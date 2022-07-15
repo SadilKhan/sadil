@@ -1,8 +1,8 @@
 ---
-title: A Spoonful of Hugo
+title: Point Cloud
 description: |
-  A forking fun new feature for series.
-author: Alison Hill
+  Introduction to Point Cloud Segmentation.
+author: Mohammad Sadil Khan
 show_post_thumbnail: false
 show_author_byline: true
 show_post_date: true
@@ -11,14 +11,13 @@ layout: list-sidebar # list, list-sidebar, list-grid
 
 # for list-sidebar layout
 sidebar: 
-  title: A Spoonful of Hugo
-  author: Alison Hill
+  title: Point Cloud
+  author: Mohammad Sadil Khan
   description: |
-    A forking fun new feature for series.
-    Even this sidebar offers a ton of customizations!
+    An Introduction to Point Cloud and Different Segmentation Methods.
     
-    Check out the _index.md file in the /blog/spoonful-series
-    folder to edit this content.
+# out the _index.md file in the /blog/spoonful-series
+#folder to edit this content.
   text_link_label: ""
   text_link_url: ""
   show_sidebar_adunit: false # show ad container
@@ -26,8 +25,8 @@ sidebar:
 # set up common front matter for all individual pages in series
 cascade:
   layout: single-series       # for a series, do not change
-  series: A Spoonful of Hugo  # name your series
-  author: Alison Hill
+  series: Point Cloud  # name your series
+  author: Mohammad Sadil Khan
   show_author_byline: true
   show_post_date: true
   sidebar:
@@ -39,8 +38,9 @@ cascade:
   tags:
   - hugo-site
   categories:
-  - Theme Features
-  - R
+  - Computer Vision
+  - Point Cloud
+  - Segmentation
 ---
 
 ** No content below YAML for the series _index. This file is a leaf bundle, and provides settings for the listing page layout and sidebar content.**
