@@ -1,0 +1,43 @@
+---
+subtitle: "Generative Rt"
+title: "Flower"
+excerpt: "Got me so high, and then she dropped me"
+date: 2021-07-22
+author: "Deisy Morselli Gysi"
+draft: false
+# layout options: single, single-sidebar
+layout: single
+categories:
+- GenerativeArt
+- art
+tags:
+- plots
+- ggplot2
+- rt
+- art
+- artistry
+- rtistry
+
+---
+
+<script src="{{< blogdown/postref >}}index_files/header-attrs/header-attrs.js"></script>
+
+
+<p><em>Got me so high, and then she dropped me</em> (Maroon five)</p>
+<pre class="r"><code>library(tidyverse)
+
+
+x = seq(from=-5, to=5, by = 0.005) %&gt;%
+  expand.grid(x=., y=.) 
+p = x %&gt;%
+  ggplot() +
+  aes(x=(pi*x + sin(x*pi)), 
+      y=(y*pi * sin(x*pi)), 
+      color = abs(y)) + 
+  geom_point(alpha=.01, shape=20, size=0)+
+ scale_color_distiller(palette = &quot;YlGn&quot;, 
+ direction = 1) +
+  theme_void()+
+  theme(legend.position = &quot;none&quot; ) +
+  coord_polar(); p</code></pre>
+<p><img src="{{< blogdown/postref >}}index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
