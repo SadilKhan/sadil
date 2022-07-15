@@ -1,15 +1,15 @@
 ---
-title: "Deisy Morselli Gysi"
-subtitle: "Networks & Cognition"
-description: "Network Science | Bioinformatics | Statistics | Biotechnology"
-date: 2021-06-08
+title: "Mohammad Sadil Khan"
+subtitle: "M.Sc in Machine Learning and Data Mining"
+description: "Computer Vision | Deep Learning | Statistics | Mathematics"
+date: 2022-07-23
 image_left: true
 text_align_left: false
 show_social_links: true # specify social accounts in site config
 show_action_link: true
-action_link: /about
-#action_label: "Read More &rarr;"
-#action_type: button # text, button
+action_link: about
+action_label: "Read More &rarr;"
+action_type: button # text, button
 type: home
 ---
 
