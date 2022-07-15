@@ -1,8 +1,8 @@
 baseURL = "/"
 theme = "hugo-apero"
 languageCode = "en"
-title = "Personal wonderland of Deisy Gysi"
-author = "Deisy Gysi"
+title = "Mohammad Sadil Khan"
+author = "Mohammad Sadil Khan"
 copyright = "" # set to override the auto generated copyright using org info and now year
 googleAnalytics = ""
 disqusShortname = ""
@@ -28,12 +28,12 @@ enableEmoji = true
     style = "github"
 
 [params]
-  orgName = "Deisy Morselli Gysi"
+  orgName = "Mohammad Sadil Khan"
   orgLocal = ""
-  description = "Network Science | Bioinformatics | Statistics | Biotechnology"
-  favicon = "/img/logo_color.png"
-  logo = "/img/logo_color.png"
-  mainSections = ["publications", "project", "talk"]
+  description = "Computer Vision | Deep Learning | Statistics | Mathematics"
+  #favicon = "/img/logo_color.png"
+  #logo = "/img/logo_color.png"
+  mainSections = ["publications", "project", "blogs"]
   navallcaps = true
   # show/hide social icons in site header & footer
   # configure social icons and links below in [[params.social]]
@@ -41,14 +41,14 @@ enableEmoji = true
   socialInFooter = true
   # Default image for social sharing and search engines.
   # Place image file in `static` folder and specify image name here.
-  sharing_image = "/img/logo_color.png"
+  #sharing_image = "/img/logo_color.png"
   # Twitter username (without @). Used when a visitor shares your site on Twitter.
-  twitter = "GysiDeisy"
+  #twitter = "GysiDeisy"
 
   # use a built-in color theme
   # one of: forest / grayscale / peach / plum /
   #         poppy / sky / violet / water
-  theme = "solarizedLight"
+  theme = "water"
 
   # or, leave theme empty & make your own palette
   # see docs at https://hugo-apero.netlify.app/blog/color-themes/
@@ -77,31 +77,31 @@ enableEmoji = true
   [[params.social]]
       icon      = "github" # icon name without the 'fa-'
       icon_pack = "fab"
-      url       = "https://github.com/deisygysi"
+      url       = "https://github.com/SadilKhan"
   [[params.social]]
-      icon      = "twitter" # icon name without the 'fa-'
+      icon      = "facebook" # icon name without the 'fa-'
       icon_pack = "fab"
-      url       = "https://twitter.com/GysiDeisy"
+      url       = "https://www.facebook.com/profile.php?id=100043829644032"
   [[params.social]]
       icon      = "linkedin" # icon name without the 'fa-'
       icon_pack = "fab"
-      url       = "https://www.linkedin.com/in/deisy-morselli-gysi/"
+      url       = "https://www.linkedin.com/in/mohammad-sadil-khan-a96568170/"
   [[params.social]]
       icon      = "google-scholar" # icon name without the 'fa-'
       icon_pack = "ai"
-      url       = "https://scholar.google.com/citations?user=LUOTahsAAAAJ&hl=en"
+      url       = "https://scholar.google.com/citations?user=XIDQo_IAAAAJ&hl=en&authuser=1"
   [[params.social]]
-      icon      = "lattes" # icon name without the 'fa-'
-      icon_pack = "ai"
-      url       = "http://lattes.cnpq.br/8705355235534573"
-  [[params.social]]
-      icon      = "researchgate" # icon name without the 'fa-'
-      icon_pack = "ai"
-      url       = "https://www.researchgate.net/profile/Deisy-Gysi"
- [[params.social]]
-      icon      = "mug-hot" # icon name without the 'fa-'
-      icon_pack = "fas"
-      url       = "https://ko-fi.com/deisygysi"
+      icon      = "youtube" # icon name without the 'fa-'
+      icon_pack = "fab"
+      url       = "https://www.youtube.com/channel/UC3TCC__F3NbO2I18D7nSP6g"
+  #[[params.social]]
+      #icon      = "researchgate" # icon name without the 'fa-'
+      #icon_pack = "ai"
+     # url       = "https://www.researchgate.net/profile/Deisy-Gysi"
+ #[[params.social]]
+      #icon      = "mug-hot" # icon name without the 'fa-'
+      #icon_pack = "fas"
+      #url       = "https://ko-fi.com/deisygysi"
 
 [taxonomies]
   category = "categories"
@@ -114,54 +114,36 @@ enableEmoji = true
     title = "About me"
     url = "/about/"
     weight = 1
+  [[menu.header]]
+    name = "Blogs"
+    title = "Blogs"
+    url = "/blogs/"
+    weight = 2
 
   [[menu.header]]
     name = "Projects"
     title = "Projects"
     url = "/projects/"
-    weight = 2
+    weight = 3
 
   [[menu.header]]
     name = "Publications"
     title = "Publications"
     url = "/publications/"
-    weight = 3
-
-  [[menu.header]]
-    name = "Talks"
-    title = "Talks"
-    url = "/talk/"
     weight = 4
-
-  [[menu.header]]
-    name = "Teaching"
-    title = "Teaching"
-    url = "/teaching/"
-    weight = 5
-
-  [[menu.header]]
-    name = "R Packages"
-    title = "R Packages"
-    url = "/rpackages/"
-    weight = 6
 
   [[menu.header]]
     name = "CV"
     title = "CV"
     url = "/cv/"
-    weight = 7
-
-   [[menu.header]]
-    name = "Useful Links"
-    title = "Useful Links"
-    url = "/links/"
-    weight = 7
-    
+    weight = 5
   [[menu.header]]
-    name = "Rt"
-    title = "Rt (Art)"
-    url = "/rt/"
-    weight = 8
+    name = "Contact"
+    title = "Contact form"
+    url = "/contact/"
+    weight = 6
+
+   
 
 #  [[menu.header]]
 #    name = "Blog"
@@ -174,11 +156,7 @@ enableEmoji = true
     title = "License"
     url = "/license/"
     weight = 1
-  [[menu.footer]]
-    name = "Contact"
-    title = "Contact form"
-    url = "/contact/"
-    weight = 2
+
 
 # see https://gohugo.io/about/hugo-and-gdpr/
 [privacy]
