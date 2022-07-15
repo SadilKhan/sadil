@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Deep Learning on Home</title>
+    <link>/tags/deep-learning/</link>
+    <description>Recent content in Deep Learning on Home</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 28 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/deep-learning/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Point Cloud</title>
+      <link>/blog/pointcloud/</link>
+      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/pointcloud/</guid>
+      <description>Introduction to Point Cloud</description>
+    </item>
+    
+    <item>
+      <title>RandLaNet</title>
+      <link>/blog/randlanet/</link>
+      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/randlanet/</guid>
+      <description>Large-Scale Point Cloud Segmentation Network</description>
+    </item>
+    
+    <item>
+      <title>IoU Losses</title>
+      <link>/blog/iouloss/</link>
+      <pubDate>Sun, 27 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/iouloss/</guid>
+      <description>Loss Functions for Object Detection</description>
+    </item>
+    
+  </channel>
+</rss>
