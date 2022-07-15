@@ -1,13 +1,17 @@
 ---
 ## Configure sidebar content in narrow column
-author: "Deisy Morselli Gysi"
-role: "Network Science | Bioinformatics | Statistics | Biotechnology"
-avatar_shape: rounded # circle, square, rounded
+author: "Mohammad Sadil Khan"
+role: "Computer Vision | Deep Learning | Statistics | Mathematics"
+avatar_shape: circle # circle, square, rounded
 show_social_links: true # specify social accounts in site config
 # show_audio_link: true
 # audio_link_label: "How to say my name"
-# link_list_label: "Interests" # bookmarks, elsewhere, etc.
-# link_list:
+link_list_label: "Interests" # bookmarks, elsewhere, etc.
+link_list:
+  - name: Videography
+    url: https://www.youtube.com/channel/UC3TCC__F3NbO2I18D7nSP6g
+  - name: Coding
+    url: https://github.com/SadilKhan
 # - name: Paris
 #   url: https://en.wikipedia.org/wiki/Paris
 # - name: Pastries
