@@ -3,7 +3,7 @@ title: SideBar Title
 description: |
   This is a fully featured blog that supports categories, 
   tags, series, and pagination.
-author: "The R Markdown Team @RStudio"
+author: "Mohammad Sadil Khan"
 show_post_thumbnail: true
 show_author_byline: true
 show_post_date: true
