@@ -18,8 +18,8 @@ sidebar:
     
 # out the _index.md file in the /blog/spoonful-series
 #folder to edit this content.
-  text_link_label: ""
-  text_link_url: ""
+  text_link_label: "Recent Posts"
+  text_link_url: "/blog/"
   show_sidebar_adunit: false # show ad container
 
 # set up common front matter for all individual pages in series

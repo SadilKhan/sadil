@@ -80,11 +80,11 @@
     </item>
     
     <item>
-      <title>hugo-site</title>
-      <link>/tags/hugo-site/</link>
+      <title>Computer Vision</title>
+      <link>/tags/computer-vision/</link>
       <pubDate>Wed, 22 Jun 2022 00:00:00 +0000</pubDate>
       
-      <guid>/tags/hugo-site/</guid>
+      <guid>/tags/computer-vision/</guid>
       <description></description>
     </item>
     
@@ -166,15 +166,6 @@
       <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/tags/projects/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Computer Vision</title>
-      <link>/tags/computer-vision/</link>
-      <pubDate>Sun, 27 Sep 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/computer-vision/</guid>
       <description></description>
     </item>
     

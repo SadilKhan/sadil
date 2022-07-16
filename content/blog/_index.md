@@ -16,8 +16,8 @@ sidebar:
   description: |
     I write blogs on different topics in Computer Vision, Deep Learning and Programming Languages.
   author: "Mohammad Sadil Khan"
-  #text_link_label: Subscribe via RSS
-  #text_link_url: /index.xml
+  #text_link_label: Recent Posts
+  #text_link_url: /blog/
   show_sidebar_adunit: false # show ad container
 
 # set up common front matter for all pages inside blog/

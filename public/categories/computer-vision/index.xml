@@ -35,5 +35,23 @@
       <description>** No content below YAML for the series _index. This file is a leaf bundle, and provides settings for the listing page layout and sidebar content.**</description>
     </item>
     
+    <item>
+      <title>RandLaNet</title>
+      <link>/blog/randlanet/</link>
+      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/randlanet/</guid>
+      <description>Large-Scale Point Cloud Segmentation Network</description>
+    </item>
+    
+    <item>
+      <title>IoU Losses</title>
+      <link>/blog/iouloss/</link>
+      <pubDate>Sun, 27 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/iouloss/</guid>
+      <description>Loss Functions for Object Detection</description>
+    </item>
+    
   </channel>
 </rss>

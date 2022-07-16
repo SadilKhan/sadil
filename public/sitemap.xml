@@ -20,31 +20,19 @@
     <loc>/tags/deep-learning/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/deep-learning/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/tags/encoder/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/graph/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/graph/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/tags/mlp/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/mlp/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/point-cloud/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/series/point-cloud/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/point-cloud/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/pointcloud-series/</loc>
@@ -54,9 +42,6 @@
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/segmentation/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/segmentation/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/series/</loc>
@@ -71,10 +56,7 @@
     <loc>/tags/voxel/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/voxel/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/hugo-site/</loc>
+    <loc>/tags/computer-vision/</loc>
     <lastmod>2022-06-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/keynote/</loc>
@@ -283,9 +265,6 @@
   </url><url>
     <loc>/publications/codina/</loc>
     <lastmod>2020-10-15T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/computer-vision/</loc>
-    <lastmod>2020-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/iouloss/</loc>
     <lastmod>2020-09-27T00:00:00+00:00</lastmod>
