@@ -14,25 +14,37 @@
     <loc>/categories/computer-vision/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/decoder/</loc>
+    <loc>/categories/decoder/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/deep-learning/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/encoder/</loc>
+    <loc>/categories/deep-learning/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/encoder/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/graph/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/categories/graph/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/tags/mlp/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/mlp/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/point-cloud/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/series/point-cloud/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/point-cloud/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/pointcloud-series/</loc>
@@ -42,6 +54,9 @@
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/segmentation/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/segmentation/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/series/</loc>
@@ -56,8 +71,8 @@
     <loc>/tags/voxel/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/computer-vision/</loc>
-    <lastmod>2022-06-22T00:00:00+00:00</lastmod>
+    <loc>/categories/voxel/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/keynote/</loc>
     <lastmod>2022-04-02T00:00:00+00:00</lastmod>
