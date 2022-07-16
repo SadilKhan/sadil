@@ -1,7 +1,7 @@
 ---
 title: Links and other useful turorials
 #description: "Give your projects a place to live online."
-author: "Deisy Morselli Gysi"
+author: "Mohammad Sadil Khan"
 show_post_thumbnail: true
 show_author_byline: true
 show_post_date: false
