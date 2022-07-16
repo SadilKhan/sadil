@@ -122,42 +122,6 @@ library(tidyverse) x = seq(from=-2, to=2, by = 0.01) %&amp;gt;% expand.</descrip
     </item>
     
     <item>
-      <title>Lorem Simpson</title>
-      <link>/blog/2021-05-26-lorem-simpson/</link>
-      <pubDate>Wed, 26 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2021-05-26-lorem-simpson/</guid>
-      <description>Hi, I&#39;m the here-bot cat! Use me to find your way in your website.
-Here I am: content/blog/2021-05-26-lorem-simpson/index.markdown Here is my R Markdown source file: blog/2021-05-26-lorem-simpson/index.Rmarkdown You&#39;ll want to edit this file, then re-knit to see the changes take effect in your site preview.
-To remove me, delete this line inside that file: {{&amp;lt; here &amp;gt;}}
-My content section is: blog My layout is: single Images in this page bundle: /blog/2021-05-26-lorem-simpson/featured.</description>
-    </item>
-    
-    <item>
-      <title>Lorem Star Wars</title>
-      <link>/blog/2021-05-25-lorem-star-wars/</link>
-      <pubDate>Tue, 25 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2021-05-25-lorem-star-wars/</guid>
-      <description>Hi, I&#39;m the here-bot cat! Use me to find your way in your website.
-Here I am: content/blog/2021-05-25-lorem-star-wars/index.md To remove me, delete this line inside that file: {{&amp;lt; here &amp;gt;}}
-My content section is: blog My layout is: single Images in this page bundle: /blog/2021-05-25-lorem-star-wars/featured.jpg But first, a shortcode trick Courtesy of panelset.js by Garrick Aden-Buie, from his xaringanExtra package: https://pkg.garrickadenbuie.com/xaringanExtra/#/panelset
-For example, this panelset:
-Hello! 👋 hello
-Goodbye 💨 goodbye</description>
-    </item>
-    
-    <item>
-      <title>Lorem Arrested Development</title>
-      <link>/blog/2021-05-24-lorem-development/</link>
-      <pubDate>Mon, 24 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/2021-05-24-lorem-development/</guid>
-      <description>But first, panelsets with R code chunks Plot Code plot(pressure) I&amp;rsquo;m half machine. I&amp;rsquo;m a monster. It&amp;rsquo;s a hug, Michael. I&amp;rsquo;m hugging you. I&amp;rsquo;m half machine. I&amp;rsquo;m a monster. There&amp;rsquo;s only one man I&amp;rsquo;ve ever called a coward, and that&amp;rsquo;s Brian Doyle Murray. No, what I&amp;rsquo;m calling you is a television actor. Bad news. Andy Griffith turned us down. He didn&amp;rsquo;t like his trailer.
-No, I did not kill Kitty.</description>
-    </item>
-    
-    <item>
       <title>Accelerated evolution of tissue-specific genes mediates divergence amidst gene flow in European green lizards</title>
       <link>/publications/lizards/</link>
       <pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate>
