@@ -28,8 +28,9 @@ cascade:
   show_disqus_comments: false # see disqusShortname in site config
   # for single-sidebar layout
   sidebar:
-    text_link_label: View recent posts
-    text_link_url: /blog/
+    #text_link_label: View recent posts
+    #text_link_url: /blog/
+    show_details: false
     show_sidebar_adunit: false # show ad container
 ---
 

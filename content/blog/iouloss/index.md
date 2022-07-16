@@ -13,8 +13,6 @@ external_link: ""
 # slides: example
 summary: Loss Functions for Object Detection
 categories:
-- Computer Vision
-tags:
 - Deep Learning
 - Computer Vision
 title: IoU Losses

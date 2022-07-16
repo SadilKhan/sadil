@@ -3,8 +3,7 @@ date: 2022-06-28T00:00:00Z
 author: "Mohammad Sadil Khan"
 external_link: ""
 summary: Large-Scale Point Cloud Segmentation Network
-categories: ["Computer Vision"]
-tags:
+categories:
 - Deep Learning
 - Point Cloud
 - Segmentation
@@ -23,29 +22,13 @@ show_related: true
 ---
 
 
-<script src="https://mickael.canouil.fr/post/floating-toc-in-blogdown/index.en_files/header-attrs/header-attrs.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
-<div id="TOC">
-<ul>
-<li><a href="#First_Point_Header">1. Point Cloud</a>
-				</li>
-				<li><a href="#Second_Point_Header">2. RandLaNet - Architecture</a></li>
-				<li><a href="#Third_Point_Header">3. RandLaNet - LFA</a></li>
-				<li><a href="#Fourth_Point_Header">4. Conclusion</a></li>
-</ul>
-</div>
-<div> 
 
-  <h1 id="First_Point_Header">1. Point Cloud</h1>
-  <p>
-  $\textbf{A. Introduction}$
-  </p>
-  <p>
+## 1. Point Cloud
+  ### A. Introduction
   A Point Cloud is a set of points in 3D space which can represent the boundary or the whole object (including inside points). In a point cloud, the points are unordered and are not restricted by any grid which means a point cloud can be expressed in an infinite way (using translation). Each point can have 3D coordinates and feature vectors ($P=\{(X_i,F_i)\}^{i=N}_{i=1}, X_i\in\mathbb{R}^3,F_i\in\mathbb{R}^d$).
-  </p>
-  <p>
-  $\textbf{B. Properties of Point Cloud in}$ $\mathbb{R}^3$
-  </p>
+  
+  ### B. Properties of Point Cloud in $\mathbb{R}^3$
+  
   <p>
  <ul>
     <li> $\textit{Unordered:}$ Unlike images or arrays, point cloud is unordered. It has no restriction to be confined within a boundary. This causes a problem for CNN type architecture to learn since CNN uses convolutional operations which requires ordered and regular array like representation of the input. Point cloud networks are generally invariant to the $N!$ number of permutations in input.</li>
@@ -54,7 +37,7 @@ show_related: true
 </ul>
   </p>
   
-  <h1 id="Second_Point_Header">2. RandLaNet - Architecture</h1>
+## 2. RandLaNet - Architecture
   <p>
   Large-scale point cloud segmentation is a challenging task because of huge computational requirements and effective embedding learning. RandLa-Net[3] is an efficient and lightweight neural architecture that segments every point in large-scale point clouds. It is an encoder-decoder-like architecture that uses random sampling to downsample the input point cloud in the encoder and upsample the point cloud in decoder blocks. It uses random sampling compared to other sampling methods because of faster computation. Although random sampling can discard key points necessary for efficient point cloud segmentation, RandLa-Net implements attention-based local feature aggregation to effectively share features of points that are removed into the neighbor points. Figure[1] is the architecture of RandLa-Net. 
   <figure>
@@ -63,9 +46,9 @@ show_related: true
 					</figcaption>
 				</figure>
   </p>
-  <p>
-  $\textbf{A. Random Sampling}$
-  <p>
+  
+### A. Random Sampling
+
   <p>
    Compared to other sampling methods, Random sampling is extremely fast (time complexity $O(N)$). It is invariant to any changes to the points as well as the permutation of points. The random-sampling block is added in encoder part. To compensate for the loss of information, the author has added LFA module.
    <figure>
@@ -75,9 +58,9 @@ show_related: true
 				</figure>
    
   </p>
-   <p>
-  $\textbf{B. Architecture}$
-  <p>
+  
+### B. Architecture
+
   <p>
   RandLa-Net consists of 4 encoder and 4 decoder layers (Figure 1). Each encoder layer consists of LFA modules (which is shown in the bottom panel of Figure 3). LFA modules aggregate the local features and gradually expands the receptive field to perform global feature passing. Every LFA module is followed by a random sampling step. Let the input shape be $N\times d_n$, where $N$ is the number of points in the point clouds ($N\approx 10^6 - 10^7$) and $d_n \in \mathbb{R^d},d\geq3$). $d_n$ can contain the coordinates with other features like intensity, gradient or normal.
   </p>
@@ -93,7 +76,9 @@ show_related: true
   <p>
   $\textbf{Final Output Layer:}$ The segmentation label is predicted through three fully connected layers $(N,64) \rightarrow (N,32) \rightarrow (N,C)$, where $C$ is the number of classes.
   </p>
-  <h1 id="Third_Point_Header">2. RandLaNet - LFA</h1>
+  
+## 3. RandLaNet - LFA
+
   <p>The Local Feature Aggregation follows a three-step message passing system. Since point cloud don't have connectivity information, LFA ensures features are shared between points. In Figure 1, the LFA module in the first encoder transforms the feature vector ($8 \rightarrow 32$) and random sampling removes 75% of the points. Let's take a point in the first encoder $(p,f),p\in \mathbb{R}^3,f\in \mathbb{R}^8$.
   <figure>
 					<center><img src="randlanet_lfa.png" width="800" /> </center>
@@ -156,7 +141,9 @@ Since the point cloud is downsampled, it is necessary to expand the receptive fi
 	</figure>
   
   </p>
-  <h1 id="Fourth_Point_Header">4. Conclusion</h1>
+  
+## 4. Conclusion
+
   <p>$\textbf{Advantages:}$</p>
   <p>
 The main advantages of RandLa-Net are 
@@ -179,18 +166,16 @@ The main advantages of RandLa-Net are
   </p>
   
   
-<h1>Bibliography</h1>
-      <ol>
-         <li>
-            <p>Anh Nguyen, Bac Le, <a href="https://ieeexplore.ieee.org/document/6758588"><i>3D Point Cloud Segmentation - A Survey</i></a>, 2013 6th IEEE Conference on Robotics, Automation and Mechatronics (RAM), 2013, pp. 225-230.</p>
-         </li>
-         <li>
-            <p>Charles R. Qi, Hao Su, Kaichun Mo, Leonidas J. Guibas, <a href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Qi_PointNet_Deep_Learning_CVPR_2017_paper.pdf"><i>PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</i></a>, 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 77-85.</p>
-         </li>
-          <li>
-            <p>Qingyong Hu, Bo Yang, Linhai Xie, Stefano Rosa, Yulan Guo, Zhihua Wang, A. Trigoni, A. Markham, <a href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Hu_RandLA-Net_Efficient_Semantic_Segmentation_of_Large-Scale_Point_Clouds_CVPR_2020_paper.pdf"><i>RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds</i></a>,  2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR).</p>
-         </li>
-      </ol>
+## 5. Bibliography
 
-</div>
-
+<ol>
+<li>
+  <p>Anh Nguyen, Bac Le, <a href="https://ieeexplore.ieee.org/document/6758588"><i>3D Point Cloud Segmentation - A Survey</i></a>, 2013 6th IEEE Conference on Robotics, Automation and Mechatronics (RAM), 2013, pp. 225-230.</p>
+</li>
+<li>
+  <p>Charles R. Qi, Hao Su, Kaichun Mo, Leonidas J. Guibas, <a href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Qi_PointNet_Deep_Learning_CVPR_2017_paper.pdf"><i>PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</i></a>, 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 77-85.</p>
+</li>
+<li>
+  <p>Qingyong Hu, Bo Yang, Linhai Xie, Stefano Rosa, Yulan Guo, Zhihua Wang, A. Trigoni, A. Markham, <a href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Hu_RandLA-Net_Efficient_Semantic_Segmentation_of_Large-Scale_Point_Clouds_CVPR_2020_paper.pdf"><i>RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds</i></a>,  2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR).</p>
+</li>
+</ol>

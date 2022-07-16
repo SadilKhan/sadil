@@ -37,8 +37,6 @@ cascade:
     text_contents_label: "On this page" 
   categories:
   - Computer Vision
-  tags:
-  - Computer Vision
   - Deep Learning
   - Point Cloud
   - Segmentation
