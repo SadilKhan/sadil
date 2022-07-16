@@ -1,5 +1,5 @@
 ---
-title: "Point Cloud Segmentation"
+title: "Part 2 - Point Cloud Segmentation"
 weight: 2
 subtitle: ""
 excerpt: "Grid is the very first CSS module created specifically to solve the layout problems we’ve all been hacking our way around for as long as we’ve been making websites."
@@ -7,58 +7,63 @@ date: 2022-06-28
 draft: false
 ---
 
+
 # Point Cloud Segmentation Methods
+
 Point Cloud Segmentation is the task for grouping objects or assigning labels to every points in the point cloud. It is one of the most challenging tasks and a research topic in deep learning since point clouds are noisy, unstructured and lack connectedness property. All the methods are categorized into four categories.
 
 ## 1. Edge Based Methods
 
-Edges describe the intrinsic characteristics of the boundary of any 3D object. Edge-based methods locate the points which have rapid changes in the neighborhood. Bhanu[<a href="#survey" style="color:red">1</a>] proposed three approaches for detecting the edges of a 3D object. The first approach is calculating the gradient.
-    Let $r(i,j)$ be the range value at $(i,j)$ position, the magnitude and the direction of edge can be calculated by
-    \begin{equation}
-    \begin{split}
-         & m(i,j:0)=\frac{r(i,j-k)+r(i,j+k)-2r(i,j)}{2k}\\
-         & m(i,j;45)=\frac{r(i-k,j+k)+r(i+k,j-k)-2r(i,j)}{2k\sqrt2}\\
-         & m(i,j;90)=\frac{r(i-k,j)+r(i+k,j)-2r(i,j)}{2k}\\
-         & m(i,j;135)=\frac{r(i-k,j-k)+r(i+k,j+k)-2r(i,j)}{2k\sqrt2}
-     \end{split}
-     \end{equation}
-     For flat surfaces these values are zero, positive when edges are convex and negative when edges are concave. The maximum magnitude of gradient is $\max m(i,j;\theta)$ and the direction of edge is $argmax_{\theta}$ $m(i,j;\theta)$. Using threshold, points can be segmented.
+---
+
+Edges describe the intrinsic characteristics of the boundary of any 3D object. Edge-based methods locate the points which have rapid changes in the neighborhood. Bhanu[<a href="#survey" style="color:red">1</a>] proposed three approaches for detecting the edges of a 3D object. The first approach is calculating the gradient. Let $r(i,j)$ be the range value at $(i,j)$ position, the magnitude and the direction of edge can be calculated by
+    $$m(i,j:0)=\frac{r(i,j-k)+r(i,j+k)-2r(i,j)}{2k}$$
+    $$m(i,j;45)=\frac{r(i-k,j+k)+r(i+k,j-k)-2r(i,j)}{2k\sqrt2}$$
+    $$m(i,j;90)=\frac{r(i-k,j)+r(i+k,j)-2r(i,j)}{2k}$$
+    $$m(i,j;135)=\frac{r(i-k,j-k)+r(i+k,j+k)-2r(i,j)}{2k\sqrt2}$$
+     
+For flat surfaces these values are zero, positive when edges are convex and negative when edges are concave. The maximum magnitude of gradient is $\max m(i,j;\theta)$ and the direction of edge is $argmax_{\theta}$ $m(i,j;\theta)$. Using threshold, points can be segmented.
     The second approach is fitting 3D lines to a set of points(i.e neighboring points) and detecting the changes in the unit direction vector from a point to the neighboring points. The third approach is a surface normal approach where changes in the normal vectors in the neighborhood of a point determine the edge point. Edge models are fast and interpretable but they are very sensitive to noise and sparse density of point clouds and lack generalization capability. Learning on incomplete point cloud structure with edge-based models does not give good accuracy. In Medical image datasets especially MRI data, the organ boundaries sometimes do not have high gradient points compared to CT data which means for every modality, we have to find new thresholds in edge-based methods.
     
-<h1 id="Fourth_Point_Header_2">4.2 Region Based Methods</h1>
+## 2. Region Based Methods
+
+---
+
 Region-based methods use the idea of neighborhood information to group points that are similar thus finding similarly grouped 3D objects and maximizing the dissimilarity between different objects. Compared to edge-based methods, these methods are not susceptible to noise and outliers but they suffer from inaccurate border segmentation. There are two types of region-based methods.
 
 <ol type="A">
 <li><strong>Seeded-region Methods(bottom up):</strong> Seeded region segmentation is a fast, effective and very robust image segmentation method. It starts the segmentation process by choosing manually or automatically in preprocessing step, a set of seeds which can be a pixel or a set of pixels and then gradually adding neighbouring points if certain conditions satisfy regarding similarity[<a href="#survey" style="color:red">1</a>,<a href="#vsrg" style="color:red">5</a>]. The process finishes when every point belongs to a region. 
         Suppose there are N seeds chosen initially. Let $A=\{A_1,A_2,\cdots,A_N\}$ be the set of seeds. Let T be the set of pixels that are not in any $A_i$ but is adjacent to at least a point in $A_i$.
-        <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}T&space;=&space;\bigg\{x\notin&space;\bigcup_{i=1}^{i=N}&space;A_i|nbr(x)&space;\cap&space;\bigcup_{i=1}^{i=N}&space;A_i&space;\neq&space;\phi&space;\bigg\}" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}T = \bigg\{x\notin \bigcup_{i=1}^{i=N} A_i|nbr(x) \cap \bigcup_{i=1}^{i=N} A_i \neq \phi \bigg\}" />
+        $$T = \bigg\{x\notin \bigcup_{i=1}^{i=N} A_i|nbr(x) \cap \bigcup_{i=1}^{i=N} A_i \neq \phi \bigg\}$$
         where $nbr(x)$ is the neighbourhood points of x. At each step if $nbr(x) \cap A_i \neq \phi$, then x is added into the region if certain conditions are met. One such condition can be checking the difference between intensity value of $x$ with the average intensity value of $A_i \forall A_i \text{ such that } nbr(x) \cap A_i \neq \phi$. The region with minimum difference is assigned to the point. There are another method when greyvalues of any point is approximated by fitting a line i.e if a coordinate of any pixel/point $p$ is $(x,y)$, then greyvalue of $p$, $G(p)=b+a_1x+a_2y+\epsilon$, where $\epsilon$ is the error term. The new homogeneity condition is to find the minimum distance between average approximated greyvalue and the approximated greyvalue of $x$.
         Seeded-based segmentation is very much dependent upon the choice of seed points. Inaccurate choices often lead to under-segmentation or over-segmentation. </li>
         <li> <strong> Unseeded-region Methods(top-down):</strong> Unlike seeded-based methods, unseeded methods have a top-down approach. The segmentation starts with grouping all the points into one region. Then the difference between all the mean point values and chosen point value is calculated. If it is more than the threshold then the point is kept otherwise the point is different than the rest of the points and a new region is created and the point is added into the new region and removed from the old region. The challenges are over-segmentation and domain-knowledge which is not present in complex scenes[<a href="#survey" style="color:red">1</a>].</li>
 </ol>
-<h1 id="Fourth_Point_Header_3">4.3 Attribute Based Methods</h1>
+
+## 3. Attribute Based Methods
+
 Attribute-based methods use the idea of clustering. The approach is to calculate attributes for points and then use a clustering algorithm to perform segmentation. The challenges in these methods are how to find a suitable attribute that contains the necessary information for segmentation and to define proper distance metrics. Some of the attributes can be normal vectors, distance, point density, or surface texture measures. It is a very robust method but performs poorly if points are large-scale and attributes are multidimensional.[<a href="#survey" style="color:red">1</a>]
 
-<h1 id="Fourth_Point_Header_4">4.4 Deep Learning Based Methods</h1>
+## 4. Deep Learning Based Methods
 The main challenge in point cloud segmentation is find good latent vector which can contain sufficient information for segmentation task. Deep Learning methods offers the best solution to learn good representations. Neural networks being a universal approximator can theoretically approximate the target function for segmentation. The following theorem justifies how <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a>s can approximate the function for the segmentation task given enough neurons.
 <p>
-<strong>Theorem 1:</strong> Given a set of point clouds $X=\{\{x_1,x_2,\cdots,x_n\},n\in \mathbb{Z}^+,x_i \in [0,1]^m\} $, let $f:X \rightarrow R$ be a continuous function with respect to hausdorff distance($d_H(\cdot,\cdot)$).$\forall \epsilon > 0, \exists \eta,$ a continuous function and a symmetric set function $g(x_1,x_2,\cdots x_n)=\gamma \circ MAX$ such that $\forall S\subset X$.
-     <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}\bigg|f(S)-\gamma&space;\bigg(\underset{x_i&space;\in&space;S}{MAX}(\eta(x_i))&space;\bigg)&space;\bigg|<\epsilon" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}\bigg|f(S)-\gamma \bigg(\underset{x_i \in S}{MAX}(\eta(x_i)) \bigg) \bigg|<\epsilon" />
+<strong>Theorem 1:</strong> Given a set of point clouds $X=\{\{x_i\}_{i=1}^{i=n},n\in \mathbb{Z}^+,x_i \in [0,1]^m\} $, let $f:X \rightarrow R$ be a continuous function with respect to hausdorff distance($d_H(\cdot,\cdot)$).$\forall \epsilon > 0, \exists \eta,$ a continuous function and a symmetric set function $g(x_1,x_2,\cdots x_n)=\gamma \circ MAX$ such that $\forall S\subset X$.
+     $$\bigg|f(S)-\gamma \bigg(\underset{x_i \in S}{MAX}(\eta(x_i)) \bigg) \bigg|<\epsilon$$
      $\gamma$ is a continuous function and $MAX$ is an elementwise max operation which takes an input $k$ number of vectors and return a vector with element wise maximum. In practice $\gamma \text{ and } \eta$ are <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a> [<a href="#pnet" style="color:red">2</a>].</p>
      <p>
      <strong>Proof:</strong> The hausdorff distance is defined by
-     <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}d_H(x,y)=\max\bigg\{\sup\limits_{x\in&space;X}(\inf\limits_{y\in&space;Y}&space;d(x,y)),&space;\sup\limits_{y\in&space;Y}(\inf\limits_{x\in&space;X}&space;d(x,y))\bigg\}" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}d_H(x,y)=\max\bigg\{\sup\limits_{x\in X}(\inf\limits_{y\in Y} d(x,y)), \sup\limits_{y\in Y}(\inf\limits_{x\in X} d(x,y))\bigg\}" />
+    $$d_H(x,y)=\max\bigg\{\sup\limits_{x\in X}(\inf\limits_{y\in Y} d(x,y)), \sup\limits_{y\in Y}(\inf\limits_{x\in X} d(x,y))\bigg\}$$
      Since $f$ is a continuous function from $Y$ to $R$ w.r.t hausdorff distance, so by definition of continuity $\forall \epsilon > 0, \exists \delta_{\epsilon} > 0 $ such that if $S_1,S_2 \subset X$ and $d_H(S_1,S_2)<\delta_{\epsilon}$, then $|f(S_1)-f(S_2)|<\epsilon$.
      Let $K=\lceil {\frac{1}{\delta_\epsilon}}\rceil, K\in \mathbb{Z}^+$. So $[0,1]$ is evenly divided into K intervals. Let $\sigma(x)$ be defined by 
-     <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}\sigma(x)&space;=\frac{\lfloor{Kx}\rfloor}{K},&space;x&space;\in&space;S" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}\sigma(x) =\frac{\lfloor{Kx}\rfloor}{K}, x \in S" />
-     So $\sigma$ maps a point to the left side of the interval it belongs to and <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}|x-\frac{\lfloor{Kx}\rfloor}{K}|=\frac{Kx-\lfloor{Kx}\rfloor}{K}<1/K\leq&space;\delta_\epsilon" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}|x-\frac{\lfloor{Kx}\rfloor}{K}|=\frac{Kx-\lfloor{Kx}\rfloor}{K}<1/K\leq \delta_\epsilon" />
-     Let $\tilde{S}={\sigma(x)},x\in S$, then <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}|f(S)&space;-&space;f(\tilde{S})|<\epsilon" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}|f(S) - f(\tilde{S})|<\epsilon" /> Since $d_H(S,\tilde{S})\leq \delta_\epsilon.$
-     Let $\eta_k(x)=e^{-d(x,[\frac{k-1}{k},\frac{k}{K}])}$ be the indicator function where $d(x,I)$ is the point to set distance <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}d(x,I)=\inf\limits_{y&space;\in&space;I}d(x,y)" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}d(x,I)=\inf\limits_{y \in I}d(x,y)" /> $d(x,I)=0$, if $x\in I$, so $\eta_k(x)=1 \text{ if } x \in [\frac{k-1}{k},\frac{k}{K}].$
-     Let $\eta(x)=[\eta_1(x);\eta_2(x);\cdots;\eta_n(x)]$. Since there are K intervals we can define K functions $v_j:\mathbb{R}^n \rightarrow \mathbb{R}, \forall j=1,\cdots,K$ such that <<img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}v_j(x_1,x_2,x_3,\cdots,x_n)=\max\{\eta_j(x_1),\cdots,\eta_j(x_n)\}" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}v_j(x_1,x_2,x_3,\cdots,x_n)=\max\{\eta_j(x_1),\cdots,\eta_j(x_n)\}" />
+     $$\sigma(x) =\frac{\lfloor{Kx}\rfloor}{K}, x \in S$$
+     So $\sigma$ maps a point to the left side of the interval it belongs to and $$|x-\frac{\lfloor{Kx}\rfloor}{K}|=\frac{Kx-\lfloor{Kx}\rfloor}{K}<1/K\leq \delta_\epsilon$$
+     Let $\tilde{S}={\sigma(x)},x\in S$, then $$|f(S) - f(\tilde{S})|<\epsilon$$ Since $d_H(S,\tilde{S})\leq \delta_\epsilon.$
+     Let $\eta_k(x)=e^{-d(x,[\frac{k-1}{k},\frac{k}{K}])}$ be the indicator function where $d(x,I)$ is the point to set distance $$d(x,I)=\inf\limits_{y \in I}d(x,y)$$ $d(x,I)=0$, if $x\in I$, so $\eta_k(x)=1 \text{ if } x \in [\frac{k-1}{k},\frac{k}{K}].$
+     Let $\eta(x)=[\eta_1(x);\eta_2(x);\cdots;\eta_n(x)]$. Since there are K intervals we can define K functions $v_j:\mathbb{R}^n \rightarrow \mathbb{R}, \forall j=1,\cdots,K$ such that $$v_j(x_1,x_2,x_3,\cdots,x_n)=\max\{\eta_j(x_1),\cdots,\eta_j(x_n)\}$$
      So $v_j$ denotes if any points from $S$ occupy the $jth$ interval. Let $v=[v_1;v_2,\cdots,;v_n]$. So $v:R^n\rightarrow [0,1]^K$.
-     Let $\tau:[0,1]^K \rightarrow X$ be defined by <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}\tau(v(x_1,x_2,\cdots,x_n))=\bigg\{\frac{k-1}{K}:&space;v_k&space;\geq&space;1&space;\bigg\}" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}\tau(v(x_1,x_2,\cdots,x_n))=\bigg\{\frac{k-1}{K}: v_k \geq 1 \bigg\}" />
-     So $\tau$ denotes the lower bound of any interval if it contains any point from $S$. In this respect, $\tau(v) \equiv \tilde{S}$. Let $range(\tau(v))=S_{\tau}, d_H(S_{\tau},S)<\frac{1}{K} \leq \delta_{\epsilon}$ <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}|f(\tau(v(x_1,x_2,\hdots,x_n)))-f(S)|<\epsilon" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}|f(\tau(v(x_1,x_2,\hdots,x_n)))-f(S)|<\epsilon" />
-     Let $\gamma:\mathbb{R}^K \rightarrow R$ be a continuous function such that $\gamma(v)=f(\tau(v))$.Now <img src="https://latex.codecogs.com/png.image?\LARGE&space;\dpi{110}\bg{white}\gamma(v(x_1,x_2,\cdots,x_n))=\gamma&space;(MAX)(\eta(x_1),\cdots,\eta(x_n))" title="https://latex.codecogs.com/png.image?\LARGE \dpi{110}\bg{white}\gamma(v(x_1,x_2,\cdots,x_n))=\gamma (MAX)(\eta(x_1),\cdots,\eta(x_n))" />
+     Let $\tau:[0,1]^K \rightarrow X$ be defined by $$\tau(v(x_1,x_2,\cdots,x_n))=\bigg\{\frac{k-1}{K}: v_k \geq 1 \bigg\}$$
+     So $\tau$ denotes the lower bound of any interval if it contains any point from $S$. In this respect, $\tau(v) \equiv \tilde{S}$. Let $range(\tau(v))=S_{\tau}, d_H(S_{\tau},S)<\frac{1}{K} \leq \delta_{\epsilon}$ $$|f(\tau(v(x_1,x_2,\cdots,x_n)))-f(S)|<\epsilon$$
+     Let $\gamma:\mathbb{R}^K \rightarrow R$ be a continuous function such that $\gamma(v)=f(\tau(v))$.Now $$\gamma(v(x_1,x_2,\cdots,x_n))=\gamma (MAX)(\eta(x_1),\cdots,\eta(x_n))$$
      So $f$ can be approximated by a continuous($\gamma$) and a symmetric function($MAX$).In practice, $\gamma \text{ and } \eta$ can be approximated by <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a>.</p>
   <p>The DL methods for point cloud segmentation can be divided into following ways.</p>
 <ol>
@@ -91,8 +96,56 @@ The main challenge in point cloud segmentation is find good latent vector which 
 </li>
 </ol>
 
-## now for some very cool things
-
-## more
-
-## get ready!
+## 5.Bibliography
+ <ol>
+         <li>
+            <p id="survey">Anh Nguyen, Bac Le, <a href="https://ieeexplore.ieee.org/document/6758588"><i>3D Point Cloud Segmentation - A Survey</i></a>, 2013 6th IEEE Conference on Robotics, Automation and Mechatronics (RAM), 2013, pp. 225-230.</p>
+         </li>
+         <li>
+            <p id="pnet">Charles R. Qi, Hao Su, Kaichun Mo, Leonidas J. Guibas, <a href="https://openaccess.thecvf.com/content_cvpr_2017/papers/Qi_PointNet_Deep_Learning_CVPR_2017_paper.pdf"><i>PointNet: Deep Learning on Point Sets for 3D Classification and Segmentation</i></a>, 2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2017, pp. 77-85.</p>
+         </li>
+          <li>
+            <p id="rnet">Qingyong Hu, Bo Yang, Linhai Xie, Stefano Rosa, Yulan Guo, Zhihua Wang, A. Trigoni, A. Markham, <a href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Hu_RandLA-Net_Efficient_Semantic_Segmentation_of_Large-Scale_Point_Clouds_CVPR_2020_paper.pdf"><i>RandLA-Net: Efficient Semantic Segmentation of Large-Scale Point Clouds</i></a>,  2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR).</p>
+         </li>
+         <li id="gss"> <p>Jiancheng Yang, Qiang Zhang, Bingbing Ni, Linguo Li, Jinxian Liu, Mengdie Zhou, Qi Tian, <a href="https://arxiv.org/abs/1904.03375"><i>Modeling Point Clouds with Self-Attention and Gumbel Subset Sampling</i></a>, 2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) 3318-3327. 10.1109/CVPR.2019.00344. 
+         </li>
+         <li>
+         <p id="vsrg">M. Fan.
+<a href="https://www.researchgate.net/profile/Minjie-Fan-2/publication/269338276_Variants_of_Seeded_Region_Growing/links/5487cd460cf268d28f0728a2/Variants-of-Seeded-Region-Growing.pdf?origin=publication_detail">Variants of Seeded Region Growing</a>. Image Processing, IET · June 2015</p>
+         </li>
+         <li>
+         <p id="mvc">
+         Hang Su, Subhransu Maji ,Evangelos Kalogerakis, Erik Learned-Miller.
+<a href="https://ieeexplore.ieee.org/document/7410471">Multi-view Convolutional Neural Networks for 3D Shape Recognition<a>. 2015 IEEE International Conference on Computer Vision (ICCV), 2015, pp. 945-953
+         </p>
+         </li>
+         <li>
+         <p id="review1">Saifullahi Aminu Bello , Shangshu Yu, Cheng Wang.
+<a href="https://arxiv.org/pdf/2001.06280.pdf">Review: deep learning on 3D point clouds</a>. Remote Sensing 12, No. 11:1729.
+         </p>
+         </li>
+         <li>
+         <p id="tconv">
+         Maxim Tatarchenko, Jaesik Park, Vladlen Koltun, Qian-Yi Zhou.
+<a href="https://arxiv.org/pdf/1807.02443.pdf">Tangent Convolutions for Dense Prediction in 3D</a>. 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)
+         </p>
+         </li>
+         <li>
+         <p id="pvcnn">
+         Zhijian Liu, Haotian Tang, Yujun Lin, Song Han.
+<a href="https://proceedings.neurips.cc/paper/2019/file/5737034557ef5b8c02c0e46513b98f90-Paper.pdf">Point-Voxel CNN for Efficient 3D Deep Learning</a>. Proceedings of the 33rd International Conference on Neural Information Processing Systems 2019.
+         </p>
+         </li>
+         <li>
+         <p id="pnet++">
+         Charles R. Qi, Li (Eric) Yi, Hao Su, Leonidas J. Guibas 
+<a href="https://dl.acm.org/doi/10.5555/3295222.3295263">PointNet++: Deep Hierarchical Feature Learning on Point Sets in a Metric Space</a>. In Proceedings of the 31st International Conference on Neural Information Processing Systems (NIPS'17). Curran Associates Inc., Red Hook, NY, USA, 5105–5114.
+         </p>
+         </li>
+         <li>
+         <p id="pweb">
+         H. Zhao, L. Jiang, C. -W. Fu and J. Jia
+<a href="https://ieeexplore.ieee.org/document/8954075">PointWeb: Enhancing Local Neighborhood Features for Point Cloud Processing</a>. 2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2019, pp. 5560-5568, doi: 10.1109/CVPR.2019.00571.
+         </p>
+         </li>
+      </ol>
