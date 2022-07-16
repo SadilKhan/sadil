@@ -2,9 +2,17 @@
 title: "Part 2 - Point Cloud Segmentation"
 weight: 2
 subtitle: ""
-excerpt: "Grid is the very first CSS module created specifically to solve the layout problems we’ve all been hacking our way around for as long as we’ve been making websites."
+excerpt: "Point Cloud Segmentation is the task for grouping objects or assigning labels to every points in the point cloud. This blog presents different types of methods to perform segmentation."
 date: 2022-06-28
 draft: false
+tags:
+- Deep Learning
+- Point Cloud
+- Segmentation
+- Graph 
+- Voxel
+- MLP
+show_related: true
 ---
 
 
@@ -42,9 +50,14 @@ Region-based methods use the idea of neighborhood information to group points th
 
 ## 3. Attribute Based Methods
 
+---
+
 Attribute-based methods use the idea of clustering. The approach is to calculate attributes for points and then use a clustering algorithm to perform segmentation. The challenges in these methods are how to find a suitable attribute that contains the necessary information for segmentation and to define proper distance metrics. Some of the attributes can be normal vectors, distance, point density, or surface texture measures. It is a very robust method but performs poorly if points are large-scale and attributes are multidimensional.[<a href="#survey" style="color:red">1</a>]
 
 ## 4. Deep Learning Based Methods
+
+---
+
 The main challenge in point cloud segmentation is find good latent vector which can contain sufficient information for segmentation task. Deep Learning methods offers the best solution to learn good representations. Neural networks being a universal approximator can theoretically approximate the target function for segmentation. The following theorem justifies how <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a>s can approximate the function for the segmentation task given enough neurons.
 <p>
 <strong>Theorem 1:</strong> Given a set of point clouds $X=\{\{x_i\}_{i=1}^{i=n},n\in \mathbb{Z}^+,x_i \in [0,1]^m\} $, let $f:X \rightarrow R$ be a continuous function with respect to hausdorff distance($d_H(\cdot,\cdot)$).$\forall \epsilon > 0, \exists \eta,$ a continuous function and a symmetric set function $g(x_1,x_2,\cdots x_n)=\gamma \circ MAX$ such that $\forall S\subset X$.
@@ -66,9 +79,14 @@ The main challenge in point cloud segmentation is find good latent vector which 
      Let $\gamma:\mathbb{R}^K \rightarrow R$ be a continuous function such that $\gamma(v)=f(\tau(v))$.Now $$\gamma(v(x_1,x_2,\cdots,x_n))=\gamma (MAX)(\eta(x_1),\cdots,\eta(x_n))$$
      So $f$ can be approximated by a continuous($\gamma$) and a symmetric function($MAX$).In practice, $\gamma \text{ and } \eta$ can be approximated by <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a>.</p>
   <p>The DL methods for point cloud segmentation can be divided into following ways.</p>
-<ol>
-<li><strong>Projection-Based Networks:</strong> Following the success of 2d <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNN</a>s, projection-based networks use the projection of 3D point clouds into 2d images from various views/angles. Then 2D CNN techniques are applied to it to learn feature representations and finally features are aggregated with multi-view information for final output [<a href="#mvc" style="color:red">6</a>,<a href="#review1" style="color:red">7</a>]. In [<a href="#tconv" style="color:red">8</a>], tangent convolutions are used. For every point, tangent planes are calculated and tangent convolutions are based on the projection of local surface geometry on the tangent plane. This gives a tangent image which is an $l\times l$ grid where 2d convolutions can be applied. Tangent images can be computed even on a large-scale point cloud with millions of points. Compared to voxel-based models, multi-view models perform better since 2D <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNN</a> is a well-researched area and multi-view data contain richer information than 3D voxels even after losing depth information. The main challenges in multi-view methods are the choice of projection plane and the occlusion which can affect accuracy.</li>
-<li><strong>Voxel-Based Networks:</strong>$Voxel-based methods convert the 3D point clouds into voxel-based images. Figure [<a href="#voxelization" style="color:red">1</a>] shows an example. The points which make up the point cloud are unstructured and unordered but <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNN</a> requires a regular grid for convolution operation. 
+
+### A. Projection-Based Networks
+
+Following the success of 2d <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNN</a>s, projection-based networks use the projection of 3D point clouds into 2d images from various views/angles. Then 2D CNN techniques are applied to it to learn feature representations and finally features are aggregated with multi-view information for final output [<a href="#mvc" style="color:red">6</a>,<a href="#review1" style="color:red">7</a>]. In [<a href="#tconv" style="color:red">8</a>], tangent convolutions are used. For every point, tangent planes are calculated and tangent convolutions are based on the projection of local surface geometry on the tangent plane. This gives a tangent image which is an $l\times l$ grid where 2d convolutions can be applied. Tangent images can be computed even on a large-scale point cloud with millions of points. Compared to voxel-based models, multi-view models perform better since 2D <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNN</a> is a well-researched area and multi-view data contain richer information than 3D voxels even after losing depth information. The main challenges in multi-view methods are the choice of projection plane and the occlusion which can affect accuracy.
+
+### B. Voxel-Based Networks
+
+Voxel-based methods convert the 3D point clouds into voxel-based images. Figure [<a href="#voxelization" style="color:red">1</a>] shows an example. The points which make up the point cloud are unstructured and unordered but <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNN</a> requires a regular grid for convolution operation. 
 <figure id="voxelization">
 					<center><img src="voxelization.png" width="500" /> </center>
 					<figcaption class="figure-caption text-center">Figure 1: Voxelization of a point cloud (Image from [<a href="#pvcnn" style="color:red">9</a>])
@@ -90,13 +108,12 @@ The main challenge in point cloud segmentation is find good latent vector which 
 					</figcaption>
 				</figure>
         After voxelization, 3D <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNN</a>s can be applied for learning features for segmentation (3d UNet). In a similar approach, <i>Point-Voxel CNN</i> [<a href="#pvcnn" style="color:red">9</a>] uses <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network">CNN</a> and <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a> bases fusion learning. It first voxelizes the point cloud and uses convolution for feature learning and then devoxelize the voxels for voxel-to-point mapping(i.e interpolation is used to create distinct features of a voxel for the points that belong to the voxel). The features of a point cloud are then aggregated with the features learned using <a href="https://en.wikipedia.org/wiki/Multilayer_perceptron">MLP</a>. Despite its remarkable advances in segmentation tasks in the medical domain in segmentation tasks, 3D CNNs have a lot of parameters and is computationally expensive. Reducing the input size causes the loss of important information. 3DCNN also requires a large number of training samples.
-</li>
-<li>
-<strong>Point-Based Networks:</strong> Point-Based Networks work on raw point cloud data. They do not require voxelization or projection. <a href="#pnet"" style="color:red">PointNet</a> is a breakthrough network that takes input as raw point clouds and outputs labels for every point. It uses permutation-invariant operations like pointwise MLP and symmetric layer, Max-Pooling layer for feature aggregation layer. It achieves state-of-the-art performance on benchmark datasets. But <a href="#pnet"" style="color:red">PointNet</a> lacks local dependency information and so it does not capture local information. The max-pooling layer captures the global structure and loses distinct local information. Inspired by <a href="#pnet"" style="color:red">PointNet</a> many new networks are proposed to learn local structure. <a href="#pnet++"" style="color:red">PointNet++</a> extends the <a href="#pnet"" style="color:red">PointNet</a> architecture with an addition of local structure learning method. The local structure information passing idea follows the three basic steps (1) Sampling (2) Grouping (3) Feature Aggregation Layer (Section 3.3.1.E lists some Feature Aggregation functions) to aggregate the information from the points in the nearest neighbors. <i> Sampling </i> is choosing $M$ centroids from $N$ points in a point cloud ($N>M$). Random Sampling or Farthest Point Sampling are two such methods for sampling centroids. <i>Grouping</i> refers to sample representative points for a centroid using KNN. It takes the input (1) set of points $N\times(d+C)$, with $N$ is the number of points,$d$ coordinates and $C$ feature dimension and (2) set of centroids $N_1\times d$. It outputs $N_1\times K \times (d+C)$ with $K$ is the number of neighbors. These points are grouped in a local patch. The points in the local patches are used for creating local feature representation for centroid points. These local patches work like receptive fields. <i>Feature Aggregation Layer</i> takes the feature of the points in the receptive field and aggregate them to output $N_1\times(d+C)$. This process is repeated in a hierarchical way reducing the number of points as it goes deeper. This hierarchical structure enables the network to be able to learn local structures with an expanding receptive field. Most of the research in this field has gone into developing an effective feature aggregation layer to capture local structures. <a href="#pweb"" style="color:red">PointWeb</a> creates a new module <i> Adaptive Feature Adjustment</i> to enhance the neighbor features by adding the information about the impact of features on centroid features and the relation between the points. It then combines the features and uses MLP to create new representations for centroid points. Despite their initial successes the following methods achieve higher performance due to their advanced local aggregation operators.
-</li>
-</ol>
 
-## 5.Bibliography
+### C. Point-Based Networks
+
+Point-Based Networks work on raw point cloud data. They do not require voxelization or projection. <a href="#pnet" style="color:red">PointNet</a> is a breakthrough network that takes input as raw point clouds and outputs labels for every point. It uses permutation-invariant operations like pointwise MLP and symmetric layer, Max-Pooling layer for feature aggregation layer. It achieves state-of-the-art performance on benchmark datasets. But <a href="#pnet" style="color:red">PointNet</a> lacks local dependency information and so it does not capture local information. The max-pooling layer captures the global structure and loses distinct local information. Inspired by <a href="#pnet" style="color:red">PointNet</a> many new networks are proposed to learn local structure. <a href="#pnet++" style="color:red">PointNet++</a> extends the <a href="#pnet" style="color:red">PointNet</a> architecture with an addition of local structure learning method. The local structure information passing idea follows the three basic steps (1) Sampling (2) Grouping (3) Feature Aggregation Layer (Section 3.3.1.E lists some Feature Aggregation functions) to aggregate the information from the points in the nearest neighbors. <i> Sampling </i> is choosing $M$ centroids from $N$ points in a point cloud ($N>M$). Random Sampling or Farthest Point Sampling are two such methods for sampling centroids. <i>Grouping</i> refers to sample representative points for a centroid using KNN. It takes the input (1) set of points $N\times(d+C)$, with $N$ is the number of points,$d$ coordinates and $C$ feature dimension and (2) set of centroids $N_1\times d$. It outputs $N_1\times K \times (d+C)$ with $K$ is the number of neighbors. These points are grouped in a local patch. The points in the local patches are used for creating local feature representation for centroid points. These local patches work like receptive fields. <i>Feature Aggregation Layer</i> takes the feature of the points in the receptive field and aggregate them to output $N_1\times(d+C)$. This process is repeated in a hierarchical way reducing the number of points as it goes deeper. This hierarchical structure enables the network to be able to learn local structures with an expanding receptive field. Most of the research in this field has gone into developing an effective feature aggregation layer to capture local structures. <a href="#pweb" style="color:red">PointWeb</a> creates a new module <i> Adaptive Feature Adjustment</i> to enhance the neighbor features by adding the information about the impact of features on centroid features and the relation between the points. It then combines the features and uses MLP to create new representations for centroid points. Despite their initial successes the following methods achieve higher performance due to their advanced local aggregation operators.
+
+## 5. Bibliography
  <ol>
          <li>
             <p id="survey">Anh Nguyen, Bac Le, <a href="https://ieeexplore.ieee.org/document/6758588"><i>3D Point Cloud Segmentation - A Survey</i></a>, 2013 6th IEEE Conference on Robotics, Automation and Mechatronics (RAM), 2013, pp. 225-230.</p>
@@ -116,7 +133,7 @@ The main challenge in point cloud segmentation is find good latent vector which 
          <li>
          <p id="mvc">
          Hang Su, Subhransu Maji ,Evangelos Kalogerakis, Erik Learned-Miller.
-<a href="https://ieeexplore.ieee.org/document/7410471">Multi-view Convolutional Neural Networks for 3D Shape Recognition<a>. 2015 IEEE International Conference on Computer Vision (ICCV), 2015, pp. 945-953
+<a href="https://ieeexplore.ieee.org/document/7410471">Multi-view Convolutional Neural Networks for 3D Shape Recognition</a>. 2015 IEEE International Conference on Computer Vision (ICCV), 2015, pp. 945-953
          </p>
          </li>
          <li>

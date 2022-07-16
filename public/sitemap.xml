@@ -3,13 +3,10 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>/blog/pointcloud-series/introduction/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+    <lastmod>2022-06-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/pointcloud-series/segmentation/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/pointcloud-series/03-spoonful/</loc>
-    <lastmod>2021-01-03T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
@@ -23,16 +20,22 @@
     <loc>/tags/deep-learning/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/categories/deep-learning/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/tags/encoder/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/graph/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/tags/hugo-site/</loc>
+    <loc>/categories/graph/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/mlp/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/mlp/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/point-cloud/</loc>
@@ -45,9 +48,6 @@
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/pointcloud-series/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/pointcloud/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/randlanet/</loc>
@@ -70,6 +70,12 @@
   </url><url>
     <loc>/tags/voxel/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/voxel/</loc>
+    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/tags/hugo-site/</loc>
+    <lastmod>2022-06-22T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/keynote/</loc>
     <lastmod>2022-04-02T00:00:00+00:00</lastmod>

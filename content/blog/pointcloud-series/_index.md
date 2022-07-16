@@ -3,7 +3,7 @@ title: Point Cloud
 description: |
   Introduction to Point Cloud Segmentation.
 author: Mohammad Sadil Khan
-show_post_thumbnail: false
+show_post_thumbnail: true
 show_author_byline: true
 show_post_date: true
 # for series listing page layout
@@ -35,12 +35,16 @@ cascade:
     show_sidebar_adunit: false # show ad container
     text_series_label: "In this series" 
     text_contents_label: "On this page" 
-  tags:
-  - hugo-site
   categories:
   - Computer Vision
+  tags:
+  - Computer Vision
+  - Deep Learning
   - Point Cloud
   - Segmentation
+  - Graph 
+  - Voxel
+  - MLP
 ---
 
 ** No content below YAML for the series _index. This file is a leaf bundle, and provides settings for the listing page layout and sidebar content.**

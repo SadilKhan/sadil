@@ -17,6 +17,33 @@
     </item>
     
     <item>
+      <title>Deep Learning</title>
+      <link>/categories/deep-learning/</link>
+      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/deep-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Graph</title>
+      <link>/categories/graph/</link>
+      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/graph/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MLP</title>
+      <link>/categories/mlp/</link>
+      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/mlp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Point Cloud</title>
       <link>/categories/point-cloud/</link>
       <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
@@ -31,6 +58,15 @@
       <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
       
       <guid>/categories/segmentation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Voxel</title>
+      <link>/categories/voxel/</link>
+      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/voxel/</guid>
       <description></description>
     </item>
     

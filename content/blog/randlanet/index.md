@@ -3,6 +3,7 @@ date: 2022-06-28T00:00:00Z
 author: "Mohammad Sadil Khan"
 external_link: ""
 summary: Large-Scale Point Cloud Segmentation Network
+categories: ["Computer Vision"]
 tags:
 - Deep Learning
 - Point Cloud
@@ -10,7 +11,8 @@ tags:
 - Encoder
 - Decoder
 title: RandLaNet
-sutitle: Large-Scale Point Cloud Segmentation Network
+subtitle: Large-Scale Point Cloud Segmentation Network
+layout: single-sidebar # single or single-sidebar
 url_code: ""
 url_pdf: ""
 url_slides: ""
@@ -19,6 +21,8 @@ share: false
 commentable: true
 show_related: true
 ---
+
+
 <script src="https://mickael.canouil.fr/post/floating-toc-in-blogdown/index.en_files/header-attrs/header-attrs.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
 <div id="TOC">

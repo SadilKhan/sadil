@@ -2,11 +2,12 @@
 title: "Part 1 - Point Cloud Introduction"
 weight: 1
 subtitle: ""
-excerpt: "Grid is the very first CSS module created specifically to solve the layout problems we’ve all been hacking our way around for as long as we’ve been making websites."
-date: 2022-06-28
+excerpt: "A Point Cloud is a set of points in 3D space which can represent the boundary or the whole object (including inside points)"
+date: 2022-06-22
 draft: false
+commentable: true
+show_related: true
 ---
-
 
 
 ## 1. What is Point Cloud?
@@ -40,7 +41,7 @@ Point Cloud Sampling is the method of choosing a subset of point clouds from a l
   <p> $\textbf{2. Learning Based Sampling}$ </p>
 <ul>
     <li> <strong>Generator Based Sampling:</strong> Generator Based Sampling(GS) learns to generate a small subset of point clouds from the original point cloud. For a point cloud set $P$ and a task $T$, GS tries to find $S \subset P$ by minimizing the objective function $f$ such that $$S^*=argmin_{S}(f(T(S))$$. It is an end-to-end trainable model. But at inference stage, it uses FPS to match subsets with original point cloud. It takes up to 20 minutes to sample 10% of $10^6$ points.</li>
-    <li> <strong>Gumbel Subset Sampling:</strong> Gumbel Subset Sampling[<a href="#gss" style="color:red">4</a>] uses attention mechanism to choose a representative and task-specific subset of the point cloud. Given an input set $X_i \in \mathbb{R}^{N_i\times c}$, the task is to choose a suitable $X_{i+1} \in \mathbb{R}^{N_{i+1}\times c}, N_{i+1} \leq N_i$ and $$X_{i+1}=y\cdot softmax(WX_i^T), W \in \mathbb{R}^{N_{i+1}\times N_i}$$. It is completely end-to-end learnable and can be used in any segmentation network.</li>
+    <li> <strong>Gumbel Subset Sampling:</strong> Gumbel Subset Sampling[<a href="#gss" style="color:red">4</a>] uses attention mechanism to choose a representative and task-specific subset of the point cloud. Given an input set $X_i \in \mathbb{R}^{N_i\times c}$, the task is to choose a suitable $X_{i+1} \in \mathbb{R}^{N_{i+1}\times c}, N_{i+1} \leq N_i$ and $$X_{i+1}=y\cdot softmax(WX_i^T), W \in \mathbb{R}^{N_{i+1}\times N_i}$$ It is completely end-to-end learnable and can be used in any segmentation network.</li>
 </ul>
 
 ## 5. Bibliography

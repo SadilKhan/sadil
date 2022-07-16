@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>Point Cloud Introduction | Home</title>
+<title>Part 1 - Point Cloud Introduction | Home</title>
 
 
 
@@ -21,12 +21,12 @@
   
     
   
-<meta name="description" content="Grid is the very first CSS module created specifically to solve the layout problems we’ve all been hacking our way around for as long as we’ve been making websites.">
+<meta name="description" content="A Point Cloud is a set of points in 3D space which can represent the boundary or the whole object (including inside points)">
 
 
 <meta property="og:site_name" content="Home">
-<meta property="og:title" content="Point Cloud Introduction | Home">
-<meta property="og:description" content="Grid is the very first CSS module created specifically to solve the layout problems we’ve all been hacking our way around for as long as we’ve been making websites." />
+<meta property="og:title" content="Part 1 - Point Cloud Introduction | Home">
+<meta property="og:description" content="A Point Cloud is a set of points in 3D space which can represent the boundary or the whole object (including inside points)" />
 <meta property="og:type" content="page" />
 <meta property="og:url" content="/blog/pointcloud-series/introduction/" />
 <meta property="og:locale" content="en">
@@ -40,9 +40,9 @@
         <meta name="twitter:image" content="/blog/pointcloud-series/sidebar-featured.gif" >
     
     
-  <meta itemprop="name" content="Point Cloud Introduction">
-<meta itemprop="description" content="1. What is Point Cloud? A Point Cloud is a set of points in 3D space which can represent the boundary or the whole object (including inside points). In a point cloud, the points are unordered and are not restricted by any grid which means a point cloud can be expressed in an infinite way (using translation). Each point can have 3D coordinates and feature vectors. $$ P={(X_i,F_i)}^{i=N}_{i=1}, X_i\in\mathbb{R}^3,F_i\in\mathbb{R}^d$$"><meta itemprop="datePublished" content="2022-06-28T00:00:00+00:00" />
-<meta itemprop="dateModified" content="2022-06-28T00:00:00+00:00" />
+  <meta itemprop="name" content="Part 1 - Point Cloud Introduction">
+<meta itemprop="description" content="1. What is Point Cloud? A Point Cloud is a set of points in 3D space which can represent the boundary or the whole object (including inside points). In a point cloud, the points are unordered and are not restricted by any grid which means a point cloud can be expressed in an infinite way (using translation). Each point can have 3D coordinates and feature vectors. $$ P={(X_i,F_i)}^{i=N}_{i=1}, X_i\in\mathbb{R}^3,F_i\in\mathbb{R}^d$$"><meta itemprop="datePublished" content="2022-06-22T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-06-22T00:00:00+00:00" />
 <meta itemprop="wordCount" content="1042">
 <meta itemprop="keywords" content="hugo-site," />
   
@@ -283,10 +283,10 @@
   <section class="page-content mw7 center">
     <article class="post-content pa0 pl3-l">
       <header class="post-header">
-        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Point Cloud Introduction</h1>
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Part 1 - Point Cloud Introduction</h1>
         
-        <p class="f6 measure lh-copy mv1">By Mohammad Sadil Khan in <a href="/categories/computer-vision">Computer Vision</a>  <a href="/categories/point-cloud">Point Cloud</a>  <a href="/categories/segmentation">Segmentation</a> </p>
-        <p class="f7 db mv0 ttu">June 28, 2022</p>
+        <p class="f6 measure lh-copy mv1">By Mohammad Sadil Khan in <a href="/categories/computer-vision">Computer Vision</a>  <a href="/categories/deep-learning">Deep Learning</a>  <a href="/categories/point-cloud">Point Cloud</a>  <a href="/categories/segmentation">Segmentation</a>  <a href="/categories/graph">Graph</a>  <a href="/categories/voxel">Voxel</a>  <a href="/categories/mlp">MLP</a> </p>
+        <p class="f7 db mv0 ttu">June 22, 2022</p>
       </header>
       <section class="post-body pt5 pb4">
         
@@ -357,7 +357,7 @@ Point Cloud Sampling is the method of choosing a subset of point clouds from a l
   <p> $\textbf{2. Learning Based Sampling}$ </p>
 <ul>
     <li> <strong>Generator Based Sampling:</strong> Generator Based Sampling(GS) learns to generate a small subset of point clouds from the original point cloud. For a point cloud set $P$ and a task $T$, GS tries to find $S \subset P$ by minimizing the objective function $f$ such that $$S^*=argmin_{S}(f(T(S))$$. It is an end-to-end trainable model. But at inference stage, it uses FPS to match subsets with original point cloud. It takes up to 20 minutes to sample 10% of $10^6$ points.</li>
-    <li> <strong>Gumbel Subset Sampling:</strong> Gumbel Subset Sampling[<a href="#gss" style="color:red">4</a>] uses attention mechanism to choose a representative and task-specific subset of the point cloud. Given an input set $X_i \in \mathbb{R}^{N_i\times c}$, the task is to choose a suitable $X_{i+1} \in \mathbb{R}^{N_{i+1}\times c}, N_{i+1} \leq N_i$ and $$X_{i+1}=y\cdot softmax(WX_i^T), W \in \mathbb{R}^{N_{i+1}\times N_i}$$. It is completely end-to-end learnable and can be used in any segmentation network.</li>
+    <li> <strong>Gumbel Subset Sampling:</strong> Gumbel Subset Sampling[<a href="#gss" style="color:red">4</a>] uses attention mechanism to choose a representative and task-specific subset of the point cloud. Given an input set $X_i \in \mathbb{R}^{N_i\times c}$, the task is to choose a suitable $X_{i+1} \in \mathbb{R}^{N_{i+1}\times c}, N_{i+1} \leq N_i$ and $$X_{i+1}=y\cdot softmax(WX_i^T), W \in \mathbb{R}^{N_{i+1}\times N_i}$$ It is completely end-to-end learnable and can be used in any segmentation network.</li>
 </ul>
 
 
@@ -427,7 +427,7 @@ Point Cloud Sampling is the method of choosing a subset of point clouds from a l
         <div class="post-pagination dt w-100 mt4 mb2">
   
     <a class="prev dtc pr2 tl v-top fw6"
-    href="/blog/pointcloud-series/segmentation/">&larr; Point Cloud Segmentation</a>
+    href="/blog/pointcloud-series/segmentation/">&larr; Part 2 - Point Cloud Segmentation</a>
   
   
 </div>
@@ -484,13 +484,10 @@ Point Cloud Sampling is the method of choosing a subset of point clouds from a l
         <ul>
         
           
-          <li class="active" hugo-nav="/blog/pointcloud-series/introduction/"><a href="/blog/pointcloud-series/introduction/">Point Cloud Introduction</a></li>
+          <li class="active" hugo-nav="/blog/pointcloud-series/introduction/"><a href="/blog/pointcloud-series/introduction/">Part 1 - Point Cloud Introduction</a></li>
         
           
-          <li class="" hugo-nav="/blog/pointcloud-series/segmentation/"><a href="/blog/pointcloud-series/segmentation/">Point Cloud Segmentation</a></li>
-        
-          
-          <li class="" hugo-nav="/blog/pointcloud-series/03-spoonful/"><a href="/blog/pointcloud-series/03-spoonful/">A third post</a></li>
+          <li class="" hugo-nav="/blog/pointcloud-series/segmentation/"><a href="/blog/pointcloud-series/segmentation/">Part 2 - Point Cloud Segmentation</a></li>
         
         </ul>
       </nav>

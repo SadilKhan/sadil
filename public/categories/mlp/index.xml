@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Point Cloud on Home</title>
-    <link>/categories/point-cloud/</link>
-    <description>Recent content in Point Cloud on Home</description>
+    <title>MLP on Home</title>
+    <link>/categories/mlp/</link>
+    <description>Recent content in MLP on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 28 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/point-cloud/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 28 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/mlp/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Part 1 - Point Cloud Introduction</title>
       <link>/blog/pointcloud-series/introduction/</link>
