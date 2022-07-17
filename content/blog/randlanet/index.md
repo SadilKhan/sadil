@@ -1,5 +1,5 @@
 ---
-date: 2022-06-28T00:00:00Z
+date: 2022-05-12T00:00:00Z
 author: "Mohammad Sadil Khan"
 external_link: ""
 summary: Large-Scale Point Cloud Segmentation Network
@@ -21,11 +21,9 @@ commentable: true
 show_related: true
 ---
 
-
-
 ## 1. Point Cloud
   ### A. Introduction
-  A Point Cloud is a set of points in 3D space which can represent the boundary or the whole object (including inside points). In a point cloud, the points are unordered and are not restricted by any grid which means a point cloud can be expressed in an infinite way (using translation). Each point can have 3D coordinates and feature vectors ($P=\{(X_i,F_i)\}^{i=N}_{i=1}, X_i\in\mathbb{R}^3,F_i\in\mathbb{R}^d$).
+  A Point Cloud is a set of points in 3D space which can represent the boundary or the whole object (including inside points). In a point cloud, the points are unordered and are not restricted by any grid which means a point cloud can be expressed in an infinite way (using translation). Each point can have 3D coordinates and feature vectors. $$P=\{(X_i,F_i)\}^{i=N}_{i=1}, X_i\in\mathbb{R}^3,F_i\in\mathbb{R}^d$$
   
   ### B. Properties of Point Cloud in $\mathbb{R}^3$
   
@@ -41,7 +39,7 @@ show_related: true
   <p>
   Large-scale point cloud segmentation is a challenging task because of huge computational requirements and effective embedding learning. RandLa-Net[3] is an efficient and lightweight neural architecture that segments every point in large-scale point clouds. It is an encoder-decoder-like architecture that uses random sampling to downsample the input point cloud in the encoder and upsample the point cloud in decoder blocks. It uses random sampling compared to other sampling methods because of faster computation. Although random sampling can discard key points necessary for efficient point cloud segmentation, RandLa-Net implements attention-based local feature aggregation to effectively share features of points that are removed into the neighbor points. Figure[1] is the architecture of RandLa-Net. 
   <figure>
-					<center><img src="randlanet_architecture.png" width="800" /> </center>
+					<center><img src="sidebar-featured.png" width="800" /> </center>
 					<figcaption class="figure-caption text-center">Figure 1:  RandLa-Net Architecture.  FC is the fully connected layer, LFA is the localfeature aggregation, RS is random sampling, MLP is shared multilayer perceptron,US is upsampling and DP is dropout.  (Image from [3])
 					</figcaption>
 				</figure>
@@ -68,7 +66,7 @@ show_related: true
   $\textbf{Positional Encoding:}$Since point clouds are unstructured, positional encoding layer embeds the positional information in an 8 dimensional vector ($3\rightarrow 8$). This layer describes the location of a point by mapping the position/index of a point into a vector and assigning unique representation for every point. In this way, positional encoding layer makes the network more permutation-invariant.
   <p>
   <p>
-  $\textbf{Encoding Layer:}$ The encoding layer progressively reduces the number of points and increases the point features. The point cloud is downsampled at each encoding layer after the dilated residual block by downsampling factor 4 ($N\rightarrow \frac{N}{4} \rightarrow \frac{N}{4^2} \rightarrow \frac{N}{4^3} \rightarrow \frac{N}{4^4}$). The per-point feature dimension is increased gradually ($8 \rightarrow 32 \rightarrow 128 \rightarrow 256 \rightarrow 512$).
+  $\textbf{Encoding Layer:}$ The encoding layer progressively reduces the number of points and increases the point features. The point cloud is downsampled at each encoding layer after the dilated residual block by downsampling factor 4. $$N\rightarrow \frac{N}{4} \rightarrow \frac{N}{4^2} \rightarrow \frac{N}{4^3} \rightarrow \frac{N}{4^4}$$ The per-point feature dimension is increased gradually. $$8 \rightarrow 32 \rightarrow 128 \rightarrow 256 \rightarrow 512$$
   <p>
   <p>
   $\textbf{Decoding Layer:}$ In each decoder layer, points are upsampled. In each encoder layer, when a point is removed, it is stored as a reference. In subsequent decoding layer, (i.e the layer with which a skip connection is added from an encoder in Figure 1 for each query reference point, KNN is used to find the one nearest neighbor in the input set of points. Afterwards, feature of the nearest point is copied to the target point. Subsequently, the feature maps are concatenated with the feature maps produced by corresponding encoding layers through skip connections. Then a shared MLP is applied to the concatenated feature maps. Shared MLP means same MLP network for every point in the input point cloud.
@@ -89,7 +87,7 @@ show_related: true
    <ul>
   <li>$\textbf{1. Sampling:}$ The first step in message passing system is from which points we want to pass a message to the red point $p$ in Figure 3. K-Nearest Neighbor is used to find $K$ neighbor points (blue points) which will share its features with red point $p$.</li>
   <li> $\textbf{2. Message Generation:}$ Once we choose the points, we need to generate the message to send from blue points to red point. For every point, $p_i$, we will generate a message $f_i$ by incorporating the distance and spatial information using an MLP. This MLP will give us the desired dimension of feature vector for $f_i,\forall i=1,2,\cdots,K$.</li>
-  <li> $\textbf{3. Message Passing:}$ There are several ways to share features from neighbor points. We can use MAX, AVG or SUM function. But the best method is use linear sum of the features $f=\sum\limits_{i=1}^{6}\alpha_if_i$, with $\alpha_i$ as learnable by the model. This $\alpha_i$ is the attention score. It makes sure to give more weights during aggregation to points of similar nature or belonging to the same object.
+  <li> $\textbf{3. Message Passing:}$ There are several ways to share features from neighbor points. We can use MAX, AVG or SUM function. But the best method is use linear sum of the features $$f=\sum\limits_{i=1}^{6}\alpha_if_i$$, with $\alpha_i$ as learnable by the model. This $\alpha_i$ is the attention score. It makes sure to give more weights during aggregation to points of similar nature or belonging to the same object.
   </li>
   </ul>
   <figure>
@@ -107,8 +105,8 @@ For every point $p_i$, first K-Nearest Algorithm is used for finding $K$ neighbo
     r_k^{(i)}=MLP\bigg(p_i;p_k^{(i)};(p_i-p_k^{(i)});||p_i-p_k^{(i)}||\bigg), r_k^{(i)} \in \mathbb{R}^r
 \end{equation}
 $;$ is the concatenation layer and $||\cdot||$ is the $l_2$ distance between neighbor and center points. $r_k^{(i)}$ not only just concatenates two positions but also the effect of one point on another point in terms of distance is also added. Once $r_k^{(i)} ,\forall k=1,2,\cdots,K$ is computed it is concatenated with corresponding features in $N(f_i)$.
-$\hat{F}=\{\hat{F}_1,\hat{F}_2,\cdots,\hat{F}_i\},\hat{F_i}=\{\hat{f}_k^{(i)}\}_{k=1}^{k=K},
-\hat{f}_k^{(i)}=\{r_k^{(i)};f_k^{(i)}\}$.
+$$\hat{F}=\{\hat{F}_1,\hat{F}_2,\cdots,\hat{F}_i\},\hat{F_i}=\{\hat{f}_k^{(i)}\}_{k=1}^{k=K},
+\hat{f}_k^{(i)}=\{r_k^{(i)};f_k^{(i)}\}$$
   </p>
   <p>
   $\textbf{B. Attentive Pooling}$</p>

@@ -37,7 +37,7 @@ However there is no correlation between minimizing $l_{n}$ norm and improving th
 loss associated to the IoU metric [<a href="#giou" style="color:red">1</a>], $$L_{IoU}=1-IoU(B_{g},B_{d})$$.
 </p>
 <figure>
-<center><img src="whynotl1.png" width="800" /> </center>
+<center><img src="sidebar-featured.png" width="800" /> </center>
 <figcaption>Figure 1: Three cases where the $l_{2}$-norm distance between the
 representations of two rectangular bounding boxes, each given by the concatenation of the
 coordinates of
