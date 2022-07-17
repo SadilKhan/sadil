@@ -1,5 +1,5 @@
 ---
-title: Projects I'm associated with
+title: My Projects
 #description: "Give your projects a place to live online."
 author: "Mohammad Sadil Khan"
 show_post_thumbnail: true
