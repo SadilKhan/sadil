@@ -17,29 +17,11 @@
     </item>
     
     <item>
-      <title>Decoder</title>
-      <link>/categories/decoder/</link>
-      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/decoder/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Deep Learning</title>
       <link>/categories/deep-learning/</link>
       <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
       
       <guid>/categories/deep-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Encoder</title>
-      <link>/categories/encoder/</link>
-      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/encoder/</guid>
       <description></description>
     </item>
     
@@ -89,425 +71,92 @@
     </item>
     
     <item>
-      <title>keynote</title>
-      <link>/categories/keynote/</link>
-      <pubDate>Sat, 02 Apr 2022 00:00:00 +0000</pubDate>
+      <title>3D Computer Vision</title>
+      <link>/categories/3d-computer-vision/</link>
+      <pubDate>Thu, 23 Jun 2022 00:00:00 +0000</pubDate>
       
-      <guid>/categories/keynote/</guid>
+      <guid>/categories/3d-computer-vision/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>talk</title>
-      <link>/categories/talk/</link>
-      <pubDate>Sat, 02 Apr 2022 00:00:00 +0000</pubDate>
+      <title>Image Segmentation</title>
+      <link>/categories/image-segmentation/</link>
+      <pubDate>Thu, 23 Jun 2022 00:00:00 +0000</pubDate>
       
-      <guid>/categories/talk/</guid>
+      <guid>/categories/image-segmentation/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>mental wealth</title>
-      <link>/categories/mental-wealth/</link>
-      <pubDate>Sat, 05 Mar 2022 00:00:00 +0000</pubDate>
+      <title>Decoder</title>
+      <link>/categories/decoder/</link>
+      <pubDate>Thu, 12 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>/categories/mental-wealth/</guid>
+      <guid>/categories/decoder/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>paper</title>
-      <link>/categories/paper/</link>
-      <pubDate>Sat, 05 Mar 2022 00:00:00 +0000</pubDate>
+      <title>Encoder</title>
+      <link>/categories/encoder/</link>
+      <pubDate>Thu, 12 May 2022 00:00:00 +0000</pubDate>
       
-      <guid>/categories/paper/</guid>
+      <guid>/categories/encoder/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>psychology</title>
-      <link>/categories/psychology/</link>
-      <pubDate>Sat, 05 Mar 2022 00:00:00 +0000</pubDate>
+      <title>Anomaly</title>
+      <link>/categories/anomaly/</link>
+      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
       
-      <guid>/categories/psychology/</guid>
+      <guid>/categories/anomaly/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>PTSD</title>
-      <link>/categories/ptsd/</link>
-      <pubDate>Sat, 05 Mar 2022 00:00:00 +0000</pubDate>
+      <title>Autoencoder</title>
+      <link>/categories/autoencoder/</link>
+      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
       
-      <guid>/categories/ptsd/</guid>
+      <guid>/categories/autoencoder/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>ecology</title>
-      <link>/categories/ecology/</link>
-      <pubDate>Tue, 11 Jan 2022 00:00:00 +0000</pubDate>
+      <title>Image Reconstruction</title>
+      <link>/categories/image-reconstruction/</link>
+      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
       
-      <guid>/categories/ecology/</guid>
+      <guid>/categories/image-reconstruction/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>forests</title>
-      <link>/categories/forests/</link>
-      <pubDate>Tue, 11 Jan 2022 00:00:00 +0000</pubDate>
+      <title>Object Detection</title>
+      <link>/categories/object-detection/</link>
+      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
       
-      <guid>/categories/forests/</guid>
+      <guid>/categories/object-detection/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>art</title>
-      <link>/categories/art/</link>
-      <pubDate>Thu, 22 Jul 2021 00:00:00 +0000</pubDate>
+      <title>SSD</title>
+      <link>/categories/ssd/</link>
+      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
       
-      <guid>/categories/art/</guid>
+      <guid>/categories/ssd/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>GenerativeArt</title>
-      <link>/categories/generativeart/</link>
-      <pubDate>Thu, 22 Jul 2021 00:00:00 +0000</pubDate>
+      <title>Image Annotation</title>
+      <link>/categories/image-annotation/</link>
+      <pubDate>Sun, 27 Sep 2020 00:00:00 +0000</pubDate>
       
-      <guid>/categories/generativeart/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Bioinformatics</title>
-      <link>/categories/bioinformatics/</link>
-      <pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/bioinformatics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>co-expression analysis</title>
-      <link>/categories/co-expression-analysis/</link>
-      <pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/co-expression-analysis/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>evolution</title>
-      <link>/categories/evolution/</link>
-      <pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/evolution/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>hybrids</title>
-      <link>/categories/hybrids/</link>
-      <pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/hybrids/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>lizards</title>
-      <link>/categories/lizards/</link>
-      <pubDate>Fri, 14 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/lizards/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>COVID19</title>
-      <link>/categories/covid19/</link>
-      <pubDate>Tue, 11 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/covid19/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>drug repurpusing</title>
-      <link>/categories/drug-repurpusing/</link>
-      <pubDate>Tue, 11 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/drug-repurpusing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>infectious diseases</title>
-      <link>/categories/infectious-diseases/</link>
-      <pubDate>Tue, 11 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/infectious-diseases/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>virus</title>
-      <link>/categories/virus/</link>
-      <pubDate>Tue, 11 May 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/virus/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>co-expression</title>
-      <link>/categories/co-expression/</link>
-      <pubDate>Sat, 10 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/co-expression/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>network comparisson</title>
-      <link>/categories/network-comparisson/</link>
-      <pubDate>Sat, 10 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/network-comparisson/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>network medicine</title>
-      <link>/categories/network-medicine/</link>
-      <pubDate>Sat, 10 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/network-medicine/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>networks</title>
-      <link>/categories/networks/</link>
-      <pubDate>Sat, 10 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/networks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R packages</title>
-      <link>/categories/r-packages/</link>
-      <pubDate>Sat, 10 Apr 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/r-packages/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>cover</title>
-      <link>/categories/cover/</link>
-      <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/cover/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Human Genome</title>
-      <link>/categories/human-genome/</link>
-      <pubDate>Thu, 11 Feb 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/human-genome/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Network Science</title>
-      <link>/categories/network-science/</link>
-      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/network-science/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>r package</title>
-      <link>/categories/r-package/</link>
-      <pubDate>Thu, 15 Oct 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/r-package/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>fungi</title>
-      <link>/categories/fungi/</link>
-      <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/fungi/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>marine ecossystem</title>
-      <link>/categories/marine-ecossystem/</link>
-      <pubDate>Wed, 10 Jun 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/marine-ecossystem/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>construction of networks</title>
-      <link>/categories/construction-of-networks/</link>
-      <pubDate>Wed, 06 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/construction-of-networks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>network comparison</title>
-      <link>/categories/network-comparison/</link>
-      <pubDate>Wed, 06 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/network-comparison/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>network evolution</title>
-      <link>/categories/network-evolution/</link>
-      <pubDate>Wed, 06 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/network-evolution/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>networks in life sciences</title>
-      <link>/categories/networks-in-life-sciences/</link>
-      <pubDate>Wed, 06 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/networks-in-life-sciences/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>bees</title>
-      <link>/categories/bees/</link>
-      <pubDate>Mon, 27 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/bees/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>machine learning</title>
-      <link>/categories/machine-learning/</link>
-      <pubDate>Thu, 12 Mar 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/machine-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>R</title>
-      <link>/categories/r/</link>
-      <pubDate>Thu, 12 Mar 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/r/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>statistics</title>
-      <link>/categories/statistics/</link>
-      <pubDate>Thu, 12 Mar 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/statistics/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>disease association</title>
-      <link>/categories/disease-association/</link>
-      <pubDate>Wed, 13 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/disease-association/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>gene enrichment</title>
-      <link>/categories/gene-enrichment/</link>
-      <pubDate>Wed, 13 Feb 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/gene-enrichment/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>publication</title>
-      <link>/categories/publication/</link>
-      <pubDate>Wed, 24 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/publication/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>miRNA</title>
-      <link>/categories/mirna/</link>
-      <pubDate>Wed, 03 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/mirna/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>non coding RNA</title>
-      <link>/categories/non-coding-rna/</link>
-      <pubDate>Wed, 03 Oct 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/non-coding-rna/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>co-expression networks</title>
-      <link>/categories/co-expression-networks/</link>
-      <pubDate>Tue, 15 May 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/co-expression-networks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>projects</title>
-      <link>/categories/projects/</link>
-      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/projects/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>gene co-expression networks</title>
-      <link>/categories/gene-co-expression-networks/</link>
-      <pubDate>Mon, 10 Oct 2016 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/gene-co-expression-networks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>epidemiology</title>
-      <link>/categories/epidemiology/</link>
-      <pubDate>Thu, 01 Oct 2015 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/epidemiology/</guid>
+      <guid>/categories/image-annotation/</guid>
       <description></description>
     </item>
     
