@@ -1,8 +1,8 @@
 ---
 title: My Publications
 description: |
- Here I list all my peer-reviewed publications
-author: "Deisy Morselli Gysi"
+ Here I list all the preprints, thesis papers and peer-reviewed papers.
+author: "Mohammad Sadil Khan"
 show_post_thumbnail: true
 show_author_byline: true
 show_post_date: true
@@ -15,14 +15,14 @@ layout: list #list, list-sidebar
 sidebar: 
   title: My Publications
   description: |
-    Here I list all my peer-reviewed publications.
+    Here I list all the preprints, thesis papers and peer-reviewed papers.
 
-  author: "Deisy Morselli Gysi"
+  author: "Mohammad Sadil Khan"
   show_sidebar_adunit: false # show ad container
 
 # set up common front matter for all individual pages inside project/
 cascade:
-  author: "Deisy Morselli Gysi"
+  author: "Mohammad Sadil Khan"
   show_author_byline: true
   show_post_date: true
   show_post_time: false
