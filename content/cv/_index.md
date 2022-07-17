@@ -1,7 +1,7 @@
 ---
 title: CV
 description: ""
-author: "Deisy Morselli Gysi"
+author: "Mohammad Sadil Khan"
 show_post_thumbnail: true
 show_author_byline: true
 show_post_date: false
@@ -32,7 +32,4 @@ cascade:
     show_sidebar_adunit: false # show ad container
 ---
 
-I do not keep a fully updated version of my CV here. 
-Please, send me a message for the full and updated version.
-
-[PDF](CV_webpage.pdf)
+My updated CV can be downloaded from [here](resume.pdf)
