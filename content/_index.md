@@ -3,13 +3,15 @@ title: "Mohammad Sadil Khan"
 subtitle: "Masters in Machine Learning and Data Mining"
 description: "Computer Vision | Deep Learning | Statistics | Mathematics"
 date: 2022-02-01
+images:
+ - img/featured.jpg
 image_left: true
 text_align_left: false
 show_social_links: true # specify social accounts in site config
 show_action_link: true
-action_link: /about
-action_label: "Read More &rarr;"
-action_type: button # text, button
+action_link: /about/
+#action_label: "Read More &rarr;"
+#action_type: button # text, button
 type: home
 ---
 
