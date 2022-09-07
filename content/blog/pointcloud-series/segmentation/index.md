@@ -113,46 +113,6 @@ Voxel-based methods convert the 3D point clouds into voxel-based images. Figure 
 
 Point-Based Networks work on raw point cloud data. They do not require voxelization or projection. <a href="#pnet" style="color:red">PointNet</a> is a breakthrough network that takes input as raw point clouds and outputs labels for every point. It uses permutation-invariant operations like pointwise MLP and symmetric layer, Max-Pooling layer for feature aggregation layer. It achieves state-of-the-art performance on benchmark datasets. But <a href="#pnet" style="color:red">PointNet</a> lacks local dependency information and so it does not capture local information. The max-pooling layer captures the global structure and loses distinct local information. Inspired by <a href="#pnet" style="color:red">PointNet</a> many new networks are proposed to learn local structure. <a href="#pnet++" style="color:red">PointNet++</a> extends the <a href="#pnet" style="color:red">PointNet</a> architecture with an addition of local structure learning method. The local structure information passing idea follows the three basic steps (1) Sampling (2) Grouping (3) Feature Aggregation Layer (Section 3.3.1.E lists some Feature Aggregation functions) to aggregate the information from the points in the nearest neighbors. <i> Sampling </i> is choosing $M$ centroids from $N$ points in a point cloud ($N>M$). Random Sampling or Farthest Point Sampling are two such methods for sampling centroids. <i>Grouping</i> refers to sample representative points for a centroid using KNN. It takes the input (1) set of points $N\times(d+C)$, with $N$ is the number of points,$d$ coordinates and $C$ feature dimension and (2) set of centroids $N_1\times d$. It outputs $N_1\times K \times (d+C)$ with $K$ is the number of neighbors. These points are grouped in a local patch. The points in the local patches are used for creating local feature representation for centroid points. These local patches work like receptive fields. <i>Feature Aggregation Layer</i> takes the feature of the points in the receptive field and aggregate them to output $N_1\times(d+C)$. This process is repeated in a hierarchical way reducing the number of points as it goes deeper. This hierarchical structure enables the network to be able to learn local structures with an expanding receptive field. Most of the research in this field has gone into developing an effective feature aggregation layer to capture local structures. <a href="#pweb" style="color:red">PointWeb</a> creates a new module <i> Adaptive Feature Adjustment</i> to enhance the neighbor features by adding the information about the impact of features on centroid features and the relation between the points. It then combines the features and uses MLP to create new representations for centroid points. Despite their initial successes the following methods achieve higher performance due to their advanced local aggregation operators.
 
-### D. Graph-Based Networks
-A point cloud is unstructured, unordered, and
-has no connectivity properties. But it can be transformed into a graph
-structure by adding edges to the neighbors. Graph structures are good for
-modeling correlation and dependency amidst points through edges. GNN
-based networks use the idea of graph construction, local structure learning
-using expanding receptive field, and global summary structure. <a href="#pgnn" style="color:red">PointGNN</a> creates a graph structure using KNN and applies pointwise MLP
-on them followed by feature aggregation. It updates vertex features along
-with edge features at every iteration. <a href="#sg" style="color:red">Landrieu</a> introduces super point graphs to
-segment large-scale point clouds. It first creates a partition of geometrically
-similar objects (i.e planes, cubes) in an unsupervised manner and applies
-graph convolutions for contextual segmentation. <a href="#dgcnn" style="color:red">DGCNN</a> introduces
-the Edge Convolution operation for dynamically updating the vertices and
-edges thus updating the graph itself. <a href="#pgc" style="color:red">Ma</a> creates a Point Global Context
-Reasoning module to capture the global contextual information from the
-output of any segmentation network by creating a graph from the output
-embedding vectors.
-
-### E. Transformer and Attention-Based Networks
-Transformers and attention mechanism are a major breakthrough in NLP tasks. This has lead to research in attention mechanism in 2D CNN\cite{attention}. Attention follows the following derivation.
-        \begin{equation}
-            y_i=\sum\limits_{x_j\in R(x_i)} \alpha(x_i,x_j) \odot \beta(x_j)
-        \end{equation}
-        where $\odot$ is the Hadamard product, $R(x_i)$ is the local footprint of $x_i$ (i.e a receptive field, one such example can be nearest neighbors). $\beta(x_j)$ produces a feature vector from $x_j$ that is adaptively aggregated using the vector of $\alpha(x_i,x_j)$, where $\alpha(x_i,x_j)=\gamma(\delta(x_i,x_j))$. $\delta$ combines the features of $x_i$ and $x_j$ and $\gamma$ explores the relationship between $x_i$ and $x_j$ expressively. In NLP, $\gamma,\delta \text{ and }\beta$ is known as <i>Query, Key and Value</i>. Some examples of $\delta$ function can be
-        <ul>
-            <li> $\delta(x_i,x_j)=f_1(x_i)+f_2(x_j)$ </li>
-            <li> $\delta(x_i,x_j)=f_1(x_i)-f_2(x_j)$ </li>
-            <li> $\delta(x_i,x_j)=f_1(x_i)\odot f_2(x_j)$ </li>
-            <li> $\delta(x_i,x_j)=[f_1(x_i);f_2(x_j)]$ ($;$ denotes concatenation) </li>
-        </ul>
-        <b>In Matrix Form:</b> Let $P$ be the set of points in a point cloud ($P \in \mathbb{R)^{N\times F}}$ where F is the feature channels). $Q,K\in \mathbb{R}^{N\times C_k},V\in \mathbb{R}^{N\times C_v}$.
-        \begin{equation}\nonumber
-        \begin{split}
-            & Q=PW_q,K=PW_k,V=PW_v\\
-            & Attention(Q,K,V)=softmax\bigg(\frac{QK^T}{\sqrt{F_k}}\bigg)V
-        \end{split}
-        \end{equation}
-        The time complexity of original attention is $O(N^2C_v)$ and space complexity $O(N^2+NC_k+NC_v)$ which quadritically increases as $N$ increases.
-        Attention mechanism can be categorized into two categories. Self Attention where Query, key and value is derived from the same input meaning model uses attention scores for making better representation from a single representation. $Cross Attention$ where Value and Key comes from an input and Query comes from another input. It's used to query and learn conditional representation using the attention score of other feature vectors. In point cloud segmentation network, attention is generally used for local aggregation layer for giving adaptive weights to different features and can be used in point based or graph based networks. <a href="#pt" style="color:red">Point Transformer</a> uses Equation 4 for local feature aggregation layer after extracting neighbors. Each of the component is approximated by an MLP. Furthermore it uses encoder-decoder like structure. In each layer of the encoder, points are downsampled by a certain factor and in decoders the points are upsampled with skip connections added for preventing information leak. <a href="#3dmedpt" style="color:red">3D Medical Point Transformer</a> uses an Edge Convolution module for computing query value. It uses <i>Lambda Attention</i> layer which is $$Attention(Q,K,V)=Q(softmax(K^T)V)$$ which has $O(NC_kC_v)$ time complexity and $O(NC_k+C_kC_v+C_kC_v)$ space complexity. Although it uses cost effective attention layer, 3DMedPT can't perform large scale point cloud segmentation due to computational issues. <a href="#pat" style="color:red">Point Attention Network</a> uses a new end-to-end subsampling method for downsampling the number of points and is permutation invariant and robust to noises and outliers.
-
 ## 5. Bibliography
  <ol>
          <li>
@@ -203,48 +163,6 @@ Transformers and attention mechanism are a major breakthrough in NLP tasks. This
          <p id="pweb">
          H. Zhao, L. Jiang, C. -W. Fu and J. Jia
 <a href="https://ieeexplore.ieee.org/document/8954075">PointWeb: Enhancing Local Neighborhood Features for Point Cloud Processing</a>. 2019 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 2019, pp. 5560-5568, doi: 10.1109/CVPR.2019.00571.
-         </p>
-         </li>
-         <li>
-         <p id="pgnn">
-         Shi, Weijing and Rajkumar, Ragunathan (Raj)
-<a href="https://arxiv.org/pdf/2003.01251.pdf">Point-GNN: Graph Neural Network for 3D Object Detection in a Point Cloud</a>.The IEEE Conference on Computer Vision and Pattern Recognition (CVPR).
-         </p>
-         </li>
-         <li>
-         <p id="sg">
-         Landrieu, Loic and Simonovsky, Martin
-<a href="https://ieeexplore.ieee.org/document/8578577">Large-Scale Point Cloud Semantic Segmentation with Superpoint Graphs</a>.2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition.
-         </p>
-         </li>
-          <li>
-         <p id="dgcnn">
-         Wang, Yue and Sun, Yongbin and Liu, Ziwei and Sarma, Sanjay E. and Bronstein, Michael M. and Solomon, Justin M.
-<a href="https://arxiv.org/abs/1801.07829">Dynamic Graph CNN for Learning on Point Clouds</a>. ACM Transactions on Graphics (TOG).
-         </p>
-         </li>
-             <li>
-         <p id="pgc">
-         Ma, Yanni and Guo, Yulan and Liu, Hao and Lei, Yinjie and Wen, Gongjian
-<a href="https://ieeexplore.ieee.org/document/9093411">Global Context Reasoning for Semantic Segmentation of 3D Point Clouds.</a>. 2020 IEEE Winter Conference on Applications of Computer Vision (WACV).
-         </p>
-         </li>
-         <li>
-         <p id="pt">
-         Zhao, Hengshuang and Jiang, Li and Jia, Jiaya and Torr, Philip HS and Koltun, Vladlen
-<a href="https://github.com/POSTECH-CVLab/point-transformer">Point transformer.</a>. Proceedings of the IEEE/CVF International Conference on Computer Vision.
-         </p>
-         </li>
-         <li>
-         <p id="3dmedpt">
-         Jianhui Yu, Chaoyi Zhang, Heng Wang, Dingxin Zhang, Yang Song, Tiange Xiang, Dongnan Liu, Weidong Cai
-<a href="https://arxiv.org/abs/2112.04863">3D Medical Point Transformer: Introducing Convolution to Attention Networks for Medical Point Cloud Analysis.</a>. arXiv - CS - Computer Vision and Pattern Recognition  (IF),  Pub Date : 2021-12-09, DOI: arxiv-2112.04863.
-         </p>
-         </li>
-         <li>
-         <p id="pat">
-         Mingtao Feng, Liang Zhang, Xuefei Lin, Syed Zulqarnain Gilani, Ajmal Mian
-<a href="https://arxiv.org/abs/1909.12663">Point Attention Network for Semantic Segmentation of 3D Point Clouds.</a>.
          </p>
          </li>
       </ol>
