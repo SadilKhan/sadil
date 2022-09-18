@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Computational Theory on Home</title>
-    <link>/categories/computational-theory/</link>
-    <description>Recent content in Computational Theory on Home</description>
+    <title>VC Dimension and Neural Networks on Home</title>
+    <link>/series/vc-dimension-and-neural-networks/</link>
+    <description>Recent content in VC Dimension and Neural Networks on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 18 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/computational-theory/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/series/vc-dimension-and-neural-networks/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Part 1 - VC Dimension</title>
       <link>/blog/vc-nn/introduction/</link>

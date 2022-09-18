@@ -25,7 +25,7 @@ sidebar:
 # set up common front matter for all individual pages in series
 cascade:
   layout: single-series       # for a series, do not change
-  series: VC Dimension # name your series
+  series: VC Dimension and Neural Networks # name your series
   author: Mohammad Sadil Khan
   show_author_byline: true
   show_post_date: true

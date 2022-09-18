@@ -41,9 +41,10 @@
     
     
   <meta itemprop="name" content="Part 1 - VC Dimension">
-<meta itemprop="description" content="Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\\{-1,&#43;1\\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc. For each parameter $\theta$ in Logistic Regression we get $h(\theta;x) \in \mathscr{H}$."><meta itemprop="datePublished" content="2022-09-18T00:00:00+00:00" />
+<meta itemprop="description" content="This is the first part of the VC Dimension and Neural Networks series. Basic definition and some examples of vc dimension of learning algorithms are explained here.
+1. Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\{-1,&#43;1\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc."><meta itemprop="datePublished" content="2022-09-18T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-09-18T00:00:00+00:00" />
-<meta itemprop="wordCount" content="180">
+<meta itemprop="wordCount" content="322">
 <meta itemprop="keywords" content="" />
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -292,38 +293,92 @@
         <p class="f7 db mv0 ttu">September 18, 2022</p>
       </header>
       <section class="post-body pt5 pb4">
-        
+        <p>This is the first part of the <a href="/blog/vc-nn/">VC Dimension and Neural Networks</a> series. Basic definition and some examples of vc dimension of learning algorithms are explained here.</p>
 
 
 
-<h2 id="definition">Definition
-  <a href="#definition"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+
+<h2 id="1-definition">1. Definition
+  <a href="#1-definition"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
 <p>
-Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\\{-1,+1\\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc. For each parameter $\theta$ in Logistic Regression we get $h(\theta;x) \in \mathscr{H}$.
+Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\{-1,+1\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc. For each parameter $\theta$ in Logistic Regression we get $h(\theta;x) \in \mathscr{H}$.
 </p>
 <p>
-$\textbf{Shattering}:$ $S$ is shattered by $\mathscr{H}$ when all labeling of $S$ (with 0 and 1) can be computed by $\mathscr{H}$ i.e for all labeling of $S$ denoted by $Y=\{0,1\}^m$, $\exists \\, h\in \mathscr{H}$ such that the $|h(x_i)-y_i|=0$, where $y_i$ is the label of the ith point. Consider in Figure 1, $\mathscr{H}=\{wx+b;w,b\in \mathbb{R}\}$.
+$\textbf{Shattering:}$ $S$ is shattered by $\mathscr{H}$ when all labeling of $S$ (with 0 and 1) can be computed by $\mathscr{H}$ i.e for all labeling of $S$ denoted by $Y=\{0,1\}^m$, $\exists \\, h\in \mathscr{H}$ such that the $\sum_{i}|h(x_i)-y_i|=0$, where $y_i$ is the label of the ith point. Consider in Figure 1, $S$ is the set of three points, $\mathscr{H}=\{wx+b;w,b\in \mathbb{R}\}$, for every possible labels of $S$ (colors of $S$), there is a line which achieves the classification task. So $\mathscr{H}=\{wx+b;w,b\in \mathbb{R}\}$ shatters $S$ (from Figure 1).
 <figure>
 					<center><img src="/blog/VC-NN/sidebar-featured.png" width="600"> </center>
-					<figcaption style= "text-align:center">Figure 1:  Shattering of 3 points in xy plane by lines.
+					<figcaption style= "text-align:center">Figure 1:  Shattering of 3 points in xy plane by lines. Red is for negative label and blue for positive label.
 					</figcaption>
 				</figure>
 </p>
-<p>	
-$\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases}
-       1 \, \text{if} \, x_i \in S_1 \\
-      -1 \, \text{if} \, x_i \in S_2\\
-     \end{cases}$$
-</p>
+<p> $\textbf{Vapnik-Chervonenkis (VC) dimension}$ of a hypothesis space($\mathscr{H}$) is the cardinality of the largest $S$ such that $\mathscr{H}$ shatters $S$. If $VC(\mathscr{H})=n$, there there exists $n$ points which can be shattered by $\mathscr{H}$ but no set of $(n+1)$ points can be shattered.
+
+
+
+
+<h2 id="2-vc-dimension-of-class-of-thresholds">2. VC-dimension of class of Thresholds
+  <a href="#2-vc-dimension-of-class-of-thresholds"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<figure>
+					<center><img src="thresholds.png" width="600"> </center>
+					<figcaption style= "text-align:center">Figure 1:  Shattering of 2 points a class of threhsolds. Red is for negative label and blue for positive label. The green bar is the threshold. For third example, there is no hypothesis which can predict the two points.
+					</figcaption>
+				</figure>
+
+
+
+
+<h2 id="3-vc-dimension-of-class-of-intervals">3. VC-dimension of class of Intervals
+  <a href="#3-vc-dimension-of-class-of-intervals"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h2 id="4-vc-dimension-of-class-of-axis-aligned-rectangles">4. VC-dimension of class of axis-aligned rectangles
+  <a href="#4-vc-dimension-of-class-of-axis-aligned-rectangles"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h2 id="5-vc-dimension-of-class-of-2d-line">5. VC-dimension of class of 2d Line
+  <a href="#5-vc-dimension-of-class-of-2d-line"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+
+
+
+
+<h2 id="6-vc-dimension-of-class-of-hyperplane">6. VC-dimension of class of hyperplane
+  <a href="#6-vc-dimension-of-class-of-hyperplane"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
 
       </section>
       <footer class="post-footer">
         <div class="post-pagination dt w-100 mt4 mb2">
   
+  
+    <a class="next dtc pl2 tr v-top fw6"
+    href="/blog/vc-nn/theorems/">Part 2 - VC Dimension Theorems and Lemmas &rarr;</a>
   
 </div>
 
@@ -381,6 +436,9 @@ $\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a par
           
           <li class="active" hugo-nav="/blog/vc-nn/introduction/"><a href="/blog/vc-nn/introduction/">Part 1 - VC Dimension</a></li>
         
+          
+          <li class="" hugo-nav="/blog/vc-nn/theorems/"><a href="/blog/vc-nn/theorems/">Part 2 - VC Dimension Theorems and Lemmas</a></li>
+        
         </ul>
       </nav>
   </div>
@@ -389,7 +447,12 @@ $\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a par
     <div class="pl2 pr0 mh0">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#definition">Definition</a></li>
+    <li><a href="#1-definition">1. Definition</a></li>
+    <li><a href="#2-vc-dimension-of-class-of-thresholds">2. VC-dimension of class of Thresholds</a></li>
+    <li><a href="#3-vc-dimension-of-class-of-intervals">3. VC-dimension of class of Intervals</a></li>
+    <li><a href="#4-vc-dimension-of-class-of-axis-aligned-rectangles">4. VC-dimension of class of axis-aligned rectangles</a></li>
+    <li><a href="#5-vc-dimension-of-class-of-2d-line">5. VC-dimension of class of 2d Line</a></li>
+    <li><a href="#6-vc-dimension-of-class-of-hyperplane">6. VC-dimension of class of hyperplane</a></li>
   </ul>
 </nav>
     </div>
