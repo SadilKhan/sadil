@@ -26,14 +26,53 @@ $\textbf{Shattering:}$ $S$ is shattered by $\mathscr{H}$ when all labeling of $S
 <p> $\textbf{Vapnik-Chervonenkis (VC) dimension}$ of a hypothesis space($\mathscr{H}$) is the cardinality of the largest $S$ such that $\mathscr{H}$ shatters $S$. If $VC(\mathscr{H})=n$, there there exists $n$ points which can be shattered by $\mathscr{H}$ but no set of $(n+1)$ points can be shattered.
 
 ## 2. VC-dimension of class of Thresholds
+<p>
+Let $\mathscr{H}$ be the class of thresholds i.e $\forall h_a \in \mathscr{H}$, $$h_a(x)=\begin{cases} 
+1 \, \text{if } x\geq a \\
+-1 \, \text{if } x< a \\
+\end{cases}$$
 <figure>
 					<center><img src="thresholds.png" width="600"> </center>
-					<figcaption style= "text-align:center">Figure 1:  Shattering of 2 points a class of threhsolds. Red is for negative label and blue for positive label. The green bar is the threshold. For third example, there is no hypothesis which can predict the two points.
+					<figcaption style= "text-align:center">Figure 2: Sample size of 2 can't be shattered by the class of thresholds. Red is for negative label and blue for positive label. The green bar is the threshold. For third example, there is no hypothesis which can predict the two points.
+					</figcaption>
+				</figure>
+</p>
+<p>
+When $|S|=1$, it can be shattered by $\mathscr{H}$. For $|S|=2$ it's impossible to shatter since we can't find a threshold for third example (Figure 2). So $VC(\mathscr{H})=1$
+</p>
+
+## 3. VC-dimension of class of Intervals
+
+<p>
+Let $\mathscr{H}$ be the class of intervals i.e $\forall h([a,b];x) \in \mathscr{H}$,
+$$h_a(x)=\begin{cases} 
+1 \, \text{if } x\in [a,b] \\
+-1 \, \text{if } x \notin [a,b] \\
+\end{cases}$$
+<figure>
+					<center><img src="intervals.png" width="600"> </center>
+					<figcaption style= "text-align:center">Figure 3:  Shattering of 2 points by the class of intervals. Points belonging to the intervals are predicted positive.
+					</figcaption>
+				</figure>
+</p>
+
+Sample of 2 points can be shattered by $\mathscr{H}$ by taking the positive label in an interval.
+<p>
+<figure>
+					<center><img src="intervals_2.png" width="600"> </center>
+					<figcaption style= "text-align:center">Figure 4:  Shattering of 3 points can't be possible by the class of intervals. For the fourth setup, there is no interval. 
 					</figcaption>
 				</figure>
 				
-## 3. VC-dimension of class of Intervals
+But sample of 3 points can't be shattered by $\mathscr{H}$, since there is no hypothesis that can predict the example where the middle value is negative.
+</p>
+
 ## 4. VC-dimension of class of axis-aligned rectangles
+
+<p>
+
+</p>
+
 ## 5. VC-dimension of class of 2d Line
 ## 6. VC-dimension of class of hyperplane
 
