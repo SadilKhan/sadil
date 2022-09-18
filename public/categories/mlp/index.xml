@@ -6,7 +6,16 @@
     <description>Recent content in MLP on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 28 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/mlp/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/mlp/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Part 1 - VC Dimension</title>
+      <link>/blog/vc-nn/introduction/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/vc-nn/introduction/</guid>
+      <description>Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\\{-1,+1\\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc. For each parameter $\theta$ in Logistic Regression we get $h(\theta;x) \in \mathscr{H}$.</description>
+    </item>
+    
     <item>
       <title>Part 1 - Point Cloud Introduction</title>
       <link>/blog/pointcloud-series/introduction/</link>
@@ -24,6 +33,15 @@
       <guid>/blog/pointcloud-series/segmentation/</guid>
       <description>Point Cloud Segmentation Methods Point Cloud Segmentation is the task for grouping objects or assigning labels to every points in the point cloud. It is one of the most challenging tasks and a research topic in deep learning since point clouds are noisy, unstructured and lack connectedness property. All the methods are categorized into four categories.
 1. Edge Based Methods Edges describe the intrinsic characteristics of the boundary of any 3D object.</description>
+    </item>
+    
+    <item>
+      <title>VC Dimension and Neural Networks</title>
+      <link>/blog/vc-nn/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/vc-nn/</guid>
+      <description>** No content below YAML for the series _index. This file is a leaf bundle, and provides settings for the listing page layout and sidebar content.**</description>
     </item>
     
     <item>

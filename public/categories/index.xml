@@ -6,7 +6,43 @@
     <description>Recent content in Categories on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 28 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 18 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Computational Theory</title>
+      <link>/categories/computational-theory/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/computational-theory/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Deep Learning</title>
+      <link>/categories/deep-learning/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/deep-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>MLP</title>
+      <link>/categories/mlp/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/mlp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>VC Dimension</title>
+      <link>/categories/vc-dimension/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/vc-dimension/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Computer Vision</title>
       <link>/categories/computer-vision/</link>
@@ -17,29 +53,11 @@
     </item>
     
     <item>
-      <title>Deep Learning</title>
-      <link>/categories/deep-learning/</link>
-      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/deep-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Graph</title>
       <link>/categories/graph/</link>
       <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
       
       <guid>/categories/graph/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>MLP</title>
-      <link>/categories/mlp/</link>
-      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/categories/mlp/</guid>
       <description></description>
     </item>
     

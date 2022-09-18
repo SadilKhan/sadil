@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>Series | Home</title>
+<title>Part 1 - VC Dimension | Home</title>
 
 
 
@@ -21,32 +21,34 @@
   
     
   
-<meta name="description" content="Computer Vision | Deep Learning | Statistics | Mathematics">
+<meta name="description" content="The VC dimension of a Hypothesis Space &lt;span&gt;&amp;#8459;&lt;/span&gt; on &lt;span&gt;&amp;#8477;&lt;sup&gt;d&lt;/sup&gt;&lt;/span&gt; is cardinality of the largest set &lt;b&gt;S&lt;/b&gt; such that S is shattered by &lt;span&gt;&amp;#8459;&lt;/span&gt;.">
 
 
 <meta property="og:site_name" content="Home">
-<meta property="og:title" content="Series | Home">
-<meta property="og:description" content="Computer Vision | Deep Learning | Statistics | Mathematics" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/series/" />
+<meta property="og:title" content="Part 1 - VC Dimension | Home">
+<meta property="og:description" content="The VC dimension of a Hypothesis Space &lt;span&gt;&amp;#8459;&lt;/span&gt; on &lt;span&gt;&amp;#8477;&lt;sup&gt;d&lt;/sup&gt;&lt;/span&gt; is cardinality of the largest set &lt;b&gt;S&lt;/b&gt; such that S is shattered by &lt;span&gt;&amp;#8459;&lt;/span&gt;." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/vc-nn/introduction/" />
 <meta property="og:locale" content="en">
 
 
 
 
     
-        <meta property="og:image" content="%!s()" >
+        <meta property="og:image" content="/blog/vc-nn/sidebar-featured.png" >
         <meta property="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="%!s()" >
+        <meta name="twitter:image" content="/blog/vc-nn/sidebar-featured.png" >
     
-  <meta itemprop="name" content="Series">
-<meta itemprop="description" content="Computer Vision | Deep Learning | Statistics | Mathematics">
+    
+  <meta itemprop="name" content="Part 1 - VC Dimension">
+<meta itemprop="description" content="Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\\{-1,&#43;1\\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc. For each parameter $\theta$ in Logistic Regression we get $h(\theta;x) \in \mathscr{H}$."><meta itemprop="datePublished" content="2022-09-18T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-09-18T00:00:00+00:00" />
+<meta itemprop="wordCount" content="180">
+<meta itemprop="keywords" content="" />
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <link rel="shortcut icon" href="" type="image/x-icon">
   <link rel="icon" href="" type="image/x-icon">
-  
-    <link rel="alternate" type="application/rss+xml" href="/series/index.xml" title="Home" />
   
   
   <link rel="stylesheet" href="/style.main.min.4029c246551cf6ec532aa7b82ca95587b549cfad8f761f7746eb6154907463c9.css" integrity="sha256-QCnCRlUc9uxTKqe4LKlVh7VJz62Pdh93RuthVJB0Y8k=" media="screen">
@@ -213,7 +215,7 @@
   <script src="/toc.min.cbd751154f1d83c5f03e91b54c869201115768e2fe9b1aaad26e0857dd1bcbce.js" type="text/javascript"></script>
 </head>
 <body>
-      <div class="grid-container">
+      <div class="grid-container single-series">
 <header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
   <script>
   MathJax = {
@@ -252,7 +254,7 @@
         
         
         
-      <a class="link f6 f5-l dib pv1 ph2 " href="/blog/" title="Blogs">Blogs</a>
+      <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blogs">Blogs</a>
       
         
         
@@ -279,62 +281,123 @@
   </nav>
 </header>
 
-
+                       
 <main class="page-main pa4" role="main">
-  <section class="blog-intro mw7 center mb5">
-    <h1 class="f2 f1-ns fw4 lh-solid tc center i">Series</h1>
-    <p class="f6 f5-ns measure lh-copy tc center"></p>
-  </section>
-  <section class="blog-content mw7 center">
-  
-    
-                               
-     
-     
-<article class="mv4 mv5-l bb">
-  
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/series/vc-dimension/" class="db">VC Dimension</a></h1>
-      
-    </header>
-    <p class="lh-copy mb4"></p>
-    <footer>
-      
-      
-    </footer>
-  </div>
-  
-</article>
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 pl3-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Part 1 - VC Dimension</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Mohammad Sadil Khan in <a href="/categories/computational-theory">Computational Theory</a>  <a href="/categories/deep-learning">Deep Learning</a>  <a href="/categories/vc-dimension">VC Dimension</a>  <a href="/categories/mlp">MLP</a> </p>
+        <p class="f7 db mv0 ttu">September 18, 2022</p>
+      </header>
+      <section class="post-body pt5 pb4">
+        
 
-  
-    
-                               
-     
-     
-<article class="mv4 mv5-l bb">
-  
-  
-  
-  <div class="measure-wide center mb4 mb5-l">
-    <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/series/point-cloud/" class="db">Point Cloud</a></h1>
-      
-    </header>
-    <p class="lh-copy mb4"></p>
-    <footer>
-      
-      
-    </footer>
-  </div>
-  
-</article>
 
+
+<h2 id="definition">Definition
+  <a href="#definition"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>
+Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\\{-1,+1\\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc. For each parameter $\theta$ in Logistic Regression we get $h(\theta;x) \in \mathscr{H}$.
+</p>
+<p>
+$\textbf{Shattering}:$ $S$ is shattered by $\mathscr{H}$ when all labeling of $S$ (with 0 and 1) can be computed by $\mathscr{H}$ i.e for all labeling of $S$ denoted by $Y=\{0,1\}^m$, $\exists \\, h\in \mathscr{H}$ such that the $|h(x_i)-y_i|=0$, where $y_i$ is the label of the ith point. Consider in Figure 1, $\mathscr{H}=\{wx+b;w,b\in \mathbb{R}\}$.
+<figure>
+					<center><img src="/blog/VC-NN/sidebar-featured.png" width="600"> </center>
+					<figcaption style= "text-align:center">Figure 1:  Shattering of 3 points in xy plane by lines.
+					</figcaption>
+				</figure>
+</p>
+<p>	
+$\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases}
+       1 \, \text{if} \, x_i \in S_1 \\
+      -1 \, \text{if} \, x_i \in S_2\\
+     \end{cases}$$
+</p>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
   
+  
+</div>
+
+      </footer>
+    </article>
+    
   </section>
 </main>
+
+<aside class="page-sidebar" role="complementary">
+                         
+ 
+
+
+                       
+ 
+
+
+
+
+
+
+
+
+
+
+
+  <img src="/blog/vc-nn/sidebar-featured.png" class="db ma0">
+
+
+<div class="blog-info ph4 pt4 pb4 pb0-l">
+  
+
+  <h1 class="f3">VC Dimension and Neural Networks</h1>
+  <p class="f6 lh-copy measure">On the VC dimension of the family of Neural Networks</p>
+  <p class="f7 measure lh-copy i mh0-l">Written by Mohammad Sadil Khan</p>
+
+
+  
+</div>
+
+
+                         
+ 
+
+
+
+<div class="flex items-start sticky ph4 pb4">
+  <div class="w-two-thirds w-50-l ph0">
+    
+    <h2 class="mt3 mb3 f5 fw7 ttu tracked"><a class="no-underline dim" href="/blog/vc-nn/">In this series</a></h2>
+    <nav id="SeriesTableOfContents">
+        <ul>
+        
+          
+          <li class="active" hugo-nav="/blog/vc-nn/introduction/"><a href="/blog/vc-nn/introduction/">Part 1 - VC Dimension</a></li>
+        
+        </ul>
+      </nav>
+  </div>
+  <details open id="PageTableOfContents">
+    <summary><h2 class="mv0 f5 fw7 ttu tracked dib">On this page</h2></summary>
+    <div class="pl2 pr0 mh0">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#definition">Definition</a></li>
+  </ul>
+</nav>
+    </div>
+  </details>
+  
+</div>
+</aside>
+
 <footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
   <nav class="db dt-l w-100">
     <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
