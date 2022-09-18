@@ -64,12 +64,31 @@ Sample of 2 points can be shattered by $\mathscr{H}$ by taking the positive labe
 					</figcaption>
 				</figure>
 				
-But sample of 3 points can't be shattered by $\mathscr{H}$, since there is no hypothesis that can predict the example where the middle value is negative.
+But sample of 3 points can't be shattered by $\mathscr{H}$, since there is no hypothesis that can predict the example where the middle value is negative (Figure 3). So $VC(\mathscr{H})=2$.
+</p>
+<p> $\textbf{General Case:}$ For hypothesis class of k non-intersecting intervals, VC dimension is $2k$ since every 2 points can be satisfied using one interval. But no sample with $2k+1$ points can be shattered since points with alternating positive and negative points can't be shattered by k intervals. (Figure 4)
+</p>
+<p>
+$\textbf{Proof:}$ Let $S=\{x_1,x_2,\cdots,x_{2k+1} \}$. Label S such that $x_{2i+1}=1, x_{2i}=-1, \forall i=0,1,\cdots,k$. 
+<br>Then there are $k+1$ positive examples. Since every positive example sits between two negative examples, every interval contains only one positive example. But there are only k intervals. So all the positive examples can't be covered.</br>
+
+<figure>
+					<center><img src="intervals_3.png" width="600"> </center>
+					<figcaption style= "text-align:center">Figure 4:  For K=6, 2*6=12 points can be shattered by for 13 points, this configuration of labels can't be satisfied by the hypothesis space.
+					</figcaption>
+				</figure>
 </p>
 
 ## 4. VC-dimension of class of axis-aligned rectangles
-
 <p>
+Let $\mathscr{H}$ be the set of rectangles whose sides are parallel to the axes. Then it can shatter a set of 4 points. (Figure 5)
+
+<figure>
+					<center><img src="rectangles.png" width="600"> </center>
+					<figcaption style= "text-align:center">Figure 5:  Shattering of 4 points by axis-aligned rectangles. Red is for negative examples and blue is for positve examples.
+					</figcaption>
+				</figure>
+</p>
 
 </p>
 
