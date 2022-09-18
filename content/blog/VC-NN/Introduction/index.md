@@ -66,11 +66,11 @@ Sample of 2 points can be shattered by $\mathscr{H}$ by taking the positive labe
 				
 But sample of 3 points can't be shattered by $\mathscr{H}$, since there is no hypothesis that can predict the example where the middle value is negative (Figure 3). So $VC(\mathscr{H})=2$.
 </p>
-<p> $\textbf{General Case:}$ For hypothesis class of k non-intersecting intervals, VC dimension is $2k$ since every 2 points can be satisfied using one interval. But no sample with $2k+1$ points can be shattered since points with alternating positive and negative points can't be shattered by k intervals. (Figure 4)
+<p> $\textbf{General Case:}$ For hypothesis class of k non-intersecting intervals ($\mathscr{H}^{k}$), VC dimension is $2k$ since every 2 points can be satisfied using one interval. But no sample with $2k+1$ points can be shattered since points with alternating positive and negative points can't be shattered by k intervals. (Figure 4)
 </p>
 <p>
 $\textbf{Proof:}$ Let $S=\{x_1,x_2,\cdots,x_{2k+1} \}$. Label S such that $x_{2i+1}=1, x_{2i}=-1, \forall i=0,1,\cdots,k$. 
-<br>Then there are $k+1$ positive examples. Since every positive example sits between two negative examples, every interval contains only one positive example. But there are only k intervals. So all the positive examples can't be covered.</br>
+<br>Then there are $k+1$ positive examples. Since every positive example sits between two negative examples, every interval contains only one positive example. But there are only k intervals. So all the positive examples can't be covered. So $VC(\mathscr{H}^{k})=2k+1$.</br>
 
 <figure>
 					<center><img src="intervals_3.png" width="600"> </center>
@@ -81,19 +81,41 @@ $\textbf{Proof:}$ Let $S=\{x_1,x_2,\cdots,x_{2k+1} \}$. Label S such that $x_{2i
 
 ## 4. VC-dimension of class of axis-aligned rectangles
 <p>
-Let $\mathscr{H}$ be the set of rectangles whose sides are parallel to the axes. Then it can shatter a set of 4 points. (Figure 5)
+Let $\mathscr{H}$ be the set of rectangles whose sides are parallel to the axes. Then it can shatter a set of 4 points. So $VC(\mathscr{H})\geq 4$ (Figure 5).
 
 <figure>
 					<center><img src="rectangles.png" width="600"> </center>
-					<figcaption style= "text-align:center">Figure 5:  Shattering of 4 points by axis-aligned rectangles. Red is for negative examples and blue is for positve examples.
+					<figcaption style= "text-align:center">Figure 5:  Shattering of 4 points by axis-aligned rectangles. Red is for negative examples and blue is for positive examples.
 					</figcaption>
 				</figure>
-</p>
+A set of 5 points can't be shattered. Let $S_5=\{x_1,x_2,x_3,x_4,x_5 \}$ be a set of 5 points. Let $x_i[1], x_i[2]$ is the x-coordinate and y-coordinate of the point $x_i$ respectively.
+$$ \begin{align} 
+y_1=argmax_{x_i}(x_1[1],x_2[1],\cdots x_5[1])\\
+y_2=argmin_{x_i}(x_1[1],x_2[1],\cdots x_5[1])\\
+y_3=argmax_{x_i}(x_1[2],x_2[2],\cdots x_5[2])\\
+y_4=argmin_{x_i}(x_1[2],x_2[2],\cdots x_5[2])\\
+\end{align}$$
+Then $\{y_1,y_2,y_3,y_4\} \subset S_5$. Label $y_i=1, \forall y_i$ and $S_5\setminus \{y_1,y_2,y_3,y_4\}$ as -1. Then there is no rectangle that can satisfy this configuration. Since $x_k \in S_5\setminus \{y_1,y_2,y_3,y_4\}$ must be inside the rectangle.
+<figure>
+					<center><img src="rectangles_1.png" width="300"> </center>
+					<figcaption style= "text-align:center">Figure 6:  Calculation of $y_1,y_2,y_3,y_4$.
+					</figcaption>
+				</figure>
 
 </p>
+So $VC(\mathscr{H})= 4$
 
-## 5. VC-dimension of class of 2d Line
-## 6. VC-dimension of class of hyperplane
+## 5. VC-dimension of class of Line in $\mathbb{R}^2$
+
+<p>
+$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\{wx+b; w,b\in \mathbb{R}\}$ is 3 (Figure 1).
+</p>
+<p>
+$\textbf{Proof}:$ Figure 1 shows a configuration of 3 points that can be shattered by $\mathscr{H}$. So, $VC(\mathscr{H}) \geq 3$. Now we have to prove that no set of 4 points can be shattered by $\mathscr{H}$.
+</p>
+
+
+## 6. VC-dimension of class of hyperplane in $\mathbb{R}^n$
 
 
 
