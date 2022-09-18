@@ -39,7 +39,7 @@ show_related: true
   <p>
   Large-scale point cloud segmentation is a challenging task because of huge computational requirements and effective embedding learning. RandLa-Net[3] is an efficient and lightweight neural architecture that segments every point in large-scale point clouds. It is an encoder-decoder-like architecture that uses random sampling to downsample the input point cloud in the encoder and upsample the point cloud in decoder blocks. It uses random sampling compared to other sampling methods because of faster computation. Although random sampling can discard key points necessary for efficient point cloud segmentation, RandLa-Net implements attention-based local feature aggregation to effectively share features of points that are removed into the neighbor points. Figure[1] is the architecture of RandLa-Net. 
   <figure>
-					<center><img src="sidebar-featured.png" width="800"> </center>
+					<center><img src="sidebar-featured.png" width="800" /> </center>
 					<figcaption class="figure-caption text-center">Figure 1:  RandLa-Net Architecture.  FC is the fully connected layer, LFA is the localfeature aggregation, RS is random sampling, MLP is shared multilayer perceptron,US is upsampling and DP is dropout.  (Image from [3])
 					</figcaption>
 				</figure>
@@ -50,7 +50,7 @@ show_related: true
   <p>
    Compared to other sampling methods, Random sampling is extremely fast (time complexity $O(N)$). It is invariant to any changes to the points as well as the permutation of points. The random-sampling block is added in encoder part. To compensate for the loss of information, the author has added LFA module.
    <figure>
-					<center><img src="randlanet_sampling.png" width="800" > </center>
+					<center><img src="randlanet_sampling.png" width="800" /> </center>
 					<figcaption class="figure-caption text-center">Figure 2: Random Sampling in RandLa-Net.  The downsampling rate is a hyperparameter and has significant influence on model performance (Image from [3])
 					</figcaption>
 				</figure>
@@ -79,7 +79,7 @@ show_related: true
 
   <p>The Local Feature Aggregation follows a three-step message passing system. Since point cloud don't have connectivity information, LFA ensures features are shared between points. In Figure 1, the LFA module in the first encoder transforms the feature vector ($8 \rightarrow 32$) and random sampling removes 75% of the points. Let's take a point in the first encoder $(p,f),p\in \mathbb{R}^3,f\in \mathbb{R}^8$.
   <figure>
-					<center><img src="randlanet_lfa.png" width="800" > </center>
+					<center><img src="randlanet_lfa.png" width="800" /> </center>
 					<figcaption class="figure-caption text-center">Figure 3: RandLaNet Feature Sharing
 					</figcaption>
 	</figure>
@@ -91,7 +91,7 @@ show_related: true
   </li>
   </ul>
   <figure>
-					<center><img src="randlanet_lfav2.png" width="800" > </center>
+					<center><img src="randlanet_lfav2.png" width="800" /> </center>
 					<figcaption class="figure-caption text-center">Figure 4: LFA Module
 					</figcaption>
 	</figure>
@@ -127,13 +127,13 @@ Together with LSE and Attentive pooling, the model learns informative features w
   <p>
 Since the point cloud is downsampled, it is necessary to expand the receptive field to preserve geometric details. Inspired by Resnet architecture, the author stacks several LSE and attentive pooling in one block before downsampling. In Figure 6, the red points observe $K$ features from neighboring points after the first LSE and Attentive Pooling layer and then in the next step it learns from $K^2$ features (See Figure 5). However, the more layers are added, the more the model is likely to be over-fitted. In the original paper (Figure 5), only two layers of LSE and Attentive pooling are used.
 <figure>
-					<center><img src="randlanet_drb.png" width="800" > </center>
+					<center><img src="randlanet_drb.png" width="800" /> </center>
 					<figcaption class="figure-caption text-center">Figure 5: Dilated Residual Block
 					</figcaption>
 	</figure>
   
   <figure>
-					<center><img src="randlanet_drb2.png" width="400" > </center>
+					<center><img src="randlanet_drb2.png" width="400" /> </center>
 					<figcaption class="figure-caption text-center">Figure 6: Illustration of dilated residual block which expands the receptive field at each step.
 					</figcaption>
 	</figure>
