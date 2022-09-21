@@ -115,14 +115,71 @@ $\textbf{Proof}:$ Figure 1 shows a configuration of 3 points that can be shatter
 <br> Consider the set $S_4=\{x_1,x_2,x_3,x_4\}$. Now if we create a convex hull of S and label the diagonal points as same class, then no line can't classify S. So $VC(\mathscr{H})= 4$. 
 </p>
 
-## 6. VC-dimension of class of hyperplane in $\mathbb{R}^n$
+## 6. VC-dimension of class of hyperplane in $\mathbb{R}^d$
 <p>
-$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\\{h;h(X)=sign(W^TX+b); W \in \mathbb{R}^d ,b\in \mathbb{R}\\}$ in $\mathbb{R}^2$ is d.</p>
+$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\{h;h(X)=sign(W^TX+b); W \in \mathbb{R}^d ,b\in \mathbb{R}\}$ in $\mathbb{R}^2$ is d.</p>
 <p>
-$\textbf{Proof}:$ 
+$\textbf{Proof}:$ We will first prove the lower bound.
+<br> 
+Let $S=\{x_1,x_2,x_3,\cdots,x_d\} \cup \{x_{d+1}=0\}$ and $\{x_1,x_2,x_3,\cdots,x_d\}$ is the <a href="https://en.wikipedia.org/wiki/Standard_basis">standard basis</a> of $\mathbb{R}^d$ $$\begin{align}
+    x_1 = \begin{bmatrix}
+           1 \\
+           0 \\
+           \vdots \\
+            0
+         \end{bmatrix}\quad
+    x_2 = \begin{bmatrix}
+           0 \\
+           1 \\
+           \vdots \\
+            0
+         \end{bmatrix}\cdots
+     x_d = \begin{bmatrix}
+           0 \\
+           0 \\
+           \vdots \\
+            1
+         \end{bmatrix}
+  \end{align}$$
+Let $Y=\{y_1,y_2,\cdots,y_d \}$ is a class label for S with $y_i\in \{-1,+1\}\, \forall \, i$,
+then $$h(X)=sign(\sum_i [x_i;1]\hat{W}),\hat{W}=[W;b]$$ can classify S. $$\begin{align}
+    [x_i;1] = \begin{bmatrix}
+           0\\
+           0 \\
+           \vdots \\
+           i\\
+           \vdots\\
+            0\\
+            1
+         \end{bmatrix}
+         \end{align}$$
+</br>
+This is because the augmented set $\{[x_1;1],[x_2;1],\cdots, [x_d+1,1]\}$ is linearly independent and since its cardinality is $d+1$, it's a basis of $\mathbb{R}^{d+1}$. To prove that it's linearly independent, consider $\sum_i^{d+1} [x_i;1]^T\alpha_i =0$.
+$$
+\begin{bmatrix}
+           1 & 0 &\cdots 0\\
+           0 & 1 &\cdots 0\\
+           \vdots \\
+            1 & 1 &\cdots 1
+         \end{bmatrix}
+         \begin{bmatrix}
+           \alpha_1 \\
+           \alpha_2 \\
+           \vdots \\
+           \alpha_{d+1}
+         \end{bmatrix}=0
+$$
+Then $\alpha_1=0,\alpha_2=0,\cdots, \alpha_{d+1}=0$. So the augmented set is linearly independent and a basis of $\mathbb{R}^{d+1}$. So $$h(X):sign(\sum_i [x_i;1]\hat{W})=Y$$ will always have a closed form solution. (One trick is to solve $[X;1]\hat{W}=Y \implies \hat{W}=[X;1]^{-1}Y$).
+<br>
+Then there exists a set of $d+1$ points that $\mathscr{H}$ can shatter. So $VC(\mathscr{H})\geq d+1$.
+</br>
 </p>
-
-
+<p>
+<br>
+Now we will try to prove the upper bound ($VC(\mathscr{H})\leq d+1$).
+</br>
+Let $S^{'}=\{x_1,x_2,\cdots, x_{d+2}\}$ be the set of $d+2$ points.
+</p>
 
 
 
