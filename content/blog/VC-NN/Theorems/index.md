@@ -19,3 +19,4 @@ $\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a par
      \end{cases}$$
 </p>
 
+## 2. Theorem 1

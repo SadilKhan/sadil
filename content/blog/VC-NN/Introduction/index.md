@@ -25,7 +25,7 @@ $\textbf{Shattering:}$ $S$ is shattered by $\mathscr{H}$ when all labeling of $S
 </p>
 <p> $\textbf{Vapnik-Chervonenkis (VC) dimension}$ of a hypothesis space($\mathscr{H}$) is the cardinality of the largest $S$ such that $\mathscr{H}$ shatters $S$. If $VC(\mathscr{H})=n$, there there exists $n$ points which can be shattered by $\mathscr{H}$ but no set of $(n+1)$ points can be shattered.
 
-## 2. VC-dimension of class of Thresholds
+## 2. VC-dimension of class of Thresholds in $\mathbb{R}$
 <p>
 Let $\mathscr{H}$ be the class of thresholds i.e $\forall h_a \in \mathscr{H}$, $$h_a(x)=\begin{cases} 
 1 \, \text{if } x\geq a \\
@@ -41,7 +41,7 @@ Let $\mathscr{H}$ be the class of thresholds i.e $\forall h_a \in \mathscr{H}$, 
 When $|S|=1$, it can be shattered by $\mathscr{H}$. For $|S|=2$ it's impossible to shatter since we can't find a threshold for third example (Figure 2). So $VC(\mathscr{H})=1$
 </p>
 
-## 3. VC-dimension of class of Intervals
+## 3. VC-dimension of class of Intervals in $\mathbb{R}$
 
 <p>
 Let $\mathscr{H}$ be the class of intervals i.e $\forall h([a,b];x) \in \mathscr{H}$,
@@ -79,7 +79,7 @@ $\textbf{Proof:}$ Let $S=\{x_1,x_2,\cdots,x_{2k+1} \}$. Label S such that $x_{2i
 				</figure>
 </p>
 
-## 4. VC-dimension of class of axis-aligned rectangles
+## 4. VC-dimension of class of axis-aligned rectangles in $\mathbb{R}^2$
 <p>
 Let $\mathscr{H}$ be the set of rectangles whose sides are parallel to the axes. Then it can shatter a set of 4 points. So $VC(\mathscr{H})\geq 4$ (Figure 5).
 
@@ -108,14 +108,22 @@ So $VC(\mathscr{H})= 4$
 ## 5. VC-dimension of class of Line in $\mathbb{R}^2$
 
 <p>
-$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\{wx+b; w,b\in \mathbb{R}\}$ is 3 (Figure 1).
+$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\{h;h(x)=sign(wx+b); w,b\in \mathbb{R}\}$ in $\mathbb{R}^2$ is 3 (Figure 1).
 </p>
 <p>
 $\textbf{Proof}:$ Figure 1 shows a configuration of 3 points that can be shattered by $\mathscr{H}$. So, $VC(\mathscr{H}) \geq 3$. Now we have to prove that no set of 4 points can be shattered by $\mathscr{H}$.
+<br> Consider the set $S_4=\{x_1,x_2,x_3,x_4\}$. Now if we create a convex hull of S and label the diagonal points as same class, then no line can't classify S. So $VC(\mathscr{H})= 4$. 
+</p>
+
+## 6. VC-dimension of class of hyperplane in $\mathbb{R}^n$
+<p>
+$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\\{h;h(X)=sign(W^TX+b); W \in \mathbb{R}^d ,b\in \mathbb{R}\\}$ in $\mathbb{R}^2$ is d.</p>
+<p>
+$\textbf{Proof}:$ 
 </p>
 
 
-## 6. VC-dimension of class of hyperplane in $\mathbb{R}^n$
+
 
 
 
