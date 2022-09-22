@@ -154,22 +154,28 @@ then $$h(X)=sign(\sum_i [x_i;1]\hat{W}),\hat{W}=[W;b]$$ can classify S. $$\begin
          \end{bmatrix}
          \end{align}$$
 </br>
-This is because the augmented set $\{[x_1;1],[x_2;1],\cdots, [x_d+1,1]\}$ is linearly independent and since its cardinality is $d+1$, it's a basis of $\mathbb{R}^{d+1}$. To prove that it's linearly independent, consider $\sum_i^{d+1} [x_i;1]^T\alpha_i =0$.
+This is because the augmented set $\{[x_1;1],[x_2;1],\cdots, [x_d+1,1]\}$ is linearly independent and since its cardinality is $d+1$, it's a basis of $\mathbb{R}^{d+1}$. To prove that it's linearly independent, consider $\sum_i^{d+1} [x_i;1]\alpha_i =0$.
 $$
 \begin{bmatrix}
-           1 & 0 &\cdots 0\\
-           0 & 1 &\cdots 0\\
+           1 & 0 &\cdots 1\\
+           0 & 1 &\cdots 1\\
            \vdots \\
-            1 & 1 &\cdots 1
+            0& 0 &\cdots 1
          \end{bmatrix}
          \begin{bmatrix}
            \alpha_1 \\
            \alpha_2 \\
            \vdots \\
            \alpha_{d+1}
-         \end{bmatrix}=0
+         \end{bmatrix}=
+         \begin{bmatrix}
+           0 \\
+           0 \\
+           \vdots \\
+           0
+         \end{bmatrix}
 $$
-Then $\alpha_1=0,\alpha_2=0,\cdots, \alpha_{d+1}=0$. So the augmented set is linearly independent and a basis of $\mathbb{R}^{d+1}$. So $$h(X):sign(\sum_i [x_i;1]\hat{W})=Y$$ will always have a closed form solution. (One trick is to solve $[X;1]\hat{W}=Y \implies \hat{W}=[X;1]^{-1}Y$).
+Then $\alpha_1=0,\alpha_2=0,\cdots, \alpha_{d+1}=0$. So the augmented set is linearly independent and a basis of $\mathbb{R}^{d+1}$. So $$h(X):sign(\sum_i [x_i;1]\hat{W})=Y$$ will always have a closed form solution. (One trick is to solve $[X;1]\hat{W}=Y \implies \hat{W}=[X;1]^{-1}Y, [X;1]=[[x_1;1] \,[x_2;1]\cdots \,[x_{d+1};1] $).
 <br>
 Then there exists a set of $d+1$ points that $\mathscr{H}$ can shatter. So $VC(\mathscr{H})\geq d+1$.
 </br>
@@ -178,7 +184,14 @@ Then there exists a set of $d+1$ points that $\mathscr{H}$ can shatter. So $VC(\
 <br>
 Now we will try to prove the upper bound ($VC(\mathscr{H})\leq d+1$).
 </br>
-Let $S^{'}=\{x_1,x_2,\cdots, x_{d+2}\}$ be the set of $d+2$ points.
+Let $S^{'}=\{x_1,x_2,\cdots, x_{d+2}\}$ be the set of $d+2$ points that $\mathscr{H}$ can shatter. Then we will get $W$ for every possible labeling such that $h(X)=sign([X;1]W)$.
+$$\begin{align}
+    h(X) = \begin{bmatrix}
+            \\
+           0 \\
+           \vdots \\
+            0
+         \end{bmatrix}
 </p>
 
 

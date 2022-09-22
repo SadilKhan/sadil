@@ -44,7 +44,7 @@
 <meta itemprop="description" content="This is the first part of the VC Dimension and Neural Networks series. Basic definition and some examples of vc dimension of learning algorithms are explained here.
 1. Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\{-1,&#43;1\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc."><meta itemprop="datePublished" content="2022-09-18T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-09-18T00:00:00+00:00" />
-<meta itemprop="wordCount" content="805">
+<meta itemprop="wordCount" content="1112">
 <meta itemprop="keywords" content="" />
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -320,8 +320,8 @@ $\textbf{Shattering:}$ $S$ is shattered by $\mathscr{H}$ when all labeling of $S
 
 
 
-<h2 id="2-vc-dimension-of-class-of-thresholds">2. VC-dimension of class of Thresholds
-  <a href="#2-vc-dimension-of-class-of-thresholds"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h2 id="2-vc-dimension-of-class-of-thresholds-in-mathbbr">2. VC-dimension of class of Thresholds in $\mathbb{R}$
+  <a href="#2-vc-dimension-of-class-of-thresholds-in-mathbbr"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
@@ -344,8 +344,8 @@ When $|S|=1$, it can be shattered by $\mathscr{H}$. For $|S|=2$ it's impossible 
 
 
 
-<h2 id="3-vc-dimension-of-class-of-intervals">3. VC-dimension of class of Intervals
-  <a href="#3-vc-dimension-of-class-of-intervals"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h2 id="3-vc-dimension-of-class-of-intervals-in-mathbbr">3. VC-dimension of class of Intervals in $\mathbb{R}$
+  <a href="#3-vc-dimension-of-class-of-intervals-in-mathbbr"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
@@ -386,8 +386,8 @@ $\textbf{Proof:}$ Let $S=\{x_1,x_2,\cdots,x_{2k+1} \}$. Label S such that $x_{2i
 
 
 
-<h2 id="4-vc-dimension-of-class-of-axis-aligned-rectangles">4. VC-dimension of class of axis-aligned rectangles
-  <a href="#4-vc-dimension-of-class-of-axis-aligned-rectangles"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h2 id="4-vc-dimension-of-class-of-axis-aligned-rectangles-in-mathbbr2">4. VC-dimension of class of axis-aligned rectangles in $\mathbb{R}^2$
+  <a href="#4-vc-dimension-of-class-of-axis-aligned-rectangles-in-mathbbr2"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
@@ -425,22 +425,99 @@ So $VC(\mathscr{H})= 4$
     </svg></a>
 </h2>
 <p>
-$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\{wx+b; w,b\in \mathbb{R}\}$ is 3 (Figure 1).
+$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\{h;h(x)=sign(wx+b); w,b\in \mathbb{R}\}$ in $\mathbb{R}^2$ is 3 (Figure 1).
 </p>
 <p>
 $\textbf{Proof}:$ Figure 1 shows a configuration of 3 points that can be shattered by $\mathscr{H}$. So, $VC(\mathscr{H}) \geq 3$. Now we have to prove that no set of 4 points can be shattered by $\mathscr{H}$.
-<br> Consider the set $S_4=\{x_1,x_2,x_3,x_4\}$. Now 
+<br> Consider the set $S_4=\{x_1,x_2,x_3,x_4\}$. Now if we create a convex hull of S and label the diagonal points as same class, then no line can't classify S. So $VC(\mathscr{H})= 4$. 
 </p>
 
 
 
 
-<h2 id="6-vc-dimension-of-class-of-hyperplane-in-mathbbrn">6. VC-dimension of class of hyperplane in $\mathbb{R}^n$
-  <a href="#6-vc-dimension-of-class-of-hyperplane-in-mathbbrn"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h2 id="6-vc-dimension-of-class-of-hyperplane-in-mathbbrd">6. VC-dimension of class of hyperplane in $\mathbb{R}^d$
+  <a href="#6-vc-dimension-of-class-of-hyperplane-in-mathbbrd"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
+<p>
+$\textbf{Theorem}:$ VC dimension of $\mathscr{H}=\{h;h(X)=sign(W^TX+b); W \in \mathbb{R}^d ,b\in \mathbb{R}\}$ in $\mathbb{R}^2$ is d.</p>
+<p>
+$\textbf{Proof}:$ We will first prove the lower bound.
+<br> 
+Let $S=\{x_1,x_2,x_3,\cdots,x_d\} \cup \{x_{d+1}=0\}$ and $\{x_1,x_2,x_3,\cdots,x_d\}$ is the <a href="https://en.wikipedia.org/wiki/Standard_basis">standard basis</a> of $\mathbb{R}^d$ $$\begin{align}
+    x_1 = \begin{bmatrix}
+           1 \\
+           0 \\
+           \vdots \\
+            0
+         \end{bmatrix}\quad
+    x_2 = \begin{bmatrix}
+           0 \\
+           1 \\
+           \vdots \\
+            0
+         \end{bmatrix}\cdots
+     x_d = \begin{bmatrix}
+           0 \\
+           0 \\
+           \vdots \\
+            1
+         \end{bmatrix}
+  \end{align}$$
+Let $Y=\{y_1,y_2,\cdots,y_d \}$ is a class label for S with $y_i\in \{-1,+1\}\, \forall \, i$,
+then $$h(X)=sign(\sum_i [x_i;1]\hat{W}),\hat{W}=[W;b]$$ can classify S. $$\begin{align}
+    [x_i;1] = \begin{bmatrix}
+           0\\
+           0 \\
+           \vdots \\
+           i\\
+           \vdots\\
+            0\\
+            1
+         \end{bmatrix}
+         \end{align}$$
+</br>
+This is because the augmented set $\{[x_1;1],[x_2;1],\cdots, [x_d+1,1]\}$ is linearly independent and since its cardinality is $d+1$, it's a basis of $\mathbb{R}^{d+1}$. To prove that it's linearly independent, consider $\sum_i^{d+1} [x_i;1]\alpha_i =0$.
+$$
+\begin{bmatrix}
+           1 & 0 &\cdots 1\\
+           0 & 1 &\cdots 1\\
+           \vdots \\
+            0& 0 &\cdots 1
+         \end{bmatrix}
+         \begin{bmatrix}
+           \alpha_1 \\
+           \alpha_2 \\
+           \vdots \\
+           \alpha_{d+1}
+         \end{bmatrix}=
+         \begin{bmatrix}
+           0 \\
+           0 \\
+           \vdots \\
+           0
+         \end{bmatrix}
+$$
+Then $\alpha_1=0,\alpha_2=0,\cdots, \alpha_{d+1}=0$. So the augmented set is linearly independent and a basis of $\mathbb{R}^{d+1}$. So $$h(X):sign(\sum_i [x_i;1]\hat{W})=Y$$ will always have a closed form solution. (One trick is to solve $[X;1]\hat{W}=Y \implies \hat{W}=[X;1]^{-1}Y, [X;1]=[[x_1;1] \,[x_2;1]\cdots \,[x_{d+1};1] $).
+<br>
+Then there exists a set of $d+1$ points that $\mathscr{H}$ can shatter. So $VC(\mathscr{H})\geq d+1$.
+</br>
+</p>
+<p>
+<br>
+Now we will try to prove the upper bound ($VC(\mathscr{H})\leq d+1$).
+</br>
+Let $S^{'}=\{x_1,x_2,\cdots, x_{d+2}\}$ be the set of $d+2$ points that $\mathscr{H}$ can shatter. Then we will get $W$ for every possible labeling such that $h(X)=sign([X;1]W)$.
+$$\begin{align}
+    h(X) = \begin{bmatrix}
+            \\
+           0 \\
+           \vdots \\
+            0
+         \end{bmatrix}
+</p>
 
       </section>
       <footer class="post-footer">
@@ -518,11 +595,11 @@ $\textbf{Proof}:$ Figure 1 shows a configuration of 3 points that can be shatter
     <nav id="TableOfContents">
   <ul>
     <li><a href="#1-definition">1. Definition</a></li>
-    <li><a href="#2-vc-dimension-of-class-of-thresholds">2. VC-dimension of class of Thresholds</a></li>
-    <li><a href="#3-vc-dimension-of-class-of-intervals">3. VC-dimension of class of Intervals</a></li>
-    <li><a href="#4-vc-dimension-of-class-of-axis-aligned-rectangles">4. VC-dimension of class of axis-aligned rectangles</a></li>
+    <li><a href="#2-vc-dimension-of-class-of-thresholds-in-mathbbr">2. VC-dimension of class of Thresholds in $\mathbb{R}$</a></li>
+    <li><a href="#3-vc-dimension-of-class-of-intervals-in-mathbbr">3. VC-dimension of class of Intervals in $\mathbb{R}$</a></li>
+    <li><a href="#4-vc-dimension-of-class-of-axis-aligned-rectangles-in-mathbbr2">4. VC-dimension of class of axis-aligned rectangles in $\mathbb{R}^2$</a></li>
     <li><a href="#5-vc-dimension-of-class-of-line-in-mathbbr2">5. VC-dimension of class of Line in $\mathbb{R}^2$</a></li>
-    <li><a href="#6-vc-dimension-of-class-of-hyperplane-in-mathbbrn">6. VC-dimension of class of hyperplane in $\mathbb{R}^n$</a></li>
+    <li><a href="#6-vc-dimension-of-class-of-hyperplane-in-mathbbrd">6. VC-dimension of class of hyperplane in $\mathbb{R}^d$</a></li>
   </ul>
 </nav>
     </div>
