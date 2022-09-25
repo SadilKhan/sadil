@@ -63,7 +63,15 @@ $\textbf{Theorem 2:}$ <i> Let $VC(\mathscr{H})=d$ and $S$ be a set of $m$ points
 <br> <strong> Base Case: </strong>For the base case, we have to prove for (1) $d=0$ and arbitrary $m$ and (2) $m=0$ and arbitrary $d$. When $VC(\mathscr{H})=d=0$, it means that no set of points can be shattered, so points can only be labeled one way. So, $\mathscr{H}[m] = 1 \leq \Phi_{d}(m)$. When $m=0$ and $d$ is arbitrary, we can label $0$ points at most $1$ way.   
 </br>
 <br>
-<strong> Inductive Step: </strong> Let us assume that $\forall m_1,d_1$
+<strong> Inductive Step: </strong> Let us assume that $\forall m^{'} < m,d^{'} < d$, this statement is true. Let $S=\{x_1,x_2,\cdots,x_m\}$ and $VC(\mathscr{H})=d$. Let $F$ be the set of functions defined only over $S$ such that $\mathscr{H}(S)=F(S)=F$. Then for any set $S^{'} \subset S$ that is shattered by $F$ can be shattered by $\mathscr{H}$. So $VC(F)\leq VC(\mathscr{H})=d$.
+</br>
+<br>
+We now create two disjoint subsets of $F$. $$F_1=\{ \{f(x_1),f(x_2),\cdots, f(x_{m-1}), 1 \}; f \in F \}$$
+$$F_2=\{ \{f(x_1),f(x_2),\cdots, f(x_{m-1}), 0 \}; f \in F \}$$
+Then $\forall f_1 \in F_1 ,\, \exists f_2 \in F_2$, $f_1(x_i)=f_2(x_i), \, \forall \, i=1,2,\cdots, m-1$ amd $f_1(x_m)=1,f_2(x_m)=0$.</br>
+$$|\mathscr{H}(S)|=|F(S)|=|F_1(S)|+|F_2(S)|$$
+<br>
+Consider the case of $F_1$. Since $F_1 \leq F$, it's obvious that $VC(F_1) \leq VC(F) \leq d$. Now, $|F_1(S)|=|F_1(S \setminus \{x_m\})|$, since every labeling in $F_1(S)$ which is of the form $\{f(x_1),f(x_2),f(x_3), \cdots, f(x_{m-1}),1 \}$, $\{f(x_1),f(x_2),f(x_3), \cdots, f(x_{m-1}) \in F_1(S\setminus \{x_m\})$. So $F_1(S) \subseteq F_1(S\setminus \{x_m\})$
 </br>
 </p>
 
