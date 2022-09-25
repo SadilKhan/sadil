@@ -18,9 +18,11 @@ $\textbf{Dichotomy}:$ A dichotomy of $S=\{x_1,x_2,\cdots,x_m\}$ induced by $h \i
       -1 \, \text{if} \, x_i \in S_2\\
      \end{cases}$$
 </p>
-
-Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$. $$\mathscr{H}(S)=\\{ \\{ h(x_1),h(x_2),\cdots h(x_m) \\}; h \in \mathscr{H} \\}$$ If $|\mathscr{H}(S)|=2^{|S|}$, then $S$ is shattered by $\mathscr{H}$.
-Since $S$ is chosen randomly, we define $\textbf{Growth Function},C[m]=max\\{|C(S)|; |S|=m ; S \subset R^m \\}$ <a href="lecture1">[1]</a>.
+<br>
+Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$. $$\mathscr{H}(S)=\{ \{ h(x_1),h(x_2),\cdots h(x_m) \}; h \in \mathscr{H} \}$$ If $|\mathscr{H}(S)|=2^{|S|}$, then $S$ is shattered by $\mathscr{H}$.</br>
+<br>
+Since $S$ is chosen randomly, we define $\textbf{Growth Function}$ <a href="lecture1">[1]</a> $$\mathscr{H}[m]=max\{|\mathscr{H}(S)|; |S|=m ; S \subset R^m \}$$
+</br>
 
 ## 2. Theorem 1 - Radon's Theorem
 <p>
@@ -53,7 +55,7 @@ So $|\mathscr{H}|\geq 2^d \implies d \leq log_2(\mathscr{H}) \implies VC(\mathsc
 </p>
 
 ## 4. Theorem 3 - Sauer's Lemma
-$\textbf{Theorem 2:}$ 
+$\textbf{Theorem 2:}$ Let $VC(\)
 
 
 ## Bibliograpy
