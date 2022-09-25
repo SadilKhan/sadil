@@ -21,10 +21,10 @@ $\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a par
 
 ## 2. Theorem 1 - Radon's Theorem
 <p>
-$\textbf{Theorem 1 (Radon's Theorem):}$ For every set $S \subset {R}^{d}$ with $|S|=d+2$, $S$ can be divided into two disjoint sets whose convex hulls intersect.
+$\textbf{Theorem 1 (Radon's Theorem):}$ <i>For every set $S \subset {R}^{d}$ with $|S|=d+2$, $S$ can be divided into two disjoint sets whose convex hulls intersect.</i>
 </p>
 <p>
-$\textbf{Proof:}$ Let $S=\{x_1,x_2,\cdots,x_{d+2}\} \subset R^{d}$. Then $S$ is a linearly dependent set. Then the equation $$\sum_{i=1}^{d+2}a_ix_i=0$$ has non-zero solution (not all $a_i=0$).
+$\textbf{Proof:}$ Let $S=\{x_1,x_2,\cdots,x_{d+2}\} \subset R^{d}$. Then $S$ is a linearly dependent set. Let $S_{aug}=\{[x_1;1],[x_2,;1]\cdots,[x_{d+2};1]\} \subset R^{d+1}$ be the augmented set and it's also a dependent set. Then the equation $$\sum_{i=1}^{d+2}a_i[x_i;1]=0$$ has non-zero solution (not all $a_i=0$) and $\sum_{i=1}^{d+2}a_i=0$.
 Let I be the convex hull of $\{x_i:a_i>0\}$ and J be the convex hull of $\{x_i:a_i\leq 0\}$.
 $\{x_i:a_i>0\} \cap \{x_i:a_i\leq 0\} =\phi$. 
 <br>
@@ -36,4 +36,17 @@ Let $A=\sum_{i:x_i\in I}a_i=-\sum_{j:x_j\in J}a_j$.
 <br> So, S can be divided into two disjoint sets whose convex hulls intersect. </br>
 </p>
 
-## 3. Theorem 2 - 
+## 3. Theorem 2
+<p>
+$\textbf{Theorem 2:}$ <i>Let $\mathscr{H}$ be a set of binary-valued functions and $\mathscr{H}$ is finite. Then $VC(\mathscr{H}) \leq log_2(|\mathscr{H}|)$.
+</i>
+</p>
+<p>
+<br>
+$\textbf{Proof:}$ Let $VC(\mathscr{H})=d$, then there exists a set of $d$ points such that for every $2^d$ possible labelings, $\exists \, h \in \mathscr{H}$ which can classify the points. Then the cardinality of $\mathscr{H}$ must be greater than $2^d$.</br>
+<br>
+So $|\mathscr{H}|\geq 2^d \implies d \leq log_2(\mathscr{H}) \implies VC(\mathscr{H}) \leq log_2(\mathscr{H})$.
+</br>
+</p>
+
+## 4. Theorem 3
