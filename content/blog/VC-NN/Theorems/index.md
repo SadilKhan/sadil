@@ -21,7 +21,7 @@ $\textbf{Dichotomy}:$ A dichotomy of $S=\{x_1,x_2,\cdots,x_m\}$ induced by $h \i
 <br>
 Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$. $$\mathscr{H}(S)=\{ \{ h(x_1),h(x_2),\cdots h(x_m) \}; h \in \mathscr{H} \}$$ If $|\mathscr{H}(S)|=2^{|S|}$, then $S$ is shattered by $\mathscr{H}$.</br>
 <br>
-Since $S$ is chosen randomly, we define $\textbf{Growth Function}$ <a href="lecture1">[1]</a> $$\mathscr{H}[m]=max\{|\mathscr{H}(S)|; |S|=m ; S \subset R^m \}$$
+Since $S$ is chosen randomly, we define $\textbf{Growth Function}$ <a href="#lecture1">[1]</a> $$\mathscr{H}[m]=max\{|\mathscr{H}(S)|; |S|=m ; S \subset R^m \}$$
 </br>
 
 ## 2. Theorem 1 - Radon's Theorem
@@ -50,15 +50,25 @@ $\textbf{Theorem 2:}$ <i>Let $\mathscr{H}$ be a set of binary-valued functions a
 <br>
 $\textbf{Proof:}$ Let $VC(\mathscr{H})=d$, then there exists a set of $d$ points such that for every $2^d$ possible labelings, $\exists \, h \in \mathscr{H}$ which can classify the points. Then the cardinality of $\mathscr{H}$ must be greater than $2^d$.</br>
 <br>
-So $|\mathscr{H}|\geq 2^d \implies d \leq log_2(\mathscr{H}) \implies VC(\mathscr{H}) \leq log_2(\mathscr{H})$.
+So $|\mathscr{H}|\geq 2^d \implies d \leq log_2(\mathscr{H}) \implies VC(\mathscr{H}) \leq log_2(\mathscr{H})$.;
 </br>
 </p>
 
 ## 4. Theorem 3 - Sauer's Lemma
-$\textbf{Theorem 2:}$ Let $VC(\)
+<p>
+$\textbf{Theorem 2:}$ <i> Let $VC(\mathscr{H})=d$ and $S$ be a set of $m$ points. Then $$\mathscr{H}[m] \leq \Phi_{d}(m)=\sum\limits_{i=0}^{d} {m\choose i}$$ </i>
+</p>
+<p>
+<br> $\textbf{Proof:}$ We will prove it by induction.</br>
+<br> <strong> Base Case: </strong>For the base case, we have to prove for (1) $d=0$ and arbitrary $m$ and (2) $m=0$ and arbitrary $d$. When $VC(\mathscr{H})=d=0$, it means that no set of points can be shattered, so points can only be labeled one way. So, $\mathscr{H}[m] = 1 \leq \Phi_{d}(m)$. When $m=0$ and $d$ is arbitrary, we can label $0$ points at most $1$ way.   
+</br>
+<br>
+<strong> Inductive Step: </strong> Let us assume that $\forall m_1,d_1$
+</br>
+</p>
 
 
-## Bibliograpy
+## Bibliography
 
 <ol>
 <li>
