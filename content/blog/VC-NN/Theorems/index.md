@@ -13,13 +13,14 @@ This is the second part of the <a href="/blog/vc-nn/">VC Dimension and Neural Ne
 
 ## 1. Definitions
 <p>	
-$\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases}
+$\textbf{Dichotomy}:$ A dichotomy of $S=\{x_1,x_2,\cdots,x_m\}$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases}
        1 \, \text{if} \, x_i \in S_1 \\
       -1 \, \text{if} \, x_i \in S_2\\
      \end{cases}$$
 </p>
 
-Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$. $$\mathscr{H}(S)=\{ h(x_1,x_2,\cdots x_n) ; h \in \mathscr{H} \}$$
+Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$. $$\mathscr{H}(S)=\\{ \\{ h(x_1),h(x_2),\cdots h(x_m) \\}; h \in \mathscr{H} \\}$$ If $|\mathscr{H}(S)|=2^{|S|}$, then $S$ is shattered by $\mathscr{H}$.
+Since $S$ is chosen randomly, we define $\textbf{Growth Function},C[m]=max\\{|C(S)|; |S|=m ; S \subset R^m \\}$ <a href="lecture1">[1]</a>.
 
 ## 2. Theorem 1 - Radon's Theorem
 <p>
@@ -53,3 +54,13 @@ So $|\mathscr{H}|\geq 2^d \implies d \leq log_2(\mathscr{H}) \implies VC(\mathsc
 
 ## 4. Theorem 3 - Sauer's Lemma
 $\textbf{Theorem 2:}$ 
+
+
+## Bibliograpy
+
+<ol>
+<li>
+    <p id="lecture1"><a href="http://www.cs.cmu.edu/%7Eninamf/ML11/lect0922.pdf"><i>8803 Machine Learning Theory</i></a></p>
+ </li>
+ 
+ </ol>
