@@ -19,6 +19,8 @@ $\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a par
      \end{cases}$$
 </p>
 
+Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$. $$\mathscr{H}(S)=\{ h(x_1,x_2,\cdots x_n) ; h \in \mathscr{H} \}$$
+
 ## 2. Theorem 1 - Radon's Theorem
 <p>
 $\textbf{Theorem 1 (Radon's Theorem):}$ <i>For every set $S \subset {R}^{d}$ with $|S|=d+2$, $S$ can be divided into two disjoint sets whose convex hulls intersect.</i>
@@ -36,7 +38,7 @@ Let $A=\sum_{i:x_i\in I}a_i=-\sum_{j:x_j\in J}a_j$.
 <br> So, S can be divided into two disjoint sets whose convex hulls intersect. </br>
 </p>
 
-## 3. Theorem 2
+## 3. Theorem 2 - $VC(\mathscr{H}) \leq log_2(|\mathscr{H}|)$
 <p>
 $\textbf{Theorem 2:}$ <i>Let $\mathscr{H}$ be a set of binary-valued functions and $\mathscr{H}$ is finite. Then $VC(\mathscr{H}) \leq log_2(|\mathscr{H}|)$.
 </i>
@@ -49,4 +51,5 @@ So $|\mathscr{H}|\geq 2^d \implies d \leq log_2(\mathscr{H}) \implies VC(\mathsc
 </br>
 </p>
 
-## 4. Theorem 3
+## 4. Theorem 3 - Sauer's Lemma
+$\textbf{Theorem 2:}$ 
