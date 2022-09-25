@@ -19,4 +19,21 @@ $\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a par
      \end{cases}$$
 </p>
 
-## 2. Theorem 1
+## 2. Theorem 1 - Radon's Theorem
+<p>
+$\textbf{Theorem 1 (Radon's Theorem):}$ For every set $S \subset {R}^{d}$ with $|S|=d+2$, $S$ can be divided into two disjoint sets whose convex hulls intersect.
+</p>
+<p>
+$\textbf{Proof:}$ Let $S=\{x_1,x_2,\cdots,x_{d+2}\} \subset R^{d}$. Then $S$ is a linearly dependent set. Then the equation $$\sum_{i=1}^{d+2}a_ix_i=0$$ has non-zero solution (not all $a_i=0$).
+Let I be the convex hull of $\{x_i:a_i>0\}$ and J be the convex hull of $\{x_i:a_i\leq 0\}$.
+$\{x_i:a_i>0\} \cap \{x_i:a_i\leq 0\} =\phi$. 
+<br>
+Let $A=\sum_{i:x_i\in I}a_i=-\sum_{j:x_j\in J}a_j$.
+</br>
+<br>Then $\frac{1}{A}\sum_{i=1}^{d+2}a_ix_i=0 \implies \sum_{i:x_i\in I}\frac{a_j}{A}x_j=-\sum_{j:x_j\in J}\frac{a_j}{A}x_j$</br>
+<br> So $p=\sum_{i:x_i\in I}\frac{a_j}{A}x_j=-\sum_{j:x_j\in J}\frac{a_j}{A}x_j$ </br>
+<br> So $p \in I \text{ and } p \in J$.</br>
+<br> So, S can be divided into two disjoint sets whose convex hulls intersect. </br>
+</p>
+
+## 3. Theorem 2 - 
