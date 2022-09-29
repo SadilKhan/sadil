@@ -65,16 +65,52 @@ $\textbf{Theorem 2:}$ <i> Let $VC(\mathscr{H})=d$ and $S$ be a set of $m$ points
 <br>
 <strong> Inductive Step: </strong> Let us assume that $\forall m^{'} < m,d^{'} < d$, this statement is true. Let $S=\{x_1,x_2,\cdots,x_m\}$ and $VC(\mathscr{H})=d$. Let $F$ be the set of functions defined only over $S$ such that $\mathscr{H}(S)=F(S)=F$. Then for any set $S^{'} \subset S$ that is shattered by $F$ can be shattered by $\mathscr{H}$. So $VC(F)\leq VC(\mathscr{H})=d$.
 </br>
-<br>
-We now create two disjoint subsets of $F$. $$F_1=\{ \{f(x_1),f(x_2),\cdots, f(x_{m-1}), 1 \}; f \in F \}$$
-$$F_2=\{ \{f(x_1),f(x_2),\cdots, f(x_{m-1}), 0 \}; f \in F \}$$
-Then $\forall f_1 \in F_1 ,\, \exists f_2 \in F_2$, $f_1(x_i)=f_2(x_i), \, \forall \, i=1,2,\cdots, m-1$ amd $f_1(x_m)=1,f_2(x_m)=0$.</br>
+We now create two disjoint subsets of $F$. For every possible labelings of $\{x_1,x_2,\cdots,x_{m-1}\}$ in F $$F_1=\{ \{f(x_1),f(x_2),\cdots, f(x_{m-1}), 1 \}; f \in F \}$$ $$F_2=F\setminus F_1=\{ \{f(x_1),f(x_2),\cdots, f(x_{m-1}), 0 \}; f \in F \}$$
+Then $\forall f_2 \in F_2$, $\exists \, f_1 \in F_1$, such that $f_1(x_i)=f_2(x_i)$, $\forall i=1,2,\cdots, m-1$ and $f_1(x_m)=1, f_2(x_m)=0$.
 $$|\mathscr{H}(S)|=|F(S)|=|F_1(S)|+|F_2(S)|$$
+<figure>
+					<center><img src="set_example.png" width="400"> </center>
+					<figcaption style= "text-align:center">Figure 1:  Let $S=\{x_1,x_2,x_3,x_4\}$. The $F_1(S)$ consists of all possible labelings for $\{x_1,x_2,x_3\} \in F(S)$ and $x_4=1$ and if two hypotheses in $F$ label $\{x_1,x_2,x_3\}$ the same way, then the one which labels $x_4$ as $0$ will be in $F_2(S)$.
+					</figcaption>
+				</figure>
 <br>
-Consider the case of $F_1$. Since $F_1 \leq F$, it's obvious that $VC(F_1) \leq VC(F) \leq d$. Now, $|F_1(S)|=|F_1(S \setminus \{x_m\})|$, since every labeling in $F_1(S)$ which is of the form $\{f(x_1),f(x_2),f(x_3), \cdots, f(x_{m-1}),1 \}$, $\{f(x_1),f(x_2),f(x_3), \cdots, f(x_{m-1}) \in F_1(S\setminus \{x_m\})$. So $F_1(S) \subseteq F_1(S\setminus \{x_m\})$
+Consider the case of $F_1$. It's obvious that $VC(F_1) \leq VC(F) \leq d$. Now, $|F_1(S)|=|F_1(S \setminus \{x_m\})|$, since every labeling in $F_1(S)$ which is of the form $\{f(x_1),f(x_2),f(x_3), \cdots, f(x_{m-1}),1 \}$, $$\{f(x_1),f(x_2),f(x_3), \cdots, f(x_{m-1}) \} \in F_1(S\setminus \{x_m\})$$ So $|F_1(S)| \leq |F_1(S\setminus \{x_m\})|$.
 </br>
+<br>
+Let $\{f^{'}(x_1),f^{'}(x_2),f^{'}(x_3), \cdots, f^{'}(x_{m-1}) \} \in F_1(S\setminus \{x_m\})$, then 
+$$\{f^{'}(x_1),f^{'}(x_2),f^{'}(x_3), \cdots, f^{'}(x_{m-1}),1 \} \in F_1(S)$$ So, $|F_1(S\setminus \{x_m\})| \leq |F_1(S)| $.
+Then $$|F_1(S)| = |F_1(S\setminus \{x_m\})| \leq \Phi_{d}(m-1)=\sum\limits_{i=0}^{d} {m-1\choose i}$$
+</br>
+For $F_2$ $$|F_2(S)|=|F_2(S\setminus\{x_m\})|$$
+If $T$ is shattered by $F_2$, then $T\cup \{x_m\}$ must be shattered by $F$ since $\forall f_2 \in F_2, \exists \, f_1 \in F_1$ such that $f_1(x_i)=f_2(x_i)$, $\forall \, i=1,2,\cdots, m-1$ and $f_1(x_m)=1, f_2(x_m)=0$ (In Figure 1, $F_2$ shatters $\{x_3\}$ then $F$ shatters $\{x_3,x_4\}$).$ VC(F_2) \leq VC(F)-1 \leq d-1$.
+$$ |F_2(S)| \leq \Phi_{d-1}(m-1)=\sum\limits_{i=0}^{d-1} {m-1\choose i}$$
+</p>
+<p>
+<br>So, $|\mathscr{H}(S)|=|F(S)|=|F_1(S)|+|F_2(S)| \leq \sum\limits_{i=0}^{d} {m-1\choose i} + \sum\limits_{i=0}^{d-1} {m-1\choose i}$</br>
+<br>
+$\implies |\mathscr{H}(S)| \leq \sum\limits_{i=0}^{d} {m-1\choose i} + \sum\limits_{i=0}^{d-1} {m-1\choose i}$</br>
+<br>
+$\implies |\mathscr{H}(S)| \leq {m\choose 0} + \sum\limits_{i=1}^{d} {m-1\choose i} + \sum\limits_{i=1}^{d} {m-1\choose i-1}$ (Since ${m\choose 0}={m-1\choose 0}$)
+</br>
+<br>
+$\implies |\mathscr{H}(S)| \leq {m\choose 0} + \sum\limits_{i=1}^{d} {m\choose i}$ (Since ${m-1\choose k}+{m-1\choose k-1}={m\choose k}$, which comes from $(1+X)^m=(1+X)^{m-1}(1+X)$. See <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">here</a> for more information.)
+</br>
+<br>
+$\implies |\mathscr{H}(S)| \leq \Phi_{d}(m)= \sum\limits_{i=0}^{d} {m\choose i}$
+</br>
+So it proves the theorem.
 </p>
 
+### Corollary
+<p>
+$\textbf{Corollary 3.1:}$ <i> $\Phi_{d}(m)=2^m$ </i>
+</p>
+<p>
+<br> $\textbf{Proof:}$ We know, $\Phi_{d}(m)=\sum\limits_{i=0}^{d} {m\choose i}$ and $$ (1+x)^m=\sum\limits_{i=0}^{d} {m\choose i}1^ix^{m-i}$$</br>
+Take x=1, then
+$$2^m=\sum\limits_{i=0}^{d}{m\choose i}$$
+So $\Phi_{d}(m)=2^m$.
+</p>
 
 ## Bibliography
 
