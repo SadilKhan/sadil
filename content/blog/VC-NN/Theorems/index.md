@@ -1,6 +1,6 @@
 ---
 title: "Part 2: VC Dimension - Theorems and Lemmas"
-weight: 1
+weight: 2
 subtitle: ""
 excerpt: This is the second part of the <a href="/blog/vc-nn/">VC Dimension and Neural Networks</a> series. This part lists important theorems with proofs and explanations. To know the basics of VC dimension, check <a href="/blog/vc-nn/introduction">Part 1 - VC Dimension</a>.
 date: 2022-09-29
