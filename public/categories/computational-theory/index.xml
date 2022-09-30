@@ -6,9 +6,19 @@
     <description>Recent content in Computational Theory on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 18 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/computational-theory/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 29 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/computational-theory/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Part 1 - VC Dimension</title>
+      <title>Part 2: VC Dimension - Theorems and Lemmas</title>
+      <link>/blog/vc-nn/theorems/</link>
+      <pubDate>Thu, 29 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/vc-nn/theorems/</guid>
+      <description>This is the second part of the VC Dimension and Neural Networks series. This part lists important theorems with proofs and explanations. To know the basics of VC dimension, check Part 1 - VC Dimension - Definition and Examples.
+1. Definitions $\textbf{Dichotomy}:$ A dichotomy of $S=\{x_1,x_2,\cdots,x_m\}$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases} 1 \, \text{if} \, x_i \in S_1 \\ -1 \, \text{if} \, x_i \in S_2\\ \end{cases}$$ Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$.</description>
+    </item>
+    
+    <item>
+      <title>Part 1: VC Dimension - Definition and Examples</title>
       <link>/blog/vc-nn/introduction/</link>
       <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
       
@@ -18,19 +28,9 @@
     </item>
     
     <item>
-      <title>Part 2 - VC Dimension Theorems and Lemmas</title>
-      <link>/blog/vc-nn/theorems/</link>
-      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/vc-nn/theorems/</guid>
-      <description>This is the second part of the VC Dimension and Neural Networks series. This part lists important theorems with proofs and explanations. To know the basics of VC dimension, check Part 1 - VC Dimension.
-1. Definitions $\textbf{Dichotomy}:$ A dichotomy of $S$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases} 1 \, \text{if} \, x_i \in S_1 \\ -1 \, \text{if} \, x_i \in S_2\\ \end{cases}$$ 2.</description>
-    </item>
-    
-    <item>
       <title>VC Dimension and Neural Networks</title>
       <link>/blog/vc-nn/</link>
-      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      <pubDate>Thu, 29 Sep 2022 00:00:00 +0000</pubDate>
       
       <guid>/blog/vc-nn/</guid>
       <description>** No content below YAML for the series _index. This file is a leaf bundle, and provides settings for the listing page layout and sidebar content.**</description>

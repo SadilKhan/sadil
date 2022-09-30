@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>Part 1 - VC Dimension | Home</title>
+<title>Part 1: VC Dimension - Definition and Examples | Home</title>
 
 
 
@@ -21,12 +21,12 @@
   
     
   
-<meta name="description" content="The VC dimension of a Hypothesis Space &lt;span&gt;&amp;#8459;&lt;/span&gt; on &lt;span&gt;&amp;#8477;&lt;sup&gt;d&lt;/sup&gt;&lt;/span&gt; is cardinality of the largest set &lt;b&gt;S&lt;/b&gt; such that S is shattered by &lt;span&gt;&amp;#8459;&lt;/span&gt;.">
+<meta name="description" content="This is the first part of the &lt;a href=&#34;/blog/vc-nn/&#34;&gt;VC Dimension and Neural Networks&lt;/a&gt; series. Basic definition and some examples of vc dimension of learning algorithms are explained here.">
 
 
 <meta property="og:site_name" content="Home">
-<meta property="og:title" content="Part 1 - VC Dimension | Home">
-<meta property="og:description" content="The VC dimension of a Hypothesis Space &lt;span&gt;&amp;#8459;&lt;/span&gt; on &lt;span&gt;&amp;#8477;&lt;sup&gt;d&lt;/sup&gt;&lt;/span&gt; is cardinality of the largest set &lt;b&gt;S&lt;/b&gt; such that S is shattered by &lt;span&gt;&amp;#8459;&lt;/span&gt;." />
+<meta property="og:title" content="Part 1: VC Dimension - Definition and Examples | Home">
+<meta property="og:description" content="This is the first part of the &lt;a href=&#34;/blog/vc-nn/&#34;&gt;VC Dimension and Neural Networks&lt;/a&gt; series. Basic definition and some examples of vc dimension of learning algorithms are explained here." />
 <meta property="og:type" content="page" />
 <meta property="og:url" content="/blog/vc-nn/introduction/" />
 <meta property="og:locale" content="en">
@@ -40,7 +40,7 @@
         <meta name="twitter:image" content="/blog/vc-nn/sidebar-featured.png" >
     
     
-  <meta itemprop="name" content="Part 1 - VC Dimension">
+  <meta itemprop="name" content="Part 1: VC Dimension - Definition and Examples">
 <meta itemprop="description" content="This is the first part of the VC Dimension and Neural Networks series. Basic definition and some examples of vc dimension of learning algorithms are explained here.
 1. Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\{-1,&#43;1\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc."><meta itemprop="datePublished" content="2022-09-18T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-09-18T00:00:00+00:00" />
@@ -287,7 +287,7 @@
   <section class="page-content mw7 center">
     <article class="post-content pa0 pl3-l">
       <header class="post-header">
-        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Part 1 - VC Dimension</h1>
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Part 1: VC Dimension - Definition and Examples</h1>
         
         <p class="f6 measure lh-copy mv1">By Mohammad Sadil Khan in <a href="/categories/computational-theory">Computational Theory</a>  <a href="/categories/deep-learning">Deep Learning</a>  <a href="/categories/vc-dimension">VC Dimension</a>  <a href="/categories/mlp">MLP</a> </p>
         <p class="f7 db mv0 ttu">September 18, 2022</p>
@@ -558,7 +558,7 @@ Since $h(X)=[X;1]W$, $rank(h(X))=min(rank([X;1],rank(W))) \implies rank(h(X)) \l
 </br>
 So it's a contradiction as we proved that $rank(h(X))=d+2$. Then our initial assumption that $S$ can be shattered by $\mathscr{H}$ is wrong.
 <p>
-The upper bound can also be proven using <a href="/blog/VC-NN/Theorems/index/## 2. Theorem 1 - Radon's Theorem">Radon's Theorem</a> which states that any set $S \subset R^{d}$ with $|S|=d+2$ can be partitioned into two disjoint subsets $S_1$ and $S_2$ whose convex hulls intersect which means it can't be separated by a hyperplane for all possible labeling, hence it can't be shattered by $\mathscr{H}$
+The upper bound can also be proven using <a href="/blog/VC-NN/theorems/#2-theorem-1---radons-theorem">Radon's Theorem</a> which states that any set $S \subset R^{d}$ with $|S|=d+2$ can be partitioned into two disjoint subsets $S_1$ and $S_2$ whose convex hulls intersect which means it can't be separated by a hyperplane for all possible labeling, hence it can't be shattered by $\mathscr{H}$.
 <p>
 So $VC(\mathscr{H})=d+1$.
 </p>
@@ -566,8 +566,8 @@ So $VC(\mathscr{H})=d+1$.
 
 
 
-<h2 id="5-bibliography">5. Bibliography
-  <a href="#5-bibliography"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h2 id="7-bibliography">7. Bibliography
+  <a href="#7-bibliography"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
@@ -582,9 +582,9 @@ So $VC(\mathscr{H})=d+1$.
       <footer class="post-footer">
         <div class="post-pagination dt w-100 mt4 mb2">
   
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/vc-nn/theorems/">&larr; Part 2: VC Dimension - Theorems and Lemmas</a>
   
-    <a class="next dtc pl2 tr v-top fw6"
-    href="/blog/vc-nn/theorems/">Part 2 - VC Dimension Theorems and Lemmas &rarr;</a>
   
 </div>
 
@@ -640,10 +640,10 @@ So $VC(\mathscr{H})=d+1$.
         <ul>
         
           
-          <li class="active" hugo-nav="/blog/vc-nn/introduction/"><a href="/blog/vc-nn/introduction/">Part 1 - VC Dimension</a></li>
+          <li class="" hugo-nav="/blog/vc-nn/theorems/"><a href="/blog/vc-nn/theorems/">Part 2: VC Dimension - Theorems and Lemmas</a></li>
         
           
-          <li class="" hugo-nav="/blog/vc-nn/theorems/"><a href="/blog/vc-nn/theorems/">Part 2 - VC Dimension Theorems and Lemmas</a></li>
+          <li class="active" hugo-nav="/blog/vc-nn/introduction/"><a href="/blog/vc-nn/introduction/">Part 1: VC Dimension - Definition and Examples</a></li>
         
         </ul>
       </nav>
@@ -659,7 +659,7 @@ So $VC(\mathscr{H})=d+1$.
     <li><a href="#4-vc-dimension-of-class-of-axis-aligned-rectangles-in-mathbbr2">4. VC-dimension of class of axis-aligned rectangles in $\mathbb{R}^2$</a></li>
     <li><a href="#5-vc-dimension-of-class-of-line-in-mathbbr2">5. VC-dimension of class of Line in $\mathbb{R}^2$</a></li>
     <li><a href="#6-vc-dimension-of-class-of-hyperplane-in-mathbbrd">6. VC-dimension of class of hyperplane in $\mathbb{R}^d$</a></li>
-    <li><a href="#5-bibliography">5. Bibliography</a></li>
+    <li><a href="#7-bibliography">7. Bibliography</a></li>
   </ul>
 </nav>
     </div>
