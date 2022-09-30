@@ -1,8 +1,8 @@
 ---
-title: "Part 1 - VC Dimension"
+title: "Part 1: VC Dimension - Definition and Examples"
 weight: 1
 subtitle: ""
-excerpt: "The VC dimension of a Hypothesis Space <span>&#8459;</span> on <span>&#8477;<sup>d</sup></span> is cardinality of the largest set <b>S</b> such that S is shattered by <span>&#8459;</span>."
+excerpt: This is the first part of the <a href="/blog/vc-nn/">VC Dimension and Neural Networks</a> series. Basic definition and some examples of vc dimension of learning algorithms are explained here.
 date: 2022-09-18
 draft: false
 commentable: true
