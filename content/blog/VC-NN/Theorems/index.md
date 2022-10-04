@@ -103,13 +103,13 @@ So it proves the theorem.
 
 ### Corollary
 <p>
-$\textbf{Corollary 3.1:}$ <i> $\Phi_{d}(m)=2^m$ </i>
+$\textbf{Corollary 3.1:}$ <i> $\Phi_{d}(m)<2^m$ if $d < m$. </i>
 </p>
 <p>
-<br> $\textbf{Proof:}$ We know, $\Phi_{d}(m)=\sum\limits_{i=0}^{d} {m\choose i}$ and $$ (1+x)^m=\sum\limits_{i=0}^{d} {m\choose i}1^ix^{m-i}$$</br>
+<br> $\textbf{Proof:}$ We know, $\Phi_{d}(m)=\sum\limits_{i=0}^{d} {m\choose i}$ and $$ (1+x)^m=\sum\limits_{i=0}^{m} {m\choose i}1^ix^{m-i}$$</br>
 Take x=1, then
-$$2^m=\sum\limits_{i=0}^{d}{m\choose i}$$
-So $\Phi_{d}(m)=2^m$.
+$$2^m=\sum\limits_{i=0}^{m}{m\choose i}$$
+So $\Phi_{d}(m)=\sum\limits_{i=0}^{d} {m\choose i}< \sum\limits_{i=0}^{m} {m\choose i}=2^m$ (if $d < m$).
 </p>
 
 ## Bibliography
