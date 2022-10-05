@@ -32,4 +32,10 @@ Please read  <a href="/blog/vc-nn/theorems">Part 2: VC Dimension - Theorems and 
 ## 2. Theorem 1 - Separable Regions
 <p>
 In this theorem we will see how <a href="#1-important-notation">MLPs</a> divides a space into different regions and classify accordingly.
+
+ <video width="600" height="600" controls>
+  <source src="two_lines_movie.m4v" type="video/mp4">
+</video> 
 </p>
+
+
