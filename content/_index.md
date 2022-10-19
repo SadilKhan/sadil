@@ -1,6 +1,6 @@
 ---
 title: "Mohammad Sadil Khan"
-subtitle: "Masters in Machine Learning and Data Mining"
+subtitle: "PhD in Computer Vision"
 description: "Computer Vision | Deep Learning | Statistics | Mathematics"
 date: 2022-02-01
 images:
