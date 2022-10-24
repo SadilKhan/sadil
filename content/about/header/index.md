@@ -17,7 +17,6 @@ I have worked in [**Creatis Lab**](https://www.creatis.insa-lyon.fr/site7/en), I
 # My Skills
 ## Programming Language
 <code><img height="40" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png"></code>
-<code><img height="40" src="https://en.wikipedia.org/wiki/R_(programming_language)#/media/File:R_logo.svg"></code>
 <code><img height="40" src="https://julialang.org/assets/infra/logo.svg"></code>
 <code><img height="40" src="https://developer.apple.com/swift/images/swift-og.png"></code>
 
