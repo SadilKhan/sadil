@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>VC Dimension and Neural Networks | Home</title>
+<title>Part 3: VC Dimension - Neural Networks | Home</title>
 
 
 
@@ -21,16 +21,14 @@
   
     
   
-<meta name="description" content="On the VC dimension of the family of Neural Networks
-">
+<meta name="description" content="This is the third part of the &lt;a href=&#34;/blog/vc-nn/&#34;&gt;VC Dimension and Neural Networks&lt;/a&gt; series. This part discusses the important theorems for vc dimension of MLPs.">
 
 
 <meta property="og:site_name" content="Home">
-<meta property="og:title" content="VC Dimension and Neural Networks | Home">
-<meta property="og:description" content="On the VC dimension of the family of Neural Networks
-" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="/blog/vc-nn/" />
+<meta property="og:title" content="Part 3: VC Dimension - Neural Networks | Home">
+<meta property="og:description" content="This is the third part of the &lt;a href=&#34;/blog/vc-nn/&#34;&gt;VC Dimension and Neural Networks&lt;/a&gt; series. This part discusses the important theorems for vc dimension of MLPs." />
+<meta property="og:type" content="page" />
+<meta property="og:url" content="/blog/vc-nn/nn/" />
 <meta property="og:locale" content="en">
 
 
@@ -42,15 +40,16 @@
         <meta name="twitter:image" content="/blog/vc-nn/sidebar-featured.png" >
     
     
-  <meta itemprop="name" content="VC Dimension and Neural Networks">
-<meta itemprop="description" content="On the VC dimension of the family of Neural Networks
-">
+  <meta itemprop="name" content="Part 3: VC Dimension - Neural Networks">
+<meta itemprop="description" content="This is the third part of the VC Dimension and Neural Networks series. This part discusses the important theorems for vc dimension of MLPs. Please read Part 2: VC Dimension - Theorems and Lemmas for the important theorems that will be used here.
+1. Important Notation Abbreviation Meaning $NN$ Neural Networks $MLP$ Multilayer Perceptrons 2. Theorem 1 - Separable Regions In this theorem we will see how MLPs divides a space into different regions and classify accordingly."><meta itemprop="datePublished" content="2022-09-30T00:00:00+00:00" />
+<meta itemprop="dateModified" content="2022-09-30T00:00:00+00:00" />
+<meta itemprop="wordCount" content="77">
+<meta itemprop="keywords" content="" />
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   <link rel="shortcut icon" href="" type="image/x-icon">
   <link rel="icon" href="" type="image/x-icon">
-  
-    <link rel="alternate" type="application/rss+xml" href="/blog/vc-nn/index.xml" title="Home" />
   
   
   <link rel="stylesheet" href="/style.main.min.4029c246551cf6ec532aa7b82ca95587b549cfad8f761f7746eb6154907463c9.css" integrity="sha256-QCnCRlUc9uxTKqe4LKlVh7VJz62Pdh93RuthVJB0Y8k=" media="screen">
@@ -217,7 +216,7 @@
   <script src="/toc.min.cbd751154f1d83c5f03e91b54c869201115768e2fe9b1aaad26e0857dd1bcbce.js" type="text/javascript"></script>
 </head>
 <body>
-      <div class="grid-container list-sidebar">
+      <div class="grid-container single-series">
 <header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
   <script>
   MathJax = {
@@ -283,132 +282,76 @@
   </nav>
 </header>
 
+                       
+<main class="page-main pa4" role="main">
+  <section class="page-content mw7 center">
+    <article class="post-content pa0 pl3-l">
+      <header class="post-header">
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Part 3: VC Dimension - Neural Networks</h1>
+        
+        <p class="f6 measure lh-copy mv1">By Mohammad Sadil Khan in <a href="/categories/computational-theory">Computational Theory</a>  <a href="/categories/deep-learning">Deep Learning</a>  <a href="/categories/vc-dimension">VC Dimension</a>  <a href="/categories/mlp">MLP</a> </p>
+        <p class="f7 db mv0 ttu">September 30, 2022</p>
+      </header>
+      <section class="post-body pt5 pb4">
+        <p>This is the third part of the <a href="/blog/vc-nn/">VC Dimension and Neural Networks</a> series. This part discusses the important theorems for vc dimension of MLPs.
+Please read  <a href="/blog/vc-nn/theorems">Part 2: VC Dimension - Theorems and Lemmas</a> for the important theorems that will be used here.</p>
 
-<main class="page-main pa4 section" role="main">
-  <section class="blog-content mw7 center">
+
+
+
+<h2 id="1-important-notation">1. Important Notation
+  <a href="#1-important-notation"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<table style="width:40%">
+  <tr>
+    <th>Abbreviation</th>
+    <th>Meaning</th>
+  </tr>
+  <tr>
+    <td>$NN$</td>
+    <td>Neural Networks</td>
+  </tr>
+  <tr>
+    <td>$MLP$</td>
+    <td>Multilayer Perceptrons</td>
+  </tr>
+</table>
+
+
+
+
+<h2 id="2-theorem-1---separable-regions">2. Theorem 1 - Separable Regions
+  <a href="#2-theorem-1---separable-regions"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 0h24v24H0z" fill="currentColor"></path>
+      <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
+    </svg></a>
+</h2>
+<p>
+In this theorem we will see how <a href="#1-important-notation">MLPs</a> divides a space into different regions and classify accordingly.
+ <video width="600" height="600" controls>
+  <source src="two_lines_movie.m4v" type="video/mp4">
+</video> 
+</p>
+
+      </section>
+      <footer class="post-footer">
+        <div class="post-pagination dt w-100 mt4 mb2">
+  
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/vc-nn/theorems/">&larr; Part 2: VC Dimension - Theorems and Lemmas</a>
+  
+  
+</div>
+
+      </footer>
+    </article>
     
-      
-        
-                                   
-     
-     
-<article class="mv4 mv5-l bb">
-  
-  
-  
-  
-  <div class="flex flex-column mb4 mb5-l  flex-row-reverse-ns">
-    <figure class="ml4-ns ma0 mb2 mb0-l w-100 w-40-ns">
-      <a href="/blog/vc-nn/nn/" class="db">
-        
-          <img src="/blog/vc-nn/sidebar-featured.png" class="db ma0 dim" alt="">
-        
-      </a>
-    </figure>
-    <div class="flex flex-column w-100 w-60-ns pl3-ns">
-      <header class="w-100">
-        <h1 class="f3 mv2 lh-title underline"><a href="/blog/vc-nn/nn/" class="db">Part 3: VC Dimension - Neural Networks</a></h1>
-        
-        <h2 class="f5"><i class="fas fa-stream fa-fw pr1"></i><small class="f5 ttu tracked">Series: </small><a class="link i dim" href="/blog/vc-nn/">VC Dimension and Neural Networks</a></h2>
-        
-      </header>
-      <p class="f6 lh-copy mv2 flex-auto">This is the third part of the <a href="/blog/vc-nn/">VC Dimension and Neural Networks</a> series. This part discusses the important theorems for vc dimension of MLPs.
-      <footer class="w-100">
-      
-      <p class="f7 db mv1">By Mohammad Sadil Khan in <a href="/categories/computational-theory">Computational Theory</a>  <a href="/categories/deep-learning">Deep Learning</a>  <a href="/categories/vc-dimension">VC Dimension</a>  <a href="/categories/mlp">MLP</a> </p>
-      <p class="f7 db mv1">September 30, 2022</p>
-    </footer>
-    </div>
-  </div>
-  
-  
-  
-</article>
-
-      
-        
-                                   
-     
-     
-<article class="mv4 mv5-l bb">
-  
-  
-  
-  
-  <div class="flex flex-column mb4 mb5-l  flex-row-reverse-ns">
-    <figure class="ml4-ns ma0 mb2 mb0-l w-100 w-40-ns">
-      <a href="/blog/vc-nn/theorems/" class="db">
-        
-          <img src="/blog/vc-nn/sidebar-featured.png" class="db ma0 dim" alt="">
-        
-      </a>
-    </figure>
-    <div class="flex flex-column w-100 w-60-ns pl3-ns">
-      <header class="w-100">
-        <h1 class="f3 mv2 lh-title underline"><a href="/blog/vc-nn/theorems/" class="db">Part 2: VC Dimension - Theorems and Lemmas</a></h1>
-        
-        <h2 class="f5"><i class="fas fa-stream fa-fw pr1"></i><small class="f5 ttu tracked">Series: </small><a class="link i dim" href="/blog/vc-nn/">VC Dimension and Neural Networks</a></h2>
-        
-      </header>
-      <p class="f6 lh-copy mv2 flex-auto">This is the second part of the <a href="/blog/vc-nn/">VC Dimension and Neural Networks</a> series. This part lists important theorems with proofs and explanations. To know the basics of VC dimension, check <a href="/blog/vc-nn/introduction">Part 1 - VC Dimension</a>.
-      <footer class="w-100">
-      
-      <p class="f7 db mv1">By Mohammad Sadil Khan in <a href="/categories/computational-theory">Computational Theory</a>  <a href="/categories/deep-learning">Deep Learning</a>  <a href="/categories/vc-dimension">VC Dimension</a>  <a href="/categories/mlp">MLP</a> </p>
-      <p class="f7 db mv1">September 29, 2022</p>
-    </footer>
-    </div>
-  </div>
-  
-  
-  
-</article>
-
-      
-        
-                                   
-     
-     
-<article class="mv4 mv5-l bb">
-  
-  
-  
-  
-  <div class="flex flex-column mb4 mb5-l  flex-row-reverse-ns">
-    <figure class="ml4-ns ma0 mb2 mb0-l w-100 w-40-ns">
-      <a href="/blog/vc-nn/introduction/" class="db">
-        
-          <img src="/blog/vc-nn/sidebar-featured.png" class="db ma0 dim" alt="">
-        
-      </a>
-    </figure>
-    <div class="flex flex-column w-100 w-60-ns pl3-ns">
-      <header class="w-100">
-        <h1 class="f3 mv2 lh-title underline"><a href="/blog/vc-nn/introduction/" class="db">Part 1: VC Dimension - Definition and Examples</a></h1>
-        
-        <h2 class="f5"><i class="fas fa-stream fa-fw pr1"></i><small class="f5 ttu tracked">Series: </small><a class="link i dim" href="/blog/vc-nn/">VC Dimension and Neural Networks</a></h2>
-        
-      </header>
-      <p class="f6 lh-copy mv2 flex-auto">This is the first part of the <a href="/blog/vc-nn/">VC Dimension and Neural Networks</a> series. Basic definition and some examples of vc dimension of learning algorithms are explained here.
-      <footer class="w-100">
-      
-      <p class="f7 db mv1">By Mohammad Sadil Khan in <a href="/categories/computational-theory">Computational Theory</a>  <a href="/categories/deep-learning">Deep Learning</a>  <a href="/categories/vc-dimension">VC Dimension</a>  <a href="/categories/mlp">MLP</a> </p>
-      <p class="f7 db mv1">September 18, 2022</p>
-    </footer>
-    </div>
-  </div>
-  
-  
-  
-</article>
-
-      
-    
-
-
-
-
   </section>
 </main>
+
 <aside class="page-sidebar" role="complementary">
                          
  
@@ -438,11 +381,49 @@
   <p class="f7 measure lh-copy i mh0-l">Written by Mohammad Sadil Khan</p>
 
 
-  <small class="db f7"><a href="/blog/" class="dib fw7 ttu bt bw1 b--black-10 pt3">Recent Posts</a></small>
+  
 </div>
 
 
+                         
+ 
+
+
+
+<div class="flex items-start sticky ph4 pb4">
+  <div class="w-two-thirds w-50-l ph0">
+    
+    <h2 class="mt3 mb3 f5 fw7 ttu tracked"><a class="no-underline dim" href="/blog/vc-nn/">In this series</a></h2>
+    <nav id="SeriesTableOfContents">
+        <ul>
+        
+          
+          <li class="" hugo-nav="/blog/vc-nn/introduction/"><a href="/blog/vc-nn/introduction/">Part 1: VC Dimension - Definition and Examples</a></li>
+        
+          
+          <li class="" hugo-nav="/blog/vc-nn/theorems/"><a href="/blog/vc-nn/theorems/">Part 2: VC Dimension - Theorems and Lemmas</a></li>
+        
+          
+          <li class="active" hugo-nav="/blog/vc-nn/nn/"><a href="/blog/vc-nn/nn/">Part 3: VC Dimension - Neural Networks</a></li>
+        
+        </ul>
+      </nav>
+  </div>
+  <details open id="PageTableOfContents">
+    <summary><h2 class="mv0 f5 fw7 ttu tracked dib">On this page</h2></summary>
+    <div class="pl2 pr0 mh0">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-important-notation">1. Important Notation</a></li>
+    <li><a href="#2-theorem-1---separable-regions">2. Theorem 1 - Separable Regions</a></li>
+  </ul>
+</nav>
+    </div>
+  </details>
+  
+</div>
 </aside>
+
 <footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
   <nav class="db dt-l w-100">
     <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">

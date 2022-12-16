@@ -8,16 +8,6 @@
     <language>en</language>
     <lastBuildDate>Tue, 01 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Part 2: VC Dimension - Theorems and Lemmas</title>
-      <link>/blog/vc-nn/theorems/</link>
-      <pubDate>Thu, 29 Sep 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/blog/vc-nn/theorems/</guid>
-      <description>This is the second part of the VC Dimension and Neural Networks series. This part lists important theorems with proofs and explanations. To know the basics of VC dimension, check Part 1 - VC Dimension - Definition and Examples.
-1. Definitions $\textbf{Dichotomy}:$ A dichotomy of $S=\{x_1,x_2,\cdots,x_m\}$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases} 1 \, \text{if} \, x_i \in S_1 \\ -1 \, \text{if} \, x_i \in S_2\\ \end{cases}$$ Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$.</description>
-    </item>
-    
-    <item>
       <title>Part 1: VC Dimension - Definition and Examples</title>
       <link>/blog/vc-nn/introduction/</link>
       <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
@@ -37,6 +27,16 @@
     </item>
     
     <item>
+      <title>Part 2: VC Dimension - Theorems and Lemmas</title>
+      <link>/blog/vc-nn/theorems/</link>
+      <pubDate>Thu, 29 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/vc-nn/theorems/</guid>
+      <description>This is the second part of the VC Dimension and Neural Networks series. This part lists important theorems with proofs and explanations. To know the basics of VC dimension, check Part 1 - VC Dimension - Definition and Examples.
+1. Definitions $\textbf{Dichotomy}:$ A dichotomy of $S=\{x_1,x_2,\cdots,x_m\}$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases} 1 \, \text{if} \, x_i \in S_1 \\ -1 \, \text{if} \, x_i \in S_2\\ \end{cases}$$ Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$.</description>
+    </item>
+    
+    <item>
       <title>Part 2 - Point Cloud Segmentation</title>
       <link>/blog/pointcloud-series/segmentation/</link>
       <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
@@ -44,6 +44,16 @@
       <guid>/blog/pointcloud-series/segmentation/</guid>
       <description>Point Cloud Segmentation Methods Point Cloud Segmentation is the task for grouping objects or assigning labels to every points in the point cloud. It is one of the most challenging tasks and a research topic in deep learning since point clouds are noisy, unstructured and lack connectedness property. All the methods are categorized into four categories.
 1. Edge Based Methods Edges describe the intrinsic characteristics of the boundary of any 3D object.</description>
+    </item>
+    
+    <item>
+      <title>Part 3: VC Dimension - Neural Networks</title>
+      <link>/blog/vc-nn/nn/</link>
+      <pubDate>Fri, 30 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/vc-nn/nn/</guid>
+      <description>This is the third part of the VC Dimension and Neural Networks series. This part discusses the important theorems for vc dimension of MLPs. Please read Part 2: VC Dimension - Theorems and Lemmas for the important theorems that will be used here.
+1. Important Notation Abbreviation Meaning $NN$ Neural Networks $MLP$ Multilayer Perceptrons 2. Theorem 1 - Separable Regions In this theorem we will see how MLPs divides a space into different regions and classify accordingly.</description>
     </item>
     
     <item>

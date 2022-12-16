@@ -2,44 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>/blog/vc-nn/theorems/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/blog/vc-nn/introduction/</loc>
     <lastmod>2022-09-18T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/pointcloud-series/introduction/</loc>
     <lastmod>2022-06-22T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/blog/vc-nn/theorems/</loc>
+    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/blog/pointcloud-series/segmentation/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/blog/vc-nn/nn/</loc>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/categories/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/computational-theory/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/deep-learning/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/mlp/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/series/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/vc-dimension/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/series/vc-dimension-and-neural-networks/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/vc-nn/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
+    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/computer-vision/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>

@@ -15,7 +15,7 @@ ignoreFiles = ["\\.Rmd$", "\\.Rmarkdown$", "_cache$", "\\.knit\\.md$", "\\.utf8\
 enableEmoji = true
 
 [outputs]
-  home = ["HTML", "RSS", "JSON"]
+  home = ["HTML", "RSS"]
   page = ["HTML"]
 
 [markup]
@@ -35,6 +35,8 @@ enableEmoji = true
   orgName = "Mohammad Sadil Khan"
   orgLocal = ""
   description = "Computer Vision | Deep Learning | Statistics | Mathematics"
+  search = true
+  search_minify = false
   #favicon = "/img/logo_color.png"
   #logo = "/img/logo_color.png"
   mainSections = ["publications", "project", "blogs"]
@@ -146,6 +148,7 @@ enableEmoji = true
     title = "Contact form"
     url = "/contact/"
     weight = 6
+    
 
    
 

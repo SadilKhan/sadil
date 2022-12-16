@@ -44,7 +44,7 @@
 <meta itemprop="description" content="This is the second part of the VC Dimension and Neural Networks series. This part lists important theorems with proofs and explanations. To know the basics of VC dimension, check Part 1 - VC Dimension - Definition and Examples.
 1. Definitions $\textbf{Dichotomy}:$ A dichotomy of $S=\{x_1,x_2,\cdots,x_m\}$ induced by $h \in \mathscr{H}$ is a partition of S into two disjoint sets $S_1$ and $S_2$ such that $$h(x_i)=\begin{cases} 1 \, \text{if} \, x_i \in S_1 \\ -1 \, \text{if} \, x_i \in S_2\\ \end{cases}$$ Let $\mathscr{H}(S)$ be the set of all labelings or dichotomies that can be realized by $\mathscr{H}$."><meta itemprop="datePublished" content="2022-09-29T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-09-29T00:00:00+00:00" />
-<meta itemprop="wordCount" content="806">
+<meta itemprop="wordCount" content="819">
 <meta itemprop="keywords" content="" />
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -427,13 +427,13 @@ So it proves the theorem.
     </svg></a>
 </h3>
 <p>
-$\textbf{Corollary 3.1:}$ <i> $\Phi_{d}(m)=2^m$ </i>
+$\textbf{Corollary 3.1:}$ <i> $\Phi_{d}(m)<2^m$ if $d < m$. </i>
 </p>
 <p>
-<br> $\textbf{Proof:}$ We know, $\Phi_{d}(m)=\sum\limits_{i=0}^{d} {m\choose i}$ and $$ (1+x)^m=\sum\limits_{i=0}^{d} {m\choose i}1^ix^{m-i}$$</br>
+<br> $\textbf{Proof:}$ We know, $\Phi_{d}(m)=\sum\limits_{i=0}^{d} {m\choose i}$ and $$ (1+x)^m=\sum\limits_{i=0}^{m} {m\choose i}1^ix^{m-i}$$</br>
 Take x=1, then
-$$2^m=\sum\limits_{i=0}^{d}{m\choose i}$$
-So $\Phi_{d}(m)=2^m$.
+$$2^m=\sum\limits_{i=0}^{m}{m\choose i}$$
+So $\Phi_{d}(m)=\sum\limits_{i=0}^{d} {m\choose i}< \sum\limits_{i=0}^{m} {m\choose i}=2^m$ (if $d < m$).
 </p>
 
 
@@ -455,9 +455,12 @@ So $\Phi_{d}(m)=2^m$.
       <footer class="post-footer">
         <div class="post-pagination dt w-100 mt4 mb2">
   
+    <a class="prev dtc pr2 tl v-top fw6"
+    href="/blog/vc-nn/introduction/">&larr; Part 1: VC Dimension - Definition and Examples</a>
+  
   
     <a class="next dtc pl2 tr v-top fw6"
-    href="/blog/vc-nn/introduction/">Part 1: VC Dimension - Definition and Examples &rarr;</a>
+    href="/blog/vc-nn/nn/">Part 3: VC Dimension - Neural Networks &rarr;</a>
   
 </div>
 
@@ -513,10 +516,13 @@ So $\Phi_{d}(m)=2^m$.
         <ul>
         
           
+          <li class="" hugo-nav="/blog/vc-nn/introduction/"><a href="/blog/vc-nn/introduction/">Part 1: VC Dimension - Definition and Examples</a></li>
+        
+          
           <li class="active" hugo-nav="/blog/vc-nn/theorems/"><a href="/blog/vc-nn/theorems/">Part 2: VC Dimension - Theorems and Lemmas</a></li>
         
           
-          <li class="" hugo-nav="/blog/vc-nn/introduction/"><a href="/blog/vc-nn/introduction/">Part 1: VC Dimension - Definition and Examples</a></li>
+          <li class="" hugo-nav="/blog/vc-nn/nn/"><a href="/blog/vc-nn/nn/">Part 3: VC Dimension - Neural Networks</a></li>
         
         </ul>
       </nav>

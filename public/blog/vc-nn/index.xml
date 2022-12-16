@@ -6,7 +6,17 @@
     <description>Recent content in VC Dimension and Neural Networks on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 29 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/vc-nn/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 30 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/blog/vc-nn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Part 1: VC Dimension - Definition and Examples</title>
+      <link>/blog/vc-nn/introduction/</link>
+      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/vc-nn/introduction/</guid>
+      <description>This is the first part of the VC Dimension and Neural Networks series. Basic definition and some examples of vc dimension of learning algorithms are explained here.
+1. Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\{-1,+1\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc.</description>
+    </item>
+    
     <item>
       <title>Part 2: VC Dimension - Theorems and Lemmas</title>
       <link>/blog/vc-nn/theorems/</link>
@@ -18,13 +28,13 @@
     </item>
     
     <item>
-      <title>Part 1: VC Dimension - Definition and Examples</title>
-      <link>/blog/vc-nn/introduction/</link>
-      <pubDate>Sun, 18 Sep 2022 00:00:00 +0000</pubDate>
+      <title>Part 3: VC Dimension - Neural Networks</title>
+      <link>/blog/vc-nn/nn/</link>
+      <pubDate>Fri, 30 Sep 2022 00:00:00 +0000</pubDate>
       
-      <guid>/blog/vc-nn/introduction/</guid>
-      <description>This is the first part of the VC Dimension and Neural Networks series. Basic definition and some examples of vc dimension of learning algorithms are explained here.
-1. Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\{-1,+1\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc.</description>
+      <guid>/blog/vc-nn/nn/</guid>
+      <description>This is the third part of the VC Dimension and Neural Networks series. This part discusses the important theorems for vc dimension of MLPs. Please read Part 2: VC Dimension - Theorems and Lemmas for the important theorems that will be used here.
+1. Important Notation Abbreviation Meaning $NN$ Neural Networks $MLP$ Multilayer Perceptrons 2. Theorem 1 - Separable Regions In this theorem we will see how MLPs divides a space into different regions and classify accordingly.</description>
     </item>
     
   </channel>
