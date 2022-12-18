@@ -15,7 +15,7 @@ layout: list #list, list-sidebar
 sidebar: 
   title: My Publications
   description: |
-    Here I list all the preprints, thesis papers and peer-reviewed papers.
+    Here I list all the preprints, thesis and peer-reviewed papers.
 
   author: "Mohammad Sadil Khan"
   show_sidebar_adunit: false # show ad container
@@ -34,4 +34,4 @@ cascade:
     show_sidebar_adunit: false # show ad container
 ---
 
-** No content for the project index. This file provides front matter for the blog including the layout and boolean options. **
+** No content for the project index. This file provides front matter for the publication including the layout and boolean options. **

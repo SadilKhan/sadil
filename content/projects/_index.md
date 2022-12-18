@@ -6,7 +6,7 @@ show_post_thumbnail: true
 show_author_byline: true
 show_post_date: true
 # for listing page layout
-layout: list-grid # list, list-sidebar, list-grid
+layout: list # list, list-sidebar, list-grid
 
 # for list-sidebar layout
 sidebar: 
@@ -32,4 +32,4 @@ cascade:
     show_sidebar_adunit: false # show ad container
 ---
 
-** No content for the project index. This file provides front matter for the blog including the layout and boolean options. **
+** No content for the project index. This file provides front matter for the project including the layout and boolean options. **
