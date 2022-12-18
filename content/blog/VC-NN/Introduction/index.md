@@ -17,7 +17,7 @@ Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$
 <p>
 $\textbf{Shattering:}$ $S$ is shattered by $\mathscr{H}$ when all labeling of $S$ (with 0 and 1) can be computed by $\mathscr{H}$ i.e for all labeling of $S$ denoted by $Y=\{0,1\}^m$, $\exists \\, h\in \mathscr{H}$ such that the $\sum_{i}|h(x_i)-y_i|=0$, where $y_i$ is the label of the ith point. Consider in Figure 1, $S$ is the set of three points, $\mathscr{H}=\{wx+b;w,b\in \mathbb{R}\}$, for every possible labels of $S$ (colors of $S$), there is a line which achieves the classification task. So $\mathscr{H}=\{wx+b;w,b\in \mathbb{R}\}$ shatters $S$ (from Figure 1).
 <figure>
-					<center><img src="featured.png" width="600"> </center>
+					<center><img src="/content/blog/VC-NN/sidebar-featured.png" width="600"> </center>
 					<figcaption style= "text-align:center">Figure 1:  Shattering of 3 points in xy plane by lines. Red is for negative label and blue for positive label.
 					</figcaption>
 				</figure>

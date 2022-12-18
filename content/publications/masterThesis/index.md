@@ -10,10 +10,10 @@ links:
 - icon: newspaper
   icon_pack: fas
   name: publication
-  url: publications/masterThesis/report.pdf
+  url: /content/publications/masterThesis/report.pdf
 url_code: ""
 url_dataset: ""
-url_pdf: "publication/masterThesis/report.pdf"
+url_pdf: "/content/publication/masterThesis/report.pdf"
 url_poster: ""
 url_project: ""
 url_slides: "slides.pdf"
