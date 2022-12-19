@@ -233,7 +233,7 @@ Since $h(X)=[X;1]W$, $rank(h(X))=min(rank([X;1],rank(W))) \implies rank(h(X)) \l
 </br>
 So it's a contradiction as we proved that $rank(h(X))=d+2$. Then our initial assumption that $S$ can be shattered by $\mathscr{H}$ is wrong.
 <p>
-The upper bound can also be proven using <a href="/blog/VC-NN/theorems/#2-theorem-1---radons-theorem">Radon's Theorem</a> which states that any set $S \subset R^{d}$ with $|S|=d+2$ can be partitioned into two disjoint subsets $S_1$ and $S_2$ whose convex hulls intersect which means it can't be separated by a hyperplane for all possible labeling, hence it can't be shattered by $\mathscr{H}$.
+The upper bound can also be proven using <a href="/blog/vc-nn/theorems/#2-theorem-1---radons-theorem">Radon's Theorem</a> which states that any set $S \subset R^{d}$ with $|S|=d+2$ can be partitioned into two disjoint subsets $S_1$ and $S_2$ whose convex hulls intersect which means it can't be separated by a hyperplane for all possible labeling, hence it can't be shattered by $\mathscr{H}$.
 <p>
 So $VC(\mathscr{H})=d+1$.
 </p>
