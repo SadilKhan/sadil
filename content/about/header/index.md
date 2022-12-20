@@ -20,6 +20,8 @@ I have worked in [**Creatis Lab**](https://www.creatis.insa-lyon.fr/site7/en), I
 <code><img height="40" src="https://julialang.org/assets/infra/logo.svg"></code>
 <code><img height="40" src="https://developer.apple.com/swift/images/swift-og.png"></code>
 <code><img height="40" src="https://camo.githubusercontent.com/ac18665005b4292614735b188d530aaef130923b605838a83f876dc0d5409b9f/68747470733a2f2f7777772e722d70726f6a6563742e6f72672f6c6f676f2f526c6f676f2e737667"></code>
+<code><img height="40" src="https://upload.wikimedia.org/wikipedia/fr/2/2e/Java_Logo.svg"></code>
+
 
 ## Tools and Frameworks
 <code><img height="40" src="https://upload.wikimedia.org/wikipedia/en/c/cd/Anaconda_Logo.png"></code>

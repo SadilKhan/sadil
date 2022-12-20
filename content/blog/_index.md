@@ -1,8 +1,7 @@
 ---
-title: SideBar Title
+title: My Blogs
 description: |
-  This is a fully featured blog that supports categories, 
-  tags, series, and pagination.
+  My Blogs on Computer Vision
 author: "Mohammad Sadil Khan"
 show_post_thumbnail: true
 show_author_byline: true

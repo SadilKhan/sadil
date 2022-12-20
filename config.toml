@@ -144,10 +144,15 @@ enableEmoji = true
     url = "/cv/"
     weight = 5
   [[menu.header]]
+    name = "Video"
+    title = "Video"
+    url = "/travel_video/"
+    weight = 6
+  [[menu.header]]
     name = "Contact"
     title = "Contact form"
     url = "/contact/"
-    weight = 6
+    weight = 7
     
 
    
