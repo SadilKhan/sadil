@@ -8,11 +8,13 @@ show_related: true
 ---
 
 <style>
-body {
-background: #7f7fd5;
-  background: linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
+p,h4,b {
+color: black;
 }
 .card {
+
+background: #7f7fd5;
+  background: linear-gradient(to right, #91eae4, #86a8e7, #7f7fd5);
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   width: 100%;
