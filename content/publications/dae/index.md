@@ -1,6 +1,5 @@
 ---
-
-date: "2021-10-30T00:00:00Z"
+date: "2021-10-01T00:00:00Z"
 doi: ""
 links:
 - icon: newspaper
@@ -10,7 +9,7 @@ links:
 featured: true
 publishDate: "2021-10-01T00:00:00Z"
 categories: [Anomaly, Autoencoder, Object Detection, SSD, Deep Learning, Image Reconstruction, Computer Vision]
-title: Vignette detection and reconstruction of composed ornaments with a strengthened autoencoder
+title: PREPRINT - Vignette detection and reconstruction of composed ornaments with a strengthened autoencoder
 commentable: true
 show_related: true
 ---

@@ -4,8 +4,8 @@ doi: ""
 featured: true
 publishDate: "2022-06-23T00:00:00Z"
 # slides: example
-categories: [Image Segmentation, Deep Learning, 3D Computer Vision, Point Cloud]
-title: Learning Shapes for Efficient Segmentation of 3D Medical Images using Point Cloud
+categories: [Image Segmentation, Deep Learning, 3D Computer Vision, Point Cloud, Master Thesis]
+title: MASTER THESIS - Learning Shapes for Efficient Segmentation of 3D Medical Images using Point Cloud
 links:
 - icon: newspaper
   icon_pack: fas
