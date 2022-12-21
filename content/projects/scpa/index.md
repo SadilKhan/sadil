@@ -19,5 +19,9 @@ show_related: true
 
 <p> Code is available <a href = "https://github.com/SadilKhan/MLDM-2020-2022/tree/main/Semester%203%20-%20KUL/Introduction%20to%20Object%20Oriented%20Programming/Java%20Project">here</a></p>.
 <div>&nbsp</div>
-<embed src="report_java_scpa.pdf" width="100%" height="2100px"/>
+<object data='report_java_scpa.pdf' style='width:800px;height:2100px'>
+    <p>Oops! Your browser doesn't support PDFs!</p>
+    <p><a href="some.pdf">Download Instead</a></p>
+</object>
+
 
