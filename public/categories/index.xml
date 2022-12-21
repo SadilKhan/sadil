@@ -62,6 +62,24 @@
     </item>
     
     <item>
+      <title>Java</title>
+      <link>/categories/java/</link>
+      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Software</title>
+      <link>/categories/software/</link>
+      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/software/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Computer Vision</title>
       <link>/categories/computer-vision/</link>
       <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
@@ -125,6 +143,15 @@
     </item>
     
     <item>
+      <title>Master Thesis</title>
+      <link>/categories/master-thesis/</link>
+      <pubDate>Thu, 23 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/master-thesis/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Decoder</title>
       <link>/categories/decoder/</link>
       <pubDate>Thu, 12 May 2022 00:00:00 +0000</pubDate>
@@ -145,7 +172,7 @@
     <item>
       <title>Anomaly</title>
       <link>/categories/anomaly/</link>
-      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/categories/anomaly/</guid>
       <description></description>
@@ -154,7 +181,7 @@
     <item>
       <title>Autoencoder</title>
       <link>/categories/autoencoder/</link>
-      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/categories/autoencoder/</guid>
       <description></description>
@@ -163,7 +190,7 @@
     <item>
       <title>Image Reconstruction</title>
       <link>/categories/image-reconstruction/</link>
-      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/categories/image-reconstruction/</guid>
       <description></description>
@@ -172,7 +199,7 @@
     <item>
       <title>Object Detection</title>
       <link>/categories/object-detection/</link>
-      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/categories/object-detection/</guid>
       <description></description>
@@ -181,7 +208,7 @@
     <item>
       <title>SSD</title>
       <link>/categories/ssd/</link>
-      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/categories/ssd/</guid>
       <description></description>

@@ -17,6 +17,9 @@
     <loc>/blog/vc-nn/nn/</loc>
     <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/cv/</loc>
+    <lastmod>2022-12-21T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/categories/</loc>
     <lastmod>2022-12-20T00:00:00+00:00</lastmod>
   </url><url>
@@ -52,6 +55,18 @@
   </url><url>
     <loc>/blog/vc-nn/</loc>
     <lastmod>2022-09-30T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/java/</loc>
+    <lastmod>2022-08-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/projects/</loc>
+    <lastmod>2022-08-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/software/</loc>
+    <lastmod>2022-08-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/projects/scpa/</loc>
+    <lastmod>2022-08-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/computer-vision/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
@@ -101,6 +116,9 @@
     <loc>/categories/image-segmentation/</loc>
     <lastmod>2022-06-23T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/categories/master-thesis/</loc>
+    <lastmod>2022-06-23T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/publications/masterthesis/</loc>
     <lastmod>2022-06-23T00:00:00+00:00</lastmod>
   </url><url>
@@ -120,22 +138,22 @@
     <lastmod>2022-02-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/anomaly/</loc>
-    <lastmod>2021-10-30T00:00:00+00:00</lastmod>
+    <lastmod>2021-10-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/autoencoder/</loc>
-    <lastmod>2021-10-30T00:00:00+00:00</lastmod>
+    <lastmod>2021-10-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/image-reconstruction/</loc>
-    <lastmod>2021-10-30T00:00:00+00:00</lastmod>
+    <lastmod>2021-10-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/categories/object-detection/</loc>
-    <lastmod>2021-10-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/ssd/</loc>
-    <lastmod>2021-10-30T00:00:00+00:00</lastmod>
+    <lastmod>2021-10-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/publications/dae/</loc>
-    <lastmod>2021-10-30T00:00:00+00:00</lastmod>
+    <lastmod>2021-10-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/ssd/</loc>
+    <lastmod>2021-10-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/contact/</loc>
     <lastmod>2021-06-08T00:00:00+00:00</lastmod>
@@ -155,12 +173,7 @@
     <loc>/blog/iouloss/</loc>
     <lastmod>2020-09-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/projects/</loc>
-    <lastmod>2020-09-27T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/about/</loc>
-  </url><url>
-    <loc>/cv/</loc>
   </url><url>
     <loc>/license/</loc>
   </url>

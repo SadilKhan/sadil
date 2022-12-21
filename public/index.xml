@@ -57,6 +57,17 @@
     </item>
     
     <item>
+      <title>CV</title>
+      <link>/cv/</link>
+      <pubDate>Wed, 21 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/cv/</guid>
+      <description>Download CV from here
+. &amp;nbsp Oops! Your browser doesn&#39;t support PDFs!
+Download Instead</description>
+    </item>
+    
+    <item>
       <title>My Travel Video</title>
       <link>/travel_video/</link>
       <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
@@ -67,7 +78,16 @@
     </item>
     
     <item>
-      <title>Learning Shapes for Efficient Segmentation of 3D Medical Images using Point Cloud</title>
+      <title>Swedish Crossword Puzzle App</title>
+      <link>/projects/scpa/</link>
+      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/scpa/</guid>
+      <description>A Crossword Puzzle App in Java</description>
+    </item>
+    
+    <item>
+      <title>MASTER THESIS - Learning Shapes for Efficient Segmentation of 3D Medical Images using Point Cloud</title>
       <link>/publications/masterthesis/</link>
       <pubDate>Thu, 23 Jun 2022 00:00:00 +0000</pubDate>
       
@@ -85,9 +105,9 @@
     </item>
     
     <item>
-      <title>Vignette detection and reconstruction of composed ornaments with a strengthened autoencoder</title>
+      <title>PREPRINT - Vignette detection and reconstruction of composed ornaments with a strengthened autoencoder</title>
       <link>/publications/dae/</link>
-      <pubDate>Sat, 30 Oct 2021 00:00:00 +0000</pubDate>
+      <pubDate>Fri, 01 Oct 2021 00:00:00 +0000</pubDate>
       
       <guid>/publications/dae/</guid>
       <description>Abstract A strengthened autoencoder formed by placing an object detector upstream of a decoder is here developed in the context of the model-helped human analysis of composed ornaments from a dictionary of vignettes. The detection part is in charge to detect regions of interest containing some vignette features, and the decoding part to ensure vignette reconstruction with a relative quality depending on feature match. Images of ornaments without typographical composition are generated in order to properly assess the performance of each of the two parts.</description>
