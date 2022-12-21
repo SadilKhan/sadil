@@ -35,16 +35,16 @@
 
 
     
-        <meta property="og:image" content="/blog/vc-nn/sidebar-featured.png" >
+        <meta property="og:image" content="/blog/vc-nn/introduction/featured.png" >
         <meta property="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="/blog/vc-nn/sidebar-featured.png" >
+        <meta name="twitter:image" content="/blog/vc-nn/introduction/featured.png" >
     
     
   <meta itemprop="name" content="Part 1: VC Dimension - Definition and Examples">
 <meta itemprop="description" content="This is the first part of the VC Dimension and Neural Networks series. Basic definition and some examples of vc dimension of learning algorithms are explained here.
 1. Definition Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$ and $\mathscr{H}$ be a class of $\{-1,&#43;1\}$ valued functions on $\mathbb{R}^d$ i.e $$\forall \\, h \in H, h:S \to \{0,1\}^m$$ One such example is $h_1(x_i)=1 \,\forall \, x_i \in S$. In the context of Machine Learning, $\mathscr{H}$ is the learning algorithm generally used for any classification task such as Logistic Regression etc."><meta itemprop="datePublished" content="2022-09-18T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2022-09-18T00:00:00+00:00" />
-<meta itemprop="wordCount" content="1425">
+<meta itemprop="wordCount" content="1425"><meta itemprop="image" content="/blog/vc-nn/introduction/featured.png">
 <meta itemprop="keywords" content="" />
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -275,6 +275,11 @@
         
         
         
+      <a class="link f6 f5-l dib pv1 ph2 " href="/travel_video/" title="Video">Video</a>
+      
+        
+        
+        
       <a class="link f6 f5-l dib pv1 ph2 " href="/contact/" title="Contact form">Contact</a>
       
       
@@ -310,7 +315,7 @@ Let $S=\{x_1,x_2,\cdots,x_m\}$ be the set of m random points from $\mathbb{R}^d$
 <p>
 $\textbf{Shattering:}$ $S$ is shattered by $\mathscr{H}$ when all labeling of $S$ (with 0 and 1) can be computed by $\mathscr{H}$ i.e for all labeling of $S$ denoted by $Y=\{0,1\}^m$, $\exists \\, h\in \mathscr{H}$ such that the $\sum_{i}|h(x_i)-y_i|=0$, where $y_i$ is the label of the ith point. Consider in Figure 1, $S$ is the set of three points, $\mathscr{H}=\{wx+b;w,b\in \mathbb{R}\}$, for every possible labels of $S$ (colors of $S$), there is a line which achieves the classification task. So $\mathscr{H}=\{wx+b;w,b\in \mathbb{R}\}$ shatters $S$ (from Figure 1).
 <figure>
-					<center><img src="/blog/VC-NN/sidebar-featured.png" width="600"> </center>
+					<center><img src="/blog/vc-nn/sidebar-featured.png" width="600"> </center>
 					<figcaption style= "text-align:center">Figure 1:  Shattering of 3 points in xy plane by lines. Red is for negative label and blue for positive label.
 					</figcaption>
 				</figure>
@@ -558,7 +563,7 @@ Since $h(X)=[X;1]W$, $rank(h(X))=min(rank([X;1],rank(W))) \implies rank(h(X)) \l
 </br>
 So it's a contradiction as we proved that $rank(h(X))=d+2$. Then our initial assumption that $S$ can be shattered by $\mathscr{H}$ is wrong.
 <p>
-The upper bound can also be proven using <a href="/blog/VC-NN/theorems/#2-theorem-1---radons-theorem">Radon's Theorem</a> which states that any set $S \subset R^{d}$ with $|S|=d+2$ can be partitioned into two disjoint subsets $S_1$ and $S_2$ whose convex hulls intersect which means it can't be separated by a hyperplane for all possible labeling, hence it can't be shattered by $\mathscr{H}$.
+The upper bound can also be proven using <a href="/blog/vc-nn/theorems/#2-theorem-1---radons-theorem">Radon's Theorem</a> which states that any set $S \subset R^{d}$ with $|S|=d+2$ can be partitioned into two disjoint subsets $S_1$ and $S_2$ whose convex hulls intersect which means it can't be separated by a hyperplane for all possible labeling, hence it can't be shattered by $\mathscr{H}$.
 <p>
 So $VC(\mathscr{H})=d+1$.
 </p>

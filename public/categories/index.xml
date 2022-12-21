@@ -6,7 +6,25 @@
     <description>Recent content in Categories on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 30 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 20 Dec 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Travelling</title>
+      <link>/categories/travelling/</link>
+      <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/travelling/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Videography</title>
+      <link>/categories/videography/</link>
+      <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/videography/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Computational Theory</title>
       <link>/categories/computational-theory/</link>

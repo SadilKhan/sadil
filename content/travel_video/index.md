@@ -38,7 +38,7 @@ img {
 .tab {
   overflow: hidden;
   border: 1px solid #ccc;
-  background-color: #f1f1f1;
+  background: linear-gradient(to right, #7eb0d5, #0d88e6);
 }
 
 /* Style the buttons inside the tab */
@@ -55,12 +55,12 @@ img {
 
 /* Change background color of buttons on hover */
 .tab button:hover {
-  background-color: #ddd;
+  background-color: #C8A2C8;
 }
 
 /* Create an active/current tablink class */
 .tab button.active {
-  background-color: #ccc;
+  background-color: #b3d4ff;
 }
 
 /* Style the tab content */
@@ -69,8 +69,92 @@ img {
   padding: 6px 12px;
   border: 1px solid #ccc;
   border-top: none;
+  -webkit-animation: fadeEffect 1s;
+  animation: fadeEffect 1s;
+}
+
+/* Fade in tabs */
+@-webkit-keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
 </style>
+
+<div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'France')" id="default">France</button>
+  <button class="tablinks" onclick="openCity(event, 'Germany')">Germany</button>
+  <button class="tablinks" onclick="openCity(event, 'Italy')">Italy</button>
+  <button class="tablinks" onclick="openCity(event, 'Switzerland')">Switzerland</button>
+</div>
+
+<!--  Add videos of France --> 
+<div id="France" class="tabcontent">
+  <h3>France Travel Stories</h3>
+<div class="card">
+   <iframe width="100%" height="400" src="https://www.youtube.com/embed/zA9hGUqkyao" title="YouTube video player" frameborder="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <div class="container">
+    <h4><b>[4K] Lyon | Cinematic Video | France</b></h4> 
+    <p>This is a cinematic video of Lyon, France. I lived in this city for six months but created memories of a lifetime. This cinematic video portrays the quiet side of Lyon. If you like my video, please like, comment, and subscribe.</p> 
+  </div>
+  </div>
+<div>&nbsp;</div>
+  <div class="card">
+   <iframe width="100%" height="400" src="https://www.youtube.com/embed/AlMKd9LOvO8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <div class="container">
+    <h4><b>ICE CAVE (GROTTE DE GLACE) | CHAMONIX | France</b></h4> 
+    <p>We went to Chamonix from Annecy with Arpan on 6th July 2021.
+We visited the Ice Cave. 
+To visit there first buy a ticket from the station for Chamonix - Mer de Glace(Train Montevers). It costs 35€ per person for a round trip.
+You may then take the Gondola for a ride down the station to Ice cave or you can walk down the road.</p> 
+    </div>
+  </div>
+  <div>&nbsp;</div>
+</div>
+
+<div id="Germany" class="tabcontent">
+  <h3>Germany Travel Stories</h3>
+<div class="card">
+   <iframe width="100%" height="400" src="https://www.youtube.com/embed/MUzDmbCigfM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <div class="container">
+    <h4><b>[4k] Christmas Market | Düsseldorf | Germany</b></h4> 
+    <p>This video is about my trip to the beautiful city of Düsseldorf in Germany on 5th December 2021 with the ESN group of KU Leuven. Every year, the city hosts stunning Christmas markets with beautiful lights, delicious sweets, and a magical environment besides the Rhine River. If you enjoy the video, please do like, share, and subscribe.</p> 
+  </div>
+</div>
+<div>&nbsp;</div>
+</div>
+
+<div id="Italy" class="tabcontent">
+  <h3>Italy Travel Stories</h3>
+<div class="card">
+   <iframe width="100%" height="400" src="https://www.youtube.com/embed/uZuM4s21-3w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <div class="container">
+    <h4><b> [4K] Italy Trip 2022 | TURIN | GENOA | CINQUE TERRE | CERTALDO | FLORENCE | Italy</b></h4> 
+    <p>On 25th May 2022, I took a short trip to Italy with my friend Arghya. This video is about the quiet yet lively, modern yet medieval side of Italian towns. Hope you enjoy it. Please like, share, and subscribe.</p> 
+  </div>
+</div>
+<div>&nbsp;</div>
+</div>
+
+<div id="Switzerland" class="tabcontent">
+  <h3>Switzerland Travel Stories</h3>
+<div class="card">
+   <iframe width="100%" height="400" src="https://www.youtube.com/embed/N-rkopyzMac" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  <div class="container">
+    <h4><b>[4K] Switzerland Trip 2022 | JAUNBACH GORGE | LAUTERBRUNNEN | SEELISBERG | Suisse</b></h4> 
+    <p>On 12th August 2022, I took a hiking trip to Switzerland with WHATTRIPS for 3 days. This video captures some beautiful moments with our hiking group. If you like my video, please like, comment, share, and subscribe.</p> 
+  </div>
+</div>
+<div>&nbsp;</div>
+
+</div>
+
+
+
 
 <script>
 function openCity(evt, cityName) {
@@ -87,73 +171,9 @@ function openCity(evt, cityName) {
   evt.currentTarget.className += " active";
 }
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+// Get the element with id="default" and click on it
+document.getElementById("default").click();
 </script>
-
-<div class="tab">
-  <button class="tablinks" onclick="openCity(event, 'France')">France</button>
-  <button class="tablinks" onclick="openCity(event, 'Germany')">Germany</button>
-  <button class="tablinks" onclick="openCity(event, 'Switzerland')">Switzerland</button>
-  <button class="tablinks" onclick="openCity(event, 'Italy')">Italy</button>
-</div>
-
-<!--  Add videos of France --> 
-<div id="France" class="tabcontent">
-  <h3>France Travel Stories</h3>
-<div class="card">
-   <iframe width="100%" height="500" src="https://www.youtube.com/embed/zA9hGUqkyao" title="YouTube video player" frameborder="1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  <div class="container">
-    <h4><b>[4K] Lyon | Cinematic Video | France</b></h4> 
-    <p>This is a cinematic video of Lyon, France. I lived in this city for six months but created memories of a lifetime. This cinematic video portrays the quiet side of Lyon. If you like my video, please like, comment, and subscribe.</p> 
-  </div>
-  </div>
-  
-  <div class="card">
-   <iframe width="100%" height="500" src="https://www.youtube.com/embed/AlMKd9LOvO8" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    <div class="container">
-    <h4><b>ICE CAVE (GROTTE DE GLACE) | CHAMONIX | France</b></h4> 
-    <p>We went to Chamonix from Annecy with Arpan on 6th July 2021.
-We visited the Ice Cave. 
-To visit there first buy a ticket from the station for Chamonix - Mer de Glace(Train Montevers). It costs 35€ per person for a round trip.
-You may then take the Gondola for a ride down the station to Ice cave or you can walk down the road.</p> 
-    </div>
-  </div>
-</div>
-
-<div id="Germany" class="tabcontent">
-  <h3>Germany Travel Stories</h3>
-<div class="card">
-   <iframe width="100%" height="500" src="https://www.youtube.com/embed/MUzDmbCigfM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  <div class="container">
-    <h4><b>[4k] Christmas Market | Düsseldorf | Germany</b></h4> 
-    <p>This video is about my trip to the beautiful city of Düsseldorf in Germany on 5th December 2021 with the ESN group of KU Leuven. Every year, the city hosts stunning Christmas markets with beautiful lights, delicious sweets, and a magical environment besides the Rhine River. If you enjoy the video, please do like, share, and subscribe.</p> 
-  </div>
-</div>
-</div>
-
-<div id="Switzerland" class="tabcontent">
-  <h3>Switzerland Travel Stories</h3>
-<div class="card">
-   <iframe width="100%" height="500" src="https://www.youtube.com/embed/N-rkopyzMac" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  <div class="container">
-    <h4><b>[4K] Switzerland Trip 2022 | JAUNBACH GORGE | LAUTERBRUNNEN | SEELISBERG | Suisse</b></h4> 
-    <p>On 12th August 2022, I took a hiking trip to Switzerland with WHATTRIPS for 3 days. This video captures some beautiful moments with our hiking group. If you like my video, please like, comment, share, and subscribe.</p> 
-  </div>
-</div>
-</div>
-
-<div id="Italy" class="tabcontent">
-  <h3>Italy Travel Stories</h3>
-<div class="card">
-   <iframe width="100%" height="500" src="https://www.youtube.com/embed/uZuM4s21-3w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  <div class="container">
-    <h4><b> [4K] Italy Trip 2022 | TURIN | GENOA | CINQUE TERRE | CERTALDO | FLORENCE | Italy</b></h4> 
-    <p>On 25th May 2022, I took a short trip to Italy with my friend Arghya. This video is about the quiet yet lively, modern yet medieval side of Italian towns. Hope you enjoy it. Please like, share, and subscribe.</p> 
-  </div>
-</div>
-</div>
-
 
 
 
