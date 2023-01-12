@@ -6,6 +6,7 @@ categories:
 - Java
 - Software
 title: Swedish Crossword Puzzle App
+subtitle: A Crossword Puzzle App in Java
 author: Mohammad Sadil Khan
 layout: single-sidebar # single or single-sidebar
 url_code: ""

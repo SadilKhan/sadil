@@ -7,7 +7,7 @@ categories:
 - Computer Vision
 - Object Detection
 title: AutoLabelMe
-sutitle: Open Source Image Annotator in Python
+subtitle: Open Source Image Annotator in Python
 commentable: true
 show_related: true
 share: false
