@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>/projects/autoannotator/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/blog/vc-nn/introduction/</loc>
     <lastmod>2022-09-18T00:00:00+00:00</lastmod>
   </url><url>
@@ -17,11 +20,29 @@
     <loc>/blog/vc-nn/nn/</loc>
     <lastmod>2022-09-30T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>/categories/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/computer-vision/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/image-annotation/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/macos/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/projects/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/object-detection/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>/categories/swift/</loc>
+    <lastmod>2023-01-11T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>/cv/</loc>
     <lastmod>2022-12-21T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/</loc>
-    <lastmod>2022-12-20T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/travel_video/</loc>
     <lastmod>2022-12-20T00:00:00+00:00</lastmod>
@@ -59,17 +80,11 @@
     <loc>/categories/java/</loc>
     <lastmod>2022-08-12T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/projects/</loc>
-    <lastmod>2022-08-12T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/categories/software/</loc>
     <lastmod>2022-08-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/projects/scpa/</loc>
     <lastmod>2022-08-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/computer-vision/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/tags/deep-learning/</loc>
     <lastmod>2022-06-28T00:00:00+00:00</lastmod>
@@ -146,9 +161,6 @@
     <loc>/categories/image-reconstruction/</loc>
     <lastmod>2021-10-01T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/object-detection/</loc>
-    <lastmod>2021-10-01T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/publications/dae/</loc>
     <lastmod>2021-10-01T00:00:00+00:00</lastmod>
   </url><url>
@@ -165,9 +177,6 @@
     <lastmod>2020-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/projects/dea/</loc>
-    <lastmod>2020-09-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/image-annotation/</loc>
     <lastmod>2020-09-27T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/blog/iouloss/</loc>

@@ -6,7 +6,16 @@
     <description>Recent content in Image Annotation on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 27 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/image-annotation/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/image-annotation/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AutoAnnotator</title>
+      <link>/projects/autoannotator/</link>
+      <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/autoannotator/</guid>
+      <description>Automatic Image Annotator for Computer Vision</description>
+    </item>
+    
     <item>
       <title>AutoLabelMe</title>
       <link>/projects/autolabelme/</link>

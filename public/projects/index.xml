@@ -6,7 +6,16 @@
     <description>Recent content in My Projects on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 12 Aug 2022 00:00:00 +0000</lastBuildDate><atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 11 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="/projects/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AutoAnnotator</title>
+      <link>/projects/autoannotator/</link>
+      <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/autoannotator/</guid>
+      <description>Automatic Image Annotator for Computer Vision</description>
+    </item>
+    
     <item>
       <title>Swedish Crossword Puzzle App</title>
       <link>/projects/scpa/</link>

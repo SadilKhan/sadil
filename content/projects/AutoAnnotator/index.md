@@ -16,13 +16,15 @@ share: false
 ---
 
 
-<video width="768" height="480" autoplay muted controls>
+<video width="768" height="480" autoplay muted controls loop>
   <source src="assets/matchexamples.mp4" type="video/mp4">
   <p>
     Your browser doesn't support HTML video. Here is a
     <a href="matchexamples.mp4">link to the video</a> instead.
   </p>
 </video>
+<div> &nbsp; </div>
+<div> &nbsp; </div>
 <div> &nbsp; </div>
 <div> &nbsp; </div>
 <div align="center"> 
@@ -85,14 +87,19 @@ The first two steps are very important. These two steps are to be done only once
 <div align="left">
   <a href="#change-python-environment"><b style="color:rgba(200, 0, 0,1);">1. Change Python Enviroment (Important Step) </b></a>
   </br>
-  <a href="#path-for-python-libraries"><b style="color:rgba(200, 0, 0,1);">2. Path for Python Libraries (Important Step) </b></a>
+  <a href="#path-for-python-scripts"><b style="color:rgba(200, 0, 0,1);">2. Path for Python Scripts (Important Step) </b></a>
   </br>
   <a href="#add-new-images"><b>3. Add New Images</b></a>
   </br>
-  <a href="#draw-rectangles"><b>4. Draw Rectangles</b></a>
+  <a href="#draw-rectangle"><b>4. Draw Rectangle</b></a>
+  </br>
+  <a href="#move-rectangle"><b>5. Move Rectangle</b></a>
+  </br>
+  <a href="#resize-rectangle"><b>6. Resize Rectangle</b></a>
 </div>
 
-### Change Python Environment
+### Change Python Environment 
+<a href="#tutorial"><img src="assets/arrow_up.jpg" alt="l" style="width:20px;height:20px;"></a>
 
 AutoAnnotator is written in Swift and Python and it only requires that Python is installed in your machine. You don't need to install Swift. The libraries mentioned [here](#python-library-requirements) are necessary for automatic box generation purposes. When you will first open AutoAnnotator, it will choose the default Python Environment which mayn't have those libraries installed. 
 
@@ -126,6 +133,8 @@ The anaconda environment paths look like these.
 
 
 ### Path for Python Scripts
+<a href="#tutorial"><img src="assets/arrow_up.jpg" alt="l" style="width:20px;height:20px;"></a>
+
 Some Python Scripts are provided with the installation file. You need to load the scripts in <code> Settings/Load Scripts</code> and choose the location where you have unzipped the downloaded file.
 
 <img title="a title" alt="No Image" src="assets/script1.png" style="width: 600px;">
@@ -133,12 +142,81 @@ Some Python Scripts are provided with the installation file. You need to load th
 <b style="color:rgba(200, 0, 0,1);"> *No need to restart after this step. This step is to be done only once when you open the app for the first time.</b>
 
 ### Add New Images
+<a href="#tutorial"><img src="assets/arrow_up.jpg" alt="l" style="width:20px;height:20px;"></a>
+
 To add one or multiple images, follow these steps
 ```console
 Click on the + button in the middle or 'New Image' button on the sidebar.
+
+Add one or multiple images
 ```
 <img title="a title" alt="No Image" src="assets/new_image.png" style="width: 600px;">
 
+### Go to Next Image
+<a href="#tutorial"><img src="assets/arrow_up.jpg" alt="l" style="width:20px;height:20px;"></a>
+
+
+```console
+Click on the 'next' and 'previous' button to navigate through images.
+```
+
+<img title="Go to next image" alt="No Image" src="assets/image_name_tab.png" style="width: 600px;">
+
+```console
+To move to your desired image, 
+click on the current image name tab and 
+a popover will appear where names of every open images are available. 
+Click on the image name you want to load.
+```
+
+<video width="768" height="480" autoplay muted controls loop>
+  <source src="assets/image_name_tab.mp4" type="video/mp4">
+  <p>
+    Your browser doesn't support HTML video. Here is a
+    <a href="matchexamples.mp4">link to the video</a> instead.
+  </p>
+</video>
+
+### Draw Rectangle
+<a href="#tutorial"><img src="assets/arrow_up.jpg" alt="l" style="width:20px;height:20px;"></a>
+
+
+```console
+Click on 'Draw Rectangles' on the sidebar and start drawing on the image.
+```
+<img title="Draw Rectangle" alt="No Image" src="assets/draw_rectangle.png" style="width: 600px;">
+
+<b style="color:rgba(200, 100, 0,1);"> When drawing mode is enabled, you can't move the image. To move the image, click on 'Move image'.</b>
+
+### Move Rectangle
+<a href="#tutorial"><img src="assets/arrow_up.jpg" alt="l" style="width:20px;height:20px;"></a>
+
+Following video demonstrates how to change the box position.
+
+<video width="768" height="480" autoplay muted controls loop>
+  <source src="assets/box_manipulation.mp4" type="video/mp4">
+  <p>
+    Your browser doesn't support HTML video. Here is a
+    <a href="matchexamples.mp4">link to the video</a> instead.
+  </p>
+</video>
+
+### Resize Rectangle
+<a href="#tutorial"><img src="assets/arrow_up.jpg" alt="l" style="width:20px;height:20px;"></a>
+
+```console
+To resize an image click on the red circle of the box 
+and drag it to increase or decrease the size of the box.
+```
+<video width="768" height="480" autoplay muted controls loop>
+  <source src="assets/resize_box.mp4" type="video/mp4">
+  <p>
+    Your browser doesn't support HTML video. Here is a
+    <a href="matchexamples.mp4">link to the video</a> instead.
+  </p>
+</video>
+
+### 
 
 ## Examples
   
