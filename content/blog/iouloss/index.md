@@ -301,7 +301,7 @@ $$L_{CIoU}=L_{DIoU}+\alpha v$$
 $ and $\alpha=\frac{v}{(1-IOU)+v}$.</p>
 
 ## 5. Code
-```
+```python
 import os
 import torch
 import math

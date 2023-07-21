@@ -44,6 +44,8 @@
   
     <link rel="alternate" type="application/rss+xml" href="/index.xml" title="Home" />
   
+    <link rel="alternate" type="application/json" href="/index.json" title="Home" />
+  
   
   <link rel="stylesheet" href="/style.main.min.4029c246551cf6ec532aa7b82ca95587b549cfad8f761f7746eb6154907463c9.css" integrity="sha256-QCnCRlUc9uxTKqe4LKlVh7VJz62Pdh93RuthVJB0Y8k=" media="screen">
   
@@ -290,10 +292,12 @@
      
 
     .search-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        z-index: 999;  
+      }
 
      
     .search-button {
@@ -339,6 +343,8 @@
       align-items: center;
       width: 80%;
       max-width: 600px;  
+      max-height: 300px;  
+      overflow-y: auto;  
     }
 
      
@@ -372,90 +378,155 @@
       width: 20px;
       height: 20px;
     }
+    
+     
+      .search-results {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .search-results li {
+        margin-bottom: 10px;
+        cursor: pointer;
+  transition: background-color 0.2s ease;  
+      }
+      
+       
+    .search-results li:hover {
+      background-color: #f1f1f1;
+      border-radius: 15px;
+      padding: 5px;
+        }
   </style>
 </head>
 
-<body>
-  <div class="search-container">
-    <button class="search-button" id="search-button">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-        <path fill="none" d="M0 0h24v24H0z" />
-        <path
-          d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z" />
-      </svg>
-    </button>
+<body>  
+
+
+<div class="search-container">
+  <button class="search-button" id="search-button">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <path fill="none" d="M0 0h24v24H0z" />
+      <path
+        d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z"
+      />
+    </svg>
+  </button>
+</div>
+
+
+<template id="search-modal-template">
+  <div class="modal-container">
+    <div class="search-modal">
+      <div class="search-input-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button class="clear-button" id="clear-button">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
+          </svg>
+        </button>
+      </div>
+      <ul id="search-results" class="search-results"></ul>
+    </div>
   </div>
+</template>
+
 
   
- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const searchButton = document.getElementById("search-button");
-      let isSearchActive = false; 
+&lt;<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchButton = document.getElementById("search-button");
+    let isSearchActive = false; 
 
-      searchButton.addEventListener("click", function () {
-        if (!isSearchActive) {
-          openSearchModal();
-        } else {
-          closeSearchModal();
-        }
-      });
+    searchButton.addEventListener("click", function () {
+      if (!isSearchActive) {
+        openSearchModal();
+      } else {
+        closeSearchModal();
+      }
+    });
 
-      function openSearchModal() {
-        
-        const modalContainer = document.createElement("div");
-        modalContainer.classList.add("modal-container");
+    function openSearchModal() {
+      
+      const modalContainer = document.importNode(
+        document.getElementById("search-modal-template").content,
+        true
+      );
 
-        
-        modalContainer.innerHTML = `
-          <div class="search-modal">
-            <div class="search-input-container">
-              <input type="text" id="search-input" placeholder="Search...">
-              <button class="clear-button" id="clear-button">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-  <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
-</svg>
+      
+      document.body.appendChild(modalContainer);
 
-              </button>
-            </div>
-          </div>
-        `;
+      
+      const searchInput = document.getElementById("search-input");
+      const clearButton = document.getElementById("clear-button");
+      const searchResults = document.getElementById("search-results");
 
-        
-        const clearButton = modalContainer.querySelector("#clear-button");
-        const searchInput = modalContainer.querySelector("#search-input");
-        clearButton.addEventListener("click", function () {
-          if (searchInput.value.trim() === "") {
+      
+      clearButton.addEventListener("click", function () {
+        if (searchInput.value.trim() === "") {
           closeSearchModal();
         }
         searchInput.value = "";
         searchInput.focus();
-        
+
+        showSearchResults([]); 
       });
 
-        
-        document.body.appendChild(modalContainer);
-
-        
-        searchInput.focus();
-       
-
-        isSearchActive = true;
-        
       
+      searchInput.addEventListener("input", function () {
+        const query = searchInput.value.toLowerCase().trim();
+        const filteredResults = window.pagesIndex.filter((page) =>
+          page.title.toLowerCase().includes(query)
+        );
+        showSearchResults(filteredResults);
+      });
+
+      
+      searchInput.focus();
+
+      isSearchActive = true;
+    }
+
+    function closeSearchModal() {
+      
+      const modalContainer = document.querySelector(".modal-container");
+      if (modalContainer) {
+        modalContainer.remove();
       }
+      isSearchActive = false;
+    }
 
-      function closeSearchModal() {
-        
-        const modalContainer = document.querySelector(".modal-container");
-        if (modalContainer) {
-          modalContainer.remove();
-        }
-        isSearchActive = false;
-      }
-      
-      
-    });
-  </script>
+    
+    fetch("\/index.json")
+      .then((response) => response.json())
+      .then((data) => {
+        window.pagesIndex = data;
+        console.log(data); 
+      })
+      .catch((error) => console.error("Error loading index.json:", error));
+
+    
+    function showSearchResults(results) {
+      const searchResults = document.getElementById("search-results");
+      searchResults.innerHTML = "";
+
+      results.forEach((result) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = result.title;
+        listItem.addEventListener("click", function () {
+          window.location.href = result.href; 
+          closeSearchModal();
+        });
+        searchResults.appendChild(listItem);
+      });
+    }
+  });
+</script>
+
+
 </body>
 
 </html>
@@ -476,6 +547,13 @@
 <script src="/js/stats.js"></script>
 <script src="/js/particles.min.js"></script>
 <script src="/js/particles.js"></script>
+<script>
+  
+  fetch("\/index.json")
+    .then((response) => response.json())
+    .then((data) => (window.pagesIndex = data));
+</script>
+
 <main class="page-main pa4" role="main">
   <section class="page-content mw9 center">
     <div class="flex-l items-center" style="flex-direction: row-reverse;">

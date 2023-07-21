@@ -10,6 +10,13 @@
 <script src="{{ .Site.BaseURL }}js/stats.js"></script>
 <script src="{{ .Site.BaseURL }}js/particles.min.js"></script>
 <script src="{{ .Site.BaseURL }}js/particles.js"></script>
+<script>
+  // Load the index.json file and set its contents to the window.pagesIndex variable
+  fetch("{{ .Site.BaseURL }}index.json")
+    .then((response) => response.json())
+    .then((data) => (window.pagesIndex = data));
+</script>
+
 <main class="page-main pa4" role="main">
   <section class="page-content mw9 center">
     <div class="flex-l items-center" style="{{ if .Params.image_left }}flex-direction: row-reverse;{{ end }}">

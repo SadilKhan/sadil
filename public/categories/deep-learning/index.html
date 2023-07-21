@@ -294,10 +294,12 @@
      
 
     .search-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        z-index: 999;  
+      }
 
      
     .search-button {
@@ -343,6 +345,8 @@
       align-items: center;
       width: 80%;
       max-width: 600px;  
+      max-height: 300px;  
+      overflow-y: auto;  
     }
 
      
@@ -376,90 +380,155 @@
       width: 20px;
       height: 20px;
     }
+    
+     
+      .search-results {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .search-results li {
+        margin-bottom: 10px;
+        cursor: pointer;
+  transition: background-color 0.2s ease;  
+      }
+      
+       
+    .search-results li:hover {
+      background-color: #f1f1f1;
+      border-radius: 15px;
+      padding: 5px;
+        }
   </style>
 </head>
 
-<body>
-  <div class="search-container">
-    <button class="search-button" id="search-button">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-        <path fill="none" d="M0 0h24v24H0z" />
-        <path
-          d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z" />
-      </svg>
-    </button>
+<body>  
+
+
+<div class="search-container">
+  <button class="search-button" id="search-button">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <path fill="none" d="M0 0h24v24H0z" />
+      <path
+        d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z"
+      />
+    </svg>
+  </button>
+</div>
+
+
+<template id="search-modal-template">
+  <div class="modal-container">
+    <div class="search-modal">
+      <div class="search-input-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button class="clear-button" id="clear-button">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
+          </svg>
+        </button>
+      </div>
+      <ul id="search-results" class="search-results"></ul>
+    </div>
   </div>
+</template>
+
 
   
- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const searchButton = document.getElementById("search-button");
-      let isSearchActive = false; 
+&lt;<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchButton = document.getElementById("search-button");
+    let isSearchActive = false; 
 
-      searchButton.addEventListener("click", function () {
-        if (!isSearchActive) {
-          openSearchModal();
-        } else {
-          closeSearchModal();
-        }
-      });
+    searchButton.addEventListener("click", function () {
+      if (!isSearchActive) {
+        openSearchModal();
+      } else {
+        closeSearchModal();
+      }
+    });
 
-      function openSearchModal() {
-        
-        const modalContainer = document.createElement("div");
-        modalContainer.classList.add("modal-container");
+    function openSearchModal() {
+      
+      const modalContainer = document.importNode(
+        document.getElementById("search-modal-template").content,
+        true
+      );
 
-        
-        modalContainer.innerHTML = `
-          <div class="search-modal">
-            <div class="search-input-container">
-              <input type="text" id="search-input" placeholder="Search...">
-              <button class="clear-button" id="clear-button">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-  <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
-</svg>
+      
+      document.body.appendChild(modalContainer);
 
-              </button>
-            </div>
-          </div>
-        `;
+      
+      const searchInput = document.getElementById("search-input");
+      const clearButton = document.getElementById("clear-button");
+      const searchResults = document.getElementById("search-results");
 
-        
-        const clearButton = modalContainer.querySelector("#clear-button");
-        const searchInput = modalContainer.querySelector("#search-input");
-        clearButton.addEventListener("click", function () {
-          if (searchInput.value.trim() === "") {
+      
+      clearButton.addEventListener("click", function () {
+        if (searchInput.value.trim() === "") {
           closeSearchModal();
         }
         searchInput.value = "";
         searchInput.focus();
-        
+
+        showSearchResults([]); 
       });
 
-        
-        document.body.appendChild(modalContainer);
-
-        
-        searchInput.focus();
-       
-
-        isSearchActive = true;
-        
       
+      searchInput.addEventListener("input", function () {
+        const query = searchInput.value.toLowerCase().trim();
+        const filteredResults = window.pagesIndex.filter((page) =>
+          page.title.toLowerCase().includes(query)
+        );
+        showSearchResults(filteredResults);
+      });
+
+      
+      searchInput.focus();
+
+      isSearchActive = true;
+    }
+
+    function closeSearchModal() {
+      
+      const modalContainer = document.querySelector(".modal-container");
+      if (modalContainer) {
+        modalContainer.remove();
       }
+      isSearchActive = false;
+    }
 
-      function closeSearchModal() {
-        
-        const modalContainer = document.querySelector(".modal-container");
-        if (modalContainer) {
-          modalContainer.remove();
-        }
-        isSearchActive = false;
-      }
-      
-      
-    });
-  </script>
+    
+    fetch("\/index.json")
+      .then((response) => response.json())
+      .then((data) => {
+        window.pagesIndex = data;
+        console.log(data); 
+      })
+      .catch((error) => console.error("Error loading index.json:", error));
+
+    
+    function showSearchResults(results) {
+      const searchResults = document.getElementById("search-results");
+      searchResults.innerHTML = "";
+
+      results.forEach((result) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = result.title;
+        listItem.addEventListener("click", function () {
+          window.location.href = result.href; 
+          closeSearchModal();
+        });
+        searchResults.appendChild(listItem);
+      });
+    }
+  });
+</script>
+
+
 </body>
 
 </html>
@@ -560,32 +629,19 @@
   
   
   
-  
-  <div class="flex flex-column mb4 mb5-l  flex-row-reverse-ns">
-    <figure class="ml4-ns ma0 mb2 mb0-l w-100 w-40-ns">
-      <a href="/blog/pointcloud-series/segmentation/" class="db">
-        
-          <img src="/blog/pointcloud-series/segmentation/sidebar-featured.gif" class="db ma0 dim" alt="">
-        
-      </a>
-    </figure>
-    <div class="flex flex-column w-100 w-60-ns pl3-ns">
-      <header class="w-100">
-        <h1 class="f3 mv2 lh-title underline"><a href="/blog/pointcloud-series/segmentation/" class="db">Part 2 - Point Cloud Segmentation</a></h1>
-        
-        <h2 class="f5"><i class="fas fa-stream fa-fw pr1"></i><small class="f5 ttu tracked">Series: </small><a class="link i dim" href="/blog/pointcloud-series/">Point Cloud</a></h2>
-        
-      </header>
-      <p class="f6 lh-copy mv2 flex-auto">Point Cloud Segmentation is the task for grouping objects or assigning labels to every points in the point cloud. This blog presents different types of methods to perform segmentation.
-      <footer class="w-100">
+  <div class="measure-wide center mb4 mb5-l">
+    <header>
+      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/blog/pointcloud-series/segmentation/" class="db">Part 2 - Point Cloud Segmentation</a></h1>
       
-      <p class="f7 db mv1">By Mohammad Sadil Khan in <a href="/categories/computer-vision">Computer Vision</a>  <a href="/categories/deep-learning">Deep Learning</a>  <a href="/categories/point-cloud">Point Cloud</a>  <a href="/categories/segmentation">Segmentation</a>  <a href="/categories/graph">Graph</a>  <a href="/categories/voxel">Voxel</a>  <a href="/categories/mlp">MLP</a> </p>
-      <p class="f7 db mv1">June 28, 2022</p>
+      <h2 class="f5"><i class="fas fa-stream fa-fw pr1"></i><small class="f5 ttu tracked">Series: </small><a class="link i dim" href="/blog/pointcloud-series/">Point Cloud</a></h2>
+      
+    </header>
+    <p class="lh-copy mb4">Point Cloud Segmentation is the task for grouping objects or assigning labels to every points in the point cloud. This blog presents different types of methods to perform segmentation.
+    <footer>
+      
+      
     </footer>
-    </div>
   </div>
-  
-  
   
 </article>
 

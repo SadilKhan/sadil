@@ -296,10 +296,12 @@
      
 
     .search-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        z-index: 999;  
+      }
 
      
     .search-button {
@@ -345,6 +347,8 @@
       align-items: center;
       width: 80%;
       max-width: 600px;  
+      max-height: 300px;  
+      overflow-y: auto;  
     }
 
      
@@ -378,90 +382,155 @@
       width: 20px;
       height: 20px;
     }
+    
+     
+      .search-results {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .search-results li {
+        margin-bottom: 10px;
+        cursor: pointer;
+  transition: background-color 0.2s ease;  
+      }
+      
+       
+    .search-results li:hover {
+      background-color: #f1f1f1;
+      border-radius: 15px;
+      padding: 5px;
+        }
   </style>
 </head>
 
-<body>
-  <div class="search-container">
-    <button class="search-button" id="search-button">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-        <path fill="none" d="M0 0h24v24H0z" />
-        <path
-          d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z" />
-      </svg>
-    </button>
+<body>  
+
+
+<div class="search-container">
+  <button class="search-button" id="search-button">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <path fill="none" d="M0 0h24v24H0z" />
+      <path
+        d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z"
+      />
+    </svg>
+  </button>
+</div>
+
+
+<template id="search-modal-template">
+  <div class="modal-container">
+    <div class="search-modal">
+      <div class="search-input-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button class="clear-button" id="clear-button">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
+          </svg>
+        </button>
+      </div>
+      <ul id="search-results" class="search-results"></ul>
+    </div>
   </div>
+</template>
+
 
   
- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const searchButton = document.getElementById("search-button");
-      let isSearchActive = false; 
+&lt;<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchButton = document.getElementById("search-button");
+    let isSearchActive = false; 
 
-      searchButton.addEventListener("click", function () {
-        if (!isSearchActive) {
-          openSearchModal();
-        } else {
-          closeSearchModal();
-        }
-      });
+    searchButton.addEventListener("click", function () {
+      if (!isSearchActive) {
+        openSearchModal();
+      } else {
+        closeSearchModal();
+      }
+    });
 
-      function openSearchModal() {
-        
-        const modalContainer = document.createElement("div");
-        modalContainer.classList.add("modal-container");
+    function openSearchModal() {
+      
+      const modalContainer = document.importNode(
+        document.getElementById("search-modal-template").content,
+        true
+      );
 
-        
-        modalContainer.innerHTML = `
-          <div class="search-modal">
-            <div class="search-input-container">
-              <input type="text" id="search-input" placeholder="Search...">
-              <button class="clear-button" id="clear-button">
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-  <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
-</svg>
+      
+      document.body.appendChild(modalContainer);
 
-              </button>
-            </div>
-          </div>
-        `;
+      
+      const searchInput = document.getElementById("search-input");
+      const clearButton = document.getElementById("clear-button");
+      const searchResults = document.getElementById("search-results");
 
-        
-        const clearButton = modalContainer.querySelector("#clear-button");
-        const searchInput = modalContainer.querySelector("#search-input");
-        clearButton.addEventListener("click", function () {
-          if (searchInput.value.trim() === "") {
+      
+      clearButton.addEventListener("click", function () {
+        if (searchInput.value.trim() === "") {
           closeSearchModal();
         }
         searchInput.value = "";
         searchInput.focus();
-        
+
+        showSearchResults([]); 
       });
 
-        
-        document.body.appendChild(modalContainer);
-
-        
-        searchInput.focus();
-       
-
-        isSearchActive = true;
-        
       
+      searchInput.addEventListener("input", function () {
+        const query = searchInput.value.toLowerCase().trim();
+        const filteredResults = window.pagesIndex.filter((page) =>
+          page.title.toLowerCase().includes(query)
+        );
+        showSearchResults(filteredResults);
+      });
+
+      
+      searchInput.focus();
+
+      isSearchActive = true;
+    }
+
+    function closeSearchModal() {
+      
+      const modalContainer = document.querySelector(".modal-container");
+      if (modalContainer) {
+        modalContainer.remove();
       }
+      isSearchActive = false;
+    }
 
-      function closeSearchModal() {
-        
-        const modalContainer = document.querySelector(".modal-container");
-        if (modalContainer) {
-          modalContainer.remove();
-        }
-        isSearchActive = false;
-      }
-      
-      
-    });
-  </script>
+    
+    fetch("\/index.json")
+      .then((response) => response.json())
+      .then((data) => {
+        window.pagesIndex = data;
+        console.log(data); 
+      })
+      .catch((error) => console.error("Error loading index.json:", error));
+
+    
+    function showSearchResults(results) {
+      const searchResults = document.getElementById("search-results");
+      searchResults.innerHTML = "";
+
+      results.forEach((result) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = result.title;
+        listItem.addEventListener("click", function () {
+          window.location.href = result.href; 
+          closeSearchModal();
+        });
+        searchResults.appendChild(listItem);
+      });
+    }
+  });
+</script>
+
+
 </body>
 
 </html>
@@ -828,130 +897,130 @@ $ and $\alpha=\frac{v}{(1-IOU)+v}$.</p>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h2>
-<pre tabindex="0"><code class="language-{python,eval=F," data-lang="{python,eval=F,">import os
-import torch
-import math
-import torch.nn as nn
-import torchvision
-
-def calculate_iou(pred,true):
-  &#34;&#34;&#34;Functions to calculate IoU&#34;&#34;&#34;
-  
-  ints_x_min=torch.max(true[:,0],pred[:,0])
-  ints_y_min=torch.max(true[:,1],pred[:,1])
-  ints_x_max=torch.min(true[:,2],pred[:,2])
-  ints_y_max=torch.min(true[:,3],pred[:,3])
-  
-  width=torch.max((ints_x_max-ints_x_min),torch.tensor([0]).unsqueeze(0))
-  height=torch.max((ints_y_max-ints_y_min),torch.tensor([0]).unsqueeze(0))
-  area_intersection=torch.max(width*height,
-  torch.tensor([0]).unsqueeze(0))
-  
-  # Find Area of the Box True
-  area_true=torch.mul((true[:,2]-true[:,0]),(true[:,3]-true[:,1]))
-  
-  # Find Area of the Box Pred
-  area_pred=torch.mul((pred[:,2]-pred[:,0]),(pred[:,3]-pred[:,1]))
-  
-  # Find Area of the Union
-  area_union=area_true+area_pred-area_intersection
-  
-  # Calculate IoU
-  iou=area_intersection/area_union
-  return iou,area_intersection,area_union
-  
-  
-class IoULoss(nn.Module):
-&#34;&#34;&#34;Intersection over Union Loss&#34;&#34;&#34;
-
-  def __init__(self,losstype=&#39;giou&#39;):
-    super(IoULoss, self).__init__()
-    &#34;&#34;&#34;losstype --&gt; str. Type of IoU based Loss. &#34;iou&#34;,&#34;giou&#34;,&#34;diou&#34;,&#34;ciou&#34;,&#34;eiou&#34; are available&#34;&#34;&#34;
-    self.losstype =losstype
-    
-  def forward(self, pred, true):
-    pred=torch.clamp(pred,min=0)
-    true=torch.clamp(true,min=0)
-    
-    if self.losstype == &#34;iou&#34;:
-    loss=torch.mean(1-calculate_iou(pred,true)[0])
-    elif self.losstype == &#34;giou&#34;:
-    l_giou=1-calculate_iou(pred,true)[0]+self.penalty_giou(pred,true)
-    loss=torch.mean(l_giou)
-    elif self.losstype == &#34;diou&#34;:
-    l_diou=1-calculate_iou(pred,true)[0]+self.penalty_diou(pred,true)
-    loss=torch.mean(l_diou)
-    elif self.losstype == &#34;ciou&#34;:
-    l_ciou=1-calculate_iou(pred,true)[0]+self.penalty_ciou(pred,true)
-    loss=torch.mean(l_ciou)
-    elif self.losstype == &#34;eiou&#34;:
-    l_eiou=1-calculate_iou(pred,true)[0]+self.penalty_eiou(pred,true)
-    loss=torch.mean(l_eiou)
-    return loss
-    
-  def penalty_giou(self, pred, true):
-    # Find Area of the Smallest Enclosing Box
-    
-    box_x_min=torch.min(true[:,0],pred[:,0])
-    box_y_min=torch.min(true[:,1],pred[:,1])
-    box_x_max=torch.max(true[:,2],pred[:,2])
-    box_y_max=torch.max(true[:,3],pred[:,3])
-    area_c=(box_x_max-box_x_min)*(box_y_max-box_y_min)
-    return (area_c-calculate_iou(pred,true)[2])/area_c
-    
-  def penalty_diou(self, pred, true):
-    # Center point of the predicted bounding box
-    
-    center_x1 = (pred[:, 2] + pred[:, 0]) / 2
-    center_y1 = (pred[:, 3] + pred[:, 1]) / 2
-    
-    # Center Point of the ground truth box
-    center_x2 = (true[:, 2] + true[:, 0]) / 2
-    center_y2 = (true[:, 3] + true[:, 1]) / 2
-    inter_max_xy = torch.min(pred[:, 2:],true[:, 2:])
-    inter_min_xy = torch.max(pred[:, :2],true[:, :2])
-    
-    # Bottom right corner of the enclosing box
-    out_max_xy = torch.max(pred[:, 2:],true[:, 2:]) 
-    # Top left corner of the enclosing box
-    out_min_xy = torch.min(pred[:, :2],true[:, :2]) 
-    # Distance between the center points of the ground truth and the predicted box
-    inter_diag = (center_x2 - center_x1)**2 + (center_y2 - center_y1)**2
-    outer = torch.clamp((out_max_xy - out_min_xy), min=0)
-    outer_diag = (outer[:, 0] ** 2) + (outer[:, 1] ** 2)
-    return inter_diag/outer_diag
-    
-  def penalty_ciou(self, pred, true):
-    w1 = pred[:, 2] - pred[:, 0]
-    h1 = pred[:, 3] - pred[:, 1]
-    w2 = true[:, 2] - true[:, 0]
-    h2 = true[:, 3] - true[:, 1]
-    v = (4 / (math.pi ** 2)) * torch.pow((torch.atan(w2 / h2) - torch.atan(w1 / h1)), 2)
-    with torch.no_grad():
-    S = 1 - calculate_iou(pred,true)[0]
-    alpha = v / (S + v)
-    
-    return self.penalty_diou(pred,true)+alpha*v
-
-  def penalty_eiou(self, pred, true):
-    w1 = pred[:, 2] - pred[:, 0]
-    h1 = pred[:, 3] - pred[:, 1]
-    w2 = true[:, 2] - true[:, 0]
-    h2 = true[:, 3] - true[:, 1]
-
-    # Bottom right corner of the enclosing box
-    out_max_xy = torch.max(pred[:, 2:],true[:, 2:]) 
-    # Top left corner of the enclosing box
-    out_min_xy = torch.min(pred[:, :2],true[:, :2]) 
-    # Width of the Smallest enclosing box
-    C_w=(out_max_xy[:,0]-out_min_xy[:,0])
-    # Height of the smallest enclosing box
-    C_h=(out_max_xy[:,1]-out_min_xy[:,1])
-    
-    asp= torch.clamp((w2-w1)**2,min=0)/(C_w**2) + torch.clamp((h2-h1)**2,min=0)/(C_h**2)
-    
-    return self.penalty_diou(pred,true)+asp
-</code></pre>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">os</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">torch</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">math</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">torch.nn</span> <span style="color:#000;font-weight:bold">as</span> <span style="color:#555">nn</span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">import</span> <span style="color:#555">torchvision</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">calculate_iou</span>(pred,true):
+</span></span><span style="display:flex;"><span>  <span style="color:#d14">&#34;&#34;&#34;Functions to calculate IoU&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  ints_x_min<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>max(true[:,<span style="color:#099">0</span>],pred[:,<span style="color:#099">0</span>])
+</span></span><span style="display:flex;"><span>  ints_y_min<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>max(true[:,<span style="color:#099">1</span>],pred[:,<span style="color:#099">1</span>])
+</span></span><span style="display:flex;"><span>  ints_x_max<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>min(true[:,<span style="color:#099">2</span>],pred[:,<span style="color:#099">2</span>])
+</span></span><span style="display:flex;"><span>  ints_y_max<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>min(true[:,<span style="color:#099">3</span>],pred[:,<span style="color:#099">3</span>])
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  width<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>max((ints_x_max<span style="color:#000;font-weight:bold">-</span>ints_x_min),torch<span style="color:#000;font-weight:bold">.</span>tensor([<span style="color:#099">0</span>])<span style="color:#000;font-weight:bold">.</span>unsqueeze(<span style="color:#099">0</span>))
+</span></span><span style="display:flex;"><span>  height<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>max((ints_y_max<span style="color:#000;font-weight:bold">-</span>ints_y_min),torch<span style="color:#000;font-weight:bold">.</span>tensor([<span style="color:#099">0</span>])<span style="color:#000;font-weight:bold">.</span>unsqueeze(<span style="color:#099">0</span>))
+</span></span><span style="display:flex;"><span>  area_intersection<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>max(width<span style="color:#000;font-weight:bold">*</span>height,
+</span></span><span style="display:flex;"><span>  torch<span style="color:#000;font-weight:bold">.</span>tensor([<span style="color:#099">0</span>])<span style="color:#000;font-weight:bold">.</span>unsqueeze(<span style="color:#099">0</span>))
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic"># Find Area of the Box True</span>
+</span></span><span style="display:flex;"><span>  area_true<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>mul((true[:,<span style="color:#099">2</span>]<span style="color:#000;font-weight:bold">-</span>true[:,<span style="color:#099">0</span>]),(true[:,<span style="color:#099">3</span>]<span style="color:#000;font-weight:bold">-</span>true[:,<span style="color:#099">1</span>]))
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic"># Find Area of the Box Pred</span>
+</span></span><span style="display:flex;"><span>  area_pred<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>mul((pred[:,<span style="color:#099">2</span>]<span style="color:#000;font-weight:bold">-</span>pred[:,<span style="color:#099">0</span>]),(pred[:,<span style="color:#099">3</span>]<span style="color:#000;font-weight:bold">-</span>pred[:,<span style="color:#099">1</span>]))
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic"># Find Area of the Union</span>
+</span></span><span style="display:flex;"><span>  area_union<span style="color:#000;font-weight:bold">=</span>area_true<span style="color:#000;font-weight:bold">+</span>area_pred<span style="color:#000;font-weight:bold">-</span>area_intersection
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#998;font-style:italic"># Calculate IoU</span>
+</span></span><span style="display:flex;"><span>  iou<span style="color:#000;font-weight:bold">=</span>area_intersection<span style="color:#000;font-weight:bold">/</span>area_union
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">return</span> iou,area_intersection,area_union
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#000;font-weight:bold">class</span> <span style="color:#458;font-weight:bold">IoULoss</span>(nn<span style="color:#000;font-weight:bold">.</span>Module):
+</span></span><span style="display:flex;"><span><span style="color:#d14">&#34;&#34;&#34;Intersection over Union Loss&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">def</span> __init__(<span style="color:#999">self</span>,losstype<span style="color:#000;font-weight:bold">=</span><span style="color:#d14">&#39;giou&#39;</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#0086b3">super</span>(IoULoss, <span style="color:#999">self</span>)<span style="color:#000;font-weight:bold">.</span>__init__()
+</span></span><span style="display:flex;"><span>    <span style="color:#d14">&#34;&#34;&#34;losstype --&gt; str. Type of IoU based Loss. &#34;iou&#34;,&#34;giou&#34;,&#34;diou&#34;,&#34;ciou&#34;,&#34;eiou&#34; are available&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>losstype <span style="color:#000;font-weight:bold">=</span>losstype
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">forward</span>(<span style="color:#999">self</span>, pred, true):
+</span></span><span style="display:flex;"><span>    pred<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>clamp(pred,<span style="color:#0086b3">min</span><span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>    true<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>clamp(true,<span style="color:#0086b3">min</span><span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">if</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>losstype <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;iou&#34;</span>:
+</span></span><span style="display:flex;"><span>    loss<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>mean(<span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>calculate_iou(pred,true)[<span style="color:#099">0</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">elif</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>losstype <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;giou&#34;</span>:
+</span></span><span style="display:flex;"><span>    l_giou<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>calculate_iou(pred,true)[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">+</span><span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>penalty_giou(pred,true)
+</span></span><span style="display:flex;"><span>    loss<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>mean(l_giou)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">elif</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>losstype <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;diou&#34;</span>:
+</span></span><span style="display:flex;"><span>    l_diou<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>calculate_iou(pred,true)[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">+</span><span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>penalty_diou(pred,true)
+</span></span><span style="display:flex;"><span>    loss<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>mean(l_diou)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">elif</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>losstype <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;ciou&#34;</span>:
+</span></span><span style="display:flex;"><span>    l_ciou<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>calculate_iou(pred,true)[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">+</span><span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>penalty_ciou(pred,true)
+</span></span><span style="display:flex;"><span>    loss<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>mean(l_ciou)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">elif</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>losstype <span style="color:#000;font-weight:bold">==</span> <span style="color:#d14">&#34;eiou&#34;</span>:
+</span></span><span style="display:flex;"><span>    l_eiou<span style="color:#000;font-weight:bold">=</span><span style="color:#099">1</span><span style="color:#000;font-weight:bold">-</span>calculate_iou(pred,true)[<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">+</span><span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>penalty_eiou(pred,true)
+</span></span><span style="display:flex;"><span>    loss<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>mean(l_eiou)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> loss
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">penalty_giou</span>(<span style="color:#999">self</span>, pred, true):
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Find Area of the Smallest Enclosing Box</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    box_x_min<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>min(true[:,<span style="color:#099">0</span>],pred[:,<span style="color:#099">0</span>])
+</span></span><span style="display:flex;"><span>    box_y_min<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>min(true[:,<span style="color:#099">1</span>],pred[:,<span style="color:#099">1</span>])
+</span></span><span style="display:flex;"><span>    box_x_max<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>max(true[:,<span style="color:#099">2</span>],pred[:,<span style="color:#099">2</span>])
+</span></span><span style="display:flex;"><span>    box_y_max<span style="color:#000;font-weight:bold">=</span>torch<span style="color:#000;font-weight:bold">.</span>max(true[:,<span style="color:#099">3</span>],pred[:,<span style="color:#099">3</span>])
+</span></span><span style="display:flex;"><span>    area_c<span style="color:#000;font-weight:bold">=</span>(box_x_max<span style="color:#000;font-weight:bold">-</span>box_x_min)<span style="color:#000;font-weight:bold">*</span>(box_y_max<span style="color:#000;font-weight:bold">-</span>box_y_min)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> (area_c<span style="color:#000;font-weight:bold">-</span>calculate_iou(pred,true)[<span style="color:#099">2</span>])<span style="color:#000;font-weight:bold">/</span>area_c
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">penalty_diou</span>(<span style="color:#999">self</span>, pred, true):
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Center point of the predicted bounding box</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    center_x1 <span style="color:#000;font-weight:bold">=</span> (pred[:, <span style="color:#099">2</span>] <span style="color:#000;font-weight:bold">+</span> pred[:, <span style="color:#099">0</span>]) <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>    center_y1 <span style="color:#000;font-weight:bold">=</span> (pred[:, <span style="color:#099">3</span>] <span style="color:#000;font-weight:bold">+</span> pred[:, <span style="color:#099">1</span>]) <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Center Point of the ground truth box</span>
+</span></span><span style="display:flex;"><span>    center_x2 <span style="color:#000;font-weight:bold">=</span> (true[:, <span style="color:#099">2</span>] <span style="color:#000;font-weight:bold">+</span> true[:, <span style="color:#099">0</span>]) <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>    center_y2 <span style="color:#000;font-weight:bold">=</span> (true[:, <span style="color:#099">3</span>] <span style="color:#000;font-weight:bold">+</span> true[:, <span style="color:#099">1</span>]) <span style="color:#000;font-weight:bold">/</span> <span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>    inter_max_xy <span style="color:#000;font-weight:bold">=</span> torch<span style="color:#000;font-weight:bold">.</span>min(pred[:, <span style="color:#099">2</span>:],true[:, <span style="color:#099">2</span>:])
+</span></span><span style="display:flex;"><span>    inter_min_xy <span style="color:#000;font-weight:bold">=</span> torch<span style="color:#000;font-weight:bold">.</span>max(pred[:, :<span style="color:#099">2</span>],true[:, :<span style="color:#099">2</span>])
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Bottom right corner of the enclosing box</span>
+</span></span><span style="display:flex;"><span>    out_max_xy <span style="color:#000;font-weight:bold">=</span> torch<span style="color:#000;font-weight:bold">.</span>max(pred[:, <span style="color:#099">2</span>:],true[:, <span style="color:#099">2</span>:]) 
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Top left corner of the enclosing box</span>
+</span></span><span style="display:flex;"><span>    out_min_xy <span style="color:#000;font-weight:bold">=</span> torch<span style="color:#000;font-weight:bold">.</span>min(pred[:, :<span style="color:#099">2</span>],true[:, :<span style="color:#099">2</span>]) 
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Distance between the center points of the ground truth and the predicted box</span>
+</span></span><span style="display:flex;"><span>    inter_diag <span style="color:#000;font-weight:bold">=</span> (center_x2 <span style="color:#000;font-weight:bold">-</span> center_x1)<span style="color:#000;font-weight:bold">**</span><span style="color:#099">2</span> <span style="color:#000;font-weight:bold">+</span> (center_y2 <span style="color:#000;font-weight:bold">-</span> center_y1)<span style="color:#000;font-weight:bold">**</span><span style="color:#099">2</span>
+</span></span><span style="display:flex;"><span>    outer <span style="color:#000;font-weight:bold">=</span> torch<span style="color:#000;font-weight:bold">.</span>clamp((out_max_xy <span style="color:#000;font-weight:bold">-</span> out_min_xy), <span style="color:#0086b3">min</span><span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)
+</span></span><span style="display:flex;"><span>    outer_diag <span style="color:#000;font-weight:bold">=</span> (outer[:, <span style="color:#099">0</span>] <span style="color:#000;font-weight:bold">**</span> <span style="color:#099">2</span>) <span style="color:#000;font-weight:bold">+</span> (outer[:, <span style="color:#099">1</span>] <span style="color:#000;font-weight:bold">**</span> <span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> inter_diag<span style="color:#000;font-weight:bold">/</span>outer_diag
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">penalty_ciou</span>(<span style="color:#999">self</span>, pred, true):
+</span></span><span style="display:flex;"><span>    w1 <span style="color:#000;font-weight:bold">=</span> pred[:, <span style="color:#099">2</span>] <span style="color:#000;font-weight:bold">-</span> pred[:, <span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>    h1 <span style="color:#000;font-weight:bold">=</span> pred[:, <span style="color:#099">3</span>] <span style="color:#000;font-weight:bold">-</span> pred[:, <span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>    w2 <span style="color:#000;font-weight:bold">=</span> true[:, <span style="color:#099">2</span>] <span style="color:#000;font-weight:bold">-</span> true[:, <span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>    h2 <span style="color:#000;font-weight:bold">=</span> true[:, <span style="color:#099">3</span>] <span style="color:#000;font-weight:bold">-</span> true[:, <span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>    v <span style="color:#000;font-weight:bold">=</span> (<span style="color:#099">4</span> <span style="color:#000;font-weight:bold">/</span> (math<span style="color:#000;font-weight:bold">.</span>pi <span style="color:#000;font-weight:bold">**</span> <span style="color:#099">2</span>)) <span style="color:#000;font-weight:bold">*</span> torch<span style="color:#000;font-weight:bold">.</span>pow((torch<span style="color:#000;font-weight:bold">.</span>atan(w2 <span style="color:#000;font-weight:bold">/</span> h2) <span style="color:#000;font-weight:bold">-</span> torch<span style="color:#000;font-weight:bold">.</span>atan(w1 <span style="color:#000;font-weight:bold">/</span> h1)), <span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">with</span> torch<span style="color:#000;font-weight:bold">.</span>no_grad():
+</span></span><span style="display:flex;"><span>    S <span style="color:#000;font-weight:bold">=</span> <span style="color:#099">1</span> <span style="color:#000;font-weight:bold">-</span> calculate_iou(pred,true)[<span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>    alpha <span style="color:#000;font-weight:bold">=</span> v <span style="color:#000;font-weight:bold">/</span> (S <span style="color:#000;font-weight:bold">+</span> v)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>penalty_diou(pred,true)<span style="color:#000;font-weight:bold">+</span>alpha<span style="color:#000;font-weight:bold">*</span>v
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#000;font-weight:bold">def</span> <span style="color:#900;font-weight:bold">penalty_eiou</span>(<span style="color:#999">self</span>, pred, true):
+</span></span><span style="display:flex;"><span>    w1 <span style="color:#000;font-weight:bold">=</span> pred[:, <span style="color:#099">2</span>] <span style="color:#000;font-weight:bold">-</span> pred[:, <span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>    h1 <span style="color:#000;font-weight:bold">=</span> pred[:, <span style="color:#099">3</span>] <span style="color:#000;font-weight:bold">-</span> pred[:, <span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>    w2 <span style="color:#000;font-weight:bold">=</span> true[:, <span style="color:#099">2</span>] <span style="color:#000;font-weight:bold">-</span> true[:, <span style="color:#099">0</span>]
+</span></span><span style="display:flex;"><span>    h2 <span style="color:#000;font-weight:bold">=</span> true[:, <span style="color:#099">3</span>] <span style="color:#000;font-weight:bold">-</span> true[:, <span style="color:#099">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Bottom right corner of the enclosing box</span>
+</span></span><span style="display:flex;"><span>    out_max_xy <span style="color:#000;font-weight:bold">=</span> torch<span style="color:#000;font-weight:bold">.</span>max(pred[:, <span style="color:#099">2</span>:],true[:, <span style="color:#099">2</span>:]) 
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Top left corner of the enclosing box</span>
+</span></span><span style="display:flex;"><span>    out_min_xy <span style="color:#000;font-weight:bold">=</span> torch<span style="color:#000;font-weight:bold">.</span>min(pred[:, :<span style="color:#099">2</span>],true[:, :<span style="color:#099">2</span>]) 
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Width of the Smallest enclosing box</span>
+</span></span><span style="display:flex;"><span>    C_w<span style="color:#000;font-weight:bold">=</span>(out_max_xy[:,<span style="color:#099">0</span>]<span style="color:#000;font-weight:bold">-</span>out_min_xy[:,<span style="color:#099">0</span>])
+</span></span><span style="display:flex;"><span>    <span style="color:#998;font-style:italic"># Height of the smallest enclosing box</span>
+</span></span><span style="display:flex;"><span>    C_h<span style="color:#000;font-weight:bold">=</span>(out_max_xy[:,<span style="color:#099">1</span>]<span style="color:#000;font-weight:bold">-</span>out_min_xy[:,<span style="color:#099">1</span>])
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    asp<span style="color:#000;font-weight:bold">=</span> torch<span style="color:#000;font-weight:bold">.</span>clamp((w2<span style="color:#000;font-weight:bold">-</span>w1)<span style="color:#000;font-weight:bold">**</span><span style="color:#099">2</span>,<span style="color:#0086b3">min</span><span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)<span style="color:#000;font-weight:bold">/</span>(C_w<span style="color:#000;font-weight:bold">**</span><span style="color:#099">2</span>) <span style="color:#000;font-weight:bold">+</span> torch<span style="color:#000;font-weight:bold">.</span>clamp((h2<span style="color:#000;font-weight:bold">-</span>h1)<span style="color:#000;font-weight:bold">**</span><span style="color:#099">2</span>,<span style="color:#0086b3">min</span><span style="color:#000;font-weight:bold">=</span><span style="color:#099">0</span>)<span style="color:#000;font-weight:bold">/</span>(C_h<span style="color:#000;font-weight:bold">**</span><span style="color:#099">2</span>)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#000;font-weight:bold">return</span> <span style="color:#999">self</span><span style="color:#000;font-weight:bold">.</span>penalty_diou(pred,true)<span style="color:#000;font-weight:bold">+</span>asp
+</span></span></code></pre></div>
 
 
 
