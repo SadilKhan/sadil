@@ -10,7 +10,7 @@ headline: |
 
 Hello, My name is Mohammad Sadil Khan. I am currently a Ph.D. student at [**Computer Vision, Imaging & Machine Intelligence Research Group (CVI2 Lab)**](https://cvi2.uni.lu/) at the [**Interdisciplinary Centre for Security, Reliability and Trust (SnT)**](https://wwwfr.uni.lu/snt) of the [**University of Luxembourg (UL)**](https://wwwen.uni.lu/). My PhD supervisior is [**Prof. Djamila Aouada**](https://wwwfr.uni.lu/snt/people/djamila_aouada).
 
-My research interests are in **Computer Vision, Generative Models, Deep Learning and Explainable AI**.
+My research interests are in **Computer Vision, Generative Models, Deep Learning and Explainable AI**. I am also interested in developing MacOS App. Check out my [Projects](/projects) page.
 
 I have completed my Masters in **Machine Learning and Data Mining** from [**University Jean Monnet**](https://www.univ-st-etienne.fr/fr/index.html), Saint Etienne, France. I have also completed an exchange semester in [**KU Leuven**](https://www.kuleuven.be/english/kuleuven), Belgium.
 

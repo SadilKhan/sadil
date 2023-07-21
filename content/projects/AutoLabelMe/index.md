@@ -13,7 +13,7 @@ show_related: true
 share: false
 ---
 
-
+<b style="color:rgba(200, 0, 0,1);">AutoLabelMe Project has been closed and the GUI has been rewritten in Swift and Python. Check the [AutoAnnotator](/projects/autoannotator) App. </b>
 ## 1. Introduction
 
 Data Collection is a major step in every Machine Learning

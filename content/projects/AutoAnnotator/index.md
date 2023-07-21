@@ -1,5 +1,5 @@
 ---
-title: AutoAnnotator
+title: AutoAnnotator - MacOS Utility App
 subtitle: Automatic Image Annotator for Computer Vision
 weight: 1
 date: "2023-01-11"
@@ -15,6 +15,11 @@ show_related: true
 share: false
 ---
 
+# Introduction
+
+Data Collection is a major step in every Machine Learning projects. The quality and quantity of data alone can greatly impact the results of the model. AutoAnnotator is an open-source automatic image annotator created using the Swift and Python. It's an updated version of AutoLabelMe, the GUI I wrote using Tkinter library in Python for my Internship at Hubert Curien Laboratoire. 
+
+It matches the template provided by the user in an image and find same objects associating a bounding box and label for every object. AutoAnnotator uses Normalized Cross-Correlation to check whether two templates are similar. It is designed keeping in mind with the necessity of creating dataset for object detection purposes.
 
 <video width="768" height="480" autoplay muted controls loop>
   <source src="assets/matchexamples.mp4" type="video/mp4">
@@ -46,7 +51,7 @@ Currently only for Macos, AutoAnnotator is released.
 
 ### Python Library Requirements
 
-<b style="color:rgba(0, 0, 200,1);">1. Numpy</b>
+<b style="color:rgba(50, 125, 240,1);">1. Numpy</b>
  
 ```console
 user@Mac ~ % conda install numpy 
@@ -56,13 +61,13 @@ or
 user@Mac ~ % pip install numpy
 ```
 
-<b style="color:rgba(0, 0, 200,1);">2. Pandas</b>
+<b style="color:rgba(50, 125, 240,1);">2. Pandas</b>
  
 ```console
 user@Mac ~ % conda install pandas 
 ```
 
-<b style="color:rgba(0, 0, 200,1);">3. Opencv</b>
+<b style="color:rgba(50, 125, 240,1);">3. Opencv</b>
  
 ```console
 user@Mac ~ % conda install -c conda-forge opencv 
@@ -74,7 +79,7 @@ or
 user@Mac ~ % pip install opencv-python
 ```
 
-<b style="color:rgba(0, 0, 200,1);">4. PIL</b>
+<b style="color:rgba(50, 125, 240,1);">4. PIL</b>
 
 ```console
 user@Mac ~ % pip install Pillow
@@ -96,6 +101,8 @@ The first two steps are very important. These two steps are to be done only once
   <a href="#move-rectangle"><b>5. Move Rectangle</b></a>
   </br>
   <a href="#resize-rectangle"><b>6. Resize Rectangle</b></a>
+  </br>
+  <a href="#match-rectangles"><b>7. Match Rectangles</b></a>
 </div>
 
 ### Change Python Environment 
@@ -216,7 +223,7 @@ and drag it to increase or decrease the size of the box.
   </p>
 </video>
 
-### 
+### Match Rectangles
 
 ## Examples
   

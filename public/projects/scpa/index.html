@@ -283,7 +283,192 @@
       
       
     </div>
-  </nav>
+    
+    
+    
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netflix - Search Box Modal</title>
+  <style>
+     
+
+    .search-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+     
+    .search-button {
+      background-color: transparent;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-button svg {
+      fill: #007bff;
+      width: 30px;
+      height: 30px;
+    }
+
+     
+    .modal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0,0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(20px);  
+      z-index: 9999;
+    }
+
+     
+    .search-modal {
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 80%;
+      max-width: 600px;  
+    }
+
+     
+    .search-input-container {
+      position: relative;
+      width: 100%;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      font-size: 18px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    .clear-button {
+      position: absolute;
+      top: 30px;
+      right: 10px;
+      transform: translateY(-50%);
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .clear-button svg {
+      fill: #007bff;
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="search-container">
+    <button class="search-button" id="search-button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z" />
+      </svg>
+    </button>
+  </div>
+
+  
+ <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchButton = document.getElementById("search-button");
+      let isSearchActive = false; 
+
+      searchButton.addEventListener("click", function () {
+        if (!isSearchActive) {
+          openSearchModal();
+        } else {
+          closeSearchModal();
+        }
+      });
+
+      function openSearchModal() {
+        
+        const modalContainer = document.createElement("div");
+        modalContainer.classList.add("modal-container");
+
+        
+        modalContainer.innerHTML = `
+          <div class="search-modal">
+            <div class="search-input-container">
+              <input type="text" id="search-input" placeholder="Search...">
+              <button class="clear-button" id="clear-button">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
+</svg>
+
+              </button>
+            </div>
+          </div>
+        `;
+
+        
+        const clearButton = modalContainer.querySelector("#clear-button");
+        const searchInput = modalContainer.querySelector("#search-input");
+        clearButton.addEventListener("click", function () {
+          if (searchInput.value.trim() === "") {
+          closeSearchModal();
+        }
+        searchInput.value = "";
+        searchInput.focus();
+        
+      });
+
+        
+        document.body.appendChild(modalContainer);
+
+        
+        searchInput.focus();
+       
+
+        isSearchActive = true;
+        
+      
+      }
+
+      function closeSearchModal() {
+        
+        const modalContainer = document.querySelector(".modal-container");
+        if (modalContainer) {
+          modalContainer.remove();
+        }
+        isSearchActive = false;
+      }
+      
+      
+    });
+  </script>
+</body>
+
+</html>
+
+
+      </nav>
+    
 </header>
 
 <main class="page-main pa4" role="main">
@@ -335,7 +520,7 @@
         <div class="post-pagination dt w-100 mt4 mb2">
   
     <a class="prev dtc pr2 tl v-top fw6"
-    href="/projects/autoannotator/">&larr; AutoAnnotator</a>
+    href="/projects/autoannotator/">&larr; AutoAnnotator - MacOS Utility App</a>
   
   
     <a class="next dtc pl2 tr v-top fw6"

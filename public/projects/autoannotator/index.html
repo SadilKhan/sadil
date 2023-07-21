@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>AutoAnnotator | Home</title>
+<title>AutoAnnotator - MacOS Utility App | Home</title>
 
 
 
@@ -25,7 +25,7 @@
 
 
 <meta property="og:site_name" content="Home">
-<meta property="og:title" content="AutoAnnotator | Home">
+<meta property="og:title" content="AutoAnnotator - MacOS Utility App | Home">
 <meta property="og:description" content="Automatic Image Annotator for Computer Vision" />
 <meta property="og:type" content="page" />
 <meta property="og:url" content="/projects/autoannotator/" />
@@ -40,10 +40,10 @@
         <meta name="twitter:image" content="/projects/autoannotator/featured.png" >
     
     
-  <meta itemprop="name" content="AutoAnnotator">
+  <meta itemprop="name" content="AutoAnnotator - MacOS Utility App">
 <meta itemprop="description" content="Automatic Image Annotator for Computer Vision"><meta itemprop="datePublished" content="2023-01-11T00:00:00+00:00" />
 <meta itemprop="dateModified" content="2023-01-11T00:00:00+00:00" />
-<meta itemprop="wordCount" content="589"><meta itemprop="image" content="/projects/autoannotator/featured.png">
+<meta itemprop="wordCount" content="707"><meta itemprop="image" content="/projects/autoannotator/featured.png">
 <meta itemprop="keywords" content="" />
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -283,14 +283,199 @@
       
       
     </div>
-  </nav>
+    
+    
+    
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netflix - Search Box Modal</title>
+  <style>
+     
+
+    .search-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+     
+    .search-button {
+      background-color: transparent;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-button svg {
+      fill: #007bff;
+      width: 30px;
+      height: 30px;
+    }
+
+     
+    .modal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0,0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(20px);  
+      z-index: 9999;
+    }
+
+     
+    .search-modal {
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 80%;
+      max-width: 600px;  
+    }
+
+     
+    .search-input-container {
+      position: relative;
+      width: 100%;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 15px;
+      font-size: 18px;
+      outline: none;
+      margin-bottom: 20px;
+    }
+
+    .clear-button {
+      position: absolute;
+      top: 30px;
+      right: 10px;
+      transform: translateY(-50%);
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .clear-button svg {
+      fill: #007bff;
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="search-container">
+    <button class="search-button" id="search-button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+        <path fill="none" d="M0 0h24v24H0z" />
+        <path
+          d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z" />
+      </svg>
+    </button>
+  </div>
+
+  
+ <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchButton = document.getElementById("search-button");
+      let isSearchActive = false; 
+
+      searchButton.addEventListener("click", function () {
+        if (!isSearchActive) {
+          openSearchModal();
+        } else {
+          closeSearchModal();
+        }
+      });
+
+      function openSearchModal() {
+        
+        const modalContainer = document.createElement("div");
+        modalContainer.classList.add("modal-container");
+
+        
+        modalContainer.innerHTML = `
+          <div class="search-modal">
+            <div class="search-input-container">
+              <input type="text" id="search-input" placeholder="Search...">
+              <button class="clear-button" id="clear-button">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
+</svg>
+
+              </button>
+            </div>
+          </div>
+        `;
+
+        
+        const clearButton = modalContainer.querySelector("#clear-button");
+        const searchInput = modalContainer.querySelector("#search-input");
+        clearButton.addEventListener("click", function () {
+          if (searchInput.value.trim() === "") {
+          closeSearchModal();
+        }
+        searchInput.value = "";
+        searchInput.focus();
+        
+      });
+
+        
+        document.body.appendChild(modalContainer);
+
+        
+        searchInput.focus();
+       
+
+        isSearchActive = true;
+        
+      
+      }
+
+      function closeSearchModal() {
+        
+        const modalContainer = document.querySelector(".modal-container");
+        if (modalContainer) {
+          modalContainer.remove();
+        }
+        isSearchActive = false;
+      }
+      
+      
+    });
+  </script>
+</body>
+
+</html>
+
+
+      </nav>
+    
 </header>
 
 <main class="page-main pa4" role="main">
   <section class="page-content mw7 center">
     <article class="post-content pa0 ph4-l">
       <header class="post-header">
-        <h1 class="f1 lh-solid measure-narrow mb3 fw4">AutoAnnotator</h1>
+        <h1 class="f1 lh-solid measure-narrow mb3 fw4">AutoAnnotator - MacOS Utility App</h1>
         <h4 class="f4 mt0 mb4 lh-title measure">Automatic Image Annotator for Computer Vision</h4>
         <p class="f6 measure lh-copy mv1"> in <a href="/categories/image-annotation">Image Annotation</a>  <a href="/categories/computer-vision">Computer Vision</a>  <a href="/categories/object-detection">Object Detection</a>  <a href="/categories/macos">MacOS</a>  <a href="/categories/swift">Swift</a> </p>
         <p class="f7 db mv0 ttu">January 11, 2023</p>
@@ -299,7 +484,16 @@
 
       </header>
       <section class="post-body pt5 pb4">
-        <video width="768" height="480" autoplay muted controls loop>
+        
+
+
+
+<h1 id="introduction">Introduction
+  <a href="#introduction"></a>
+</h1>
+<p>Data Collection is a major step in every Machine Learning projects. The quality and quantity of data alone can greatly impact the results of the model. AutoAnnotator is an open-source automatic image annotator created using the Swift and Python. It&rsquo;s an updated version of AutoLabelMe, the GUI I wrote using Tkinter library in Python for my Internship at Hubert Curien Laboratoire.</p>
+<p>It matches the template provided by the user in an image and find same objects associating a bounding box and label for every object. AutoAnnotator uses Normalized Cross-Correlation to check whether two templates are similar. It is designed keeping in mind with the necessity of creating dataset for object detection purposes.</p>
+<video width="768" height="480" autoplay muted controls loop>
   <source src="assets/matchexamples.mp4" type="video/mp4">
   <p>
     Your browser doesn't support HTML video. Here is a
@@ -354,17 +548,17 @@
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
 </h3>
-<p><b style="color:rgba(0, 0, 200,1);">1. Numpy</b></p>
+<p><b style="color:rgba(50, 125, 240,1);">1. Numpy</b></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">user@Mac ~ % conda install numpy 
 </span></span></span></code></pre></div><p>or</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">user@Mac ~ % pip install numpy
-</span></span></span></code></pre></div><p><b style="color:rgba(0, 0, 200,1);">2. Pandas</b></p>
+</span></span></span></code></pre></div><p><b style="color:rgba(50, 125, 240,1);">2. Pandas</b></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">user@Mac ~ % conda install pandas 
-</span></span></span></code></pre></div><p><b style="color:rgba(0, 0, 200,1);">3. Opencv</b></p>
+</span></span></span></code></pre></div><p><b style="color:rgba(50, 125, 240,1);">3. Opencv</b></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">user@Mac ~ % conda install -c conda-forge opencv 
 </span></span></span></code></pre></div><p>or</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">user@Mac ~ % pip install opencv-python
-</span></span></span></code></pre></div><p><b style="color:rgba(0, 0, 200,1);">4. PIL</b></p>
+</span></span></span></code></pre></div><p><b style="color:rgba(50, 125, 240,1);">4. PIL</b></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span><span style="color:#888">user@Mac ~ % pip install Pillow
 </span></span></span></code></pre></div><p><b style="color:rgba(200, 0, 0,1);">Installtion of the python libraries is necessary for the app to run effectively. If you don&rsquo;t have it installed or if the selected python environment in the app don&rsquo;t have it installed, the app will install it automatically. This may delay results. </b></p>
 
@@ -390,6 +584,8 @@
   <a href="#move-rectangle"><b>5. Move Rectangle</b></a>
   </br>
   <a href="#resize-rectangle"><b>6. Resize Rectangle</b></a>
+  </br>
+  <a href="#match-rectangles"><b>7. Match Rectangles</b></a>
 </div>
 
 
@@ -529,8 +725,8 @@
 
 
 
-<h3 id="heading">
-  <a href="#heading"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
+<h3 id="match-rectangles">Match Rectangles
+  <a href="#match-rectangles"><svg class="anchor-symbol" aria-hidden="true" height="26" width="26" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg">
       <path d="M0 0h24v24H0z" fill="currentColor"></path>
       <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76.0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71.0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71.0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76.0 5-2.24 5-5s-2.24-5-5-5z"></path>
     </svg></a>
@@ -554,7 +750,7 @@
   </dl>
   <dl class="f6 lh-copy">
     <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">3 minute read, 589 words</dd>
+    <dd class="fw5 ml0">4 minute read, 707 words</dd>
   </dl>
   
   <dl class="f6 lh-copy">
