@@ -184,6 +184,14 @@
   </url><url>
     <loc>/about/</loc>
   </url><url>
+    <loc>/categories/conferences/</loc>
+  </url><url>
     <loc>/license/</loc>
+  </url><url>
+    <loc>/papers/</loc>
+  </url><url>
+    <loc>/categories/papers/</loc>
+  </url><url>
+    <loc>/categories/publication/</loc>
   </url>
 </urlset>

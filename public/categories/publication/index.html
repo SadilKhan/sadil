@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="generator" content="Hugo 0.101.0" />
-<title>publication | Home</title>
+<title>Publication | Home</title>
 
 
 
@@ -25,7 +25,7 @@
 
 
 <meta property="og:site_name" content="Home">
-<meta property="og:title" content="publication | Home">
+<meta property="og:title" content="Publication | Home">
 <meta property="og:description" content="Computer Vision | Deep Learning | Statistics | Mathematics" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/categories/publication/" />
@@ -39,7 +39,7 @@
         <meta property="twitter:card" content="summary_large_image">
         <meta name="twitter:image" content="%!s()" >
     
-  <meta itemprop="name" content="publication">
+  <meta itemprop="name" content="Publication">
 <meta itemprop="description" content="Computer Vision | Deep Learning | Statistics | Mathematics">
   
   <!--[if IE]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -49,7 +49,7 @@
     <link rel="alternate" type="application/rss+xml" href="/categories/publication/index.xml" title="Home" />
   
   
-  <link rel="stylesheet" href="/style.main.min.2e8db1e59e7d98bd8c451e2542436561be3152740f658175882313ed7b4585b4.css" integrity="sha256-Lo2x5Z59mL2MRR4lQkNlYb4xUnQPZYF1iCMT7XtFhbQ=" media="screen">
+  <link rel="stylesheet" href="/style.main.min.4029c246551cf6ec532aa7b82ca95587b549cfad8f761f7746eb6154907463c9.css" integrity="sha256-QCnCRlUc9uxTKqe4LKlVh7VJz62Pdh93RuthVJB0Y8k=" media="screen">
   
   
   <script src="/panelset.min.dca42702d7daf6fd31dc352efd2bcf0e4ac8c05ccaa58d9293f6177462de5d5f.js" type="text/javascript"></script>
@@ -262,7 +262,7 @@
         
         
         
-      <a class="link f6 f5-l dib pv1 ph2 " href="/publications/" title="Publications">Publications</a>
+      <a class="link f6 f5-l dib pv1 ph2 " href="/papers/" title="Publications">Publications</a>
       
         
         
@@ -272,17 +272,372 @@
         
         
         
+      <a class="link f6 f5-l dib pv1 ph2 " href="/travel_video/" title="Video">Video</a>
+      
+        
+        
+        
       <a class="link f6 f5-l dib pv1 ph2 " href="/contact/" title="Contact form">Contact</a>
       
       
     </div>
-  </nav>
+    
+    
+    
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Netflix - Search Box Modal</title>
+  <style>
+     
+
+    .search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        z-index: 999;  
+      }
+
+     
+    .search-button {
+      background-color: transparent;
+      width: 30px;
+      height: 30px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-button svg {
+      fill: #007bff;
+      width: 30px;
+      height: 30px;
+    }
+
+     
+    .modal-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0,0, 0.6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(20px);  
+      z-index: 9999;
+    }
+
+     
+    .search-modal {
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 80%;
+      max-width: 600px;  
+      max-height: 300px;  
+      overflow-y: auto;  
+    }
+
+     
+    .search-input-container {
+      position: fixed;
+      top: 20%;
+      right: 25%;
+      width: 50%;
+    }
+
+    #search-input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #8a2be2;
+      border-radius: 15px;
+      font-size: 18px;
+      outline: none;
+      margin-bottom: 10px;
+      box-shadow: 0 0 5px #8a2be2;  
+      transition: box-shadow 0.3s ease;  
+    }
+    
+     
+  #search-input:focus {
+    box-shadow: 0 0 10px #8a2be2;  
+  }
+
+
+    .clear-button {
+      position: absolute;
+      top: 30px;
+      right: 10px;
+      transform: translateY(-50%);
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .clear-button svg {
+      fill: #007bff;
+      width: 20px;
+      height: 20px;
+    }
+    
+     
+     .search-results {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      margin-top: 20px;
+    }
+
+    .search-results li {
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;  
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+     
+    .search-results li:hover {
+      background-color: #8a2be2;
+      color: white;
+    }
+
+     
+    .preview-subwindow {
+      position: fixed;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #f9f9f9;
+      padding: 10px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      display: none;
+      z-index: 999;
+    }
+
+    .search-results li:hover .preview-subwindow {
+      display: block;
+    }
+        
+        .search-results-container {
+        background-color: #f9f9f9;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 600px;  
+      max-height: 300px;  
+      overflow-y: auto;  
+}
+
+
+  </style>
+</head>
+
+<body>  
+
+
+<div class="search-container">
+  <button class="search-button" id="search-button">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+      <path fill="none" d="M0 0h24v24H0z" />
+      <path
+        d="M19.71 18.29l-4.88-4.88a7.5 7.5 0 1 0-1.41 1.41l4.88 4.88a1 1 0 0 0 1.41-1.41zM10.5 16a5.5 5.5 0 1 1 5.5-5.5 5.506 5.506 0 0 1-5.5 5.5z"
+      />
+    </svg>
+  </button>
+</div>
+
+
+<template id="search-modal-template">
+  <div class="modal-container">
+          <div class="search-input-container">
+        <input type="text" id="search-input" placeholder="Search...">
+        <button class="clear-button" id="clear-button">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
+          </svg>
+        </button>
+      </div>
+
+    <div class="search-results-container">
+      <ul id="search-results" class="search-results"></ul>
+    </div>
+    
+  </div>
+</template>
+
+
+
+  
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const searchButton = document.getElementById("search-button");
+    let isSearchActive = false; 
+    let previewWindow; 
+
+    searchButton.addEventListener("click", function () {
+      if (!isSearchActive) {
+        openSearchModal();
+        window.addEventListener("click", outsideClickListener);
+      } else {
+        closeSearchModal();
+        window.removeEventListener("click", outsideClickListener);
+      }
+    });
+
+    function outsideClickListener(event) {
+      const searchInput = document.getElementById("search-input");
+      const searchModal = document.querySelector(".search-modal");
+    }
+
+    function openSearchModal() {
+      const modalContainer = document.importNode(
+        document.getElementById("search-modal-template").content,
+        true
+      );
+
+      document.body.appendChild(modalContainer);
+
+      const searchInput = document.getElementById("search-input");
+      const clearButton = document.getElementById("clear-button");
+      const searchResults = document.getElementById("search-results");
+      const searchResultsContainer = document.querySelector(".search-results-container");
+
+      clearButton.addEventListener("click", function () {
+        if (searchInput.value.trim() === "") {
+          closeSearchModal();
+        }
+        searchInput.value = "";
+        searchInput.focus();
+        showSearchResults([]);
+      });
+
+      searchInput.addEventListener("input", function () {
+        const query = searchInput.value.toLowerCase().trim();
+        const filteredResults = window.pagesIndex.filter((page) =>
+          page.title.toLowerCase().includes(query)
+        );
+        showSearchResults(filteredResults);
+        searchResultsContainer.classList.toggle("show-results", filteredResults.length > 0);
+      });
+
+      searchInput.focus();
+      isSearchActive = true;
+    }
+
+    function closeSearchModal() {
+      const modalContainer = document.querySelector(".modal-container");
+      if (modalContainer) {
+        modalContainer.remove();
+      }
+      isSearchActive = false;
+    }
+
+    fetch("\/index.json")
+      .then((response) => response.json())
+      .then((data) => {
+        window.pagesIndex = data;
+      })
+      .catch((error) => console.error("Error loading index.json:", error));
+
+    function showSearchResults(results) {
+      const searchResults = document.getElementById("search-results");
+      searchResults.innerHTML = "";
+
+      const uniqueSuggestions = new Set();
+
+      results.forEach((result) => {
+        if (!uniqueSuggestions.has(result.title)) {
+          const listItem = document.createElement("li");
+          listItem.textContent = result.title;
+          listItem.addEventListener("click", function () {
+            window.location.href = result.href;
+            closeSearchModal();
+          });
+
+          
+          listItem.addEventListener("mouseenter", function () {
+            showPreview(result.title, result.description);
+          });
+
+          
+          listItem.addEventListener("mouseleave", hidePreview);
+
+          searchResults.appendChild(listItem);
+          uniqueSuggestions.add(result.title);
+        }
+      });
+            searchResultsContainer.style.display = results.length > 0 ? "block" : "none";
+    }
+
+    function showPreview(title, content) {
+      if (!previewWindow) {
+        
+        previewWindow = document.createElement("div");
+        previewWindow.classList.add("preview-window");
+        document.body.appendChild(previewWindow);
+      }
+
+      
+      previewWindow.innerHTML = `<h3>${title}</h3><p>${content}</p>`;
+
+      
+      const searchInput = document.getElementById("search-input");
+      const searchInputRect = searchInput.getBoundingClientRect();
+      const previewWindowRect = previewWindow.getBoundingClientRect();
+
+      const top = searchInputRect.bottom + 10;
+      const left = searchInputRect.left + searchInputRect.width / 2 - previewWindowRect.width / 2;
+
+      previewWindow.style.top = `${top}px`;
+      previewWindow.style.left = `${left}px`;
+      previewWindow.style.display = "block";
+    }
+
+    function hidePreview() {
+      
+      if (previewWindow) {
+        previewWindow.style.display = "none";
+      }
+    }
+  });
+</script>
+
+
+
+
+</body>
+
+</html>
+
+
+      </nav>
+    
 </header>
 
 
 <main class="page-main pa4" role="main">
   <section class="blog-intro mw7 center mb5">
-    <h1 class="f2 f1-ns fw4 lh-solid tc center i">publication</h1>
+    <h1 class="f2 f1-ns fw4 lh-solid tc center i">Publication</h1>
     <p class="f6 f5-ns measure lh-copy tc center"></p>
   </section>
   <section class="blog-content mw7 center">
@@ -297,10 +652,10 @@
   
   <div class="measure-wide center mb4 mb5-l">
     <header>
-      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/publications/wto/" class="db">wTO: an R package for computing weighted topological overlap and a consensus network with integrated visualization tool</a></h1>
+      <h1 class="f3 mt0 mb2 lh-title underline fw4"><a href="/papers/" class="db">My Publications</a></h1>
       
     </header>
-    <p class="lh-copy mb4">Abstract Network analyses, such as of gene co-expression networks, metabolic networks and ecological networks have become a central approach for the systems-level study of biological data. Several software packages exist for generating and analyzing such networks, either from correlation scores or the absolute value of a transformed score called weighted topological overlap (wTO). However, since gene regulatory processes can up- or down-regulate genes, it is of great interest to explicitly consider both positive and negative correlations when constructing a gene co-expression network.</p>
+    <p class="lh-copy mb4"></p>
     <footer>
       
       
@@ -315,7 +670,7 @@
 <footer class="site-footer pv4 bt b--transparent ph5" role="contentinfo">
   <nav class="db dt-l w-100">
     <p class="site-copyright f7 db dtc-l v-mid w-100 w-33-l tc tl-l pv2 pv0-l mv0 lh-copy">
-      &copy; 2022 Mohammad Sadil Khan
+      &copy; 2023 Mohammad Sadil Khan
       <span class="middot-divider"></span>
       Based on <span xmlns:dct="http://purl.org/dc/terms/" property="dct:title"><a xmlns:dct="http://purl.org/dc/terms/" href="https://github.com/hugo-apero/" rel="dct:source">Hugo Apéro</a></span>.
       <br />
