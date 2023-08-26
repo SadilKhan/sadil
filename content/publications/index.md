@@ -2,8 +2,9 @@
 title: My Publications
 author: "Mohammad Sadil Khan"
 show_post_date: false
-categories: [Publication,Papers, Conferences]
+categories: [Publication, Papers, Conferences]
 show_related: true
+publishDate: "2023-08-10T00:00:00Z"
 ---
 
  <link rel="stylesheet" href="styles.css">
