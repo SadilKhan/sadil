@@ -81,6 +81,7 @@ publishDate: "2022-12-21"
   margin: 0;
   padding: 0;
   padding-left: 30px;
+  display: none;
 }
 
 .cv-list-item {
@@ -94,6 +95,25 @@ publishDate: "2022-12-21"
   content: ">>"; /* Unicode bullet character */
   font-size: 0.9em; /* Adjust the bullet size */
   color: #5b8bde;
+}
+.collapsible {
+  background-image: linear-gradient(45deg, #8A2BE2, #00FFFF);
+  color: black;
+  cursor: pointer;
+  padding: 5px 10px;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  border-radius: 20px;
+}
+
+.collapsible:hover {
+  background-image: linear-gradient(45deg, #8A2BE2, #00FFFF);
+}
+
+.content {
+  display: none;
 }
 </style>
 
@@ -109,16 +129,18 @@ publishDate: "2022-12-21"
             <h4><b>Doctoral Researcher</b></h4>
             <p> CVI2 Lab, University of Luxembourg, Kirchberg, Luxembourg </p>
             <p> Jan 2022-Present</p>
+            <button class="collapsible">Details</button>
             <div class="cv-list">
         <div class="cv-list-item">
             <p>Currently working on Vision-Language modeling for transforming Point Cloud into CAD design. </p>
         </div>
-    </div>
+          </div>
         </div>
         <div class="timeline-component timeline-content">
             <h4><b>Research Intern</b></h4>
             <p>Creatis Lab, INSA Lyon, Lyon, France</p>
             <p> Feb 2022 - Jul 2022</p>
+            <button class="collapsible">Details</button>
             <div class="cv-list">
         <div class="cv-list-item">
             <p> <a href="Thesis Link - https://mdsadilkhan.onrender.com/papers/data/report.pdf">Project : Learning Shapes For The Effective Segmentation of 3D Medical Images using Point Cloud.</a> </p>
@@ -137,11 +159,13 @@ Extraction Layer to capture local spatial information.</p></div>
             <h4><b>Research Intern</b></h4>
             <p>Laboratoire Hubert Curien, UJM, Saint-Etienne, France</p>
             <p> Apr 2021 - Aug 2021</p>
+            <button class="collapsible">Details</button>
         </div>
         <div class="timeline-component timeline-content">
             <h4><b>Data Analyst Intern</b></h4>
             <p>Accenture Digital, India</p>
             <p> May 2020 – Jul 2020</p>
+            <button class="collapsible">Details</button>
         </div>
       </div>
   </section>
@@ -197,17 +221,41 @@ document.addEventListener("DOMContentLoaded", function() {
         x: 0,
         scrollTrigger: {
           trigger: component,
-          start: "top 80%", // Adjust the start point as needed
-          end: "bottom 60%", // Adjust the end point as needed
-          scrub: true, // Animation follows scroll smoothly
-          toggleActions: "play none reverse none", // Animation direction on scroll
+          start: "top 80%",
+          end: "bottom 60%",
+          scrub: true,
+          toggleActions: "play none reverse none",
         },
       });
     }
   });
 
-  
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+      gsap.from(content, { opacity: 0, y: -10, duration: 0.5, ease: "power2.out" });
+    });
+  }
+
+  coll[i].addEventListener("click", function() {
+    gsap.to(this, {
+      scale: 1.05,
+      duration: 0.2,
+      yoyo: true,
+      repeat: 1
+    });
+  });
 });
+
 </script>
 
 
