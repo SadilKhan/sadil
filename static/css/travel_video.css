@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Lora:400,400i,700");
 
 @mixin sp-layout {
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 800px) {
     @content;
   }
 }
@@ -250,7 +250,6 @@ p {
     flex-wrap: wrap;
 
     @include sp-layout {
-      display: none;
       justify-content: center;
     }
 
@@ -429,4 +428,45 @@ p {
 /* Add a dark background to the active button */
 .btn.active {
   background-color: #195f7b;
+}
+
+/* Add a media query to target mobile devices */
+@media (max-width: 767px) {
+    /* Hide images */
+    .tm-thumbnail-container img {
+        display: none;
+    }
+
+    /* Add a class to hide the images in the overlay */
+    .tm-img-overlay {
+        background-image: none;
+    }
+
+    /* Adjust padding of the search container */
+    .tm-search-container {
+        padding-right: 0;
+    }
+
+    /* Hide the welcome text */
+    .tm-welcome-text {
+        display: none;
+    }
+
+    /* Show the menu button */
+    .navbar-toggler i.tm-menu-opened-icon {
+        display: none;
+    }
+
+    .navbar-toggler i.tm-menu-closed-icon {
+        display: block;
+    }
+
+    /* Show the collapsed menu */
+    .navbar-collapse {
+        display: none;
+    }
+
+    .navbar-toggler.collapsed + .navbar-collapse {
+        display: block;
+    }
 }
