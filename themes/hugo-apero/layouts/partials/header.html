@@ -10,17 +10,23 @@
         {{ $active := or ($page.IsMenuCurrent "header" .) ($page.HasMenuCurrent "header" .) }}
         {{ $active = or $active (eq $page.Section (trim .URL "/")) }}
         {{ $active = or $active (eq $page.RelPermalink .URL ) }}
-      <a class="link f6 f5-l dib pv1 ph2 {{ if $active }}active{{ end }}" href="{{ .URL }}" title="{{ .Title }}">{{ .Name }}</a>
+        <a class="link f6 f5-l dib pv1 ph2 {{ if $active }}active{{ end }}" href="{{ .URL }}" title="{{ .Title }}">
+          {{ if eq .Name "Search" }}
+            <i class="fas fa-search" aria-hidden="true"></i>
+          {{ else }}
+            {{ .Name }}
+          {{ end }}
+        </a>
       {{ end }}
       {{ if .Site.Params.socialInHeader }}
-      <div class="dib v-mid">
-        {{ partial "shared/social-links.html" . }}
-      </div>
+        <div class="dib v-mid">
+          {{ partial "shared/social-links.html" . }}
+        </div>
       {{ end }}
     </div>
+
     
-    
-    
+    <!--
 <html lang="en">
 
 <head>
@@ -188,11 +194,8 @@
 </head>
 
 <body>  
-
-<!-- HTML code for the search box -->
 <div class="search-container">
   <button class="search-button" id="search-button">
-    <!-- SVG icon for the search button -->
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
       <path fill="none" d="M0 0h24v24H0z" />
       <path
@@ -202,13 +205,11 @@
   </button>
 </div>
 
-<!-- HTML template for the search modal -->
 <template id="search-modal-template">
   <div class="modal-container">
           <div class="search-input-container">
         <input type="text" id="search-input" placeholder="Search...">
         <button class="clear-button" id="clear-button">
-          <!-- SVG icon for the clear button -->
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
             <path d="M18.3 6.3l-1.4-1.4-5.6 5.6-5.6-5.6-1.4 1.4 5.6 5.6-5.6 5.6 1.4 1.4 5.6-5.6 5.6 5.6 1.4-1.4-5.6-5.6z" />
           </svg>
@@ -223,8 +224,6 @@
 </template>
 
 
-
-  <!-- JavaScript to handle search button click and open/close the modal -->
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const searchButton = document.getElementById("search-button");
@@ -364,8 +363,7 @@
 
 </body>
 
-</html>
-
+</html> -->
 
       </nav>
     

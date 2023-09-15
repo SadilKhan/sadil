@@ -1,5 +1,5 @@
 ---
-date: "2020-09-27T00:00:00Z"
+date: "2020-09-27"
 external_link: ""
 summary: Open Source Image Annotator in Python
 categories:
