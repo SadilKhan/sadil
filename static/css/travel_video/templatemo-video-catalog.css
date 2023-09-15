@@ -527,6 +527,12 @@ video {
     }
 }
 
+@media (max-width: 768px){
+  .tm-catalog-item-list {
+    padding-left: 20px;
+  }
+}
+
 
 .tm-search-container {
   padding-right: 20px; /* Add desired margin value */
