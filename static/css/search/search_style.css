@@ -70,5 +70,11 @@
     font-weight: normal;
 }
 
+@media (max-width: 768px) {
+  .search-container {
+    top: 30%; /* Adjust this value for mobile */
+    width: 300px;
+  }
+}
 
 

@@ -50,9 +50,26 @@ function formatDate(dateString) {
     return `${month} ${day}${getDaySuffix(day)}, ${year}`;
 }
 
+function mySearch(query) {
+    query = query.toLowerCase();
+    var results = [];
+
+    posts.forEach(function (post) {
+        var title = post.title.toLowerCase();
+        var content = post.content.toLowerCase();
+        var url = post.url.toLowerCase();
+
+        if (title.includes(query) || content.includes(query) || url.includes(query)) {
+            results.push(post);
+        }
+    });
+
+    return results;
+}
+
 function showSearchResults() {
     var query = searchElem.value || '';
-    var searchString = query.replace(/[^\w\s]/gi, '');
+    var searchString = query.trim();
 
     clearTimeout(window.searchTimeout);
     window.searchTimeout = setTimeout(function () {
@@ -62,19 +79,7 @@ function showSearchResults() {
         lastQuery = searchString;
 
         if (searchString && searchString !== '') {
-            var index = lunr(function () {
-                this.ref('title');
-                this.field('content');
-                posts.forEach(function (doc) {
-                    this.add(doc);
-                }, this);
-            });
-
-            var matches = index.search(searchString);
-            var matchPosts = [];
-            matches.forEach((m) => {
-                matchPosts.push(postsByTitle[m.ref]);
-            });
+            var matchPosts = mySearch(searchString);
 
             if (matchPosts.length > 0) {
                 target.innerHTML = matchPosts.map(function (p) {
@@ -93,5 +98,6 @@ function showSearchResults() {
         }
     }, 300);
 }
+
 
 searchElem.addEventListener('input', showSearchResults);
