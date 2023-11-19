@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Lora:400,400i,700");
 
 @mixin sp-layout {
-  @media screen and (max-width: 750px) {
+  @media screen and (max-width: 800px) {
     @content;
   }
 }
@@ -429,3 +429,4 @@ p {
 .btn.active {
   background-color: #195f7b;
 }
+
