@@ -72,7 +72,6 @@ width: 150%;
 		}
 	}
 	
-	
 	.tag_date {
 		display: inline-block;
 		background-color: #FFEDEE;
@@ -117,7 +116,7 @@ width: 150%;
     .loc {
       font-size: 1rem;
       margin: 0;
-      padding-left: 10px;
+      padding-left: 5px;
         font-style: italic; /* Italicize the text */
     }
     
@@ -210,16 +209,6 @@ width: 150%;
     </div>
     </li>
     <!-- Second Item -->
-    <li>
-    <div class="card">
-		<span class="tag">Erasmus Exchange in Computer Science</span>
-		<span class="tag_date">Sep 2021 - Feb 2022</span>
-		<div class="info">
-        <h4>KU Leuven</h4>
-        <span class="loc"> Leuven, Belgium</span>
-        </div>
-    </div>
-    </li>
    <li>
     <div class="card">
 		<span class="tag">M.Sc in Machine Learning and Data Mining</span>
@@ -227,6 +216,36 @@ width: 150%;
 		<div class="info">
         <h4>Université Jean Monnet</h4>
         <span class="loc"> Saint-Étienne, France</span>
+        </div>
+    </div>
+    </li>
+        <li>
+    <div class="card">
+		<span class="tag">Erasmus Exchange in Faculty of Engineering Science</span>
+		<span class="tag_date">Sep 2021 - Feb 2022</span>
+		<div class="info">
+        <h4>KU Leuven</h4>
+        <span class="loc"> Leuven, Belgium</span>
+        </div>
+    </div>
+    </li>
+    <li>
+    <div class="card">
+		<span class="tag">Masters M1 in Data Science</span>
+		<span class="tag_date">Aug 2019 - Jul 2020</span>
+		<div class="info">
+        <h4>Chennai Mathematical Institute</h4>
+        <span class="loc">Siruseri, India</span>
+        </div>
+    </div>
+    </li>
+    <li>
+    <div class="card">
+		<span class="tag">B.Sc in Mathemtics</span>
+		<span class="tag_date">Jul 2016 - May 2019</span>
+		<div class="info">
+        <h4>Ramakrishna Mission Residential College</h4>
+        <span class="loc">Kolkata, India</span>
         </div>
     </div>
     </li>
