@@ -7,255 +7,230 @@ publishDate: "2022-12-21"
 ---
 
 <style>
-:root {
-  --timeline-line-color-light: #F27121;
-  --timeline-line-color-dark: #8A2387;
-  --timeline-circle-color-light: #F27121;
-  --timeline-circle-color-dark: #8A2387;
-  /* ... other CSS variables ... */
-}
-.design-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  padding: 100px 0;
-}
-
-.design {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.timeline {
-  width: 100%;
-  height: auto;
-  max-width: 800px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.timeline-content {
-  padding: 10px;
-  background-color: #ebeef2;
-  -webkit-box-shadow: 5px 5px 10px #1b3f7d, -5px -5px 10px #c7d6ed;
-          box-shadow: 5px 5px 10px #1b3f7d, -5px -5px 10px #c7d6ed;
-  border-radius: 5px;
-  padding: 1.75rem;
-  transition: 0.4s ease;
-  margin: 1rem;
-  color: black;
-  margin-bottom: 20px;
-  border-radius: 20px;
-  font-size: 16px;
-}
-
-.dark-mode .timeline-component {
-  background-color: #1f1f1f;
-}
-
-.dark-mode .timeline-content {
-  background-color: #1f1f1f;
-  color: white;
--webkit-box-shadow: 5px 5px 10px #1a1a1a, -5px -5px 10px #242424;
-          box-shadow: 5px 5px 10px #1a1a1a, -5px -5px 10px #242424;
-}
-
-.timeline-component {
-  margin: 0px 10px 20px 20px;
-  width: calc(100% + 50px); /* Adjust the width as needed */
-  margin-left: -20px; /* To center-align the expanded component *
-}
-
-
-.timeline-content li {
-  display: inline; /* Display list items inline */
-  width: 100%;
-}
-
-
-.cv-list {
+    ul {
+  list-style: none;
   margin: 0;
   padding: 0;
-  padding-left: 30px;
-  display: none;
+  position: relative;
+
 }
 
-.cv-list-item {
-  display: flex; /* Display items in a row */
-  align-items: center; /* Vertically center-align content */
-  gap: 10px; /* Space between icon and content */
-  margin-bottom: -30px; /* Adjust the margin between list items */
+ul:before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  background-color: #4062BB;
+  position: absolute;
+  left: 6px;
+  top: 5px;
+  height: calc(100% - 10px);
 }
 
-.cv-list-item::before {
-  content: ">>"; /* Unicode bullet character */
-  font-size: 0.9em; /* Adjust the bullet size */
-  color: #5b8bde;
-}
-.collapsible {
-  background-image: linear-gradient(45deg, #8A2BE2, #00FFFF);
-  color: black;
-  cursor: pointer;
-  padding: 5px 10px;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-  border-radius: 20px;
+li {
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: auto;
+  padding-bottom:20px;
 }
 
-.collapsible:hover {
-  background-image: linear-gradient(45deg, #8A2BE2, #00FFFF);
+li:before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: #F45B69;
+  position: absolute;
+  left: 0;
+  top: 5px;
+  border-radius: 10px;
 }
 
-.content {
-  display: none;
+.card {
+width: 150%;
+      background-color: #fff; /* Adjust as needed */
+      padding: 5px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      padding-left: 20px;
+      padding-right:20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow as needed */
+    }
+.tag {
+		display: inline-block;
+		background-color: #f1eeff;
+	  color: #6558d3;
+		font-weight: 600;
+		font-size: 0.875rem;
+		padding: 0.5em 0.75em;
+		padding-bottom: 10px;
+		line-height: 1;
+		border-radius: 6px;
+		& + * {
+			margin-top: 1rem;
+			
+		}
+	}
+	
+	
+	.tag_date {
+		display: inline-block;
+		background-color: #FFEDEE;
+	  color: #F45B69;
+		font-weight: 600;
+		font-size: 0.875rem;
+		padding: 0.5em 0.75em;
+		padding-bottom: 10px;
+		line-height: 1;
+		border-radius: 6px;
+		& + * {
+			margin-top: 1rem;
+			
+		}
+	}
+		.button {
+		font: inherit;
+		line-height: 1;
+		background-color: #fff;
+		border: 2px solid #6558d3;
+		color: #6558d3;
+		padding: 0.5em 1em;
+		border-radius: 6px;
+		font-weight: 500;
+		display: inline-flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		&:hover,
+		&:focus {
+			background-color: #6558d3;
+			color: var(--c-white);
+		}
+	}
+	
+	.card h4 {
+      font-size: 1.2rem;
+      color: #333;
+      margin: 0;
+      padding-left: 5px;
+    }
+    .loc {
+      font-size: 1rem;
+      margin: 0;
+      padding-left: 10px;
+        font-style: italic; /* Italicize the text */
+    }
+    
+  .info {
+		color: #a0a0a0;
+		& + * {
+			margin-top: 1.25rem;
+		}
+	}
+	.dark-mode .card {
+  background-color: #1f1f1f;
 }
-</style>
-
- <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+	</style>
 <body>
-<section class="design-section">
-    <!-- Experience -->
-  <div class="timeline">
-    <h2> Experience</h2>
-        <!-- First Component -->
-        <div class="timeline-component timeline-content">
-            <h4><b>Doctoral Researcher</b></h4>
-            <p> CVI2 Lab, University of Luxembourg, Kirchberg, Luxembourg </p>
-            <p> Jan 2022-Present</p>
-            <button class="collapsible">Details</button>
-            <div class="cv-list">
-        <div class="cv-list-item">
-            <p>Currently working on Vision-Language modeling for transforming Point Cloud into CAD design. </p>
+<h2> Work Experience </h2>
+  <ul>
+  <!-- First Item -->
+    <li>
+    <div class="card">
+		<span class="tag">Doctoral Researcher</span>
+		<span class="tag_date">Jan 2023-Present</span>
+		<div class="info">
+        <h4>CVI2 Lab, University of Luxembourg</h4>
+        <span class="loc">Kirchberg, Luxembourg</span>
         </div>
-          </div>
-        </div>
-        <div class="timeline-component timeline-content">
-            <h4><b>Research Intern</b></h4>
-            <p>Creatis Lab, INSA Lyon, Lyon, France</p>
-            <p> Feb 2022 - Jul 2022</p>
-            <button class="collapsible">Details</button>
-            <div class="cv-list">
-        <div class="cv-list-item">
-            <p> <a href="Thesis Link - https://mdsadilkhan.onrender.com/papers/data/report.pdf">Project : Learning Shapes For The Effective Segmentation of 3D Medical Images using Point Cloud.</a> </p>
-        </div>
-        <div class="cv-list-item">
-            <p> Developed a novel approach for 3D medical image segmentation utilizing point clouds. </p>
-        </div>
-        <div class="cv-list-item"><p>Modified RandLaNet, an attention-based point cloud segmentation network, by incorporating a Feature
-Extraction Layer to capture local spatial information.</p></div>
-<div class="cv-list-item"><p>Proposed a model-independent step to leverage the trained RandLaNet for accurate 3D voxel segmentation.</p></div>
-<div class="cv-list-item"><p><b>Grade</b>: 16.5/20</p></div>
-<div class="cv-list-item"><p>Proposed a model-independent step to leverage the trained RandLaNet for accurate 3D voxel segmentation.</p></div>
+        <p style="font-style:italic">
+        Project: 3D Shape Modelling using Deep Geometric and Language Models.</p>
+        <p> The primary task is to develop novel vision-language architectures for CAD language inference from the point cloud.
+        </p>
     </div>
+    </li>
+    <!-- Second Item -->
+    <li>
+    <div class="card">
+		<span class="tag">Research Intern</span>
+		<span class="tag_date">Feb 2022-Jul 2022</span>
+		<div class="info">
+        <h4>Creatis, INSA Lyon</h4>
+        <span class="loc">Lyon, France</span>
         </div>
-        <div class="timeline-component timeline-content">
-            <h4><b>Research Intern</b></h4>
-            <p>Laboratoire Hubert Curien, UJM, Saint-Etienne, France</p>
-            <p> Apr 2021 - Aug 2021</p>
-            <button class="collapsible">Details</button>
+        <p style="font-style:italic">
+        Master Thesis Title: Learning Shapes For The Effective Segmentation of 3D Medical Images using Point Cloud.</p>
+        <p> Worked on 3D medical image segmentation using Point Cloud under Prof. Razmig Kechichian, Julie Digne, and Sebastien Valette.
+        </p>
+    </div>
+    </li>
+    <!-- Third Item -->
+    <li>
+    <div class="card">
+		<span class="tag">Research Intern</span>
+		<span class="tag_date">Apr 2021-Aug 2021</span>
+		<div class="info">
+        <h4>Laboratoire Hubert Curien, Université Jean Monnet</h4>
+        <span class="loc">Saint-Étienne, France</span>
         </div>
-        <div class="timeline-component timeline-content">
-            <h4><b>Data Analyst Intern</b></h4>
-            <p>Accenture Digital, India</p>
-            <p> May 2020 – Jul 2020</p>
-            <button class="collapsible">Details</button>
+        <p style="font-style:italic">
+        Project: Detector-Encoder Autoencoders for unsupervised decomposition into visual parts.</p>
+        <p> Worked on reconstructing historical ornament vignettes under Prof. Rémi Emonet and Prof. Thierry Fournel. The primary task was to modify the Single-Shot Multibox Detector (SSD) to reconstruct the detected vignettes. 
+        </p>
+    </div>
+    </li>
+     <!-- Fourth Item -->
+    <li>
+    <div class="card">
+		<span class="tag">Data Analyst Intern</span>
+		<span class="tag_date">May 2020-Jul 2020</span>
+		<div class="info">
+        <h4>Accenture Digital</h4>
+        <span class="loc">India</span>
         </div>
-      </div>
-  </section>
-  <section>
-    <!-- Education -->
-    <div class="timeline">
-    <h2> Education</h2>
-        <!-- First Component -->
-        <div class="timeline-component timeline-content">
-            <h4><b>PhD in Computer Vision</b></h4>
-            <p> University of Luxembourg, Kirchberg, Luxembourg</p>
-            <p> 2022-Present</p>
+        <p style="font-style:italic">
+         Project : Intelligent Inventory Planning</p>
+        <p> Worked on automatic forecast hedging to cover demand gaps using AI.
+        </p>
+    </div>
+    </li>
+  </ul>
+  <!-- Education -->
+<h2> Education </h2>
+<ul>
+  <!-- First Item -->
+    <li>
+    <div class="card">
+		<span class="tag">PhD in 3D Computer Vision</span>
+		<span class="tag_date">Jan 2023-Present</span>
+		<div class="info">
+        <h4>University of Luxembourg</h4>
+        <span class="loc"> Kirchberg, Luxembourg</span>
         </div>
-        <div class="timeline-component timeline-content">
-            <h4><b>M.Sc in Machine Learning and Data Mining</b></h4>
-            <p>University Jean Monnet, Saint-Etienne, France</p>
-            <p> 2020-2022</p>
+    </div>
+    </li>
+    <!-- Second Item -->
+    <li>
+    <div class="card">
+		<span class="tag">Erasmus Exchange in Computer Science</span>
+		<span class="tag_date">Sep 2021 - Feb 2022</span>
+		<div class="info">
+        <h4>KU Leuven</h4>
+        <span class="loc"> Leuven, Belgium</span>
         </div>
-        <div class="timeline-component timeline-content">
-            <h4><b>M1 in Data Science</b></h4>
-            <p>Chennai Mathematical Institute, Siruseri, India</p>
-            <p> 2019-2020</p>
+    </div>
+    </li>
+   <li>
+    <div class="card">
+		<span class="tag">M.Sc in Machine Learning and Data Mining</span>
+		<span class="tag_date">Oct 2020 - Sep 2022</span>
+		<div class="info">
+        <h4>Université Jean Monnet</h4>
+        <span class="loc"> Saint-Étienne, France</span>
         </div>
-        <div class="timeline-component timeline-content">
-            <h4><b>B.Sc in Mathematics</b></h4>
-            <p>Ramakrishna Mission Residential College (Autonomous)</p>
-            <p> 2016-2019</p>
-        </div>
-        </div>
-</section>
+    </div>
+    </li>
+  </ul>
 </body>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const timelineComponents = document.querySelectorAll(".timeline-component");
-  const timelineCircles = document.querySelectorAll(".timeline-circle");
-  const timelineLine = document.querySelector(".timeline-middle");
-
-  timelineComponents.forEach((component, index) => {
-    if (index == 0) {
-      component.style.opacity = "1";
-    } else {
-      component.style.opacity = "0";
-    }
-  });
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  timelineComponents.forEach((component, index) => {
-    if (index > 0) {
-      gsap.to(component, {
-        opacity: 1,
-        x: 0,
-        scrollTrigger: {
-          trigger: component,
-          start: "top 80%",
-          end: "bottom 60%",
-          scrub: true,
-          toggleActions: "play none reverse none",
-        },
-      });
-    }
-  });
-
-  var coll = document.getElementsByClassName("collapsible");
-  var i;
-
-  for (i = 0; i < coll.length; i++) {
-    coll[i].addEventListener("click", function() {
-      this.classList.toggle("active");
-      var content = this.nextElementSibling;
-      if (content.style.display === "block") {
-        content.style.display = "none";
-      } else {
-        content.style.display = "block";
-      }
-      gsap.from(content, { opacity: 0, y: -10, duration: 0.5, ease: "power2.out" });
-    });
-  }
-
-  coll[i].addEventListener("click", function() {
-    gsap.to(this, {
-      scale: 1.05,
-      duration: 0.2,
-      yoyo: true,
-      repeat: 1
-    });
-  });
-});
-
-</script>
 
 
