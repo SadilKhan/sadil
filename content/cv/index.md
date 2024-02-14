@@ -46,6 +46,8 @@ li:before {
   border-radius: 10px;
 }
 
+
+
 .card {
 width: 200%;
       background-color: #fff; /* Adjust as needed */
@@ -57,6 +59,15 @@ width: 200%;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add shadow as needed */
     }
+    
+@media only screen and (max-width: 768px) {
+  .card {
+    width: 100%;
+  }
+}
+    
+    
+    
 .tag {
 		display: inline-block;
 		background-color: #f1eeff;

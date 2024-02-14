@@ -119,18 +119,32 @@
     {{ end }}
     {{ end }}
 
-    <section>
+    <section class="page-body">
       <!--make the flexbox a row only on not small screens-->
-      <div>
+      <div class="flex items-start flex-row-l flex-column-ns flex-column">
 
         <!--begin main content column: 2/3-->
-        <!-- {{ $main := printf "/%s/%s" .Section "main/index.md" }}
-        {{ with site.GetPage $main }} -->
+        {{ $main := printf "/%s/%s" .Section "main/index.md" }}
+        {{ with site.GetPage $main }}
         <div>
+          <!-- {{ if $page.Params.show_header }}
+            {{ with .Title}}
+              <h2 class="about-main f2 fw7 tl">{{ . | markdownify }}</h2>
+            {{ end }}
+          {{ else }}
+            {{ with .Title }}
+            <h1 class="f2 f1-m f-headline-l fw5-ns mv4 lh-solid tracked-tight-ns">{{ . | markdownify }}</h1>
+            {{ end }}
+          {{ end }}
+          {{ if .Params.show_intro }}
+            <div class="pv3 f4 measure lh-copy dib">{{ .Params.intro | markdownify }}</div>
+          {{ end }} -->
           {{ partial "shared/summary-li" . }}
-
+          {{ if .Params.show_outro }}
+            <div class="pt3 measure-wide lh-copy cf">{{ .Params.outro | markdownify }}</div>
+          {{ end }}
         </div> <!--close wide column -->
-        <!-- {{ end }} -->
+        {{ end }}
 
       </div>    <!--close flex-->
     </section>  <!--close body section-->

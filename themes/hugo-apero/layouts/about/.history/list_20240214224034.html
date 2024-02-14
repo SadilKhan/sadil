@@ -119,19 +119,14 @@
     {{ end }}
     {{ end }}
 
-    <section>
+    <section class="page-body">
       <!--make the flexbox a row only on not small screens-->
-      <div>
 
         <!--begin main content column: 2/3-->
         <!-- {{ $main := printf "/%s/%s" .Section "main/index.md" }}
         {{ with site.GetPage $main }} -->
         <div>
           {{ partial "shared/summary-li" . }}
-
-        </div> <!--close wide column -->
-        <!-- {{ end }} -->
-
       </div>    <!--close flex-->
     </section>  <!--close body section-->
   </section>    <!--close page content section-->

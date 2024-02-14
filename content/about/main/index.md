@@ -1,6 +1,5 @@
 ---
 ## Configure page content in wide column
-title: "Upcoming Events" # leave blank to exclude
 number_featured: 1 # pulling from mainSections in config.toml
 number_categories: 100 # set to zero to exclude
 show_intro: true
