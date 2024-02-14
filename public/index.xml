@@ -80,10 +80,9 @@
       <pubDate>Wed, 21 Dec 2022 00:00:00 +0000</pubDate>
       
       <guid>/cv/</guid>
-      <description>Experience Doctoral Researcher CVI2 Lab, University of Luxembourg, Kirchberg, Luxembourg Jan 2022-Present
-Details Currently working on Vision-Language modeling for transforming Point Cloud into CAD design. Research Intern Creatis Lab, INSA Lyon, Lyon, France
-Feb 2022 - Jul 2022
-Details Project : Learning Shapes For The Effective Segmentation of 3D Medical Images using Point Cloud. Developed a novel approach for 3D medical image segmentation utilizing point clouds. Modified RandLaNet, an attention-based point cloud segmentation network, by incorporating a Feature Extraction Layer to capture local spatial information.</description>
+      <description>Work Experience Doctoral Researcher Jan 2023-Feb 2024 CVI2 Lab, University of Luxembourg Kirchberg, Luxembourg Project: 3D Shape Modelling using Deep Geometric and Language Models.
+The primary task is to develop novel vision-language architectures for CAD language inference from the point cloud. Research Intern Feb 2022-Jul 2022 Creatis, INSA Lyon Lyon, France Master Thesis Title: Learning Shapes For The Effective Segmentation of 3D Medical Images using Point Cloud.
+Worked on 3D medical image segmentation using Point Cloud under Prof.</description>
     </item>
     
     <item>

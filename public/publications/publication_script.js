@@ -80,7 +80,7 @@ function displayPublications() {
             // Create a new section for each year
             const yearSection = document.createElement('div');
             yearSection.classList.add('year-section');
-            yearSection.innerHTML = `<h2 style="color:black;" onclick="toggleYearContent(${publication.year})">
+            yearSection.innerHTML = `<h2 onclick="toggleYearContent(${publication.year})">
     ${publication.year} <span class="arrow-icon">▼</span>
 </h2>
 `; publicationList.appendChild(yearSection);
@@ -96,34 +96,132 @@ function displayPublications() {
         else {
             paperCount++; // Increment paper count for the same year
         }
-
+        
+        // Split authors by comma and trim any extra spaces
+        const authors = publication.authors.split(',').map(author => author.trim());
+        
+        // Create a new array to hold authors with underlining applied to Mohammad Sadil Khan
+        const authorsWithUnderline = authors.map(author => {
+            // Check if the author's name contains "Sadil", and if so, apply underlining
+            if (author.toLowerCase().includes('sadil')) {
+                return `<u><b>${author}</b></u>`;
+            } else {
+                return author;
+            }
+        }).join(', '); // Join the authors back into a string separated by comma
+        
+        
         const publicationContent = document.createElement('div');
         publicationContent.classList.add('publication');
+        
+        let paperImageHtml = ''; // Initialize an empty string for the paper image HTML
+        const bibtexHtml = publication.bibtex ? `<a href="#" onclick="copyBibtex('${publication.bibtex}')">BibTex
+</a>
+` : '';
+        // Check if publication.image exists
+        if (publication.image) {
+            // If publication.image exists, add the <div class="paper-image"> with the image
+            paperImageHtml = `
+                <div class="paper-image">
+                    <img src="${publication.image}" alt="Publication Image">
+                </div>
+            `;
+        }
 
         publicationContent.innerHTML = `
+                  <div class="publication-content">
+                  ${paperImageHtml}
+                  </div>
                     <div class="paper-info">
                         <div class="paper-title"><b>${publication.title}</b></div>
-                        <div class="paper-authors">${publication.authors}</div>
+                        <div class="paper-authors">${authorsWithUnderline}</div>
                         <div class="paper-conference"><i>${publication.conference}</i></div>
                     </div>
                     <div class="links">
+                        ${bibtexHtml}
                         ${publication.codeLink ? `<a href="${publication.codeLink}" target="_blank">Code</a>` : ''}
                         ${publication.paperLink ? `<a href="${publication.paperLink}" target="_blank">Paper</a>` : ''}
+                         ${publication.arxiv ? `<a href="${publication.arxiv}" target="_blank">Arxiv</a>` : ''}
+                         ${publication.poster ? `<a href="${publication.poster}" target="_blank">Poster</a>` : ''}
                     </div>
+                    
                 `;
         // Add event listener to show mini pop-up on hover
-        publicationContent.addEventListener('mouseover', event => {
+        /*publicationContent.addEventListener('mouseover', event => {
             const tooltipContent = `
-                ${publication.abstract}
+                ${publication.image}
             `;
             showTooltip(event, tooltipContent);
-        });
+        });*/
 
         const yearContent = publicationList.querySelector(`.year-content[data-year="${publication.year}"]`);
         yearContent.appendChild(publicationContent);
     });
-
 }
+
+// Function to show BibTeX text in a modal or container
+function showBibtex(bibtexText) {
+    // Create a container for displaying BibTeX text
+    const bibtexContainer = document.createElement('div');
+    bibtexContainer.classList.add('bibtex-container');
+    bibtexContainer.innerHTML = `
+        <div class="bibtex-text">${bibtexText}</div>
+        <button onclick="copyBibtex('${bibtexText}')">Copy</button>
+    `;
+    
+    // Append the container to the body
+    document.body.appendChild(bibtexContainer);
+}
+
+// Function to copy BibTeX text
+function copyBibtex(bibtexText) {
+    // Create a temporary textarea element to copy text
+    const textarea = document.createElement('textarea');
+    textarea.value = formatBibtex(bibtexText); // Format BibTeX text
+    document.body.appendChild(textarea);
+    
+    // Select and copy the text
+    textarea.select();
+    document.execCommand('copy');
+    
+    // Remove the temporary textarea
+    document.body.removeChild(textarea);
+    
+    // Alert message with the copied content
+    alert(`BibTeX copied:\n\n${textarea.value}`);
+}
+
+function formatBibtex(bibtexText) {
+    let insideBraces = false;
+    let formattedText = '';
+    let num_bracket=0
+
+    for (let i = 0; i < bibtexText.length; i++) {
+        const char = bibtexText[i];
+
+        if (char === '{') {
+          if (num_bracket>0) {
+            insideBraces = true;
+            formattedText += char;
+          }
+          else {
+            formattedText += char;
+            num_bracket++;
+          }
+        } else if (char === '}') {
+            insideBraces = false;
+            formattedText += char;
+        } else if (char === ',' && !insideBraces) {
+            formattedText += char + '\n';
+        } else {
+            formattedText += char;
+        }
+    }
+
+    return formattedText;
+}
+
+
 
 
 // Function to filter publications based on search input
