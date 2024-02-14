@@ -131,7 +131,8 @@ function displayPublications() {
         publicationContent.innerHTML = `
                   <div class="publication-content">
                   ${paperImageHtml}
-                  </div>
+                  
+                  <div>
                     <div class="paper-info">
                         <div class="paper-title"><b>${publication.title}</b></div>
                         <div class="paper-authors">${authorsWithUnderline}</div>
@@ -144,7 +145,8 @@ function displayPublications() {
                          ${publication.arxiv ? `<a href="${publication.arxiv}" target="_blank">Arxiv</a>` : ''}
                          ${publication.poster ? `<a href="${publication.poster}" target="_blank">Poster</a>` : ''}
                     </div>
-                    
+                    </div>
+                    </div>
                 `;
         // Add event listener to show mini pop-up on hover
         /*publicationContent.addEventListener('mouseover', event => {

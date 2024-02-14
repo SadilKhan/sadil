@@ -27,6 +27,7 @@ ul:before {
 }
 
 li {
+
   position: relative;
   padding-left: 25px;
   margin-bottom: auto;
@@ -46,7 +47,7 @@ li:before {
 }
 
 .card {
-width: 150%;
+width: 200%;
       background-color: #fff; /* Adjust as needed */
       padding: 5px;
       padding-top: 10px;
