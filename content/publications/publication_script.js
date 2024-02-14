@@ -80,7 +80,7 @@ function displayPublications() {
             // Create a new section for each year
             const yearSection = document.createElement('div');
             yearSection.classList.add('year-section');
-            yearSection.innerHTML = `<h2 style="color:black;" onclick="toggleYearContent(${publication.year})">
+            yearSection.innerHTML = `<h2 onclick="toggleYearContent(${publication.year})">
     ${publication.year} <span class="arrow-icon">▼</span>
 </h2>
 `; publicationList.appendChild(yearSection);
@@ -188,7 +188,7 @@ function copyBibtex(bibtexText) {
     document.body.removeChild(textarea);
     
     // Alert message with the copied content
-    alert(`BibTeX text copied:\n\n${textarea.value}`);
+    alert(`BibTeX copied:\n\n${textarea.value}`);
 }
 
 function formatBibtex(bibtexText) {

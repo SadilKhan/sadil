@@ -137,7 +137,7 @@ width: 150%;
     <li>
     <div class="card">
 		<span class="tag">Doctoral Researcher</span>
-		<span class="tag_date">Jan 2023-Present</span>
+		<span class="tag_date">Jan 2023-Feb 2024</span>
 		<div class="info">
         <h4>CVI2 Lab, University of Luxembourg</h4>
         <span class="loc">Kirchberg, Luxembourg</span>
@@ -201,7 +201,7 @@ width: 150%;
     <li>
     <div class="card">
 		<span class="tag">PhD in 3D Computer Vision</span>
-		<span class="tag_date">Jan 2023-Present</span>
+		<span class="tag_date">Jan 2023-Feb 2024</span>
 		<div class="info">
         <h4>University of Luxembourg</h4>
         <span class="loc"> Kirchberg, Luxembourg</span>

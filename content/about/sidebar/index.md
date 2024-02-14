@@ -1,7 +1,7 @@
 ---
 ## Configure sidebar content in narrow column
 author: "Mohammad Sadil Khan"
-role: "Computer Vision | Deep Learning | Statistics | Mathematics"
+role: "Computer Vision | Shape Understanding | Vision-Language Modeling | Generative Models"
 avatar_shape: circle # circle, square, rounded
 show_social_links: true # specify social accounts in site config
 # show_audio_link: true

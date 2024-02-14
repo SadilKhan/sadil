@@ -7,8 +7,6 @@ body {
     max-width: 800px;
     width: 100%; /* Set the width to 100% of its parent container */
     margin: 0 auto;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
 }
 
 input[type="text"] {
@@ -20,14 +18,26 @@ input[type="text"] {
 }
 
 .publication {
-    border: 1px solid #ddd;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     margin-bottom: 1rem;
     padding: 1rem;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
+/*    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+*/    border-radius: 3px;
     transition: transform 0.3s;
     /* Added transition for the zoom effect */
+}
+
+/* Define styles for dark mode */
+.dark-mode .publication {
+  border: 1px solid #c9d1d9;
+}
+
+.dark-mode .paper-authors,
+.dark-mode .paper-conference {
+  color: #c9d1d9;  
+}
+.dark-mode .paper-title {
+  color: rgba(119,170,255);
 }
 
 .publication:hover {
@@ -57,15 +67,20 @@ ul {
 
 .year-section {
     margin-top: 10px;
-    border: 1px solid #ddd;
     padding: 10px;
-    background-color: #f9f9f9;
-    cursor: pointer;
+/*    background-color: #f9f9f9;
+*/    cursor: pointer;
 }
 
 .year-section h2 {
     margin: 0;
     color: black;
+    border-radius: 4px;
+}
+
+/* Define styles for dark mode */
+.dark-mode h2 {
+    color: #c9d1d9; /* Text color in dark mode */
 }
 
 .year-content {
