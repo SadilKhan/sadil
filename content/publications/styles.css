@@ -18,19 +18,11 @@ input[type="text"] {
 }
 
 .publication {
-    border: 1px solid rgba(0, 0, 0, 0.3);
     margin-bottom: 1rem;
     padding: 1rem;
-/*    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-*/    border-radius: 3px;
     transition: transform 0.3s;
-    /* Added transition for the zoom effect */
 }
 
-/* Define styles for dark mode */
-.dark-mode .publication {
-  border: 1px solid #c9d1d9;
-}
 
 .dark-mode .paper-authors,
 .dark-mode .paper-conference {
@@ -68,8 +60,7 @@ ul {
 .year-section {
     margin-top: 10px;
     padding: 10px;
-/*    background-color: #f9f9f9;
-*/    cursor: pointer;
+    cursor: pointer;
 }
 
 .year-section h2 {
@@ -142,9 +133,7 @@ ul {
     font-size: 14px;
     white-space: pre-line;
     overflow: hidden;
-    /* Hide overflow content */
     text-overflow: ellipsis;
-    /* Add ellipsis for content that overflows */
 }
 
 @keyframes fadeIn {
@@ -174,11 +163,16 @@ ul {
 }
 
 
-.publication-content {
+
+
+@media (min-width: 768px) {
+ .publication-content {
  display: grid;
- grid-template-columns: 0.8fr 2fr;
+ grid-template-columns: 0.4fr 2fr;
  column-gap: 2%;
 }
+}
+
 
 .paper-image {
   max-width: 100%;
@@ -186,6 +180,14 @@ ul {
 
 .publication {
     animation: fadeIn 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+ .publication-content {
+ display: grid;
+ grid-template-rows: 0.4fr 2fr;
+ row-gap: 2%;
+}
 }
 
 
