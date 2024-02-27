@@ -18,20 +18,11 @@ input[type="text"] {
 }
 
 .publication {
-/*    border: 1px solid rgba(0, 0, 0, 0.3);
-*/    margin-bottom: 1rem;
+    margin-bottom: 1rem;
     padding: 1rem;
-/*    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
-    border-radius: 3px;
-    */
     transition: transform 0.3s;
-    /* Added transition for the zoom effect */
 }
 
-/* Define styles for dark mode */
-.dark-mode .publication {
-  border: 1px solid #c9d1d9;
-}
 
 .dark-mode .paper-authors,
 .dark-mode .paper-conference {
@@ -41,10 +32,10 @@ input[type="text"] {
   color: rgba(119,170,255);
 }
 
-.publication:hover {
+/*.publication:hover {
     transform: scale(1.05);
-    /* Zoom effect on hover */
-}
+    /* Zoom effect on hover
+}*/
 
 h3 {
     margin-top: 0;
@@ -69,8 +60,7 @@ ul {
 .year-section {
     margin-top: 10px;
     padding: 10px;
-/*    background-color: #f9f9f9;
-*/    cursor: pointer;
+    cursor: pointer;
 }
 
 .year-section h2 {
@@ -118,7 +108,7 @@ ul {
 
 .paper-conference {
     flex-basis: 100%;
-    font-style: italic;
+    font-family: "Georgia", Times, serif;
     color: black;
 }
 
@@ -143,9 +133,7 @@ ul {
     font-size: 14px;
     white-space: pre-line;
     overflow: hidden;
-    /* Hide overflow content */
     text-overflow: ellipsis;
-    /* Add ellipsis for content that overflows */
 }
 
 @keyframes fadeIn {
@@ -175,18 +163,38 @@ ul {
 }
 
 
-.publication-content {
+
+
+@media (min-width: 768px) {
+ .publication-content {
  display: grid;
- grid-template-columns: 0.8fr 2fr;
+ grid-template-columns: 0.4fr 2fr;
  column-gap: 2%;
 }
+}
+
 
 .paper-image {
   max-width: 100%;
+  transition: transform 0.3s;
 }
+
+.paper-image:hover {
+    transform: scale(1.4);
+    /* Zoom effect on hover */
+}
+
 
 .publication {
     animation: fadeIn 0.5s ease-in-out;
+}
+
+@media (max-width: 768px) {
+ .publication-content {
+ display: grid;
+ grid-template-rows: 0.4fr 2fr;
+ row-gap: 2%;
+}
 }
 
 

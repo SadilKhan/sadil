@@ -12,9 +12,11 @@ Hello, My name is Mohammad Sadil Khan. I am currently a Ph.D. student at [**Comp
 
 My research interests are in **Computer Vision, Generative Models, Vision-Language Modeling and Explainable AI**. I am also interested in developing MacOS App. 
 
-Check out my [Projects](/projects) and [Publications](/publications) page.
+Check out my [**Projects**](/projects) and [**Publications**](/publications) page.
 
 # Recent Events
+
+- **[26-02-2024]** My paper got accepted in **CVPR** 2024. Check [Here](/publications).
 
 <!--# My Skills
 -->
