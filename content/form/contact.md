@@ -1,7 +1,7 @@
 ---
 title: Contact
 name: Contact Us Form
-description: "Send me a message if you would like to discuss something."
+description: "Please send me a message if you would like to discuss something."
 date: 2021-06-08
 draft: false
 url: contact

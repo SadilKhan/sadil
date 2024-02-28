@@ -139,11 +139,13 @@ function displayPublications() {
                         <div class="paper-conference">${publication.conference}</div>
                     </div>
                     <div class="links">
-                        ${bibtexHtml}
+                    ${publication.arxiv ? `<a href="${publication.arxiv}" target="_blank">Arxiv</a>` : ''}
+                        
                         ${publication.codeLink ? `<a href="${publication.codeLink}" target="_blank">Code</a>` : ''}
                         ${publication.paperLink ? `<a href="${publication.paperLink}" target="_blank">Paper</a>` : ''}
-                         ${publication.arxiv ? `<a href="${publication.arxiv}" target="_blank">Arxiv</a>` : ''}
+                         
                          ${publication.poster ? `<a href="${publication.poster}" target="_blank">Poster</a>` : ''}
+                         ${bibtexHtml}
                     </div>
                     <div class="paper-info">
                     <div class="paper-metadata">${publication.metadata}</div></div>
