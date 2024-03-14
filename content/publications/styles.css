@@ -3,10 +3,23 @@ body {
     padding: 0;
 }
 
-.container {
+
+@media (max-width: 768px) {
+  .container {
     max-width: 100%;
     width: 100%; /* Set the width to 100% of its parent container */
     margin: 0 auto;
+}
+
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 75%;
+    width: 100%; /* Set the width to 100% of its parent container */
+    margin: 0 auto;
+}
+
 }
 
 input[type="text"] {
@@ -91,6 +104,7 @@ ul {
     margin-bottom: 10px;
 }
 
+
 .paper-title {
     flex-basis: 100%;
     color: blue;
@@ -99,6 +113,7 @@ ul {
 .paper-authors {
     flex-basis: 100%;
     color: black;
+    padding-bottom: 5px;
 }
 
 
@@ -176,7 +191,7 @@ ul {
 @media (min-width: 768px) {
  .publication-content {
  display: grid;
- grid-template-columns: 0.4fr 2fr;
+ grid-template-columns: 1fr 2fr;
  column-gap: 2%;
 }
 }
