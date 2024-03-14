@@ -3,10 +3,23 @@ body {
     padding: 0;
 }
 
-.container {
+
+@media (max-width: 768px) {
+  .container {
     max-width: 100%;
     width: 100%; /* Set the width to 100% of its parent container */
     margin: 0 auto;
+}
+
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 75%;
+    width: 100%; /* Set the width to 100% of its parent container */
+    margin: 0 auto;
+}
+
 }
 
 input[type="text"] {
@@ -21,6 +34,7 @@ input[type="text"] {
     margin-bottom: 1rem;
     padding: 1rem;
     transition: transform 0.3s;
+    
 }
 
 
@@ -90,6 +104,7 @@ ul {
     margin-bottom: 10px;
 }
 
+
 .paper-title {
     flex-basis: 100%;
     color: blue;
@@ -98,6 +113,7 @@ ul {
 .paper-authors {
     flex-basis: 100%;
     color: black;
+    padding-bottom: 5px;
 }
 
 
@@ -108,8 +124,15 @@ ul {
 
 .paper-conference {
     flex-basis: 100%;
-    font-family: "Georgia", Times, serif;
+    font-style: italic;
     color: black;
+}
+
+.paper-metadata {
+    flex-basis: 100%;
+    font-size: 13px;
+    color: #DB5461;
+    margin-top: 10px;
 }
 
 .year-section h2:hover .arrow-icon {
@@ -168,7 +191,7 @@ ul {
 @media (min-width: 768px) {
  .publication-content {
  display: grid;
- grid-template-columns: 0.4fr 2fr;
+ grid-template-columns: 1fr 2fr;
  column-gap: 2%;
 }
 }
