@@ -14,28 +14,20 @@ My research interests are in **Computer Vision, 3D Reconstruction and Vision-Lan
 
 Check out my [**Projects**](/projects) and [**Publications**](/publications/) page.
 
+
+<div style="text-align: center;">
+
+[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=sadilkhan)](https://github.com/sadilkhan) 
+
+[![trophy](https://github-profile-trophy.vercel.app/?username=sadilkhan)](https://github.com/sadilkhan/github-profile-trophy)
+
+</div>
+
 # Recent Events
 
 - **[04-04-2024]** CAD-SIGNet has been accepted as **highlight** in **CVPR** 2024 *(12% of the accepted papers)*.
-- **[26-02-2024]** My paper got accepted in **CVPR** 2024. Check [Here](/publications/).
 
-<!--# My Skills
--->
-<!--### Programming Language
-<code><img height="20" src="https://raw.githubusercontent.com/github/explore/80688e429a7d4ef2fca1e82350fe8e3517d3494d/topics/python/python.png"></code>
-<code><img height="20" src="https://julialang.org/assets/infra/logo.svg"></code>
-<code><img height="20" src="https://developer.apple.com/swift/images/swift-og.png"></code>
-<code><img height="20" src="https://upload.wikimedia.org/wikipedia/fr/2/2e/Java_Logo.svg"></code>
-
-
-### Tools and Frameworks
-<code><img height="20" src="https://upload.wikimedia.org/wikipedia/en/c/cd/Anaconda_Logo.png"></code>
-<code><img height="20" src="https://upload.wikimedia.org/wikipedia/commons/9/96/Pytorch_logo.png"></code>
-<code><img height="20" src="https://keras.io/img/logo.png"></code>
-<code><img height="20" src="https://upload.wikimedia.org/wikipedia/commons/5/53/OpenCV_Logo_with_text.png"></code>-->
-<!--
-I have completed my Masters in **Machine Learning and Data Mining** from [**University Jean Monnet**](https://www.univ-st-etienne.fr/fr/index.html), Saint Etienne, France. I have also completed an exchange semester in [**KU Leuven**](https://www.kuleuven.be/english/kuleuven), Belgium.
-I have worked in [**Creatis Lab**](https://www.creatis.insa-lyon.fr/site7/en), INSA Lyon for my Master Thesis on the topic *Learning Shapes For The Effective Segmentation of 3D Medical Images using Point Cloud*. I worked as a research intern in [**Laboratoire Hubert Curien**](https://laboratoirehubertcurien.univ-st-etienne.fr/en/index.html) at Saint-Etienne, France on the topic of *Detector-Encoder Autoencoder for anomaly segmentation of 18th Century Ornaments* under the supervision of Professor Ŕemi Emonet and Professor Thierry Fournel.-->
+- **[26-02-2024]** My paper CAD-SIGNet has been accepted in **CVPR** 2024. Check [Here](/publications/).
 
 
 
