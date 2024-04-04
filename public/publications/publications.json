@@ -2,7 +2,7 @@
     {
         "title": "SHARP Challenge 2023: Solving CAD History and pArameters Recovery from Point clouds and 3D scans. Overview, Datasets, Metrics, and Baselines",
         "authors": " Dimitrios Mallis, Sk Aziz Ali, Elona Dupont, Kseniya Cherenkova, Ahmet Serdar Karadeniz, Mohammad Sadil Khan, Anis Kacem, Gleb Gusev, Djamila Aouada",
-        "conference": "IEEE/CVF International Conference on Computer Vision (ICCV) workshop (2023)",
+        "conference": "ICCV Workshop 2023",
         "year": 2023,
         "codeLink": "https://gitlab.uni.lu/cvi2/iccv2023-sharp-challenge",
         "poster": "https://skazizali.com/assets/pdf/SHARP_ICCV23_Poster.pdf",
@@ -17,7 +17,7 @@
     {
         "title": "CAD-SIGNet: CAD Language Inference from Point Clouds using Layer-wise Sketch Instance Guided Attention",
         "authors": "Mohammad Sadil Khan, Elona Dupont, Sk Aziz Ali, Kseniya Cherenkova, Anis Kacem, Djamila Aouada",
-        "conference": "IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)",
+        "conference": "CVPR 2024 (Highlight)",
         "year": 2024,
         "project": "http://skazizali.com/cadsignet.github.io/",
         "codeLink": "",

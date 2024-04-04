@@ -134,7 +134,8 @@ function displayPublications() {
                   
                   <div>
                     <div class="paper-info">
-                        <div class="paper-title"><b>${publication.title}</b></div>
+                        <div class="paper-title">${publication.title}</div>
+                          <div class="paper-metadata">${publication.metadata}</div>
                         <div class="paper-authors">${authorsWithUnderline}</div>
                         <div class="paper-conference">${publication.conference}</div>
                     </div>
@@ -148,8 +149,6 @@ function displayPublications() {
                          ${publication.poster ? `<a href="${publication.poster}" target="_blank">Poster</a>` : ''}
                          ${bibtexHtml}
                     </div>
-                    <div class="paper-info">
-                    <div class="paper-metadata">${publication.metadata}</div></div>
                     </div>
                     </div>
                 `;

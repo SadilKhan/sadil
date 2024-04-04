@@ -1,6 +1,7 @@
 body {
     margin: 0;
     padding: 0;
+    font-family: 'Open Sans', 'Lato', Arial, sans-serif;
 }
 
 
@@ -15,7 +16,7 @@ body {
 
 @media (min-width: 768px) {
   .container {
-    max-width: 75%;
+    max-width: 90%;
     width: 100%; /* Set the width to 100% of its parent container */
     margin: 0 auto;
 }
@@ -79,7 +80,7 @@ ul {
 
 .year-section h2 {
     margin: 0;
-    color: black;
+    color: #333333eb;
     border-radius: 4px;
 }
 
@@ -102,37 +103,43 @@ ul {
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 10px;
+    text-align: justify;
 }
 
 
 .paper-title {
     flex-basis: 100%;
-    color: blue;
+    color: #333333eb;
+    font-size: 25px;
+    
 }
 
 .paper-authors {
     flex-basis: 100%;
-    color: black;
+    color: #333333eb;
     padding-bottom: 5px;
+    font-size: 15px;
+    padding-bottom: 15px;
+
 }
 
 
 .paper-bibtex {
     flex-basis: 100%;
-    color: black;
+    color: #333333eb;
 }
 
 .paper-conference {
     flex-basis: 100%;
-    font-style: italic;
-    color: black;
+    color: #333333eb;
+    font-size: 20px;
 }
 
 .paper-metadata {
     flex-basis: 100%;
     font-size: 13px;
-    color: #DB5461;
-    margin-top: 10px;
+    color: #333333eb;
+   padding-bottom: 4px;
 }
 
 .year-section h2:hover .arrow-icon {
