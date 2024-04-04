@@ -10,12 +10,13 @@ headline: |
 
 Hello, My name is Mohammad Sadil Khan. I have completed my Masters in **Machine Learning and Data Mining** from [**University Jean Monnet**](https://www.univ-st-etienne.fr/fr/index.html), Saint Etienne, France. I have also completed an exchange semester in [**KU Leuven**](https://www.kuleuven.be/english/kuleuven), Belgium.
 
-My research interests are in **Computer Vision, Generative Models, Vision-Language Modeling and Explainable AI**. I am also interested in developing MacOS App. 
+My research interests are in **Computer Vision, 3D Reconstruction and Vision-Language Modeling**. I am also interested in developing MacOS App. 
 
 Check out my [**Projects**](/projects) and [**Publications**](/publications/) page.
 
 # Recent Events
 
+- **[04-04-2024]** CAD-SIGNet has been accepted as **highlight** in **CVPR** 2024 *(12% of the accepted papers)*.
 - **[26-02-2024]** My paper got accepted in **CVPR** 2024. Check [Here](/publications/).
 
 <!--# My Skills

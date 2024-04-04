@@ -115,8 +115,8 @@ function displayPublications() {
         publicationContent.classList.add('publication');
         
         let paperImageHtml = ''; // Initialize an empty string for the paper image HTML
-        const bibtexHtml = publication.bibtex ? `<a href="#" onclick="copyBibtex('${publication.bibtex}')">BibTex
-</a>
+        const bibtexHtml = publication.bibtex ? `<button class="button" onclick="copyBibtex('${publication.bibtex}')">BibTex
+</button>
 ` : '';
         // Check if publication.image exists
         if (publication.image) {
@@ -139,15 +139,15 @@ function displayPublications() {
                         <div class="paper-authors">${authorsWithUnderline}</div>
                         <div class="paper-conference">${publication.conference}</div>
                     </div>
-                    <div class="links">
-                    ${publication.arxiv ? `<a href="${publication.arxiv}" target="_blank">Arxiv</a>` : ''}
-                    ${publication.paperLink ? `<a href="${publication.paperLink}" target="_blank">Paper</a>` : ''}
+                     <div class="links">
+                    ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
+                    ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
                          
-                    ${publication.project ? `<a href="${publication.project}" target="_blank">Project</a>` : ''}
+                    ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
                         
-                        ${publication.codeLink ? `<a href="${publication.codeLink}" target="_blank">Code</a>` : ''}
-                         ${publication.poster ? `<a href="${publication.poster}" target="_blank">Poster</a>` : ''}
-                         ${bibtexHtml}
+                        ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
+                         ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
+                          ${bibtexHtml}</button>
                     </div>
                     </div>
                     </div>

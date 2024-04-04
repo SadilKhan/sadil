@@ -154,7 +154,7 @@ width: 200%;
 		<span class="tag">Doctoral Researcher</span>
 		<span class="tag_date">Jan 2023-Feb 2024</span>
 		<div class="info">
-        <h4>CVI2 Lab, University of Luxembourg</h4>
+        <h4>CVI2 Lab, SnT, University of Luxembourg</h4>
         <span class="loc">Kirchberg, Luxembourg</span>
         </div>
         <p style="font-style:italic">
@@ -174,7 +174,7 @@ width: 200%;
         </div>
         <p style="font-style:italic">
         Master Thesis Title: Learning Shapes For The Effective Segmentation of 3D Medical Images using Point Cloud.</p>
-        <p> Worked on 3D medical image segmentation using Point Cloud under Prof. Razmig Kechichian, Julie Digne, and Sebastien Valette.
+        <p> Worked on 3D medical image segmentation using Point Cloud under <b>Prof. Razmig Kechichian, Julie Digne, and Sebastien Valette.</b>
         </p>
     </div>
     </li>
@@ -213,7 +213,7 @@ width: 200%;
 <h2> Education </h2>
 <ul>
   <!-- First Item -->
-    <li>
+    <!--<li>
     <div class="card">
 		<span class="tag">PhD in 3D Computer Vision</span>
 		<span class="tag_date">Jan 2023-Feb 2024</span>
@@ -222,7 +222,7 @@ width: 200%;
         <span class="loc"> Kirchberg, Luxembourg</span>
         </div>
     </div>
-    </li>
+    </li>-->
     <!-- Second Item -->
    <li>
     <div class="card">
