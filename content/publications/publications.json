@@ -28,6 +28,6 @@
         "paperLink": "",
         "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, RandLa-Net, CAD, Vision-Language Modeling",
         "image": "data/cad_signet.png",
-        "metadata": "An autoregressive architecture for generating CAD sequence from Point cloud (More details coming soon)."
+        "metadata": "An autoregressive architecture for generating CAD sequence from Point cloud."
     }
 ]
