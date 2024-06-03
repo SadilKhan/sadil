@@ -148,10 +148,25 @@ width: 200%;
 <body>
 <h2> Work Experience </h2>
   <ul>
-  <!-- First Item -->
+  <!-- Another Item -->
     <li>
     <div class="card">
-		<span class="tag">Doctoral Researcher</span>
+		<span class="tag">PhD Student</span>
+		<span class="tag_date">Jan 2023-Feb 2024</span>
+		<div class="info">
+        <h4>German Center of Artificial Intelligence (DFKI), RPTU</h4>
+        <span class="loc">Kaiserslautern, Germany</span>
+        </div>
+        <p style="font-style:italic">
+        Project: Explainable Mini Vision-Language Architectures for Scene and Shape Understanding.</p>
+<!--        <p> The primary task is to develop novel vision-language architectures for CAD language inference from the point cloud.
+        </p>-->
+    </div>
+    </li>
+  <!-- One Item -->
+  <li>
+    <div class="card">
+		<span class="tag">Student Researcher</span>
 		<span class="tag_date">Jan 2023-Feb 2024</span>
 		<div class="info">
         <h4>CVI2 Lab, SnT, University of Luxembourg</h4>
@@ -159,11 +174,11 @@ width: 200%;
         </div>
         <p style="font-style:italic">
         Project: 3D Shape Modelling using Deep Geometric and Language Models.</p>
-        <p> The primary task is to develop novel vision-language architectures for CAD language inference from the point cloud.
+        <p> The primary task was to develop novel vision-language architectures for CAD language inference from the point cloud.
         </p>
     </div>
     </li>
-    <!-- Second Item -->
+    <!-- Another Item -->
     <li>
     <div class="card">
 		<span class="tag">Research Intern</span>
@@ -178,7 +193,7 @@ width: 200%;
         </p>
     </div>
     </li>
-    <!-- Third Item -->
+    <!-- Another Item -->
     <li>
     <div class="card">
 		<span class="tag">Research Intern</span>
@@ -193,7 +208,7 @@ width: 200%;
         </p>
     </div>
     </li>
-     <!-- Fourth Item -->
+     <!-- Another Item -->
     <li>
     <div class="card">
 		<span class="tag">Data Analyst Intern</span>
@@ -213,16 +228,16 @@ width: 200%;
 <h2> Education </h2>
 <ul>
   <!-- First Item -->
-    <!--<li>
+    <li>
     <div class="card">
-		<span class="tag">PhD in 3D Computer Vision</span>
-		<span class="tag_date">Jan 2023-Feb 2024</span>
+		<span class="tag">PhD in Computer Science</span>
+		<span class="tag_date">Feb 2024-</span>
 		<div class="info">
-        <h4>University of Luxembourg</h4>
-        <span class="loc"> Kirchberg, Luxembourg</span>
+        <h4>Rheinland-Pfälzische Technische Universität (RPTU)</h4>
+        <span class="loc"> Kaiserslautern, Germany</span>
         </div>
     </div>
-    </li>-->
+    </li>
     <!-- Second Item -->
    <li>
     <div class="card">
