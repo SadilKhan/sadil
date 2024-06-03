@@ -8,9 +8,11 @@ headline: |
 
 <!-- this is a subheadline -->
 
-Hello, My name is Mohammad Sadil Khan. I have completed my Masters in **Machine Learning and Data Mining** from [**University Jean Monnet**](https://www.univ-st-etienne.fr/fr/index.html), Saint Etienne, France. I have also completed an exchange semester in [**KU Leuven**](https://www.kuleuven.be/english/kuleuven), Belgium.
+Hello, My name is Mohammad Sadil Khan. I am currently pursuing a PhD degree with the [**German Research Center for Artificial Intelligence (DFKI GmbH)**](https://av.dfki.de/members/sadil-khan/) and the [**University of Kaiserslautern-Landau (RPTU)**](https://rptu.de/), under the supervision of Prof. Dr Didier Stricker. I am currently working on 3D Scene and Shape understanding with vision-language models and Computer-Aided Design(CAD) representation learning.
 
-My research interests are in **Computer Vision, 3D Reconstruction and Vision-Language Modeling**. I am also interested in developing MacOS App. 
+I have completed my Masters in **Machine Learning and Data Mining** from [**University Jean Monnet**](https://www.univ-st-etienne.fr/fr/index.html), Saint Etienne, France. I have also completed an exchange semester in [**KU Leuven**](https://www.kuleuven.be/english/kuleuven), Belgium.
+
+My research interests are in **Computer Vision, 3D Reconstruction and Vision-Language Modeling**. I am also interested in IOS Development. 
 
 Check out my [**Projects**](/projects) and [**Publications**](/publications/) page.
 
@@ -25,9 +27,9 @@ Check out my [**Projects**](/projects) and [**Publications**](/publications/) pa
 
 # Recent Events
 
-- **[04-04-2024]** CAD-SIGNet has been accepted as **highlight** in **CVPR** 2024 *(12% of the accepted papers)*.
+- **[04-04-2024]** CAD-SIGNet has been accepted as **highlight** in **CVPR** 2024 *(12% of the accepted papers)*. 🎉🎉🎉
 
-- **[26-02-2024]** My paper CAD-SIGNet has been accepted in **CVPR** 2024. Check [Here](/publications/).
+- **[26-02-2024]** My first paper CAD-SIGNet has been accepted in **CVPR** 2024. Check [Here](/publications/). 🎉🎉🎉
 
 
 
