@@ -12,7 +12,8 @@
         "paperLink": "https://paperswithcode.com/paper/sharp-challenge-2023-solving-cad-history-and",
         "categories": "Deep Learning, Computer Vision, Representation Learning, CAD",
         "image": "data/sharp2023.png",
-         "metadata": ""
+         "metadata": "",
+         "video": ""
     },
     {
         "title": "CAD-SIGNet: CAD Language Inference from Point Clouds using Layer-wise Sketch Instance Guided Attention",
@@ -21,11 +22,12 @@
         "year": 2024,
         "project": "http://skazizali.com/cadsignet.github.io/",
         "codeLink": "",
-        "poster": "",
-        "bibtex": "@misc{khan2024cadsignet,title={CAD-SIGNet: CAD Language Inference from Point Clouds using Layer-wise Sketch Instance Guided Attention}, author={Mohammad Sadil Khan and Elona Dupont and Sk Aziz Ali and Kseniya Cherenkova and Anis Kacem and Djamila Aouada},year={2024},eprint={2402.17678},archivePrefix={arXiv},primaryClass={cs.CV}}",
+        "poster": "https://cvpr.thecvf.com/media/PosterPDFs/CVPR%202024/30538.png?t=1716992823.610076",
+        "bibtex": "@InProceedings{{Khan_2024_CVPR,author = {Khan, Mohammad Sadil and Dupont, Elona and Ali, Sk Aziz and Cherenkova, Kseniya and Kacem, Anis and Aouada, Djamila}, title = {CAD-SIGNet: CAD Language Inference from Point Clouds using Layer-wise Sketch Instance Guided Attention}, booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},month = {June},year = {2024},pages = {4713-4722}}",
         "arxiv": "https://arxiv.org/pdf/2402.17678.pdf",
+        "video": "https://www.youtube.com/watch?v=ivg03_ckLIM",
         "abstract": "",
-        "paperLink": "",
+        "paperLink": "https://openaccess.thecvf.com/content/CVPR2024/papers/Khan_CAD-SIGNet_CAD_Language_Inference_from_Point_Clouds_using_Layer-wise_Sketch_CVPR_2024_paper.pdf",
         "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, RandLa-Net, CAD, Vision-Language Modeling",
         "image": "data/cad_signet.png",
         "metadata": "An autoregressive architecture for generating CAD sequence from Point cloud."
