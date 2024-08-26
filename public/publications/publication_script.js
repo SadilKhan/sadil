@@ -142,13 +142,12 @@ function displayPublications() {
                         <div class="paper-conference">${publication.conference}</div>
                     </div>
                      <div class="links">
+                     ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
                     ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
-                    ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
-                         
                     ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
-                        
                         ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
                          ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
+                         ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
                           ${bibtexHtml}</button>
                     </div>
                     </div>
@@ -310,13 +309,12 @@ function displayFilteredPublications(filteredPublications) {
                         <div class="paper-conference">${publication.conference}</div>
                     </div>
                      <div class="links">
+                     ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
                     ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
-                    ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
-                         
                     ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
-                        
                         ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
                          ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
+                         ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
                           ${bibtexHtml}</button>
                     </div>
                     </div>

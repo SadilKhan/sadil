@@ -267,7 +267,7 @@ function displayFilteredPublications(filteredPublications) {
                 // Create a new section for each year
                 const yearSection = document.createElement('div');
                 yearSection.classList.add('year-section');
-                yearSection.innerHTML = `<h2 style="color:black;" onclick="toggleYearContent(${publication.year})">
+                yearSection.innerHTML = `<h2 onclick="toggleYearContent(${publication.year})">
                     ${publication.year} <span class="arrow-icon">▼</span>
                 </h2>`;
                 publicationList.appendChild(yearSection);

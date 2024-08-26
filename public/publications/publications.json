@@ -12,22 +12,40 @@
         "paperLink": "https://paperswithcode.com/paper/sharp-challenge-2023-solving-cad-history-and",
         "categories": "Deep Learning, Computer Vision, Representation Learning, CAD",
         "image": "data/sharp2023.png",
-         "metadata": ""
+         "metadata": "",
+         "video": ""
     },
     {
         "title": "CAD-SIGNet: CAD Language Inference from Point Clouds using Layer-wise Sketch Instance Guided Attention",
         "authors": "Mohammad Sadil Khan, Elona Dupont, Sk Aziz Ali, Kseniya Cherenkova, Anis Kacem, Djamila Aouada",
-        "conference": "CVPR 2024 (Highlight)",
+        "conference": "CVPR 2024 (Highlight - Top 2.5%)",
         "year": 2024,
         "project": "http://skazizali.com/cadsignet.github.io/",
         "codeLink": "",
         "poster": "https://cvpr.thecvf.com/media/PosterPDFs/CVPR%202024/30538.png?t=1716992823.610076",
         "bibtex": "@InProceedings{{Khan_2024_CVPR,author = {Khan, Mohammad Sadil and Dupont, Elona and Ali, Sk Aziz and Cherenkova, Kseniya and Kacem, Anis and Aouada, Djamila}, title = {CAD-SIGNet: CAD Language Inference from Point Clouds using Layer-wise Sketch Instance Guided Attention}, booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},month = {June},year = {2024},pages = {4713-4722}}",
         "arxiv": "https://arxiv.org/pdf/2402.17678.pdf",
+        "video": "https://www.youtube.com/watch?v=ivg03_ckLIM",
         "abstract": "",
         "paperLink": "https://openaccess.thecvf.com/content/CVPR2024/papers/Khan_CAD-SIGNet_CAD_Language_Inference_from_Point_Clouds_using_Layer-wise_Sketch_CVPR_2024_paper.pdf",
         "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, RandLa-Net, CAD, Vision-Language Modeling",
         "image": "data/cad_signet.png",
         "metadata": "An autoregressive architecture for generating CAD sequence from Point cloud."
+    },
+    {
+        "title": "BRep Boundary and Junction Detection for CAD Reverse Engineering",
+        "authors": " Sk Aziz Ali, Mohammad Sadil Khan, Didier Stricker",
+        "conference": "ICMI, 2024",
+        "year": 2024,
+        "codeLink": "",
+        "poster": "",
+        "bibtex": "@article{Ali2024BRepBA, title={BRep Boundary and Junction Detection for CAD Reverse Engineering}, author={Sk Aziz Ali and Mohammad Sadil Khan and Didier Stricker}, journal={2024 IEEE 3rd International Conference on Computing and Machine Intelligence (ICMI)}, year={2024},pages={1-6}, url={https://api.semanticscholar.org/CorpusID:269741798}}",
+        "arxiv": "https://www.semanticscholar.org/paper/BRep-Boundary-and-Junction-Detection-for-CAD-Ali-Khan/cadccf40d3a254114c75e7c7ab390a0f8ad0bcda",
+        "abstract": "In machining process, 3D reverse engineering of mechanical system is an integral, highly important, and yet time consuming step to obtain parametric CAD models from 3D scans. Therefore, deep learning-based Scan-to-CAD modeling can offer designers enormous editability to quickly modify CAD model, being able to parse all its structural compositions and design steps. In this paper, we propose a supervised boundary representation (BRep) detection network BRepDetNet from 3D scans of CC3D and ABC dataset. We have carefully annotated the ~50K and ~45K scans of both the datasets with appropriate topological relations (e.g., next, mate, previous) between the geometrical primitives (i.e., boundaries, junctions, loops, faces) of their BRep data structures. The proposed solution decomposes the Scan-to-CAD problem in Scan-to-BRep ensuring the right step towards feature-based modeling, and therefore, leveraging other existing BRep-to-CAD modeling methods. Our proposed Scan-to-BRep neural network learns to detect BRep boundaries and junctions by minimizing focal-loss and non-maximal sup-pression (NMS) during training time. Experimental results show that our BRepDetNet with NMS-Loss achieves impressive results.",
+        "paperLink": "",
+        "categories": "Deep Learning, Computer Vision, Representation Learning, CAD",
+        "image": "data/sharp2023.png",
+         "metadata": "",
+         "video": ""
     }
 ]
