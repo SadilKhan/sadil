@@ -26,7 +26,7 @@
         "arxiv": "https://www.semanticscholar.org/paper/BRep-Boundary-and-Junction-Detection-for-CAD-Ali-Khan/cadccf40d3a254114c75e7c7ab390a0f8ad0bcda",
         "abstract": "In machining process, 3D reverse engineering of mechanical system is an integral, highly important, and yet time consuming step to obtain parametric CAD models from 3D scans. Therefore, deep learning-based Scan-to-CAD modeling can offer designers enormous editability to quickly modify CAD model, being able to parse all its structural compositions and design steps. In this paper, we propose a supervised boundary representation (BRep) detection network BRepDetNet from 3D scans of CC3D and ABC dataset. We have carefully annotated the ~50K and ~45K scans of both the datasets with appropriate topological relations (e.g., next, mate, previous) between the geometrical primitives (i.e., boundaries, junctions, loops, faces) of their BRep data structures. The proposed solution decomposes the Scan-to-CAD problem in Scan-to-BRep ensuring the right step towards feature-based modeling, and therefore, leveraging other existing BRep-to-CAD modeling methods. Our proposed Scan-to-BRep neural network learns to detect BRep boundaries and junctions by minimizing focal-loss and non-maximal sup-pression (NMS) during training time. Experimental results show that our BRepDetNet with NMS-Loss achieves impressive results.",
         "paperLink": "https://ieeexplore.ieee.org/document/10585950",
-        "categories": "Deep Learning, Computer Vision, Representation Learning, CAD",
+        "categories": "Deep Learning, Computer Vision, CAD",
         "image": "data/brep_det_net.png",
          "metadata": "",
          "video": ""

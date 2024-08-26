@@ -287,6 +287,18 @@ function displayFilteredPublications(filteredPublications) {
             publicationContent.classList.add('publication');
             
             let paperImageHtml = ''; // Initialize an empty string for the paper image HTML
+            
+            const authors = publication.authors.split(',').map(author => author.trim());
+             // Create a new array to hold authors with underlining applied to Mohammad Sadil Khan
+            authorsWithUnderline = authors.map(author => {
+                // Check if the author's name contains "Sadil", and if so, apply underlining
+                if (author.toLowerCase().includes('sadil')) {
+                    return `<u><b>${author}</b></u>`;
+                } else {
+                    return author;
+                }
+            }).join(', '); // Join the authors back into a string separated by comma
+        
           // Check if publication.image exists
           if (publication.image) {
               // If publication.image exists, add the <div class="paper-image"> with the image
