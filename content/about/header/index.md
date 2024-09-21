@@ -8,13 +8,15 @@ headline: |
 
 <!-- this is a subheadline -->
 
-Hello, My name is Mohammad Sadil Khan. I am currently pursuing a PhD degree with the [**German Research Center for Artificial Intelligence (DFKI GmbH)**](https://av.dfki.de/members/sadil-khan/) and the [**University of Kaiserslautern-Landau (RPTU)**](https://rptu.de/), under the supervision of Prof. Dr Didier Stricker. I am currently working on 3D Scene and Shape understanding with vision-language models and Computer-Aided Design(CAD) representation learning.
+Hello, My name is Mohammad Sadil Khan. I am currently pursuing a PhD degree with the [**German Research Center for Artificial Intelligence (DFKI GmbH)**](https://av.dfki.de/members/sadil-khan/) and the [**University of Kaiserslautern-Landau (RPTU)**](https://rptu.de/), under the supervision of Prof. Dr Didier Stricker. 
 
-I have completed my Masters in **Machine Learning and Data Mining** from [**University Jean Monnet**](https://www.univ-st-etienne.fr/fr/index.html), Saint Etienne, France. I have also completed an exchange semester in [**KU Leuven**](https://www.kuleuven.be/english/kuleuven), Belgium.
+My research interests are in **3D Reconstruction, Vision-Language Modeling and AI-Aided CAD Designing**. I love building new AI architectures and am very passionate about text-to-3D domain. Check out my [**Projects**](/projects) and [**Publications**](/publications/) page.
 
-My research interests are in **Computer Vision, 3D Reconstruction and Vision-Language Modeling**. I am also interested in IOS Development. 
 
-Check out my [**Projects**](/projects) and [**Publications**](/publications/) page.
+I am open to research collaboration as well as internship opportunity on the following domains
+
+1. 3D scene or shape reconstruction.
+2. CAD design history generation using AI.
 
 
 <div style="text-align: center;">

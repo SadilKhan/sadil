@@ -152,7 +152,7 @@ width: 200%;
     <li>
     <div class="card">
 		<span class="tag">PhD Student</span>
-		<span class="tag_date">Jan 2023-Feb 2024</span>
+		<span class="tag_date">Feb 2024 -</span>
 		<div class="info">
         <h4>German Center of Artificial Intelligence (DFKI), RPTU</h4>
         <span class="loc">Kaiserslautern, Germany</span>
