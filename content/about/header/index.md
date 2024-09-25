@@ -29,6 +29,8 @@ I am open to research collaboration as well as internship opportunity on the fol
 
 # Recent Events
 
+- **[25-09-2024]** Text2CAD has been accepted as **spolight** in **NeurIPS** 2024. Check [Here](/publications/). 🎉🎉🎉
+
 - **[04-04-2024]** CAD-SIGNet has been accepted as **highlight** in **CVPR** 2024 *(12% of the accepted papers)*. 🎉🎉🎉
 
 - **[26-02-2024]** My first paper CAD-SIGNet has been accepted in **CVPR** 2024. Check [Here](/publications/). 🎉🎉🎉

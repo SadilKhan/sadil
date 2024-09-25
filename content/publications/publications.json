@@ -16,11 +16,29 @@
          "video": ""
     },
     {
+        "title": "Text2CAD: Generating Sequential CAD Designs from Beginner-to-Expert Level Text Prompts",
+        "authors": "Mohammad Sadil Khan*, Sankalp Sinha*, Sheikh Talha Uddin, Didier Stricker, Sk Aziz Ali, Muhammad Zeshan Afzal",
+        "conference": "NeurIPS 2024 (Spotlight) 🤩",
+        "year": 2024,
+        "project": "https://sadilkhan.github.io/text2cad-project/",
+        "codeLink": "",
+        "poster": "",
+        "bibtex": "",
+        "arxiv": "",
+        "video": "",
+        "abstract": "",
+        "paperLink": "",
+        "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, Text, LLM, VLM, CAD, Vision-Language Modeling",
+        "image": "data/text2cad.png",
+        "metadata": "An AI framework to generate CAD design history from text prompts."
+    },
+    {
         "title": "BRep Boundary and Junction Detection for CAD Reverse Engineering",
         "authors": " Sk Aziz Ali, Mohammad Sadil Khan, Didier Stricker",
         "conference": "ICMI 2024",
         "year": 2024,
         "codeLink": "",
+        "project": "https://skazizali.com/brepdetnet.github.io/",
         "poster": "",
         "bibtex": "@INPROCEEDINGS{10585950,author={Ali, Sk Aziz and Khan, Mohammad Sadil and Stricker, Didier},booktitle={2024 IEEE 3rd International Conference on Computing and Machine Intelligence (ICMI)}, title={BRep Boundary and Junction Detection for CAD Reverse Engineering}, year={2024},volume={},number={},pages={1-6},keywords={Training;Solid modeling;Three-dimensional displays;Reverse engineering;Neural networks;Machining;Mechanical systems;BRep;Boundary Detection;Junction Detection;Scan-to-CAD;Reverse Engineering;NMS},doi={10.1109/ICMI60790.2024.10585950}}",
         "arxiv": "https://www.semanticscholar.org/paper/BRep-Boundary-and-Junction-Detection-for-CAD-Ali-Khan/cadccf40d3a254114c75e7c7ab390a0f8ad0bcda",
@@ -34,7 +52,7 @@
     {
         "title": "CAD-SIGNet: CAD Language Inference from Point Clouds using Layer-wise Sketch Instance Guided Attention",
         "authors": "Mohammad Sadil Khan, Elona Dupont, Sk Aziz Ali, Kseniya Cherenkova, Anis Kacem, Djamila Aouada",
-        "conference": "CVPR 2024 (Highlight - Top 2.5%)",
+        "conference": "CVPR 2024 (Highlight - Top 12%) 🤩",
         "year": 2024,
         "project": "http://skazizali.com/cadsignet.github.io/",
         "codeLink": "",
@@ -48,4 +66,5 @@
         "image": "data/cad_signet.png",
         "metadata": "An autoregressive architecture for generating CAD sequence from Point cloud."
     }
+    
 ]

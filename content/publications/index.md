@@ -10,8 +10,10 @@ publishDate: "2023-08-10T00:00:00Z"
  <link rel="stylesheet" href="styles.css">
 <div class="container">
         <input type="text" id="search" placeholder="Search publications...">
+        <div> * <i> equal contributions </i> </div>
         <div id="publication-list"></div>
     </div>
-    
+
+
 <script src="publication_script.js"></script>
     
