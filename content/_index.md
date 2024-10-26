@@ -1,7 +1,7 @@
 ---
 title: "Mohammad Sadil Khan"
-subtitle: "PhD in 3D Computer Vision"
-description: "Computer Vision | Deep Learning | Generative AI"
+subtitle: "PhD in Computer Vision"
+description: "3D Computer Vision | Deep Learning | Generative AI"
 date: 2022-02-01
 images:
  - img/featured.jpg

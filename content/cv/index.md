@@ -164,7 +164,7 @@ publishDate: "2022-12-21"
           <h4>German Center of Artificial Intelligence (DFKI), RPTU</h4>
           <span class="loc">Kaiserslautern, Germany</span>
         </div>
-        <p style="font-style:italic">Project: Explainable Mini Vision-Language Architectures for Scene and Shape Understanding.</p>
+        <p style="font-style:italic">Project: Vision-Language Architectures for 3D Scene and Shape Reconstruction.</p>
       </div>
     </li>
     <li>
@@ -188,7 +188,7 @@ publishDate: "2022-12-21"
           <span class="loc">Lyon, France</span>
         </div>
         <p style="font-style:italic">Master Thesis Title: Learning Shapes For The Effective Segmentation of 3D Medical Images using Point Cloud.</p>
-        <p>Worked on 3D medical image segmentation using Point Cloud under <b>Prof. Razmig Kechichian, Julie Digne, and Sebastien Valette.</b></p>
+        <p>Worked on 3D medical image segmentation using Point Cloud under Prof. Razmig Kechichian, Julie Digne, and Sebastien Valette.</p>
       </div>
     </li>
     <li>
