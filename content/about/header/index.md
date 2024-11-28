@@ -13,6 +13,9 @@ Hello, My name is Mohammad Sadil Khan. I am currently pursuing a PhD degree at [
 I am currently working on these domains.
 
 <details><summary><strong>Text-to-3D Reconstruction: </strong>Generating 3D models from detailed textual descriptions. </summary>
+<ul>
+    <li><a href="https://arxiv.org/abs/2411.17945">MARVEL-40M+</a>: The largest and the most descriptive 3D Captioning Dataset. </li>
+    </ul>
 </details>
 
 <details><summary><strong>Efficient 3D Representation:</strong>  Exploring efficient 3D representation approaches like Triplane, Gaussian Splatting, and CAD Language. </summary>
