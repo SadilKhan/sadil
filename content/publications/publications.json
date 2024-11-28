@@ -16,6 +16,23 @@
          "video": ""
     },
     {
+        "title": "MARVEL-40M+: Multi-Level Visual Elaboration for High-Fidelity Text-to-3D Content Creation",
+        "authors": "Sankalp Sinha*, Mohammad Sadil Khan*, Muhammad Usama, Shino Sam, Didier Stricker, Sk Aziz Ali, Muhammad Zeshan Afzal",
+        "conference": "Preprint",
+        "year": 2024,
+        "project": "",
+        "codeLink": "",
+        "poster": "",
+        "bibtex": "",
+        "arxiv": "https://arxiv.org/abs/2411.17945",
+        "video": "",
+        "abstract": "",
+        "paperLink": "",
+        "categories": "Text-to-3D, Stable Diffusion, 3D Reconstruction, LLM, VLM, Annotation",
+        "image": "data/marvel.png",
+        "metadata": "The largest and the most descriptive 3D Captioning Dataset."
+    },
+    {
         "title": "Text2CAD: Generating Sequential CAD Designs from Beginner-to-Expert Level Text Prompts",
         "authors": "Mohammad Sadil Khan*, Sankalp Sinha*, Sheikh Talha Uddin, Didier Stricker, Sk Aziz Ali, Muhammad Zeshan Afzal",
         "conference": "NeurIPS 2024 (Spotlight) 🤩",
@@ -24,11 +41,11 @@
         "codeLink": "",
         "poster": "",
         "bibtex": "",
-        "arxiv": "",
+        "arxiv": "https://arxiv.org/abs/2409.17106",
         "video": "",
         "abstract": "",
         "paperLink": "",
-        "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, Text, LLM, VLM, CAD, Vision-Language Modeling",
+        "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, Text, LLM, VLM, CAD, Vision-Language Modeling, Annotation",
         "image": "data/text2cad.png",
         "metadata": "An AI framework to generate CAD design history from text prompts."
     },
