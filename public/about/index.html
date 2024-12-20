@@ -518,19 +518,91 @@ if (!doNotTrack) {
     
     
       <header class="page-header bb b--black-10 bw1 pb4 mb5 ">
-      <h1 class="f2 f1-m f-headline-l fw5-ns mv4 lh-solid tracked-tight-ns db">Welcome</h1>
+      <h1 class="f2 f1-m f-headline-l fw5-ns mv4 lh-solid tracked-tight-ns db"></h1>
       
-        <div class="pt2 f4 measure-wide lh-copy dib"><!-- this is a subheadline -->
+        <div class="pt2 f4 measure-wide lh-copy dib"><style>
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.hand-wave {
+  display: inline-block;
+  animation: wave 1.5s infinite; /* Infinite looping animation */
+  transform-origin: 70% 70%; /* Adjust origin to make it look natural */
+  font-size: 72px; /* Default size */
+}
+
+.welcome {
+  font-size: 72px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.heading {
+  margin-top: -60px;
+  text-align: center; /* Center-align the heading */
+  line-height: 1.2;
+}
+
+/* Animation enhancement for the heading */
+@keyframes textSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.heading {
+  animation: textSlideIn 1.2s ease-in-out; /* Smooth slide-in animation for the text */
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .hand-wave {
+    font-size: 48px; /* Reduce emoji size */
+  }
+
+  .welcome {
+    font-size: 48px; /* Reduce text size */
+  }
+
+  .heading {
+    margin-top: -30px; /* Adjust spacing for smaller screens */
+  }
+}
+
+/* Additional hover effect for the waving hand */
+.hand-wave:hover {
+  animation: wave 0.8s infinite; /* Faster waving animation on hover */
+  color: #007bff; /* Change emoji color when hovered */
+}
+</style>
+<!-- Subheadline -->
+<div class="heading">
+  <span class="welcome">Welcome</span>
+  <span class="hand-wave">👋</span>
+</div>
 <p>Hello, My name is Mohammad Sadil Khan. I am currently pursuing a PhD degree at 
 <a href="https://av.dfki.de/members/sadil-khan/" target="_blank" rel="noopener"><strong>German Research Center for Artificial Intelligence (DFKI GmbH)</strong></a> and 
 <a href="https://rptu.de/" target="_blank" rel="noopener"><strong>University of Kaiserslautern-Landau (RPTU)</strong></a>, under the supervision of Prof. Dr Didier Stricker.</p>
-<p>I am currently working on these domains.</p>
+<p>I am currently working on the following domains.</p>
 <details><summary><strong>Text-to-3D Reconstruction: </strong>Generating 3D models from detailed textual descriptions. </summary>
 <ul>
     <li><a href="https://arxiv.org/abs/2411.17945">MARVEL-40M+</a>: The largest and the most descriptive 3D Captioning Dataset. </li>
     </ul>
 </details>
-<details><summary><strong>Efficient 3D Representation:</strong>  Exploring efficient 3D representation approaches like Triplane, Gaussian Splatting, and CAD Language. </summary>
+<details><summary><strong>Efficient 3D Representation:</strong>  Exploring efficient 3D representation approaches.</summary>
 </details>
 <details><summary><strong>AI-Assisted CAD designing: </strong>  Leveraging AI to accelerate computer-aided design processes.</summary>
   <ul>
@@ -541,23 +613,17 @@ if (!doNotTrack) {
 <p>Check out my 
 <a href="/projects"><strong>Projects</strong></a> and 
 <a href="/publications/"><strong>Publications</strong></a> page.</p>
-<p>I am open to research collaboration as well as internship opportunity on the following domains.</p>
+<p>I am open to research collaboration or internship opportunity on the following domains.</p>
 <ol>
 <li>3D scene or shape reconstruction.</li>
-<li>CAD design history generation using AI.</li>
+<li>CAD design history generation using Multi-modal inputs.</li>
 </ol>
-<div style="text-align: center;">
-<p>
-<a href="https://github.com/sadilkhan" target="_blank" rel="noopener"><img src="https://github-readme-stats.vercel.app/api?username=sadilkhan" alt="Anurag&amp;rsquo;s GitHub stats"></a></p>
-<p>
-<a href="https://github.com/sadilkhan/github-profile-trophy" target="_blank" rel="noopener"><img src="https://github-profile-trophy.vercel.app/?username=sadilkhan" alt="trophy"></a></p>
-</div>
 <h1 id="recent-events">Recent Events
   <a href="#recent-events"></a>
 </h1>
 <ul>
 <li>
-<p><strong>[25-09-2024]</strong> Text2CAD has been accepted as <strong>spolight</strong> in <strong>NeurIPS</strong> 2024. Check 
+<p><strong>[25-09-2024]</strong> Text2CAD has been accepted as <strong>spotlight</strong> in <strong>NeurIPS</strong> 2024. Check 
 <a href="/publications/">Here</a>. 🎉🎉🎉</p>
 </li>
 <li>

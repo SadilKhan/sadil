@@ -9,8 +9,12 @@ publishDate: "2023-08-10T00:00:00Z"
 
  <link rel="stylesheet" href="styles.css">
 <div class="container">
-        <input type="text" id="search" placeholder="Search publications...">
-        <div> * <i> equal contributions </i> </div>
+        <div id="search-container">
+        <form>
+            <input type="text" name="search" id="search" placeholder="Search anything (year, author, title, conference...)">
+            </form>
+        </div>
+        <div> <p> * <span style="padding-right:20px"> Equal Contributions </span>  🤩 Spotlight/Hightlight </p></div>
         <div id="publication-list"></div>
     </div>
 

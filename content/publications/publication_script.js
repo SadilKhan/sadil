@@ -48,7 +48,7 @@ function showTooltip(event, content) {
     }
 
     // Update the tooltip content and position
-    activeTooltip.innerHTML = `<p><b> Abstract: <br> </b> ${content}</p>`;
+    activeTooltip.innerHTML = `<p> ${content}</p>`;
 
     const xOffset = 10; // Adjust this value to set the horizontal offset
     const yOffset = -80; // Adjust this value to set the vertical offset
@@ -99,6 +99,11 @@ function displayPublications() {
             paperCount++; // Increment paper count for the same year
         }
         
+        // Highlight "highlight," "spotlight," or "oral" in red in the conference text
+        let conferenceText = publication.conference || '';
+        conferenceText = conferenceText.replace(/(highlight|spotlight|oral)/gi, match => `<span style="color: red;">${match}</span>`);
+
+        
         // Split authors by comma and trim any extra spaces
         const authors = publication.authors.split(',').map(author => author.trim());
         
@@ -139,13 +144,14 @@ function displayPublications() {
                         <div class="paper-title">${publication.title}</div>
                           <div class="paper-metadata">${publication.metadata}</div>
                         <div class="paper-authors">${authorsWithUnderline}</div>
-                        <div class="paper-conference">${publication.conference}</div>
+                        <div class="paper-conference">${conferenceText}</div>
                     </div>
                      <div class="links">
                      ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
                     ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
                     ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
                         ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
+                        ${publication.dataset ? `<button class="button" onclick="window.open('${publication.dataset}', '_blank')">Dataset</button>` : ''}
                          ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
                          ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
                           ${bibtexHtml}</button>
@@ -238,8 +244,7 @@ function filterPublications(searchText) {
         publication.authors.toLowerCase().includes(searchText.toLowerCase()) ||
         publication.year.toString().includes(searchText) ||
         publication.conference.toLowerCase().includes(searchText.toLowerCase()) ||
-        publication.categories.toLowerCase().includes(searchText.toLowerCase()) ||
-        publication.abstract.toLowerCase().includes(searchText.toLowerCase())
+        publication.categories.toLowerCase().includes(searchText.toLowerCase())
     );
     return filteredPublications;
 }
@@ -255,12 +260,14 @@ function updatePublications() {
 function displayFilteredPublications(filteredPublications) {
     const publicationList = document.getElementById('publication-list');
     publicationList.innerHTML = ''; // Clear previous content
+    
 
     if (filteredPublications.length === 0) {
         publicationList.innerHTML = '<p>No matching publications found.</p>';
     } else {
         let currentYear = null;
         let paperCount = 0; // Initialize paper count
+        
 
         filteredPublications.forEach(publication => {
             if (publication.year !== currentYear) {
@@ -282,11 +289,16 @@ function displayFilteredPublications(filteredPublications) {
             } else {
                 paperCount++; // Increment paper count for the same year
             }
+            
+            // Highlight "highlight," "spotlight," or "oral" in red in the conference text
+          let conferenceText = publication.conference || '';
+          conferenceText = conferenceText.replace(/(highlight|spotlight|oral)/gi, match => `<span style="color: red;">${match}</span>`);
 
             const publicationContent = document.createElement('div');
             publicationContent.classList.add('publication');
             
             let paperImageHtml = ''; // Initialize an empty string for the paper image HTML
+           
             
             const authors = publication.authors.split(',').map(author => author.trim());
              // Create a new array to hold authors with underlining applied to Mohammad Sadil Khan
@@ -298,7 +310,7 @@ function displayFilteredPublications(filteredPublications) {
                     return author;
                 }
             }).join(', '); // Join the authors back into a string separated by comma
-        
+            
           // Check if publication.image exists
           if (publication.image) {
               // If publication.image exists, add the <div class="paper-image"> with the image
@@ -308,7 +320,9 @@ function displayFilteredPublications(filteredPublications) {
                   </div>
               `;
           }
-
+           bibtexHtml = publication.bibtex ? `<button class="button" onclick="copyBibtex('${publication.bibtex}')">BibTex
+</button>
+` : '';
             publicationContent.innerHTML = `
                 <div class="publication-content">
                   ${paperImageHtml}
@@ -318,13 +332,14 @@ function displayFilteredPublications(filteredPublications) {
                         <div class="paper-title">${publication.title}</div>
                           <div class="paper-metadata">${publication.metadata}</div>
                         <div class="paper-authors">${authorsWithUnderline}</div>
-                        <div class="paper-conference">${publication.conference}</div>
+                        <div class="paper-conference">${conferenceText}</div>
                     </div>
                      <div class="links">
                      ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
                     ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
                     ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
                         ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
+                        ${publication.dataset ? `<button class="button" onclick="window.open('${publication.dataset}', '_blank')">Dataset</button>` : ''}
                          ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
                          ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
                           ${bibtexHtml}</button>
