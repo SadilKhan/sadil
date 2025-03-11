@@ -70,7 +70,111 @@ text_align_right: false
   animation: wave 0.8s infinite; /* Faster waving animation on hover */
   color: #007bff; /* Change emoji color when hovered */
 }
+
+
+/* Styling for the <details> container */
+details {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(46, 191, 165, 0.05)); 
+  backdrop-filter: blur(10px); /* Frosted glass effect */
+  border-radius: 12px; /* Smooth rounded corners */
+  margin: 12px 0;
+  padding: 14px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease-in-out;
+}
+
+/* Summary section - clickable title */
+summary {
+  font-size: 18px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  transition: color 0.3s ease-in-out;
+}
+
+/* Add hover effect on summary */
+summary:hover {
+  color: #007bff; /* Change color when hovered */
+}
+
+/* Add a plus (+) and minus (-) indicator */
+summary::after {
+  font-size: 20px;
+  font-weight: bold;
+  transition: transform 0.3s ease-in-out;
+   
+}
+
+/* Change the plus to minus when details are open */
+details[open] summary::after {
+  transform: rotate(180deg);
+  
+}
+
+/* Styling for expanded content */
+details[open] {
+  border: 1px solid #007bff;
+}
+
+/* Inside the details (list items) */
+details ul {
+  margin-top: 8px;
+  padding-left: 10%;
+  list-style-type: circle;
+}
+
+/* Style the list items */
+details ul li {
+  font-size: 16px;
+  padding: 4px 0;
+}
+
+/* Fade-in effect when opening */
+details[open] > ul, details[open] > p {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Keyframe animation for fade-in effect */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const detailsElements = document.querySelectorAll("details");
+
+  detailsElements.forEach((detail) => {
+    detail.addEventListener("toggle", function () {
+      if (this.open) {
+        let content = this.querySelector("ul, p");
+        if (content) {
+          let maxHeight = content.scrollHeight + "px";
+          content.style.maxHeight = maxHeight;
+        }
+      } else {
+        let content = this.querySelector("ul, p");
+        if (content) {
+          content.style.maxHeight = "0px";
+        }
+      }
+    });
+  });
+});
+</script>
+
+
 
 <!-- Subheadline -->
 <div class="heading">
@@ -83,18 +187,19 @@ Hello, My name is Mohammad Sadil Khan. I am currently pursuing a PhD degree at [
 
 I am currently working on the following domains.
 
-<details><summary><strong>Text-to-3D Reconstruction: </strong>Generating 3D models from detailed textual descriptions. </summary>
+<details><summary><strong> <u>Text-to-3D Reconstruction</u>:</strong> <i> Generating 3D models from detailed textual descriptions. </i> </summary>
 <ul>
-    <li><a href="https://arxiv.org/abs/2411.17945">MARVEL-40M+</a>: The largest and the most descriptive 3D Captioning Dataset. </li>
+    <li><a href="https://arxiv.org/abs/2411.17945">MARVEL-40M+</a>: The largest and the most descriptive 3D Captioning Dataset (CVPR 2025). </li>
     </ul>
 </details>
 
-<details><summary><strong>Efficient 3D Representation:</strong>  Exploring efficient 3D representation approaches.</summary>
+<details><summary><strong><u>Efficient 3D Representation</u>:</strong> <i>Exploring efficient 3D representation approaches. </i> </summary>
+<p> Coming Soon </p>
 </details>
 
-<details><summary><strong>AI-Assisted CAD designing: </strong>  Leveraging AI to accelerate computer-aided design processes.</summary>
+<details><summary><strong><u>Multi-Modal CAD Designing</u>:</strong> <i> Leveraging AI to accelerate computer-aided design processes. </i></summary>
   <ul>
-    <li><a href="https://sadilkhan.github.io/text2cad-project/">TextCAD</a>: Generate Editable CAD models from text prompts (NeurIPS 2024 - Spotlight).</li>
+    <li><a href="https://sadilkhan.github.io/text2cad-project/">TextCAD</a>: <span> Generate Editable CAD models from text prompts (NeurIPS 2024 - Spotlight). </span> </li>
     <li><a href="http://skazizali.com/cadsignet.github.io/">CAD-SIGNet</a>: Generate Full CAD design history from point clouds (CVPR 2024 - Highlight)..</li>
   </ul>
 </details>
@@ -112,6 +217,13 @@ I am open to research collaboration or internship opportunity on the following d
 
 # Recent Events
 
+- **[26-02-2025]** Marvel-40M+ has been accepted in **CVPR** 2025. Check [Here](/publications/). 🎉🎉🎉
+
 - **[25-09-2024]** Text2CAD has been accepted as **spotlight** in **NeurIPS** 2024. Check [Here](/publications/). 🎉🎉🎉
 
 - **[04-04-2024]** CAD-SIGNet has been accepted as **highlight** in **CVPR** 2024 *(12% of the accepted papers)*. 🎉🎉🎉
+
+
+
+
+
