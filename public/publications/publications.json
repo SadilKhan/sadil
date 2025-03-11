@@ -40,7 +40,7 @@
         "project": "https://sadilkhan.github.io/text2cad-project/",
         "codeLink": "https://github.com/SadilKhan/Text2CAD",
         "poster": "https://neurips.cc/media/PosterPDFs/NeurIPS%202024/96571.png?t=1731322691.2308366",
-        "bibtex": "@inproceedings{khan2024textcad,title={Text2{CAD}: Generating Sequential {CAD} Designs from Beginner-to-Expert Level Text Prompts},author={Mohammad Sadil Khan and Sankalp Sinha and Sheikh Talha Uddin and Didier Stricker and Sk Aziz Ali and Muhammad Zeshan Afzal},booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},year={2024},url={https://openreview.net/forum?id=5k9XeHIK3L}}",
+        "bibtex": "@inproceedings{khan2024text2cad,author = {Khan, Mohammad Sadil and Sinha, Sankalp and Uddin, Talha and Stricker, Didier and Ali, Sk Aziz and Afzal, Muhammad Zeshan},booktitle = {Advances in Neural Information Processing Systems},editor = {A. Globerson and L. Mackey and D. Belgrave and A. Fan and U. Paquet and J. Tomczak and C. Zhang},pages = {7552--7579},publisher = {Curran Associates, Inc.},title = {Text2CAD: Generating Sequential CAD Designs from Beginner-to-Expert Level Text Prompts},url = {https://proceedings.neurips.cc/paper_files/paper/2024/file/0e5b96f97c1813bb75f6c28532c2ecc7-Paper-Conference.pdf},volume = {37},year = {2024},bdsk-url-1 = {https://proceedings.neurips.cc/paper_files/paper/2024/file/0e5b96f97c1813bb75f6c28532c2ecc7-Paper-Conference.pdf}}",
         "arxiv": "https://arxiv.org/abs/2409.17106",
         "video": "",
         "dataset": "https://huggingface.co/datasets/SadilKhan/Text2CAD",
