@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 
 
-Hello, My name is Mohammad Sadil Khan. I am currently pursuing a PhD degree at [**German Research Center for Artificial Intelligence (DFKI GmbH)**](https://av.dfki.de/members/sadil-khan/) and [**University of Kaiserslautern-Landau (RPTU)**](https://rptu.de/), under the supervision of Prof. Dr Didier Stricker. 
+Hello, My name is Mohammad Sadil Khan. I am currently a 2nd year PhD student at [**DFKI**](https://av.dfki.de/members/sadil-khan/), under the supervision of Prof. Dr Didier Stricker. 
 
 I am currently working on the following domains.
 
@@ -219,9 +219,6 @@ I am open to research collaboration or internship opportunity on the following d
 
 - **[26-02-2025]** Marvel-40M+ has been accepted in **CVPR** 2025. Check [Here](/publications/). 🎉🎉🎉
 
-- **[25-09-2024]** Text2CAD has been accepted as **spotlight** in **NeurIPS** 2024. Check [Here](/publications/). 🎉🎉🎉
-
-- **[04-04-2024]** CAD-SIGNet has been accepted as **highlight** in **CVPR** 2024 *(12% of the accepted papers)*. 🎉🎉🎉
 
 
 

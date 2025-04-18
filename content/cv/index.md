@@ -156,10 +156,21 @@ publishDate: "2022-12-21"
 
 <h2> Work Experience </h2>
   <ul>
+  <li>
+      <div class="card">
+        <span class="tag">Research Intern</span>
+        <span class="tag_date">May 2025 - November 2025</span>
+        <div class="info">
+          <h4> Huawei Noah's Ark Lab</h4>
+          <span class="loc">London, UK</span>
+        </div>
+        <p style="font-style:italic"> Project: 3D Reconstruction</p>
+      </div>
+    </li>
     <li>
       <div class="card">
         <span class="tag">PhD Student</span>
-        <span class="tag_date">Feb 2024 -</span>
+        <span class="tag_date">Feb 2024 - April 2025</span>
         <div class="info">
           <h4>German Center of Artificial Intelligence (DFKI), RPTU</h4>
           <span class="loc">Kaiserslautern, Germany</span>
