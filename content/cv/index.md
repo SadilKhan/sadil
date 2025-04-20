@@ -205,7 +205,7 @@ publishDate: "2022-12-21"
     <li>
       <div class="card">
         <span class="tag">Research Intern</span>
-        <span class="tag_date">Apr 2021-Aug 2021</span>
+        <span class="tag_date">Apr 2021 - Aug 2021</span>
         <div class="info">
           <h4>Laboratoire Hubert Curien, Université Jean Monnet</h4>
           <span class="loc">Saint-Étienne, France</span>
