@@ -159,7 +159,7 @@ publishDate: "2022-12-21"
   <li>
       <div class="card">
         <span class="tag">Research Intern</span>
-        <span class="tag_date">May 2025 - November 2025</span>
+        <span class="tag_date">May 2025 - Nov 2025</span>
         <div class="info">
           <h4> Huawei Noah's Ark Lab</h4>
           <span class="loc">London, UK</span>
@@ -170,7 +170,7 @@ publishDate: "2022-12-21"
     <li>
       <div class="card">
         <span class="tag">PhD Student</span>
-        <span class="tag_date">Feb 2024 - April 2025</span>
+        <span class="tag_date">Feb 2024 - Apr 2025</span>
         <div class="info">
           <h4>German Center of Artificial Intelligence (DFKI), RPTU</h4>
           <span class="loc">Kaiserslautern, Germany</span>
@@ -181,7 +181,7 @@ publishDate: "2022-12-21"
     <li>
       <div class="card">
         <span class="tag">Student Researcher</span>
-        <span class="tag_date">Jan 2023-Feb 2024</span>
+        <span class="tag_date">Jan 2023 - Feb 2024</span>
         <div class="info">
           <h4>CVI2 Lab, SnT, University of Luxembourg</h4>
           <span class="loc">Kirchberg, Luxembourg</span>
@@ -193,7 +193,7 @@ publishDate: "2022-12-21"
     <li>
       <div class="card">
         <span class="tag">Research Intern</span>
-        <span class="tag_date">Feb 2022-Jul 2022</span>
+        <span class="tag_date">Feb 2022 - Jul 2022</span>
         <div class="info">
           <h4>Creatis, INSA Lyon</h4>
           <span class="loc">Lyon, France</span>
@@ -217,7 +217,7 @@ publishDate: "2022-12-21"
     <li>
       <div class="card">
         <span class="tag">Data Analyst Intern</span>
-        <span class="tag_date">May 2020-Jul 2020</span>
+        <span class="tag_date">May 2020 - Jul 2020</span>
         <div class="info">
           <h4>Accenture Digital</h4>
           <span class="loc">India</span>
@@ -234,7 +234,7 @@ publishDate: "2022-12-21"
     <li>
       <div class="card">
         <span class="tag">PhD in Computer Science</span>
-        <span class="tag_date">Feb 2024-</span>
+        <span class="tag_date">Feb 2024 - </span>
         <div class="info">
           <h4>Rheinland-Pfälzische Technische Universität (RPTU)</h4>
           <span class="loc">Kaiserslautern, Germany</span>
