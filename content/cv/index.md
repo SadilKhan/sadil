@@ -1,6 +1,6 @@
 ---
 title: Mohammad Sadil Khan
-subtitle: PhD in 3D Computer Vision
+subtitle: PhD in Computer Science
 description: 
 author: "Mohammad Sadil Khan"
 publishDate: "2022-12-21"
@@ -14,7 +14,6 @@ publishDate: "2022-12-21"
       padding: 0;
       position: relative;
     }
-
     ul:before {
       content: "";
       display: inline-block;
@@ -25,14 +24,12 @@ publishDate: "2022-12-21"
       top: 5px;
       height: calc(100% - 10px);
     }
-
     li {
       position: relative;
       padding-left: 25px;
       margin-bottom: auto;
       padding-bottom:20px;
     }
-
     li:before {
       content: "";
       display: inline-block;
@@ -44,7 +41,6 @@ publishDate: "2022-12-21"
       top: 5px;
       border-radius: 10px;
     }
-
     .card {
       width: 200%;
       background-color: #fff;
@@ -56,13 +52,11 @@ publishDate: "2022-12-21"
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
-    
     @media only screen and (max-width: 768px) {
       .card {
         width: 100%;
       }
     }
-    
     .tag {
       display: inline-block;
       background-color: #f1eeff;
@@ -74,7 +68,6 @@ publishDate: "2022-12-21"
       line-height: 1;
       border-radius: 6px;
     }
-
     .tag_date {
       display: inline-block;
       background-color: #FFEDEE;
@@ -86,7 +79,6 @@ publishDate: "2022-12-21"
       line-height: 1;
       border-radius: 6px;
     }
-
     .button {
       font: inherit;
       line-height: 1;
@@ -102,35 +94,29 @@ publishDate: "2022-12-21"
       gap: 0.5rem;
       text-decoration: none;
     }
-
     .button:hover,
     .button:focus {
       background-color: #6558d3;
       color: white;
     }
-
     .card h4 {
       font-size: 1.2rem;
       color: #333;
       margin: 0;
       padding-left: 5px;
     }
-
     .loc {
       font-size: 1rem;
       margin: 0;
       padding-left: 5px;
       font-style: italic;
     }
-    
     .info {
       color: #a0a0a0;
     }
-
     .dark-mode .card {
       background-color: #1f1f1f;
     }
-
     /* Additional styling for the download section */
      /* Style buttons */
 .btn {
@@ -151,7 +137,7 @@ publishDate: "2022-12-21"
 </style>
 
 <body>
-  <!-- Download Resume Section -->
+
 <button class="btn"><i class="fa fa-download"></i> <a href="resume.pdf" style="color:white">Download Resume</a></button>
 
 <h2> Work Experience </h2>
@@ -282,6 +268,4 @@ publishDate: "2022-12-21"
       </div>
     </li>
   </ul>
-
- 
 </body>
