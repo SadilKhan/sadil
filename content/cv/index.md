@@ -169,7 +169,7 @@ publishDate: "2022-12-21"
     </li>
     <li>
       <div class="card">
-        <span class="tag">PhD Student</span>
+        <span class="tag">Research Assistant</span>
         <span class="tag_date">Feb 2024 - Apr 2025</span>
         <div class="info">
           <h4>German Center of Artificial Intelligence (DFKI), RPTU</h4>
