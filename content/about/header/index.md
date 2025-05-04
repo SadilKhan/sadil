@@ -217,6 +217,9 @@ I am open to research collaboration or internship opportunity on the following d
 
 # Recent Events
 
+
+- **[01-05-2025]** I have started my summer research internship at Huawei's Noah Ark Lab, London.
+
 - **[26-02-2025]** Marvel-40M+ has been accepted in **CVPR** 2025. Check [Here](/publications/). 🎉🎉🎉
 
 
