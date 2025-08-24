@@ -6,7 +6,16 @@
     <description>Recent content in Series on Home</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 30 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/series/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 24 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="/series/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Adventure</title>
+      <link>/series/adventure/</link>
+      <pubDate>Sun, 24 Aug 2025 00:00:00 +0000</pubDate>
+      
+      <guid>/series/adventure/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>VC Dimension and Neural Networks</title>
       <link>/series/vc-dimension-and-neural-networks/</link>

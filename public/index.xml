@@ -8,6 +8,17 @@
     <language>en</language>
     <lastBuildDate>Tue, 01 Feb 2022 00:00:00 +0000</lastBuildDate><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Iceland Trip</title>
+      <link>/blog/adventure/iceland/</link>
+      <pubDate>Sun, 24 Aug 2025 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/adventure/iceland/</guid>
+      <description>In August, we took a week-long campervan trip around Iceland — from Golden Circle hot springs to South Coast waterfalls, glacier lagoons, Eastfjords fishing villages, and the wildlife of the north and Snæfellsnes.
+It was seven days of drone flights, hot river soaks, black sand beaches, endless waterfalls, and fresh fish dinners — each day with its own theme and adventure.
+Here’s our day-by-day itinerary and the highlights that made this trip unforgettable.</description>
+    </item>
+    
+    <item>
       <title>AutoAnnotator - MacOS Utility App</title>
       <link>/projects/autoannotator/</link>
       <pubDate>Wed, 11 Jan 2023 00:00:00 +0000</pubDate>
@@ -147,6 +158,15 @@ Student Researcher Jan 2023 - Feb 2024 CVI2 Lab, SnT, University of Luxembourg K
       
       <guid>/blog/iouloss/</guid>
       <description>Loss Functions for Object Detection</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>/blog/adventure/introduction/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/adventure/introduction/</guid>
+      <description></description>
     </item>
     
     <item>
