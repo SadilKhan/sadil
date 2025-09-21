@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 
 
-Hello, My name is Mohammad Sadil Khan. I am currently a 2nd year PhD student at [**DFKI**](https://av.dfki.de/members/sadil-khan/), under the supervision of Prof. Dr Didier Stricker. 
+Hello, My name is Mohammad Sadil Khan. I am currently a 2nd year PhD student at [**DFKI**](https://av.dfki.de/members/sadil-khan/), under the supervision of Prof. Dr Didier Stricker. I am currently doing my summer research internship at Huawei's Noah Ark Lab, London under [Ismail Elezi](https://therevanchist.github.io/) and [Jiankang Deng](https://jiankangdeng.github.io/).
 
 I am currently working on the following domains.
 
