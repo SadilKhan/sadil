@@ -30,7 +30,7 @@
         "paperLink": "",
         "categories": "Text-to-3D, Stable Diffusion, 3D Reconstruction, LLM, VLM, Annotation, Objaverse",
         "image": "data/marvel.png",
-        "metadata": "A 40M+ 3D captioning dataset with domain-specific and multi-level visual reasoning for text-to-3D generation."
+        "metadata": "Largest 3D captioning dataset (40M+) with domain-specific and multi-level visual reasoning for text-to-3D generation."
     },
     {
         "title": "Text2CAD: Generating Sequential CAD Designs from Beginner-to-Expert Level Text Prompts",
@@ -47,7 +47,7 @@
         "paperLink": "https://openreview.net/pdf?id=5k9XeHIK3L",
         "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, Text, LLM, VLM, CAD, Vision-Language Modeling, Annotation",
         "image": "data/text2cad.png",
-            "metadata": "A framework that generates CAD design history from natural-language prompts of varying expertise levels."
+            "metadata": "First framework that generates CAD design history from natural-language prompts of varying expertise levels."
     },
     {
         "title": "BRep Boundary and Junction Detection for CAD Reverse Engineering",
@@ -81,7 +81,7 @@
         "paperLink": "https://openaccess.thecvf.com/content/CVPR2024/papers/Khan_CAD-SIGNet_CAD_Language_Inference_from_Point_Clouds_using_Layer-wise_Sketch_CVPR_2024_paper.pdf",
         "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, RandLa-Net, CAD, Vision-Language Modeling",
         "image": "data/cad_signet.png",
-        "metadata": "An autoregressive architecture for generating CAD sequence from Point cloud."
+        "metadata": "An autoregressive architecture for generating 3D CAD sequence from Point cloud. Uses a novel sketch-guided Attention mechanism."
     }
     
 ]

@@ -8,6 +8,7 @@ publishDate: "2023-08-10T00:00:00Z"
 ---
 
  <link rel="stylesheet" href="styles.css">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
 <div class="container">
         <div id="search-container">
         <form>
