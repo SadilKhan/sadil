@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
 </div>
 
 
-Hello, My name is Mohammad Sadil Khan. I am currently a 2nd year PhD student at [**DFKI**](https://av.dfki.de/members/sadil-khan/), under the supervision of Prof. Dr Didier Stricker. I am currently doing my summer research internship at Huawei's Noah Ark Lab, London under [Ismail Elezi](https://therevanchist.github.io/) and [Jiankang Deng](https://jiankangdeng.github.io/).
+Hello, My name is Mohammad Sadil Khan. I am currently a 2nd year PhD student at [**DFKI**](https://av.dfki.de/members/sadil-khan/), under the supervision of Prof. Dr Didier Stricker. I am also a summer research intern at Huawei’s Noah’s Ark Lab, London where I work with [Ismail Elezi](https://therevanchist.github.io/) and [Jiankang Deng](https://jiankangdeng.github.io/).
 
 I am currently working on the following domains.
 
@@ -213,6 +213,9 @@ I am open to research collaboration or internship opportunity on the following d
 1. 3D scene or shape reconstruction.
 2. CAD design history generation using Multi-modal inputs.
 
+
+
+**Reviewer for**: AAAI'26, NeurIPS'25 (DB Track), SIGGRAPH Asia'25, ICPR'24
 
 
 # Recent Events

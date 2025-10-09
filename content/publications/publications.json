@@ -12,7 +12,7 @@
         "paperLink": "https://paperswithcode.com/paper/sharp-challenge-2023-solving-cad-history-and",
         "categories": "Deep Learning, Computer Vision, Representation Learning, CAD",
         "image": "data/sharp2023.png",
-         "metadata": "",
+         "metadata": "A large-scale benchmark defining datasets, metrics, and baselines for realistic CAD reverse engineering from 3D scans.",
          "video": ""
     },
     {
@@ -30,7 +30,7 @@
         "paperLink": "",
         "categories": "Text-to-3D, Stable Diffusion, 3D Reconstruction, LLM, VLM, Annotation, Objaverse",
         "image": "data/marvel.png",
-        "metadata": "The largest and the most descriptive 3D Captioning Dataset."
+        "metadata": "A 40M+ 3D captioning dataset with domain-specific and multi-level visual reasoning for text-to-3D generation."
     },
     {
         "title": "Text2CAD: Generating Sequential CAD Designs from Beginner-to-Expert Level Text Prompts",
@@ -47,7 +47,7 @@
         "paperLink": "https://openreview.net/pdf?id=5k9XeHIK3L",
         "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, Text, LLM, VLM, CAD, Vision-Language Modeling, Annotation",
         "image": "data/text2cad.png",
-        "metadata": "An AI framework to generate CAD design history from Multi-Level text prompts."
+            "metadata": "A framework that generates CAD design history from natural-language prompts of varying expertise levels."
     },
     {
         "title": "BRep Boundary and Junction Detection for CAD Reverse Engineering",
@@ -63,7 +63,7 @@
         "paperLink": "https://ieeexplore.ieee.org/document/10585950",
         "categories": "Deep Learning, Computer Vision, CAD, Brep",
         "image": "data/brep_det_net.png",
-         "metadata": "",
+        "metadata": "A deep-learning approach for detecting BRep boundaries and junctions to enhance CAD reverse engineering accuracy.",
          "video": ""
     },
     {

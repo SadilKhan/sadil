@@ -1,319 +1,332 @@
+/* ============================================================
+   GLOBAL BASE STYLES
+   ============================================================ */
 body {
-    margin: 0;
-    padding: 0;
-    
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', 'Lato', Arial, sans-serif;
 }
 
+/* Container for the main content */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+}
 
+/* Responsive container width */
 @media (max-width: 768px) {
   .container {
-    max-width: 100%;
-    width: 100%; /* Set the width to 100% of its parent container */
-    margin: 0 auto;
-    font-family: 'Open Sans', 'Lato', Arial, sans-serif;
+    width: 95%;
+  }
 }
 
+/* ============================================================
+   SEARCH BOX STYLING
+   ============================================================ */
+#search {
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-@media (min-width: 768px) {
-  .container {
-    max-width: 90%;
-    width: 100%; /* Set the width to 100% of its parent container */
-    margin: 0 auto;
-    font-family: 'Open Sans', 'Lato', Arial, sans-serif;
+/* Focus effect */
+#search:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
+  background-color: #f9f9ff;
+  transform: scale(1.02);
 }
 
+/* Placeholder text */
+#search::placeholder {
+  color: #aaa;
+  font-style: italic;
 }
 
-input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+#search:focus::placeholder {
+  opacity: 0.6;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.publication {
-    margin-bottom: 1rem;
-    padding: 1rem;
-    transition: transform 0.3s;
-    
-}
-
-
-.dark-mode .paper-authors,
-.dark-mode .paper-conference, 
-.dark-mode .paper-metadata, 
-.dark-mode .paper-title {
-  color:#f2f2f2;
-}
-
-/*.publication:hover {
-    transform: scale(1.05);
-    /* Zoom effect on hover
-}*/
-
-h3 {
-    margin-top: 0;
-}
-
-ul {
-    padding-left: 20px;
-}
-
-.publication-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    margin-bottom: 10px;
-}
-
-/*.links {
-    display: flex;
-    gap: 10px;
-}*/
-
+/* ============================================================
+   YEAR SECTIONS (COLLAPSIBLE HEADERS)
+   ============================================================ */
 .year-section {
-    margin-top: 10px;
-    padding: 10px;
-    cursor: pointer;
+  margin-top: 16px;
+  padding: 10px;
+  cursor: pointer;
 }
 
+/* Year headings */
 .year-section h2 {
-    margin: 0;
-    color: #333333eb;
-    border-radius: 4px;
+  margin: 0;
+  color: #333333eb;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  transition: transform 0.3s ease;
 }
 
-/* Define styles for dark mode */
+/* Hover animation for headings */
+.year-section h2:hover {
+  transform: scale(1.02);
+}
+
+/* Arrow icon beside year */
+.arrow-icon {
+  font-size: 14px;
+  margin-left: 6px;
+  transition: transform 0.3s ease;
+}
+
+/* Dark mode year heading */
 .dark-mode h2 {
-    color: #c9d1d9; /* Text color in dark mode */
+  color: #c9d1d9;
 }
 
+/* Collapsible content (expanded by default) */
 .year-content {
-    margin-top: 10px;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+  opacity: 1;
+  max-height: 1000px;
 }
 
-.year-content.show {
-    display: none;
-    animation: slideDown 0.3s ease-in-out;
+/* When collapsed */
+.year-content.hide {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 
+/* Arrow rotation when expanded */
+.year-section h2.open .arrow-icon {
+  transform: rotate(180deg);
+}
+
+/* ============================================================
+   PUBLICATION CARD STYLING
+   ============================================================ */
+.publication {
+  position: relative;
+  margin-bottom: 1.5rem;
+  padding: 1.2rem 1.5rem;
+  border-radius: 16px; /* Rounded boundary */
+  border: 2px solid rgba(0, 123, 255, 0.25); /* Subtle blue border */
+  background-color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Hover effect */
+.publication:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 123, 255, 0.6);
+}
+
+/* Dark mode publication card */
+.dark-mode .publication {
+  background-color: rgba(25, 25, 25, 0.8);
+  border: 2px solid rgba(0, 123, 255, 0.4);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   PUBLICATION CONTENT LAYOUT
+   ============================================================ */
 @media (min-width: 768px) {
+  .publication-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 2%;
+    align-items: start;
+  }
+}
+
+@media (max-width: 768px) {
+  .publication-content {
+    display: block;
+  }
+}
+
+/* ============================================================
+   PAPER IMAGE
+   ============================================================ */
+.paper-image {
+  max-width: 100%;
+  transition: transform 0.3s ease;
+  text-align: center;
+}
+
+.paper-image img {
+  width: 100%;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+./*paper-image img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+}*/
+
+/* ============================================================
+   PAPER TEXT INFORMATION
+   ============================================================ */
 .paper-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 10px;
-    text-align: justify;
-}
-}
-
-@media (max-width: 768px) {
-  .paper-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 10px;
-}
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+  text-align: justify;
 }
 
-@media (min-width: 768px) {
 .paper-title {
-    flex-basis: 100%;
-    color: #333333eb;
-    font-size: 22px;
-}   
-}
-
-
-@media (max-width: 768px) {
-  .paper-title {
-    flex-basis: 100%;
-    color: #333333eb;
-    font-size: 18px;
-}
-}
-
-.paper-authors {
-    flex-basis: 100%;
-    color: #333333eb;
-    padding-bottom: 5px;
-    font-size: 16px;
-    padding-bottom: 15px;
-
-}
-
-
-.paper-bibtex {
-    flex-basis: 100%;
-    color: #333333eb;
-}
-
-.paper-conference {
-    flex-basis: 100%;
-    color: #333333eb;
-    font-size: 20px;
+  flex-basis: 100%;
+  font-size: 1.4rem;
+  color: #333333eb;
+  font-weight: 700;
+  margin-bottom: 6px;
 }
 
 .paper-metadata {
-    flex-basis: 100%;
-    font-size: 13px;
-    color: #333333eb;
-   padding-bottom: 4px;
+  font-style: italic;
+  font-size: 13px;
+  color: #555;
+  margin-top: 6px;
+  text-align: center;
+  line-height: 1.4;
 }
 
-.year-section h2:hover .arrow-icon {
-    transform: rotate(180deg);
+.paper-authors {
+  flex-basis: 100%;
+  color: #333333eb;
+  font-size: 16px;
+  margin-bottom: 8px;
 }
 
-.arrow-icon {
-    font-size: 12px;
-    margin-left: 5px;
-    transition: transform 0.3s;
+
+/* Make authors centered and more spaced on small screens */
+@media (max-width: 768px) {
+  .paper-authors {
+    justify-content: center;
+    text-align: center;
+    font-size: 15px;
+    line-height: 1.6;
+    gap: 8px;
+  }
 }
 
+.paper-conference {
+  flex-basis: 100%;
+  font-size: 18px;
+  color: #0056b3;
+  font-weight: 600;
+}
+
+/* Dark mode text colors */
+.dark-mode .paper-title {
+  color: #f2f2f2;
+}
+
+.dark-mode .paper-authors {
+  color: #c9d1d9;
+}
+
+.dark-mode .paper-conference {
+  color: #00e0ff;
+}
+
+.dark-mode .paper-metadata {
+  color: #b9b9b9;
+}
+
+/* ============================================================
+   BUTTONS (GRADIENT OUTLINE STYLE)
+   ============================================================ */
+.button {
+  display: inline-block;
+  padding: 6px 14px;
+  margin: 4px 6px 6px 0;
+  border-radius: 8px;
+  background: transparent;
+  border: 2px solid;
+  color: #347FC4;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+/* Dark mode buttons */
+.dark-mode .button {
+  color: white;
+  background: #4344B1;
+}
+
+.dark-mode .button:hover {
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 255, 200, 0.25);
+}
+
+/* ============================================================
+   TOOLTIP STYLING
+   ============================================================ */
 .tooltip {
-    position: absolute;
-    z-index: 9999;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 5px;
-    padding-left: 20px;
-    border-radius: 20px;
-    font-size: 14px;
-    white-space: pre-line;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  position: absolute;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  border-radius: 12px;
+  padding: 10px 16px;
+  max-width: 400px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  font-size: 14px;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
 @keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes slideDown {
-    from {
-        transform: scaleY(0);
-        transform-origin: top;
-        opacity: 0;
-    }
-
-    to {
-        transform: scaleY(1);
-        transform-origin: top;
-        opacity: 1;
-    }
+  from {
+    transform: scaleY(0);
+    transform-origin: top;
+    opacity: 0;
+  }
+  to {
+    transform: scaleY(1);
+    transform-origin: top;
+    opacity: 1;
+  }
 }
-
-
-
-
-@media (min-width: 768px) {
- .publication-content {
- display: grid;
- grid-template-columns: 1fr 2fr;
- column-gap: 2%;
-}
-}
-
-
-.paper-image {
-  max-width: 100%;
-  transition: transform 0.3s;
-}
-
-.paper-image:hover {
-    transform: scale(1.4);
-    /* Zoom effect on hover */
-}
-
-
-.publication {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@media (max-width: 768px) {
- .publication-content {
- display: grid;
- grid-template-rows: 0.4fr 2fr;
- row-gap: 2%;
-}
-}
-
-
-.button {
-    display: inline-block;
-    padding: 4px 12px;
-    margin-bottom: 10px;
-    background-color: rgba(0, 123, 255, 0);
-    border: 2px solid #007bff;
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    text-align: center;
-    transition: background-color 0.3s ease; /* Add transition for background-color */
-}
-
-.dark-mode .button {
-    color: white;
-    border: 2px solid #007bff;
-}
-
-.button:hover {
-    background-color: rgba(0, 123, 255, 0.25);
-}
-
-.links {
-    margin-top: 8px;
-}
-
-.links .button {
-    margin-right: 8px;
-}
-
-
-/* Search Box Styling */
-#search {
-    width: 100%;
-    padding: 12px 16px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-    transition: all 0.3s ease-in-out; /* Smooth transitions */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Focused state for the search box */
-#search:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.5);
-    background-color: #f9f9ff; /* Slightly lighter background on focus */
-    transform: scale(1.02); /* Slight zoom-in effect */
-}
-
-/* Placeholder text styling */
-#search::placeholder {
-    color: #aaa;
-    font-style: italic;
-}
-
-/* Animation when typing */
-#search:focus::placeholder {
-    transition: opacity 0.3s ease-in-out;
-    opacity: 0.6;
-}
-
-
-
-
-

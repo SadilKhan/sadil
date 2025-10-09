@@ -17,17 +17,19 @@ async function fetchPublications() {
 
 // Function to toggle year content visibility
 function toggleYearContent(year) {
-    const yearContent = document.querySelector(`.year-content[data-year="${year}"]`);
-    const arrowIcon = yearContent.previousElementSibling.querySelector('.arrow-icon');
+  const yearContent = document.querySelector(`.year-content[data-year="${year}"]`);
+  const arrowIcon = yearContent.previousElementSibling.querySelector('.arrow-icon');
 
-    if (yearContent.classList.contains('show')) {
-        arrowIcon.textContent = '▼';
-        yearContent.classList.remove('show');
-    } else {
-        arrowIcon.textContent = '▲';
-        yearContent.classList.add('show');
-    }
+  // Toggle the 'hide' class (since CSS uses .hide)
+  yearContent.classList.toggle('hide');
+
+  if (yearContent.classList.contains('hide')) {
+    arrowIcon.textContent = '▼';
+  } else {
+    arrowIcon.textContent = '▲';
+  }
 }
+
 
 let activeTooltip = null;
 
@@ -109,13 +111,12 @@ function displayPublications() {
         
         // Create a new array to hold authors with underlining applied to Mohammad Sadil Khan
         authorsWithUnderline = authors.map(author => {
-            // Check if the author's name contains "Sadil", and if so, apply underlining
-            if (author.toLowerCase().includes('sadil')) {
-                return `<u><b>${author}</b></u>`;
-            } else {
-                return author;
-            }
-        }).join(', '); // Join the authors back into a string separated by comma
+                if (author.toLowerCase().includes('sadil')) {
+                    return `<u><b>${author}</b></u>`;
+                } else {
+                    return author;
+                }
+            }).join(' &nbsp;·&nbsp; ');
         
         
         const publicationContent = document.createElement('div');
@@ -136,29 +137,32 @@ function displayPublications() {
         }
 
         publicationContent.innerHTML = `
-                  <div class="publication-content">
-                  ${paperImageHtml}
-                  
-                  <div>
-                    <div class="paper-info">
-                        <div class="paper-title">${publication.title}</div>
-                          <div class="paper-metadata">${publication.metadata}</div>
-                        <div class="paper-authors">${authorsWithUnderline}</div>
-                        <div class="paper-conference">${conferenceText}</div>
-                    </div>
-                     <div class="links">
-                     ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
-                    ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
-                    ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
-                        ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
-                        ${publication.dataset ? `<button class="button" onclick="window.open('${publication.dataset}', '_blank')">Dataset</button>` : ''}
-                         ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
-                         ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
-                          ${bibtexHtml}</button>
-                    </div>
-                    </div>
-                    </div>
-                `;
+  <div class="publication-content">
+      <div class="paper-image">
+          ${publication.image ? `<img src="${publication.image}" alt="Publication Image">` : ''}
+          ${publication.metadata ? `<div class="paper-metadata">${publication.metadata}</div>` : ''}
+      </div>
+
+      <div>
+          <div class="paper-info">
+              <div class="paper-title">${publication.title}</div>
+              <div class="paper-authors">${authorsWithUnderline}</div>
+              <div class="paper-conference">${conferenceText}</div>
+          </div>
+          <div class="links">
+              ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
+              ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
+              ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
+              ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
+              ${publication.dataset ? `<button class="button" onclick="window.open('${publication.dataset}', '_blank')">Dataset</button>` : ''}
+              ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
+              ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
+              ${bibtexHtml}
+          </div>
+      </div>
+  </div>
+`;
+
         // Add event listener to show mini pop-up on hover
         /*publicationContent.addEventListener('mouseover', event => {
             const tooltipContent = `
@@ -324,29 +328,32 @@ function displayFilteredPublications(filteredPublications) {
 </button>
 ` : '';
             publicationContent.innerHTML = `
-                <div class="publication-content">
-                  ${paperImageHtml}
-                  
-                  <div>
-                    <div class="paper-info">
-                        <div class="paper-title">${publication.title}</div>
-                          <div class="paper-metadata">${publication.metadata}</div>
-                        <div class="paper-authors">${authorsWithUnderline}</div>
-                        <div class="paper-conference">${conferenceText}</div>
-                    </div>
-                     <div class="links">
-                     ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
-                    ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
-                    ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
-                        ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
-                        ${publication.dataset ? `<button class="button" onclick="window.open('${publication.dataset}', '_blank')">Dataset</button>` : ''}
-                         ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
-                         ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
-                          ${bibtexHtml}</button>
-                    </div>
-                    </div>
-                    </div>
-            `;
+  <div class="publication-content">
+      <div class="paper-image">
+          ${publication.image ? `<img src="${publication.image}" alt="Publication Image">` : ''}
+          ${publication.metadata ? `<div class="paper-metadata">${publication.metadata}</div>` : ''}
+      </div>
+
+      <div>
+          <div class="paper-info">
+              <div class="paper-title">${publication.title}</div>
+              <div class="paper-authors">${authorsWithUnderline}</div>
+              <div class="paper-conference">${conferenceText}</div>
+          </div>
+          <div class="links">
+              ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
+              ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
+              ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
+              ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
+              ${publication.dataset ? `<button class="button" onclick="window.open('${publication.dataset}', '_blank')">Dataset</button>` : ''}
+              ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
+              ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
+              ${bibtexHtml}
+          </div>
+      </div>
+  </div>
+`;
+
 
             // Add event listener to show mini pop-up on hover
             /*publicationContent.addEventListener('mouseover', event => {
