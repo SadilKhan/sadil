@@ -13,6 +13,26 @@ async function fetchPublications() {
         console.error('Error fetching publications:', error);
     }
 }
+function setupFadeInAnimation() {
+    const observerOptions = {
+        threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            } else {
+                entry.target.classList.remove('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.publication').forEach(card => {
+        observer.observe(card);
+    });
+}
+
 
 
 // Function to toggle year content visibility
@@ -70,6 +90,7 @@ function showTooltip(event, content) {
 
 
 function displayPublications() {
+  document.querySelectorAll('.publication').forEach(card => card.classList.remove('visible'));
     const publicationList = document.getElementById('publication-list');
     publicationList.innerHTML = ''; // Clear previous content
 
@@ -122,9 +143,7 @@ function displayPublications() {
         const publicationContent = document.createElement('div');
         publicationContent.classList.add('publication');
         
-        bibtexHtml = publication.bibtex ? `<button class="button" onclick="copyBibtex('${publication.bibtex}')">BibTex
-</button>
-` : '';
+        bibtexHtml = publication.bibtex ? `<button class="button" onclick="showBibtex(\`${publication.bibtex}\`)">BibTeX</button>` : '';
         let paperImageHtml = ''; // Initialize an empty string for the paper image HTML
         // Check if publication.image exists
         if (publication.image) {
@@ -159,6 +178,7 @@ function displayPublications() {
               ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
               ${bibtexHtml}
           </div>
+          
       </div>
   </div>
 `;
@@ -174,22 +194,69 @@ function displayPublications() {
         const yearContent = publicationList.querySelector(`.year-content[data-year="${publication.year}"]`);
         yearContent.appendChild(publicationContent);
     });
+    
+    setupFadeInAnimation(); 
+}
+
+
+function colorizeBibtex(text) {
+  // Detect if the page is in dark mode
+  const isDark = document.body.classList.contains('dark-mode');
+
+  // Define theme colors
+  const colors = isDark
+    ? { // 🌙 Dark Mode Palette
+        at: '#ff7b72',      // pink-red
+        key: '#79c0ff',     // cyan-blue
+        value: '#d2a8ff'    // violet
+      }
+    : { // ☀️ Light Mode Palette
+        at: '#d73a49',      // red
+        key: '#005cc5',     // blue
+        value: '#6f42c1'    // purple
+      };
+
+  // Apply regex-based highlighting
+  return text
+    .replace(
+      /^@(\w+)/gm,
+      `<span style="color:${colors.at}; font-weight:600;">@$1</span>`
+    )
+    .replace(
+      /^(\s*[a-zA-Z]+)\s*=/gm,
+      `<span style="color:${colors.key}; font-weight:500;">$1</span> =`
+    )
+    .replace(
+      /({[^}]+})/gm,
+      `<span style="color:${colors.value};">$1</span>`
+    );
 }
 
 // Function to show BibTeX text in a modal or container
 function showBibtex(bibtexText) {
     // Create a container for displaying BibTeX text
-    const bibtexContainer = document.createElement('div');
-    bibtexContainer.classList.add('bibtex-container');
-    bibtexContainer.innerHTML = `
-        <div class="bibtex-text">${bibtexText}</div>
-        <button onclick="copyBibtex('${bibtexText}')">Copy</button>
-    `;
-    
-    // Append the container to the body
-    document.body.appendChild(bibtexContainer);
+    const modal = document.getElementById('bibtexModal');
+    const content = document.getElementById('bibtexContent');
+    content.innerHTML = colorizeBibtex(formatBibtex(bibtexText));
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden'; // disable background scroll
 }
 
+// Close modal
+function closeBibtexModal() {
+    const modal = document.getElementById('bibtexModal');
+    modal.style.display = 'none';
+    document.body.style.overflow = ''; // re-enable scroll
+}
+
+// Copy button inside modal
+function copyBibtexFromModal() {
+    const content = document.getElementById('bibtexContent').textContent;
+    navigator.clipboard.writeText(content);
+    const copyBtn = document.querySelector('.copy-btn');
+    copyBtn.textContent = "✅ Copied!";
+    setTimeout(() => copyBtn.textContent = "📋 Copy", 1200);
+}
 // Function to copy BibTeX text
 function copyBibtex(bibtexText) {
     // Create a temporary textarea element to copy text
@@ -257,11 +324,23 @@ function filterPublications(searchText) {
 function updatePublications() {
     const searchText = document.getElementById('search').value;
     const filteredPublications = filterPublications(searchText);
-    displayFilteredPublications(filteredPublications);
+    displayFilteredPublications(filteredPublications, searchText);
 
 }
+
+
+
+// Highlight search term in text (case-insensitive)
+function highlightSearchTerm(text, searchTerm) {
+    if (!searchTerm) return text; // If no search input, return plain text
+    const regex = new RegExp(`(${searchTerm})`, 'gi');
+    return text.replace(regex, '<mark>$1</mark>');
+}
+
 // Function to display filtered publications
-function displayFilteredPublications(filteredPublications) {
+function displayFilteredPublications(filteredPublications, searchText) {
+  document.querySelectorAll('.publication').forEach(card => card.classList.remove('visible'));
+  
     const publicationList = document.getElementById('publication-list');
     publicationList.innerHTML = ''; // Clear previous content
     
@@ -324,9 +403,7 @@ function displayFilteredPublications(filteredPublications) {
                   </div>
               `;
           }
-           bibtexHtml = publication.bibtex ? `<button class="button" onclick="copyBibtex('${publication.bibtex}')">BibTex
-</button>
-` : '';
+           bibtexHtml = publication.bibtex ? `<button class="button" onclick="showBibtex(\`${publication.bibtex}\`)">BibTeX</button>` : '';
             publicationContent.innerHTML = `
   <div class="publication-content">
       <div class="paper-image">
@@ -336,9 +413,10 @@ function displayFilteredPublications(filteredPublications) {
 
       <div>
           <div class="paper-info">
-              <div class="paper-title">${publication.title}</div>
-              <div class="paper-authors">${authorsWithUnderline}</div>
-              <div class="paper-conference">${conferenceText}</div>
+              <div class="paper-title">${highlightSearchTerm(publication.title, searchText)}</div>
+<div class="paper-authors">${highlightSearchTerm(authorsWithUnderline, searchText)}</div>
+<div class="paper-conference">${highlightSearchTerm(conferenceText, searchText)}</div>
+
           </div>
           <div class="links">
               ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
@@ -365,6 +443,9 @@ function displayFilteredPublications(filteredPublications) {
             yearContent.appendChild(publicationContent);
         });
     }
+
+  
+  setupFadeInAnimation(); 
 }
 
 fetchPublications();

@@ -77,24 +77,33 @@ Here’s our day-by-day itinerary and the highlights that made this trip unforge
     </item>
     
     <item>
+      <title></title>
+      <link>/cv/</link>
+      <pubDate>Fri, 10 Oct 2025 00:00:00 +0000</pubDate>
+      
+      <guid>/cv/</guid>
+      <description>📄 Download Resume 🌿 Work Experience Research Intern Huawei Noah’s Ark Lab
+London, UK
+May 2025 – Nov 2025
+3D Reconstruction and Parametric Surface Modeling.
+Research Assistant DFKI, RPTU
+Kaiserslautern, Germany
+Feb 2024 – Apr 2025
+Vision-Language Architectures for 3D Scene and Shape Reconstruction.
+Student Researcher SnT, University of Luxembourg
+Kirchberg, Luxembourg
+Jan 2023 – Feb 2024
+3D Shape Modelling with Deep Geometric-Language Models.
+Research Intern Creatis, INSA Lyon</description>
+    </item>
+    
+    <item>
       <title>My Publications</title>
       <link>/publications/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
       
       <guid>/publications/</guid>
-      <description> * Equal Contributions </description>
-    </item>
-    
-    <item>
-      <title>Mohammad Sadil Khan</title>
-      <link>/cv/</link>
-      <pubDate>Wed, 21 Dec 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/cv/</guid>
-      <description>Download Resume
-Work Experience Research Intern May 2025 - Nov 2025 Huawei Noah&#39;s Ark Lab London, UK Project: 3D Reconstruction
-Research Assistant Feb 2024 - Apr 2025 German Center of Artificial Intelligence (DFKI), RPTU Kaiserslautern, Germany Project: Vision-Language Architectures for 3D Scene and Shape Reconstruction.
-Student Researcher Jan 2023 - Feb 2024 CVI2 Lab, SnT, University of Luxembourg Kirchberg, Luxembourg Project: 3D Shape Modelling using Deep Geometric and Language Models.</description>
+      <description> * Equal Contributions × BibTeX Entry 📋 Copy </description>
     </item>
     
     <item>

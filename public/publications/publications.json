@@ -23,7 +23,7 @@
         "project": "https://sankalpsinha-cmos.github.io/MARVEL/",
         "codeLink": "https://github.com/SadilKhan/MARVEL-FX3D",
         "poster": "data/marvel_poster.png",
-        "bibtex": "@misc{sinha2024marvel40mmultilevelvisualelaboration,title={MARVEL-40M+: Multi-Level Visual Elaboration for High-Fidelity Text-to-3D Content Creation}, author={Sankalp Sinha and Mohammad Sadil Khan and Muhammad Usama and Shino Sam and Didier Stricker and Sk Aziz Ali and Muhammad Zeshan Afzal},year={2024}, eprint={2411.17945},archivePrefix={arXiv}, primaryClass={cs.CV}, url={https://arxiv.org/abs/2411.17945}, }",
+        "bibtex": "@InProceedings{Sinha_2025_CVPR, author    = {Sinha, Sankalp and Khan, Mohammad Sadil and Usama, Muhammad and Sam, Shino and Stricker, Didier and Ali, Sk Aziz and Afzal, Muhammad Zeshan},title     = {MARVEL-40M+: Multi-Level Visual Elaboration for High-Fidelity Text-to-3D Content Creation},booktitle = {Proceedings of the Computer Vision and Pattern Recognition Conference (CVPR)}, month     = {June}, year      = {2025},pages     = {8105-8116}}",
         "arxiv": "https://arxiv.org/abs/2411.17945",
         "video": "",
         "dataset": "https://sadilkhan.github.io/Marvel-Explorer/",

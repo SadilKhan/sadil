@@ -19,6 +19,16 @@ publishDate: "2023-08-10T00:00:00Z"
         <div id="publication-list"></div>
     </div>
 
+<!-- BibTeX Modal (Hugo-friendly embed) -->
+<div id="bibtexModal" class="bibtex-modal">
+  <div class="bibtex-card">
+    <span class="close-btn" onclick="closeBibtexModal()">×</span>
+    <h3>BibTeX Entry</h3>
+    <pre id="bibtexContent" class="bibtex-text"></pre>
+    <button class="copy-btn" onclick="copyBibtexFromModal()">📋 Copy</button>
+  </div>
+</div>
+
 
 <script src="publication_script.js"></script>
     
