@@ -1,7 +1,7 @@
 ---
 title: ""
 subtitle: ""
-description: "Interactive CV showcasing research and education in a horizontal timeline layout"
+description: "CV"
 author: "Mohammad Sadil Khan"
 publishDate: "2025-10-10"
 ---

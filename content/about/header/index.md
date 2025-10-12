@@ -4,6 +4,40 @@ text_align_right: false
 ---
 
 <style>
+/* ===== Hero Section ===== */
+.hero {
+  text-align: center;
+  padding: 5rem 1rem 3rem;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 30%, rgba(136,170,255,0.1), transparent 70%);
+  animation: fadeIn 1.4s ease forwards;
+}
+
+.hand-wave {
+  display: inline-block;
+  animation: wave 1.6s infinite;
+  transform-origin: 70% 70%;
+  font-size: 72px;
+}
+
+.welcome {
+  font-size: 72px;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(90deg, var(--accent, #4062bb), var(--highlight, #f45b69));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtext {
+  font-size: 1.1rem;
+  color: var(--fg-muted, #555);
+  margin-top: -10px;
+  opacity: 0.9;
+}
+
+/* Wave keyframes */
 @keyframes wave {
   0% { transform: rotate(0deg); }
   10% { transform: rotate(14deg); }
@@ -11,222 +45,269 @@ text_align_right: false
   30% { transform: rotate(14deg); }
   40% { transform: rotate(-4deg); }
   50% { transform: rotate(10deg); }
-  60% { transform: rotate(0deg); }
-  100% { transform: rotate(0deg); }
+  60%, 100% { transform: rotate(0deg); }
 }
 
-.hand-wave {
-  display: inline-block;
-  animation: wave 1.5s infinite; /* Infinite looping animation */
-  transform-origin: 70% 70%; /* Adjust origin to make it look natural */
-  font-size: 72px; /* Default size */
+/* ===== Content Section ===== */
+.about-content {
+  max-width: 900px;
+  margin: 0 auto;
+  line-height: 1.7;
+  font-size: 1.05rem;
+  color: var(--fg, #111);
+  opacity: 0;
+  animation: slideUp 1s ease forwards 0.4s;
 }
 
-.welcome {
-  font-size: 72px;
-  font-weight: bold;
+/* ===== Research Cards ===== */
+.research-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin: 2.5rem auto;
+  max-width: 1100px;
+}
+
+.research-card {
+  width: 300px;
+  height: 230px;
+  perspective: 1000px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative;
+}
+
+.research-card:hover { transform: scale(1.04); }
+
+.research-front, .research-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  transition: transform 0.6s ease;
+  overflow: hidden;
+}
+
+/* FRONT FACE */
+.research-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;   /* vertically center */
+  align-items: center;       /* horizontally center */
+  text-align: center;        /* center text lines */
+  background: color-mix(in srgb, var(--bg, #fff) 90%, var(--accent, #4062bb) 5%);
+  border: 1px solid color-mix(in srgb, var(--accent, #4062bb) 30%, transparent);
+  box-shadow: 0 0 15px rgba(0,0,0,0.05);
+  border-radius: 16px;
+  padding: 1rem;
+  height: 100%;
+  box-sizing: border-box;
+}
+.research-front h3 {
+  text-align: center;
+}
+.research-front p {
+  text-align: center;
+}
+
+.dark-mode .research-front h3 {
+  color: #CA61C3;
+}
+
+.dark-mode p {
+color: white;
+}
+
+.dark-mode .research-front p {
+color: black;
+}
+
+/* BACK FACE */
+.research-back {
+  background: color-mix(in srgb, var(--accent, #4062bb) 10%, var(--highlight, #f45b69) 10%, var(--bg, #fff) 80%);
+  border: 1px solid color-mix(in srgb, var(--accent, #4062bb) 40%, transparent);
+  color: var(--fg, #111);
+  transform: rotateY(180deg);
+  box-shadow: 0 0 20px rgba(0,0,0,0.05);
+}
+.research-back ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1rem;
+  font-size: 0.9rem;
+  list-style-type: square;
+}
+.research-back li { margin-bottom: 0.4rem; }
+.research-back a {
+  color: var(--accent, #4062bb);
+  text-decoration: none;
+  font-weight: 500;
+}
+.research-back a:hover { text-decoration: underline; }
+
+.dark-mode .research-back li {
+color: white;
+}
+
+.dark-mode li {
+color:white;
+}
+
+/* FLIP ANIMATION */
+.research-card:hover .research-front { transform: rotateY(180deg); }
+.research-card:hover .research-back { transform: rotateY(0deg); }
+
+/* ===== Headings ===== */
+h2 {
+  margin-top: 3rem;
+  color: var(--accent, #4062bb);
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.8rem;
+}
+
+/* ===== Recent Events ===== */
+.events {
+  background: color-mix(in srgb, var(--bg, #fff) 95%, var(--accent, #4062bb) 5%);
+  border: 1px solid color-mix(in srgb, var(--accent, #4062bb) 20%, transparent);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 3rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+  animation: fadeIn 1.2s ease forwards;
+}
+.events ul {
+  list-style: none;
+  padding: 0;
   margin: 0;
 }
-
-.heading {
-  margin-top: -60px;
-  text-align: center; /* Center-align the heading */
-  line-height: 1.2;
+.events li {
+  margin: 0.75rem 0;
+  font-size: 1rem;
+  color: var(--fg, #111);
+}
+.events strong {
+  color: var(--accent, #4062bb);
 }
 
-/* Animation enhancement for the heading */
-@keyframes textSlideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.heading {
-  animation: textSlideIn 1.2s ease-in-out; /* Smooth slide-in animation for the text */
-}
-
-/* Responsive adjustments for smaller screens */
-@media (max-width: 768px) {
-  .hand-wave {
-    font-size: 48px; /* Reduce emoji size */
-  }
-
-  .welcome {
-    font-size: 48px; /* Reduce text size */
-  }
-
-  .heading {
-    margin-top: -30px; /* Adjust spacing for smaller screens */
-  }
-}
-
-/* Additional hover effect for the waving hand */
-.hand-wave:hover {
-  animation: wave 0.8s infinite; /* Faster waving animation on hover */
-  color: #007bff; /* Change emoji color when hovered */
-}
-
-
-/* Styling for the <details> container */
-details {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(46, 191, 165, 0.05)); 
-  backdrop-filter: blur(10px); /* Frosted glass effect */
-  border-radius: 12px; /* Smooth rounded corners */
-  margin: 12px 0;
-  padding: 14px 18px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.4s ease-in-out;
-}
-
-/* Summary section - clickable title */
-summary {
-  font-size: 18px;
-  cursor: pointer;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px;
-  transition: color 0.3s ease-in-out;
-}
-
-/* Add hover effect on summary */
-summary:hover {
-  color: #007bff; /* Change color when hovered */
-}
-
-/* Add a plus (+) and minus (-) indicator */
-summary::after {
-  font-size: 20px;
-  font-weight: bold;
-  transition: transform 0.3s ease-in-out;
-   
-}
-
-/* Change the plus to minus when details are open */
-details[open] summary::after {
-  transform: rotate(180deg);
-  
-}
-
-/* Styling for expanded content */
-details[open] {
-  border: 1px solid #007bff;
-}
-
-/* Inside the details (list items) */
-details ul {
-  margin-top: 8px;
-  padding-left: 10%;
-  list-style-type: circle;
-}
-
-/* Style the list items */
-details ul li {
-  font-size: 16px;
-  padding: 4px 0;
-}
-
-/* Fade-in effect when opening */
-details[open] > ul, details[open] > p {
-  animation: fadeIn 0.4s ease-in-out;
-}
-
-/* Keyframe animation for fade-in effect */
+/* ===== Animations ===== */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .welcome { font-size: 52px; }
+  .hand-wave { font-size: 48px; }
+  .subtext { font-size: 1rem; }
+  .about-content { font-size: 1rem; padding: 0 1rem; }
+  .research-grid { flex-direction: column; align-items: center; }
+  .research-card { width: 90%; height: auto; }
+  .research-front, .research-back {
+    position: relative;
+    transform: none !important;
+    border-radius: 12px;
+    box-shadow: none;
+  }
+  .research-back { margin-top: 0.8rem; }
+}
 </style>
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const detailsElements = document.querySelectorAll("details");
-
-  detailsElements.forEach((detail) => {
-    detail.addEventListener("toggle", function () {
-      if (this.open) {
-        let content = this.querySelector("ul, p");
-        if (content) {
-          let maxHeight = content.scrollHeight + "px";
-          content.style.maxHeight = maxHeight;
-        }
-      } else {
-        let content = this.querySelector("ul, p");
-        if (content) {
-          content.style.maxHeight = "0px";
-        }
-      }
-    });
-  });
-});
-</script>
 
 
-
-<!-- Subheadline -->
-<div class="heading">
-  <span class="welcome">Welcome</span>
-  <span class="hand-wave">👋</span>
+<!-- ========================= HERO ========================= -->
+<div class="hero">
+  <div class="heading">
+    <span class="welcome">Welcome</span>
+    <span class="hand-wave">👋</span>
+  </div>
+  <p class="subtext">PhD Student • Research Intern • 3D Vision & Generative CAD</p>
 </div>
 
+<!-- ========================= ABOUT ========================= -->
+<div class="about-content">
 
-Hello, My name is Mohammad Sadil Khan. I am currently a 2nd year PhD student at [**DFKI**](https://av.dfki.de/members/sadil-khan/), under the supervision of Prof. Dr Didier Stricker. I am also a summer research intern at Huawei’s Noah’s Ark Lab, London where I work with [Ismail Elezi](https://therevanchist.github.io/) and [Jiankang Deng](https://jiankangdeng.github.io/).
+<p>Hello, My name is <strong>Mohammad Sadil Khan</strong>. I am currently a 2nd year PhD student at <a href="https://av.dfki.de/members/sadil-khan/" target="_blank"><b>DFKI</b></a>, under the supervision of Prof. Dr Didier Stricker. I am also a summer research intern at Huawei’s Noah’s Ark Lab, London where I work with <a href="https://therevanchist.github.io/" target="_blank">Ismail Elezi</a> and <a href="https://jiankangdeng.github.io/" target="_blank">Jiankang Deng</a>.</p>
 
-I am currently working on the following domains.
+<p>I am currently working on the following domains:</p>
 
-<details><summary><strong> <u>Text-to-3D Reconstruction</u>:</strong> <i> Generating 3D models from detailed textual descriptions. </i> </summary>
+<h2 style="text-align:center; margin-top:3rem;"> 👨🏻‍💻Research Domains</h2>
+
+<div class="research-grid">
+  <!-- Card 1 -->
+  <div class="research-card">
+    <div class="research-front">
+      <h3>3D Reconstruction</h3>
+      <p>Generating 3D models from multimodal inputs (texts,images,etc)</p>
+    </div>
+    <div class="research-back">
+      <ul>
+        <li><a href="https://arxiv.org/abs/2411.17945" target="_blank">MARVEL-40M+</a> — Largest 3D Captioning Dataset (CVPR 2025)</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="research-card">
+    <div class="research-front">
+      <h3>3D Understanding</h3>
+      <p>Bridging geometry, perception, and semantics.</p>
+    </div>
+    <div class="research-back">
+      <p>Coming soon 🚧</p>
+    </div>
+  </div>
+
+  <!-- Card 2 -->
+  <div class="research-card">
+    <div class="research-front">
+      <h3>Efficient 3D Representation</h3>
+      <p>Exploring compact 3D representation</p>
+    </div>
+    <div class="research-back">
+      <p>Coming soon 🚧</p>
+    </div>
+  </div>
+
+  <!-- Card 3 -->
+  <div class="research-card">
+    <div class="research-front">
+      <h3>CAD Generative AI</h3>
+      <p>Leveraging AI to accelerate computer-aided design</p>
+    </div>
+    <div class="research-back">
+      <ul>
+        <li><a href="https://sadilkhan.github.io/text2cad-project/" target="_blank">TextCAD</a> — Text-to-Editable CAD (NeurIPS 2024 Spotlight)</li>
+        <li><a href="http://skazizali.com/cadsignet.github.io/" target="_blank">CAD-SIGNet</a> — CAD design history from point clouds (CVPR 2024 Highlight)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<p>Check out my <a href="/projects"><b>Projects</b></a> and <a href="/publications/"><b>Publications</b></a> page.</p>
+
+<p>I am open to research collaborations or internship opportunities in:</p>
 <ul>
-    <li><a href="https://arxiv.org/abs/2411.17945">MARVEL-40M+</a>: The largest and the most descriptive 3D Captioning Dataset (CVPR 2025). </li>
-    </ul>
-</details>
+  <li>3D Scene or Shape Reconstruction</li>
+  <li>CAD Design History Generation using Multi-modal Inputs</li>
+</ul>
 
-<details><summary><strong><u>Efficient 3D Representation</u>:</strong> <i>Exploring efficient 3D representation approaches. </i> </summary>
-<p> Coming Soon </p>
-</details>
+<p><strong>Reviewer for:</strong> AAAI'26, NeurIPS'25 (DB Track), SIGGRAPH Asia'25, ICPR'24</p>
 
-<details><summary><strong><u>Multi-Modal CAD Designing</u>:</strong> <i> Leveraging AI to accelerate computer-aided design processes. </i></summary>
+<h2>🗓 Recent Events</h2>
+
+<div class="events">
   <ul>
-    <li><a href="https://sadilkhan.github.io/text2cad-project/">TextCAD</a>: <span> Generate Editable CAD models from text prompts (NeurIPS 2024 - Spotlight). </span> </li>
-    <li><a href="http://skazizali.com/cadsignet.github.io/">CAD-SIGNet</a>: Generate Full CAD design history from point clouds (CVPR 2024 - Highlight)..</li>
+    <li><strong>[01-05-2025]</strong> Started my summer research internship at Huawei's Noah’s Ark Lab, London.</li>
+    <li><strong>[26-02-2025]</strong> MARVEL-40M+ accepted at <b>CVPR 2025</b>. 🎉 Check <a href="/publications/">here</a>.</li>
   </ul>
-</details>
+</div>
 
-
-Check out my [**Projects**](/projects) and [**Publications**](/publications/) page.
-
-
-I am open to research collaboration or internship opportunity on the following domains.
-
-1. 3D scene or shape reconstruction.
-2. CAD design history generation using Multi-modal inputs.
-
-
-
-**Reviewer for**: AAAI'26, NeurIPS'25 (DB Track), SIGGRAPH Asia'25, ICPR'24
-
-
-# Recent Events
-
-
-- **[01-05-2025]** I have started my summer research internship at Huawei's Noah Ark Lab, London.
-
-- **[26-02-2025]** Marvel-40M+ has been accepted in **CVPR** 2025. Check [Here](/publications/). 🎉🎉🎉
-
-
-
-
-
-
+</div>
