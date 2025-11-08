@@ -284,6 +284,7 @@ h2 {
     </div>
     <div class="research-back">
       <ul>
+        <li><a href="" target="_blank">NURBGen</a> — NURBS based CAD from texts (AAAI-2026). </li>
         <li><a href="https://sadilkhan.github.io/text2cad-project/" target="_blank">TextCAD</a> — Text-to-Editable CAD (NeurIPS 2024 Spotlight)</li>
         <li><a href="http://skazizali.com/cadsignet.github.io/" target="_blank">CAD-SIGNet</a> — CAD design history from point clouds (CVPR 2024 Highlight)</li>
       </ul>
@@ -299,14 +300,14 @@ h2 {
   <li>CAD Design History Generation using Multi-modal Inputs</li>
 </ul>
 
-<p><strong>Reviewer for:</strong> AAAI'26, NeurIPS'25 (DB Track), SIGGRAPH Asia'25, ICPR'24</p>
+<p><strong>Reviewer for:</strong> CVPR'26, AAAI'26, NeurIPS'25 (DB Track), SIGGRAPH Asia'25, ICPR'24</p>
 
 <h2>🗓 Recent Events</h2>
 
 <div class="events">
   <ul>
-    <li><strong>[01-05-2025]</strong> Started my summer research internship at Huawei's Noah’s Ark Lab, London.</li>
-    <li><strong>[26-02-2025]</strong> MARVEL-40M+ accepted at <b>CVPR 2025</b>. 🎉 Check <a href="/publications/">here</a>.</li>
+  <li><strong>[08-11-2025]</strong> 🎉 NURBGen accepted in AAAI 2026. Details coming Soon.</li>
+    <li><strong>[01-05-2025]</strong> Started my summer research internship at Huawei, London.</li>
   </ul>
 </div>
 
