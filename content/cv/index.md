@@ -232,7 +232,7 @@ button.download:hover {
     <h3>Research Intern</h3>
     <p><strong>Huawei Noah’s Ark Lab</strong></p>
     <p>London, UK</p>
-    <p><em>May 2025 – Nov 2025</em></p>
+    <p><em>May 2025 – Present</em></p>
     <p>3D Reconstruction and Parametric Surface Modeling.</p>
   </div>
 

@@ -1,5 +1,23 @@
 [
     {
+        "title": "NURBGen: High-Fidelity Text-to-CAD Generation through LLM-Driven NURBS Modeling",
+        "authors": "Muhammad Usama*, Mohammad Sadil Khan*, Didier Stricker, Muhammad Zeshan Afzal",
+        "conference": "AAAI 2026",
+        "year": 2026,
+        "project": "",
+        "codeLink": "",
+        "poster": "",
+        "bibtex": "",
+        "arxiv": "",
+        "video": "",
+        "dataset": "",
+        "paperLink": "",
+        "categories": "CAD, LLM, Nurbs, Fine-Tuning, Lora",
+        "image": "data/nurbgen.png",
+        "metadata": "First LLM-based framwork that generates editable CAD models directly from text using NURBs representation."
+    },
+    
+    {
         "title": "SHARP Challenge 2023: Solving CAD History and pArameters Recovery from Point clouds and 3D scans. Overview, Datasets, Metrics, and Baselines",
         "authors": " Dimitrios Mallis, Sk Aziz Ali, Elona Dupont, Kseniya Cherenkova, Ahmet Serdar Karadeniz, Mohammad Sadil Khan, Anis Kacem, Gleb Gusev, Djamila Aouada",
         "conference": "ICCV Workshop 2023",
@@ -28,7 +46,7 @@
         "video": "",
         "dataset": "https://sadilkhan.github.io/Marvel-Explorer/",
         "paperLink": "",
-        "categories": "Text-to-3D, Stable Diffusion, 3D Reconstruction, LLM, VLM, Annotation, Objaverse",
+        "categories": "Text-to-3D, Stable Diffusion, 3D Reconstruction, LLM, VLM, Annotation, Objaverse, Fine-Tuning, Lora",
         "image": "data/marvel.png",
         "metadata": "Largest 3D captioning dataset (40M+) with domain-specific and multi-level visual reasoning for text-to-3D generation."
     },
