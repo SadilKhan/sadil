@@ -91,18 +91,19 @@ body {
   color: #c9d1d9;
 }
 
-/* Collapsible content (expanded by default) */
+/* Collapsible content (expanded by default) - FIXED */
 .year-content {
-  overflow: hidden;
+  overflow: visible;
   transition: max-height 0.4s ease, opacity 0.4s ease;
   opacity: 1;
-  max-height: 1000px;
+  max-height: none; /* Changed from 1000px to none */
 }
 
 /* When collapsed */
 .year-content.hide {
   max-height: 0;
   opacity: 0;
+  overflow: hidden; /* Only hide overflow when collapsed */
   pointer-events: none;
 }
 
@@ -118,8 +119,8 @@ body {
   position: relative;
   margin-bottom: 1.5rem;
   padding: 1.2rem 1.5rem;
-  border-radius: 16px; /* Rounded boundary */
-  border: 2px solid rgba(0, 123, 255, 0.25); /* Subtle blue border */
+  border-radius: 16px;
+  border: 2px solid rgba(0, 123, 255, 0.25);
   background-color: #ffffff;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
   transition: opacity 0.8s ease, transform 0.8s ease, box-shadow 0.8s ease, border-color 0.3s ease;
@@ -128,7 +129,6 @@ body {
   transform: translateY(20px);
   will-change: opacity, transform;
 }
-
 
 .publication.visible {
   opacity: 1;
@@ -139,6 +139,7 @@ body {
 .publication:nth-child(2) { transition-delay: 0.1s; }
 .publication:nth-child(3) { transition-delay: 0.15s; }
 .publication:nth-child(4) { transition-delay: 0.2s; }
+
 /* Hover effect */
 .publication:hover {
   transform: translateY(-4px);
@@ -189,11 +190,6 @@ body {
   margin: 0 auto;
 }
 
-./*paper-image img:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-}*/
-
 /* ============================================================
    PAPER TEXT INFORMATION
    ============================================================ */
@@ -229,7 +225,6 @@ body {
   font-size: 16px;
   padding-bottom: 20px;
 }
-
 
 /* Make authors centered and more spaced on small screens */
 @media (max-width: 768px) {
@@ -346,11 +341,8 @@ body {
   }
 }
 
-
-
-
 mark {
-  background-color: rgba(173, 216, 230, 0.6); /* subtle translucent light blue */
+  background-color: rgba(173, 216, 230, 0.6);
   color: #000;
   border-radius: 3px;
   padding: 0 3px;
@@ -359,11 +351,9 @@ mark {
 
 /* Better contrast for dark mode */
 .dark-mode mark {
-  background-color: rgba(255, 235, 59, 0.6); /* soft golden yellow */
+  background-color: rgba(255, 235, 59, 0.6);
   color: #111;
 }
-
-
 
 /* --- Overlay background --- */
 .bibtex-modal {
@@ -446,10 +436,4 @@ mark {
 }
 
 /* --- Animation --- */
-@keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
 @keyframes slideUp { from {transform: translateY(30px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
-
-
-
-
-
