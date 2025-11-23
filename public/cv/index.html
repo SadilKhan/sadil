@@ -359,213 +359,229 @@ if (!doNotTrack) {
       <section class="post-body pt5 pb4">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
+
 :root {
   --bg: #0f0f0f;
   --fg: #eee;
   --accent: #88aaff;
   --highlight: #ff6f91;
-  --line: rgba(136, 170, 255, 0.4);
+  --line: rgba(136, 170, 255, 0.3);
 }
 
 body {
-  background-color: var(--bg);
   color: var(--fg);
-  font-family: 'Inter', sans-serif;
   margin: 0;
-  text-align: center;
   overflow-x: hidden;
 }
 
-/* Section title */
 h2 {
-  margin-top: 3rem;
-  font-size: 1.9rem;
+  text-align: center;
+  font-size: 2rem;
   color: var(--accent);
   font-weight: 700;
+  margin: 3rem 0 2rem;
 }
 
-/* Horizontal timeline */
-.timeline {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 3rem;
-  margin: 4rem auto;
-  padding: 2rem 0;
-  position: relative;
-  overflow-x: auto;
-  scrollbar-width: none;
-  scroll-behavior: smooth;
-  max-width: 100%;
-  scroll-padding: 3rem; /* ensures ends are visible */
-}
-
-/* Padding elements on each end */
-.timeline::before,
-.timeline::after {
-  content: "";
-  flex: 0 0 3rem; /* same as scroll-padding */
-}
-
-/* Timeline line */
-.timeline::after,
-.timeline::before {
-  background: none; /* keeps clean, only for spacing */
-}
-
-/* Horizontal line behind nodes */
-.timeline-track {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  height: 3px;
-  width: 100%;
-  background: var(--line);
-  transform: translateY(-50%);
-  z-index: 0;
-}
-
-/* Node cards */
-.node {
-  position: relative;
-  background: var(--bg);
-  border: 2px solid var(--accent);
-  color: var(--fg);
-  border-radius: 12px;
-  padding: 1.2rem 1.4rem;
-  width: 260px;
-  flex-shrink: 0;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  z-index: 1;
-  opacity: 0;
-  transform: translateY(25px);
-  animation: fadeInSeq 0.8s ease forwards;
-}
-.node:nth-child(1) { animation-delay: 0.2s; }
-.node:nth-child(2) { animation-delay: 0.5s; }
-.node:nth-child(3) { animation-delay: 0.8s; }
-.node:nth-child(4) { animation-delay: 1.1s; }
-
-@keyframes fadeInSeq {
-  from { opacity: 0; transform: translateY(25px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* === Education Timeline (softer aesthetic) === */
-.timeline.education {
-  gap: 3rem;
-  margin: 3rem auto 6rem auto;
-  padding: 2rem 1rem;
-  max-width: 900px;
-  justify-content: align;
-  position: relative;
-}
-
-.timeline.education .timeline-track {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  height: 2px;
-  width: 100%;
-  background: linear-gradient(
-    to right,
-    rgba(136, 170, 255, 0.1),
-    rgba(136, 170, 255, 0.6),
-    rgba(136, 170, 255, 0.1)
-  );
-  transform: translateY(-50%);
-  border-radius: 2px;
-  z-index: 0;
-}
-
-/* smaller, lighter connector dots */
-.timeline.education .node::before {
-  width: 10px;
-  height: 10px;
-  background: var(--accent);
-  opacity: 0.8;
-  box-shadow: 0 0 6px var(--accent);
-}
-.timeline.education .node:first-child::before {
-  display: none;
-}
-
-/* slightly slower fade for academic calmness */
-.timeline.education .node {
-  animation: fadeInSeq 1s ease forwards;
-}
-.timeline.education .node:nth-child(1) { animation-delay: 0.3s; }
-.timeline.education .node:nth-child(2) { animation-delay: 0.6s; }
-.timeline.education .node:nth-child(3) { animation-delay: 0.9s; }
-
-
-/* Connector dots */
-.node::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: -25px;
-  transform: translateY(-50%);
-  width: 14px;
-  height: 14px;
-  background: var(--accent);
-  border-radius: 50%;
-  box-shadow: 0 0 10px var(--accent);
-  z-index: 2;
-}
-.node:first-child::before { display: none; }
-
-/* Node content */
-.node h3 {
-  margin: 0.3em 0;
-  font-size: 1.1rem;
-  color: var(--accent);
-}
-.node p {
-  margin: 0.2em 0;
-  padding-bottom: 20px;
-  font-size: 0.9rem;
-}
-
-/* Button */
 button.download {
+  display: block;
+  margin: 2rem auto;
   background: var(--accent);
   border: none;
   color: white;
-  padding: 10px 22px;
+  padding: 12px 28px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
-  transition: background 0.3s ease;
-}
-button.download:hover {
-  background: var(--highlight);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(136, 170, 255, 0.3);
 }
 
-/* Mobile responsive */
+button.download:hover {
+  background: var(--highlight);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 111, 145, 0.4);
+}
+
+/* Tree Structure */
+.tree {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  padding: 2rem 0;
+}
+
+/* Main trunk */
+.tree::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: linear-gradient(to bottom, var(--line), transparent);
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+/* Branch container */
+.branch {
+  position: relative;
+  margin: 3rem 0;
+  opacity: 0;
+  animation: branchGrow 0.8s ease forwards;
+}
+
+.branch:nth-child(odd) {
+  padding-right: 55%;
+}
+
+.branch:nth-child(even) {
+  padding-left: 55%;
+}
+
+.branch:nth-child(1) { animation-delay: 0.2s; }
+.branch:nth-child(2) { animation-delay: 0.4s; }
+.branch:nth-child(3) { animation-delay: 0.6s; }
+.branch:nth-child(4) { animation-delay: 0.8s; }
+.branch:nth-child(5) { animation-delay: 1s; }
+.branch:nth-child(6) { animation-delay: 1.2s; }
+
+@keyframes branchGrow {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Branch line connecting to trunk */
+.branch::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 60px;
+  height: 2px;
+  background: var(--line);
+  z-index: 0;
+}
+
+.branch:nth-child(odd)::before {
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.branch:nth-child(even)::before {
+  left: 0;
+  transform: translateY(-50%);
+}
+
+/* Node dot at trunk connection */
+.branch::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 12px;
+  height: 12px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 15px var(--accent);
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.branch:nth-child(odd)::after {
+  right: -6px;
+}
+
+.branch:nth-child(even)::after {
+  left: -6px;
+}
+
+/* Card styling */
+.node {
+  background: rgba(20, 20, 30, 0.9);
+  border: 2px solid var(--accent);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2rem;
+}
+
+.node:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 35px rgba(136, 170, 255, 0.4);
+  border-color: var(--highlight);
+}
+
+.node h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.3rem;
+  color: var(--accent);
+}
+
+.node p {
+  margin: 0.3rem 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.node p strong {
+  color: var(--highlight);
+}
+
+.node p em {
+  color: rgba(238, 238, 238, 0.7);
+  font-style: normal;
+  font-size: 0.9rem;
+}
+
+/* Education section - simpler vertical tree */
+.tree.education::before {
+  background: linear-gradient(to bottom, transparent, var(--line), transparent);
+}
+
+.tree.education .branch {
+  padding: 0;
+  margin: 2rem auto;
+  max-width: 500px;
+}
+
+.tree.education .branch::before,
+.tree.education .branch::after {
+  display: none;
+}
+
 @media (max-width: 768px) {
-  .timeline {
-    flex-direction: column;
-    gap: 2rem;
-    overflow-x: visible;
+  .tree::before {
+    left: 30px;
   }
-  .timeline-track {
-    width: 3px;
-    height: 100%;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
+  
+  .branch:nth-child(odd),
+  .branch:nth-child(even) {
+    padding-left: 80px;
+    padding-right: 0;
   }
-  .node {
-    width: 85%;
-    text-align: center;
-    animation: fadeInSeq 0.8s ease forwards;
+  
+  .branch::before {
+    left: 0;
+    right: auto;
+    width: 40px;
   }
-  .node::before {
-    left: 50%;
-    top: -25px;
-    transform: translateX(-50%);
+  
+  .branch::after {
+    left: -6px;
+    right: auto;
+  }
+  
+  .tree.education .branch {
+    padding-left: 0;
   }
 }
 </style>
