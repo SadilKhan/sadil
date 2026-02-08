@@ -5,7 +5,7 @@
         "conference": "AAAI 2026",
         "year": 2026,
         "project": "https://muhammadusama100.github.io/NURBGen-Project/",
-        "codeLink": "",
+        "codeLink": "https://github.com/SadilKhan/NURBGen",
         "poster": "",
         "bibtex": "@article{usama2025nurbgen,title={NURBGen: High-Fidelity Text-to-CAD Generation through LLM-Driven NURBS Modeling},author={Usama, Muhammad and Khan, Mohammad Sadil and Stricker, Didier and Afzal, Muhammad Zeshan},journal={arXiv preprint arXiv:2511.06194},year={2025}}",
         "arxiv": "https://arxiv.org/pdf/2511.06194",
