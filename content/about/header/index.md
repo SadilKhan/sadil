@@ -405,7 +405,7 @@ h2 {
 
 
 
-<p><strong>Reviewer: </strong> CVPR'26 &nbsp; AAAI'26 &nbsp; NeurIPS'25 &nbsp; SIGGRAPH Asia'25 &nbsp; ICPR'24</p>
+<p><strong>Reviewer: </strong> ICML'26 &nbsp; ECCV'26 &nbsp; CVPR'26 &nbsp; AAAI'26 &nbsp; NeurIPS'25 &nbsp; SIGGRAPH Asia'25 &nbsp; ICPR'24</p>
 
 <h2>🗓 Recent Events</h2>
 

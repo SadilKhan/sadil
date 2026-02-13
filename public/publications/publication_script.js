@@ -1,456 +1,291 @@
+/* ============================================================
+   PUBLICATIONS PAGE — SCRIPT
+   Mohammad Sadil Khan
+   ============================================================ */
 
-let publications = []; // Define the publications array in the global scope
-let authorsWithUnderline = '';
-let bibtexHtml= '';
+let publications = [];
 
-// Sample publication data
+// ─── FETCH ────────────────────────────────────────────────
 async function fetchPublications() {
-    try {
-        const response = await fetch('publications.json');
-        publications = await response.json();
-        displayPublications(publications);
-    } catch (error) {
-        console.error('Error fetching publications:', error);
-    }
-}
-function setupFadeInAnimation() {
-    const observerOptions = {
-        threshold: 0.15
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            } else {
-                entry.target.classList.remove('visible');
-            }
-        });
-    }, observerOptions);
-
-    document.querySelectorAll('.publication').forEach(card => {
-        observer.observe(card);
-    });
-}
-
-
-
-// Function to toggle year content visibility
-function toggleYearContent(year) {
-  const yearContent = document.querySelector(`.year-content[data-year="${year}"]`);
-  const arrowIcon = yearContent.previousElementSibling.querySelector('.arrow-icon');
-
-  // Toggle the 'hide' class (since CSS uses .hide)
-  yearContent.classList.toggle('hide');
-
-  if (yearContent.classList.contains('hide')) {
-    arrowIcon.textContent = '▼';
-  } else {
-    arrowIcon.textContent = '▲';
+  try {
+    const res = await fetch('publications.json');
+    publications = await res.json();
+    displayPublications(publications);
+    updateResultsMeta(publications.length);
+  } catch (err) {
+    console.error('Error fetching publications:', err);
+    document.getElementById('publication-list').innerHTML =
+      `<div class="no-results">
+         <div class="no-results-icon">⚠</div>
+         <p>Could not load publications.</p>
+         <small>${err.message}</small>
+       </div>`;
   }
 }
 
-
-let activeTooltip = null;
-
-// Function to create and show the mini pop-up window
-function showTooltip(event, content) {
-    // Create the tooltip if it doesn't exist
-    if (!activeTooltip) {
-        activeTooltip = document.createElement('div');
-        activeTooltip.classList.add('tooltip');
-        document.body.appendChild(activeTooltip);
-
-        // Listen for mouseleave event on the publication content
-        const publicationContent = event.currentTarget;
-        publicationContent.addEventListener('mouseleave', () => {
-            document.body.removeChild(activeTooltip);
-            activeTooltip = null;
-        });
-    }
-
-    // Update the tooltip content and position
-    activeTooltip.innerHTML = `<p> ${content}</p>`;
-
-    const xOffset = 10; // Adjust this value to set the horizontal offset
-    const yOffset = -80; // Adjust this value to set the vertical offset
-    const tooltipWidth = Math.min(600, activeTooltip.scrollWidth); // Set a maximum width of 400px
-    const tooltipHeight = activeTooltip.scrollHeight;
-    const adjustedTop = event.clientY - tooltipHeight - yOffset + window.scrollY;
-    const adjustedLeft = event.clientX + xOffset + tooltipWidth > window.innerWidth
-        ? event.clientX - tooltipWidth + window.scrollX
-        : event.clientX + xOffset;
-
-    activeTooltip.style.maxWidth = `${tooltipWidth}px`;
-    activeTooltip.style.left = `${adjustedLeft}px`;
-    activeTooltip.style.top = `${adjustedTop}px`;
+// ─── RESULTS META ─────────────────────────────────────────
+function updateResultsMeta(count, searchText = '') {
+  let meta = document.getElementById('results-meta');
+  if (!meta) {
+    meta = document.createElement('div');
+    meta.id = 'results-meta';
+    const list = document.getElementById('publication-list');
+    list.parentNode.insertBefore(meta, list);
+  }
+  meta.innerHTML = searchText
+    ? `<span>${count}</span> result${count !== 1 ? 's' : ''} for "<em>${searchText}</em>"`
+    : `<span>${count}</span> publication${count !== 1 ? 's' : ''}`;
 }
 
+// ─── FADE-IN OBSERVER ─────────────────────────────────────
+function setupFadeIn() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.06, rootMargin: '0px 0px -10px 0px' });
 
+  document.querySelectorAll('.publication').forEach(card => {
+    card.classList.remove('visible');
+    io.observe(card);
+  });
+}
 
+// ─── TOGGLE YEAR ──────────────────────────────────────────
+function toggleYearContent(year) {
+  const content = document.querySelector(`.year-content[data-year="${year}"]`);
+  if (!content) return;
+  const arrow = content.previousElementSibling?.querySelector('.arrow-icon');
+  content.classList.toggle('hide');
+  if (arrow) {
+    arrow.style.transform = content.classList.contains('hide')
+      ? 'rotate(0deg)' : 'rotate(180deg)';
+  }
+}
 
-function displayPublications() {
-  document.querySelectorAll('.publication').forEach(card => card.classList.remove('visible'));
-    const publicationList = document.getElementById('publication-list');
-    publicationList.innerHTML = ''; // Clear previous content
+// ─── FORMAT AUTHORS ───────────────────────────────────────
+function formatAuthors(str, q = '') {
+  return str.split(',').map(a => {
+    a = a.trim();
+    const html = q ? highlight(a, q) : a;
+    return a.toLowerCase().includes('sadil')
+      ? `<u><b>${html}</b></u>`
+      : html;
+  }).join(' &nbsp;·&nbsp; ');
+}
 
-    // Sort publications by year in descending order (latest first)
-    const sortedPublications = publications.sort((a, b) => b.year - a.year);
+// ─── FORMAT CONFERENCE ────────────────────────────────────
+function formatConference(text, q = '') {
+  let t = (text || '').replace(
+    /(highlight|spotlight|oral)/gi,
+    m => `<span style="color:var(--red);">${m}</span>`
+  );
+  return q ? highlight(t, q) : t;
+}
 
-    let currentYear = null;
+// ─── HIGHLIGHT ────────────────────────────────────────────
+function highlight(text, term) {
+  if (!term) return text;
+  const esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(`(${esc})`, 'gi'), '<mark>$1</mark>');
+}
 
-    let paperCount = 0; // Initialize paper count
-    sortedPublications.forEach(publication => {
-        if (publication.year !== currentYear) {
-            // Create a new section for each year
-            const yearSection = document.createElement('div');
-            yearSection.classList.add('year-section');
-            yearSection.innerHTML = `<h2 onclick="toggleYearContent(${publication.year})">
-    ${publication.year} <span class="arrow-icon">▼</span>
-</h2>
-`; publicationList.appendChild(yearSection);
+// ─── BUILD CARD ───────────────────────────────────────────
+function buildCard(pub, q = '') {
+  const el = document.createElement('div');
+  el.classList.add('publication');
 
-            const yearContent = document.createElement('div');
-            yearContent.classList.add('year-content');
-            yearContent.setAttribute('data-year', publication.year);
-            yearSection.appendChild(yearContent);
+  // Image panel content
+  const imgHtml = pub.image
+    ? `<img src="${pub.image}" alt="${pub.title}" loading="lazy">`
+    : `<div class="paper-image-placeholder">◧</div>`;
 
-            currentYear = publication.year;
-            paperCount = 1; // Reset paper count for the new year
-        }
-        else {
-            paperCount++; // Increment paper count for the same year
-        }
-        
-        // Highlight "highlight," "spotlight," or "oral" in red in the conference text
-        let conferenceText = publication.conference || '';
-        conferenceText = conferenceText.replace(/(highlight|spotlight|oral)/gi, match => `<span style="color: red;">${match}</span>`);
+  const captionHtml = pub.metadata
+    ? `<div class="paper-metadata">${pub.metadata}</div>`
+    : '';
 
-        
-        // Split authors by comma and trim any extra spaces
-        const authors = publication.authors.split(',').map(author => author.trim());
-        
-        // Create a new array to hold authors with underlining applied to Mohammad Sadil Khan
-        authorsWithUnderline = authors.map(author => {
-                if (author.toLowerCase().includes('sadil')) {
-                    return `<u><b>${author}</b></u>`;
-                } else {
-                    return author;
-                }
-            }).join(' &nbsp;·&nbsp; ');
-        
-        
-        const publicationContent = document.createElement('div');
-        publicationContent.classList.add('publication');
-        
-        bibtexHtml = publication.bibtex ? `<button class="button" onclick="showBibtex(\`${publication.bibtex}\`)">BibTeX</button>` : '';
-        let paperImageHtml = ''; // Initialize an empty string for the paper image HTML
-        // Check if publication.image exists
-        if (publication.image) {
-            // If publication.image exists, add the <div class="paper-image"> with the image
-            paperImageHtml = `
-                <div class="paper-image">
-                    <img src="${publication.image}" alt="Publication Image">
-                </div>
-            `;
-        }
+  // Buttons
+  const btns = [
+    pub.paperLink && btn('📄 Paper',   pub.paperLink),
+    pub.arxiv     && btn('Arxiv',      pub.arxiv),
+    pub.project   && btn('🌐 Project', pub.project),
+    pub.codeLink  && btn('💻 Code',    pub.codeLink),
+    pub.dataset   && btn('🗂 Dataset', pub.dataset),
+    pub.poster    && btn('🖼 Poster',  pub.poster),
+    pub.video     && btn('▶ Video',    pub.video),
+    pub.bibtex    && bibtexBtn(pub.bibtex),
+  ].filter(Boolean).join('');
 
-        publicationContent.innerHTML = `
-  <div class="publication-content">
+  const titleHtml = q ? highlight(pub.title, q) : pub.title;
+
+  el.innerHTML = `
+    <div class="publication-content">
       <div class="paper-image">
-          ${publication.image ? `<img src="${publication.image}" alt="Publication Image">` : ''}
-          ${publication.metadata ? `<div class="paper-metadata">${publication.metadata}</div>` : ''}
+        ${imgHtml}
+        ${captionHtml}
       </div>
-
-      <div>
-          <div class="paper-info">
-              <div class="paper-title">${publication.title}</div>
-              <div class="paper-authors">${authorsWithUnderline}</div>
-              <div class="paper-conference">${conferenceText}</div>
-          </div>
-          <div class="links">
-              ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
-              ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
-              ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
-              ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
-              ${publication.dataset ? `<button class="button" onclick="window.open('${publication.dataset}', '_blank')">Dataset</button>` : ''}
-              ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
-              ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
-              ${bibtexHtml}
-          </div>
-          
+      <div class="paper-body">
+        <div class="paper-info">
+          <div class="paper-title">${titleHtml}</div>
+          <div class="paper-authors">${formatAuthors(pub.authors, q)}</div>
+          <div class="paper-conference">${formatConference(pub.conference, q)}</div>
+        </div>
+        <div class="links">${btns}</div>
       </div>
-  </div>
-`;
+    </div>`;
 
-        // Add event listener to show mini pop-up on hover
-        /*publicationContent.addEventListener('mouseover', event => {
-            const tooltipContent = `
-                ${publication.image}
-            `;
-            showTooltip(event, tooltipContent);
-        });*/
-
-        const yearContent = publicationList.querySelector(`.year-content[data-year="${publication.year}"]`);
-        yearContent.appendChild(publicationContent);
-    });
-    
-    setupFadeInAnimation(); 
+  return el;
 }
 
+function btn(label, url) {
+  return `<button class="button" onclick="window.open('${url}','_blank')">${label}</button>`;
+}
+
+function bibtexBtn(raw) {
+  const escaped = raw.replace(/\\/g, '\\\\').replace(/`/g, '\\`');
+  return `<button class="button" onclick="showBibtex(\`${escaped}\`)">❝ BibTeX</button>`;
+}
+
+// ─── BUILD YEAR SECTION ───────────────────────────────────
+function buildYearSection(year, pubs, q = '') {
+  const section = document.createElement('div');
+  section.classList.add('year-section');
+
+  section.innerHTML = `
+    <h2 onclick="toggleYearContent(${year})">
+      ${year}
+      <span class="year-badge">${pubs.length}</span>
+      <span class="arrow-icon" style="transform:rotate(180deg);">▾</span>
+    </h2>
+    <hr class="year-divider">`;
+
+  const yearContent = document.createElement('div');
+  yearContent.classList.add('year-content');
+  yearContent.setAttribute('data-year', year);
+
+  const inner = document.createElement('div');
+  inner.classList.add('year-content-inner');
+
+  pubs.forEach(pub => inner.appendChild(buildCard(pub, q)));
+
+  yearContent.appendChild(inner);
+  section.appendChild(yearContent);
+  return section;
+}
+
+// ─── MAIN DISPLAY ─────────────────────────────────────────
+function displayPublications(pubs, q = '') {
+  const list = document.getElementById('publication-list');
+  list.innerHTML = '';
+
+  if (!pubs || pubs.length === 0) {
+    list.innerHTML = `
+      <div class="no-results">
+        <div class="no-results-icon">◻</div>
+        <p>No publications found.</p>
+        <small>Try a different search term.</small>
+      </div>`;
+    return;
+  }
+
+  // Group by year descending
+  const sorted = [...pubs].sort((a, b) => b.year - a.year);
+  const byYear = sorted.reduce((acc, pub) => {
+    (acc[pub.year] = acc[pub.year] || []).push(pub);
+    return acc;
+  }, {});
+
+  Object.keys(byYear).sort((a, b) => b - a).forEach(year => {
+    list.appendChild(buildYearSection(Number(year), byYear[year], q));
+  });
+
+  requestAnimationFrame(() => setTimeout(setupFadeIn, 50));
+}
+
+// ─── SEARCH ───────────────────────────────────────────────
+function filterPublications(q) {
+  const lq = q.toLowerCase();
+  return publications.filter(p =>
+    p.title.toLowerCase().includes(lq) ||
+    p.authors.toLowerCase().includes(lq) ||
+    p.year.toString().includes(lq) ||
+    (p.conference || '').toLowerCase().includes(lq) ||
+    (p.categories || '').toLowerCase().includes(lq)
+  );
+}
+
+const debounce = (fn, ms) => {
+  let t;
+  return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); };
+};
+
+function updatePublications() {
+  const q = document.getElementById('search').value.trim();
+  const results = q ? filterPublications(q) : publications;
+  updateResultsMeta(results.length, q);
+  displayPublications(results, q);
+}
+
+// ─── BIBTEX ───────────────────────────────────────────────
+function formatBibtex(text) {
+  let out = '', depth = 0;
+  for (const ch of text) {
+    if (ch === '{') { depth++; out += ch; }
+    else if (ch === '}') { depth--; out += ch; }
+    else if (ch === ',' && depth <= 1) out += ',\n';
+    else out += ch;
+  }
+  return out;
+}
 
 function colorizeBibtex(text) {
-  // Detect if the page is in dark mode
-  const isDark = document.body.classList.contains('dark-mode');
-
-  // Define theme colors
-  const colors = isDark
-    ? { // 🌙 Dark Mode Palette
-        at: '#ff7b72',      // pink-red
-        key: '#79c0ff',     // cyan-blue
-        value: '#d2a8ff'    // violet
-      }
-    : { // ☀️ Light Mode Palette
-        at: '#d73a49',      // red
-        key: '#005cc5',     // blue
-        value: '#6f42c1'    // purple
-      };
-
-  // Apply regex-based highlighting
+  const dark = document.body.classList.contains('dark-mode');
+  const c = dark
+    ? { at: '#f97583', key: '#79c0ff', val: '#d2a8ff' }
+    : { at: '#c94040', key: '#1a73e8', val: '#6f42c1' };
   return text
-    .replace(
-      /^@(\w+)/gm,
-      `<span style="color:${colors.at}; font-weight:600;">@$1</span>`
-    )
-    .replace(
-      /^(\s*[a-zA-Z]+)\s*=/gm,
-      `<span style="color:${colors.key}; font-weight:500;">$1</span> =`
-    )
-    .replace(
-      /({[^}]+})/gm,
-      `<span style="color:${colors.value};">$1</span>`
-    );
+    .replace(/^@(\w+)/gm, `<span style="color:${c.at};font-weight:700;">@$1</span>`)
+    .replace(/^(\s*[a-zA-Z]+)\s*=/gm, `<span style="color:${c.key};font-weight:600;">$1</span> =`)
+    .replace(/({[^}]+})/gm, `<span style="color:${c.val};">$1</span>`);
 }
 
-// Function to show BibTeX text in a modal or container
-function showBibtex(bibtexText) {
-    // Create a container for displaying BibTeX text
-    const modal = document.getElementById('bibtexModal');
-    const content = document.getElementById('bibtexContent');
-    content.innerHTML = colorizeBibtex(formatBibtex(bibtexText));
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden'; // disable background scroll
+function showBibtex(raw) {
+  document.getElementById('bibtexContent').innerHTML = colorizeBibtex(formatBibtex(raw));
+  document.getElementById('bibtexModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
 }
 
-// Close modal
 function closeBibtexModal() {
-    const modal = document.getElementById('bibtexModal');
-    modal.style.display = 'none';
-    document.body.style.overflow = ''; // re-enable scroll
+  document.getElementById('bibtexModal').style.display = 'none';
+  document.body.style.overflow = '';
 }
 
-// Copy button inside modal
 function copyBibtexFromModal() {
-    const content = document.getElementById('bibtexContent').textContent;
-    navigator.clipboard.writeText(content);
-    const copyBtn = document.querySelector('.copy-btn');
-    copyBtn.textContent = "✅ Copied!";
-    setTimeout(() => copyBtn.textContent = "📋 Copy", 1200);
-}
-// Function to copy BibTeX text
-function copyBibtex(bibtexText) {
-    // Create a temporary textarea element to copy text
-    const textarea = document.createElement('textarea');
-    textarea.value = formatBibtex(bibtexText); // Format BibTeX text
-    document.body.appendChild(textarea);
-    
-    // Select and copy the text
-    textarea.select();
-    document.execCommand('copy');
-    
-    // Remove the temporary textarea
-    document.body.removeChild(textarea);
-    
-    // Alert message with the copied content
-    alert(`BibTeX copied:\n\n${textarea.value}`);
+  const text = document.getElementById('bibtexContent').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    btn.style.background = '#1e8e3e';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = ''; }, 1800);
+  });
 }
 
-function formatBibtex(bibtexText) {
-    let insideBraces = false;
-    let formattedText = '';
-    let num_bracket=0
+// ─── KEYBOARD SHORTCUTS ───────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const m = document.getElementById('bibtexModal');
+    if (m?.style.display === 'flex') closeBibtexModal();
+  }
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+    e.preventDefault();
+    document.getElementById('search')?.focus();
+  }
+});
 
-    for (let i = 0; i < bibtexText.length; i++) {
-        const char = bibtexText[i];
+document.addEventListener('click', e => {
+  const m = document.getElementById('bibtexModal');
+  if (m && e.target === m) closeBibtexModal();
+});
 
-        if (char === '{') {
-          if (num_bracket>0) {
-            insideBraces = true;
-            formattedText += char;
-          }
-          else {
-            formattedText += char;
-            num_bracket++;
-          }
-        } else if (char === '}') {
-            insideBraces = false;
-            formattedText += char;
-        } else if (char === ',' && !insideBraces) {
-            formattedText += char + '\n';
-        } else {
-            formattedText += char;
-        }
-    }
-
-    return formattedText;
-}
-
-
-
-
-// Function to filter publications based on search input
-function filterPublications(searchText) {
-    const filteredPublications = publications.filter(publication =>
-        publication.title.toLowerCase().includes(searchText.toLowerCase()) ||
-        publication.authors.toLowerCase().includes(searchText.toLowerCase()) ||
-        publication.year.toString().includes(searchText) ||
-        publication.conference.toLowerCase().includes(searchText.toLowerCase()) ||
-        publication.categories.toLowerCase().includes(searchText.toLowerCase())
-    );
-    return filteredPublications;
-}
-
-// Function to update the displayed publications
-function updatePublications() {
-    const searchText = document.getElementById('search').value;
-    const filteredPublications = filterPublications(searchText);
-    displayFilteredPublications(filteredPublications, searchText);
-
-}
-
-
-
-// Highlight search term in text (case-insensitive)
-function highlightSearchTerm(text, searchTerm) {
-    if (!searchTerm) return text; // If no search input, return plain text
-    const regex = new RegExp(`(${searchTerm})`, 'gi');
-    return text.replace(regex, '<mark>$1</mark>');
-}
-
-// Function to display filtered publications
-function displayFilteredPublications(filteredPublications, searchText) {
-  document.querySelectorAll('.publication').forEach(card => card.classList.remove('visible'));
-  
-    const publicationList = document.getElementById('publication-list');
-    publicationList.innerHTML = ''; // Clear previous content
-    
-
-    if (filteredPublications.length === 0) {
-        publicationList.innerHTML = '<p>No matching publications found.</p>';
-    } else {
-        let currentYear = null;
-        let paperCount = 0; // Initialize paper count
-        
-
-        filteredPublications.forEach(publication => {
-            if (publication.year !== currentYear) {
-                // Create a new section for each year
-                const yearSection = document.createElement('div');
-                yearSection.classList.add('year-section');
-                yearSection.innerHTML = `<h2 onclick="toggleYearContent(${publication.year})">
-                    ${publication.year} <span class="arrow-icon">▼</span>
-                </h2>`;
-                publicationList.appendChild(yearSection);
-
-                const yearContent = document.createElement('div');
-                yearContent.classList.add('year-content');
-                yearContent.setAttribute('data-year', publication.year);
-                yearSection.appendChild(yearContent);
-
-                currentYear = publication.year;
-                paperCount = 1; // Reset paper count for the new year
-            } else {
-                paperCount++; // Increment paper count for the same year
-            }
-            
-            // Highlight "highlight," "spotlight," or "oral" in red in the conference text
-          let conferenceText = publication.conference || '';
-          conferenceText = conferenceText.replace(/(highlight|spotlight|oral)/gi, match => `<span style="color: red;">${match}</span>`);
-
-            const publicationContent = document.createElement('div');
-            publicationContent.classList.add('publication');
-            
-            let paperImageHtml = ''; // Initialize an empty string for the paper image HTML
-           
-            
-            const authors = publication.authors.split(',').map(author => author.trim());
-             // Create a new array to hold authors with underlining applied to Mohammad Sadil Khan
-            authorsWithUnderline = authors.map(author => {
-                // Check if the author's name contains "Sadil", and if so, apply underlining
-                if (author.toLowerCase().includes('sadil')) {
-                    return `<u><b>${author}</b></u>`;
-                } else {
-                    return author;
-                }
-            }).join(', '); // Join the authors back into a string separated by comma
-            
-          // Check if publication.image exists
-          if (publication.image) {
-              // If publication.image exists, add the <div class="paper-image"> with the image
-              paperImageHtml = `
-                  <div class="paper-image">
-                      <img src="${publication.image}" alt="Publication Image">
-                  </div>
-              `;
-          }
-           bibtexHtml = publication.bibtex ? `<button class="button" onclick="showBibtex(\`${publication.bibtex}\`)">BibTeX</button>` : '';
-            publicationContent.innerHTML = `
-  <div class="publication-content">
-      <div class="paper-image">
-          ${publication.image ? `<img src="${publication.image}" alt="Publication Image">` : ''}
-          ${publication.metadata ? `<div class="paper-metadata">${publication.metadata}</div>` : ''}
-      </div>
-
-      <div>
-          <div class="paper-info">
-              <div class="paper-title">${highlightSearchTerm(publication.title, searchText)}</div>
-<div class="paper-authors">${highlightSearchTerm(authorsWithUnderline, searchText)}</div>
-<div class="paper-conference">${highlightSearchTerm(conferenceText, searchText)}</div>
-
-          </div>
-          <div class="links">
-              ${publication.paperLink ? `<button class="button" onclick="window.open('${publication.paperLink}', '_blank')">Paper</button>` : ''}
-              ${publication.arxiv ? `<button class="button" onclick="window.open('${publication.arxiv}', '_blank')">Arxiv</button>` : ''}
-              ${publication.project ? `<button class="button" onclick="window.open('${publication.project}', '_blank')">Project</button>` : ''}
-              ${publication.codeLink ? `<button class="button" onclick="window.open('${publication.codeLink}', '_blank')">Code</button>` : ''}
-              ${publication.dataset ? `<button class="button" onclick="window.open('${publication.dataset}', '_blank')">Dataset</button>` : ''}
-              ${publication.poster ? `<button class="button" onclick="window.open('${publication.poster}', '_blank')">Poster</button>` : ''}
-              ${publication.video ? `<button class="button" onclick="window.open('${publication.video}', '_blank')">Video</button>` : ''}
-              ${bibtexHtml}
-          </div>
-      </div>
-  </div>
-`;
-
-
-            // Add event listener to show mini pop-up on hover
-            /*publicationContent.addEventListener('mouseover', event => {
-                const tooltipContent = `${publication.abstract}`;
-                showTooltip(event, tooltipContent);
-            });*/
-
-            const yearContent = publicationList.querySelector(`.year-content[data-year="${publication.year}"]`);
-            yearContent.appendChild(publicationContent);
-        });
-    }
-
-  
-  setupFadeInAnimation(); 
-}
-
+// ─── INIT ─────────────────────────────────────────────────
+document.getElementById('search').addEventListener('input', debounce(updatePublications, 200));
 fetchPublications();
-// Initial display of publications
-//displayPublications();
-
-// Attach event listener to the search input
-document.getElementById('search').addEventListener('input', updatePublications);

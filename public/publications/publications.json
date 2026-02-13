@@ -48,7 +48,7 @@
         "paperLink": "",
         "categories": "Text-to-3D, Stable Diffusion, 3D Reconstruction, LLM, VLM, Annotation, Objaverse, Fine-Tuning, Lora",
         "image": "data/marvel.png",
-        "metadata": "Largest 3D captioning dataset (40M+) with domain-specific and multi-level visual reasoning for text-to-3D generation."
+        "metadata": "Largest 3D captioning dataset (40M+) with domain-specific and multi-level visual reasoning."
     },
     {
         "title": "Text2CAD: Generating Sequential CAD Designs from Beginner-to-Expert Level Text Prompts",
@@ -81,7 +81,7 @@
         "paperLink": "https://ieeexplore.ieee.org/document/10585950",
         "categories": "Deep Learning, Computer Vision, CAD, Brep",
         "image": "data/brep_det_net.png",
-        "metadata": "A deep-learning approach for detecting BRep boundaries and junctions to enhance CAD reverse engineering accuracy.",
+        "metadata": "A deep-learning approach for detecting BRep boundaries and junctions to improve CAD reverse engineering.",
          "video": ""
     },
     {
