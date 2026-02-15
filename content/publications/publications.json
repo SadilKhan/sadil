@@ -6,13 +6,13 @@
         "year": 2026,
         "project": "https://muhammadusama100.github.io/NURBGen-Project/",
         "codeLink": "https://github.com/SadilKhan/NURBGen",
-        "poster": "",
+        "poster": "data/nurbgen_poster.png",
         "bibtex": "@article{usama2025nurbgen,title={NURBGen: High-Fidelity Text-to-CAD Generation through LLM-Driven NURBS Modeling},author={Usama, Muhammad and Khan, Mohammad Sadil and Stricker, Didier and Afzal, Muhammad Zeshan},journal={arXiv preprint arXiv:2511.06194},year={2025}}",
         "arxiv": "https://arxiv.org/pdf/2511.06194",
         "video": "",
         "dataset": "",
         "paperLink": "",
-        "categories": "CAD, LLM, Nurbs, Fine-Tuning, Lora",
+        "categories": "CAD, LLM, Nurbs, Lora",
         "image": "data/nurbgen.png",
         "metadata": "First LLM-based framwork that generates editable CAD models directly from text using NURBs representation."
     },
@@ -28,7 +28,7 @@
         "arxiv": "https://arxiv.org/abs/2308.07153",
         "dataset": "Recent breakthroughs in geometric Deep Learning (DL) and the availability of large Computer-Aided Design (CAD) datasets have advanced the research on learning CAD modeling processes and relating them to real objects. In this context, 3D reverse engineering of CAD models from 3D scans is considered to be one of the most sought-after goals for the CAD industry. However, recent efforts assume multiple simplifications limiting the applications in real-world settings. The SHARP Challenge 2023 aims at pushing the research a step closer to the real-world scenario of CAD reverse engineering through dedicated datasets and tracks. In this paper, we define the proposed SHARP 2023 tracks, describe the provided datasets, and propose a set of baseline methods along with suitable evaluation metrics to assess the performance of the track solutions. All proposed datasets along with useful routines and the evaluation metrics are publicly available. ",
         "paperLink": "https://paperswithcode.com/paper/sharp-challenge-2023-solving-cad-history-and",
-        "categories": "Deep Learning, Computer Vision, Representation Learning, CAD",
+        "categories": "CAD, Point Cloud",
         "image": "data/sharp2023.png",
          "metadata": "A large-scale benchmark defining datasets, metrics, and baselines for realistic CAD reverse engineering from 3D scans.",
          "video": ""
@@ -45,8 +45,8 @@
         "arxiv": "https://arxiv.org/abs/2411.17945",
         "video": "",
         "dataset": "https://sadilkhan.github.io/Marvel-Explorer/",
-        "paperLink": "",
-        "categories": "Text-to-3D, Stable Diffusion, 3D Reconstruction, LLM, VLM, Annotation, Objaverse, Fine-Tuning, Lora",
+        "paperLink": "https://openaccess.thecvf.com/content/CVPR2025/papers/Sinha_MARVEL-40M_Multi-Level_Visual_Elaboration_for_High-Fidelity_Text-to-3D_Content_Creation_CVPR_2025_paper.pdf",
+        "categories": "Text-to-3D, Stable Diffusion, 3D, LLM, VLM, Lora",
         "image": "data/marvel.png",
         "metadata": "Largest 3D captioning dataset (40M+) with domain-specific and multi-level visual reasoning."
     },
@@ -63,7 +63,7 @@
         "video": "",
         "dataset": "https://huggingface.co/datasets/SadilKhan/Text2CAD",
         "paperLink": "https://openreview.net/pdf?id=5k9XeHIK3L",
-        "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, Text, LLM, VLM, CAD, Vision-Language Modeling, Annotation",
+        "categories": "Point Cloud, Text-to-CAD, LLM, VLM, CAD, Annotation",
         "image": "data/text2cad.png",
             "metadata": "First framework that generates CAD design history from natural-language prompts of varying expertise levels."
     },
@@ -79,7 +79,7 @@
         "arxiv": "https://www.semanticscholar.org/paper/BRep-Boundary-and-Junction-Detection-for-CAD-Ali-Khan/cadccf40d3a254114c75e7c7ab390a0f8ad0bcda",
         "dataset": "",
         "paperLink": "https://ieeexplore.ieee.org/document/10585950",
-        "categories": "Deep Learning, Computer Vision, CAD, Brep",
+        "categories": "CAD, Brep",
         "image": "data/brep_det_net.png",
         "metadata": "A deep-learning approach for detecting BRep boundaries and junctions to improve CAD reverse engineering.",
          "video": ""
@@ -97,7 +97,7 @@
         "video": "https://www.youtube.com/watch?v=ivg03_ckLIM",
         "dataset": "",
         "paperLink": "https://openaccess.thecvf.com/content/CVPR2024/papers/Khan_CAD-SIGNet_CAD_Language_Inference_from_Point_Clouds_using_Layer-wise_Sketch_CVPR_2024_paper.pdf",
-        "categories": "Deep Learning, Computer Vision, Point Cloud, Representation Learning, RandLa-Net, CAD, Vision-Language Modeling",
+        "categories": "Point Cloud, Attention, CAD",
         "image": "data/cad_signet.png",
         "metadata": "An autoregressive architecture for generating 3D CAD sequence from Point cloud. Uses a novel sketch-guided Attention mechanism."
     }

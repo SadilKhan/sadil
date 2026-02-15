@@ -50,10 +50,10 @@
   --border:       #272d42;
   --border-hover: #3f4e7a;
 
-  --text-title:   #f0f4ff;
---text-authors: #d0d6e8;
---text-meta:    #a8b0cc;
-  --text-caption: #8892a8;
+  --text-title:   #e6e9f4;
+  --text-authors: #a8b0cc;
+  --text-meta:    #6e7894;
+  --text-caption: #515a72;
 
   --blue:       #5b9cf6;
   --blue-dark:  #4a86e8;
@@ -322,7 +322,7 @@ body {
    ============================================================ */
 .publication-content {
   display: grid;
-  grid-template-columns: 35% 1fr;
+  grid-template-columns: 30% 1fr;
   align-items: stretch;
 }
 
@@ -372,7 +372,7 @@ body {
 /* Caption below image */
 .paper-metadata {
   padding: 6px 10px 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-style: italic;
   color: var(--text-caption);
   line-height: 1.4;
@@ -655,3 +655,275 @@ mark {
   .paper-conference { font-size: 13.5px; }
   .year-section h2 { font-size: 1.3rem; }
 }
+
+/* ============================================================
+   STATS DASHBOARD
+   ============================================================ */
+
+/* Toggle button */
+#stats-panel {
+  margin-bottom: 1.6rem;
+}
+
+.stats-header {
+  margin-bottom: 0;
+}
+
+.stats-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 10px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  color: var(--blue);
+  font-family: var(--font-main);
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background var(--dur) ease, border-color var(--dur) ease, box-shadow var(--dur) ease;
+  margin-bottom: 14px;
+}
+
+.stats-toggle:hover {
+  background: var(--blue-light);
+  border-color: var(--blue);
+  box-shadow: 0 2px 10px var(--blue-glow);
+}
+
+.stats-toggle-arrow {
+  font-size: 11px;
+  transition: transform 300ms ease;
+  transform: rotate(180deg);
+}
+
+/* Collapsible body */
+.stats-body {
+  overflow: hidden;
+  max-height: 1000px;
+  opacity: 1;
+  transition: max-height 450ms cubic-bezier(0.22,1,0.36,1), opacity 300ms ease;
+}
+
+.stats-body--collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* KPI row */
+.stats-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 640px) {
+  .stats-kpis { grid-template-columns: repeat(2, 1fr); }
+}
+
+.kpi-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  text-align: center;
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease, transform var(--dur) ease;
+}
+
+.kpi-card:hover {
+  border-color: var(--blue);
+  box-shadow: 0 4px 16px var(--blue-glow);
+  transform: translateY(-2px);
+}
+
+.kpi-num {
+  font-family: var(--font-main);
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--blue);
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.kpi-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Charts grid */
+.stats-charts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 14px;
+}
+
+@media (max-width: 768px) {
+  .stats-charts-grid { grid-template-columns: 1fr; }
+}
+
+.chart-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 20px 14px;
+  transition: border-color var(--dur) ease, box-shadow var(--dur) ease;
+}
+
+.chart-card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+}
+
+.chart-card--wide {
+  grid-column: span 2;
+}
+
+@media (max-width: 768px) {
+  .chart-card--wide { grid-column: span 1; }
+}
+
+.chart-card-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text-meta);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 12px;
+}
+
+.chart-wrap {
+  position: relative;
+  height: 220px;
+}
+
+.chart-card--tall .chart-wrap {
+  height: 220px;
+}
+
+.chart-card--wide .chart-wrap {
+  height: 200px;
+}
+
+/* ============================================================
+   MOBILE — COMPREHENSIVE RESPONSIVE OVERRIDES
+   Primary breakpoint: 640px (phone)
+   Secondary:         768px (tablet)
+   ============================================================ */
+
+
+
+/* ── Buttons — wrap nicely, don't overflow ── */
+@media (max-width: 640px) {
+  .links {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .button {
+    font-size: 12px;
+    padding: 4px 12px;
+  }
+}
+
+/* ── Stats panel ── */
+@media (max-width: 640px) {
+  .stats-toggle {
+    font-size: 12.5px;
+    padding: 8px 14px;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .stats-kpis {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .kpi-card {
+    padding: 12px 10px;
+  }
+  .kpi-num {
+    font-size: 1.6rem;
+  }
+  .kpi-label {
+    font-size: 10.5px;
+  }
+  .stats-body {
+    max-height: 2400px; /* taller budget for single-column charts */
+  }
+}
+
+/* ── Charts grid — single column on mobile ── */
+@media (max-width: 768px) {
+  .stats-charts-grid {
+    grid-template-columns: 1fr;
+  }
+  .chart-card--wide {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 640px) {
+  .chart-card {
+    padding: 14px 12px 10px;
+  }
+  .chart-card-title {
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+  .chart-wrap {
+    height: 200px;
+  }
+  .chart-card--wide .chart-wrap {
+    height: 240px; /* co-author list needs more height when single col */
+  }
+}
+
+/* ── BibTeX modal ── */
+@media (max-width: 640px) {
+  .bibtex-modal-box {
+    width: 96vw;
+    max-height: 80vh;
+    padding: 16px 14px;
+    border-radius: 12px;
+  }
+  .bibtex-modal-box pre {
+    font-size: 11.5px;
+  }
+  .copy-btn {
+    font-size: 12px;
+    padding: 6px 14px;
+  }
+}
+
+/* ── Prevent horizontal scroll on very small screens ── */
+@media (max-width: 480px) {
+  .chart-wrap {
+    height: 180px;
+  }
+}
+
+
+
+/* Icon spacing inside buttons */
+.button i {
+  margin-right: 5px;
+}
+
+/* Per-button icon colors */
+.button .fa-file-lines  { color: #1a73e8; }
+.button .fa-scroll      { color: #e05c1a; }
+.button .fa-globe       { color: #0ea5e9; }
+.button .fa-github      { color: #333; }
+.button .fa-database    { color: #8b5cf6; }
+.button .fa-image       { color: #ec4899; }
+.button .fa-youtube     { color: #ff0000; }
+.button .fa-quote-left  { color: #f5a623; }
+
+.dark-mode .button .fa-github { color: #c9d1d9; }

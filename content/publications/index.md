@@ -11,10 +11,7 @@ publishDate: "2023-08-10T00:00:00Z"
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <div class="container">
-
-  <!-- Search bar -->
   <div id="search-container">
     <form onsubmit="return false;">
     <i class="fa-solid fa-magnifying-glass" id="search-icon"></i>
@@ -27,17 +24,11 @@ publishDate: "2023-08-10T00:00:00Z"
         spellcheck="false">
     </form>
   </div>
-
-  <!-- Equal contributions note -->
   <div>
     <p>* <span style="font-weight:600;">Equal Contributions</span></p>
   </div>
-
-  <!-- Publication list rendered by JS -->
   <div id="publication-list"></div>
 </div>
-
-<!-- BibTeX Modal -->
 <div id="bibtexModal" class="bibtex-modal" role="dialog" aria-modal="true" aria-label="BibTeX Entry">
   <div class="bibtex-card">
     <button class="close-btn" onclick="closeBibtexModal()" aria-label="Close">×</button>
@@ -46,5 +37,4 @@ publishDate: "2023-08-10T00:00:00Z"
     <button class="copy-btn" onclick="copyBibtexFromModal()">📋 Copy</button>
   </div>
 </div>
-
 <script src="publication_script.js"></script>
