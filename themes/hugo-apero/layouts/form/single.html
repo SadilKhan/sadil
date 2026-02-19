@@ -1,0 +1,335 @@
+{{ define "main" }}
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --c-accent:  #0ea5e9;
+  --c-accent2: #14b8a6;
+  --c-bdr:     rgba(128,128,128,0.11);
+  --c-ease:    cubic-bezier(0.22,1,0.36,1);
+}
+
+/* Force page-main to not interfere */
+.page-main.ct-page {
+  padding: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* ── Outer wrapper ── */
+.ct-wrap {
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 4rem 2.5rem 5rem;
+  box-sizing: border-box;
+}
+
+/* ── Two-column grid ── */
+.ct-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1px 1fr !important;
+  gap: 0 !important;
+  align-items: start !important;
+  width: 100% !important;
+}
+
+/* ── LEFT ── */
+.ct-left {
+  padding-right: 4rem;
+  animation: ctUp 0.65s var(--c-ease) both;
+}
+.ct-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.63rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--c-accent);
+  margin-bottom: 0.9rem;
+}
+.ct-bar {
+  width: 32px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--c-accent), var(--c-accent2));
+  margin-bottom: 1.4rem;
+}
+.ct-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.6rem, 3.5vw, 3.8rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin: 0 0 1.2rem;
+}
+.ct-title em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--c-accent), var(--c-accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.ct-desc {
+  font-size: 0.88rem;
+  line-height: 1.85;
+  opacity: 0.52;
+  margin: 0 0 2.2rem;
+}
+
+/* Info rows */
+.ct-info { display: flex; flex-direction: column; gap: 0.75rem; margin-bottom: 2rem; }
+.ct-info-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.82rem;
+  opacity: 0.65;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
+}
+.ct-info-row:hover { opacity: 1; }
+.ct-info-ico {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: rgba(14,165,233,0.07);
+  border: 1px solid rgba(14,165,233,0.14);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.72rem;
+  color: var(--c-accent);
+  flex-shrink: 0;
+}
+.ct-info-lbl {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.4;
+  margin-bottom: 0.1rem;
+}
+
+/* Social */
+.ct-social { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.ct-social a {
+  width: 33px; height: 33px;
+  border-radius: 8px;
+  border: 1px solid var(--c-bdr);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.76rem;
+  color: inherit;
+  opacity: 0.42;
+  text-decoration: none;
+  transition: opacity 0.2s, border-color 0.2s, color 0.2s, transform 0.18s;
+}
+.ct-social a:hover {
+  opacity: 1;
+  border-color: rgba(14,165,233,0.28);
+  color: var(--c-accent);
+  transform: translateY(-2px);
+}
+
+/* ── Vertical divider ── */
+.ct-vdiv {
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--c-bdr) 15%, var(--c-bdr) 85%, transparent);
+  align-self: stretch;
+  min-height: 400px;
+}
+
+/* ── RIGHT ── */
+.ct-right {
+  padding-left: 4rem;
+  animation: ctUp 0.65s var(--c-ease) 0.12s both;
+}
+.ct-form-hd { margin-bottom: 1.8rem; }
+.ct-form-hd h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin: 0 0 0.25rem;
+}
+.ct-form-hd p {
+  font-size: 0.78rem;
+  opacity: 0.4;
+  margin: 0;
+}
+
+/* Form overrides */
+.ct-right form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1.1rem !important;
+  margin: 0 !important;
+}
+.ct-right form fieldset {
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.3rem !important;
+}
+.ct-right form label {
+  font-size: 0.68rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.09em !important;
+  text-transform: uppercase !important;
+  opacity: 0.45 !important;
+  display: block !important;
+}
+.ct-right form input[type="text"],
+.ct-right form input[type="email"],
+.ct-right form select,
+.ct-right form textarea {
+  width: 100% !important;
+  padding: 0.68rem 0.9rem !important;
+  border-radius: 9px !important;
+  border: 1px solid var(--c-bdr) !important;
+  background: rgba(128,128,128,0.03) !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 0.845rem !important;
+  outline: none !important;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  color: inherit !important;
+  -webkit-appearance: none !important;
+}
+.ct-right form input:focus,
+.ct-right form textarea:focus,
+.ct-right form select:focus {
+  border-color: rgba(14,165,233,0.38) !important;
+  box-shadow: 0 0 0 3px rgba(14,165,233,0.07) !important;
+  background: rgba(14,165,233,0.018) !important;
+}
+.ct-right form textarea {
+  min-height: 130px !important;
+  resize: vertical !important;
+  line-height: 1.65 !important;
+}
+.ct-right form input[type="submit"],
+.ct-right form button[type="submit"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.45rem !important;
+  padding: 0.7rem 1.7rem !important;
+  border-radius: 9px !important;
+  background: var(--c-accent) !important;
+  border: none !important;
+  color: #fff !important;
+  font-family: 'DM Sans', sans-serif !important;
+  font-size: 0.84rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: background 0.2s, transform 0.18s, box-shadow 0.2s !important;
+  align-self: flex-start !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  margin: 0.3rem 0 0 !important;
+  width: auto !important;
+}
+.ct-right form input[type="submit"]:hover,
+.ct-right form button[type="submit"]:hover {
+  background: #0284c7 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 20px rgba(14,165,233,0.3) !important;
+}
+
+@keyframes ctUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .ct-wrap { padding: 2.5rem 1.5rem 4rem; }
+  .ct-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .ct-left  { padding-right: 0; padding-bottom: 2.5rem; }
+  .ct-vdiv  { display: none; }
+  .ct-right { padding-left: 0; padding-top: 2rem; border-top: 1px solid var(--c-bdr); }
+}
+</style>
+
+<main class="page-main ct-page" role="main">
+  <div class="ct-wrap">
+    <div class="ct-grid">
+
+      {{/* ── LEFT ── */}}
+      <div class="ct-left">
+        <div class="ct-eyebrow">
+          <i class="fa-solid fa-paper-plane"></i> Get in touch
+        </div>
+        <div class="ct-bar"></div>
+        <h1 class="ct-title">Let's<br><em>Connect</em></h1>
+        {{ with .Description }}
+          <p class="ct-desc">{{ . | markdownify }}</p>
+        {{ else }}
+          <p class="ct-desc">Whether you're interested in collaboration, have a research question, or want to discuss internship opportunities — I'd love to hear from you.</p>
+        {{ end }}
+
+        <div class="ct-info">
+          {{ with .Site.Params.contact.email }}
+          <div class="ct-info-row">
+            <div class="ct-info-ico"><i class="fa-solid fa-envelope"></i></div>
+            <div><span class="ct-info-lbl">Email</span>{{ . }}</div>
+          </div>
+          {{ end }}
+          {{ with .Site.Params.contact.location }}
+          <div class="ct-info-row">
+            <div class="ct-info-ico"><i class="fa-solid fa-location-dot"></i></div>
+            <div><span class="ct-info-lbl">Location</span>{{ . }}</div>
+          </div>
+          {{ end }}
+          {{ with .Site.Params.contact.affiliation }}
+          <div class="ct-info-row">
+            <div class="ct-info-ico"><i class="fa-solid fa-building-columns"></i></div>
+            <div><span class="ct-info-lbl">Affiliation</span>{{ . }}</div>
+          </div>
+          {{ end }}
+        </div>
+
+        {{ if .Params.show_social_links }}
+        <div class="ct-social">
+          {{ range .Site.Params.social }}
+          <a href="{{ .url }}" target="_blank" title="{{ .icon }}">
+            {{ if eq .icon_pack "fab" }}<i class="fa-brands fa-{{ .icon }}"></i>
+            {{ else if eq .icon_pack "fas" }}<i class="fa-solid fa-{{ .icon }}"></i>
+            {{ else if eq .icon_pack "ai" }}
+              {{ if eq .icon "google-scholar" }}<i class="fa-solid fa-graduation-cap"></i>
+              {{ else if eq .icon "orcid" }}<i class="fa-brands fa-orcid"></i>
+              {{ else if eq .icon "researchgate" }}<i class="fa-solid fa-flask"></i>
+              {{ else }}<i class="fa-solid fa-link"></i>{{ end }}
+            {{ end }}
+          </a>
+          {{ end }}
+        </div>
+        {{ end }}
+      </div>
+
+      {{/* ── Divider ── */}}
+      <div class="ct-vdiv"></div>
+
+      {{/* ── RIGHT ── */}}
+      <div class="ct-right">
+        <div class="ct-form-hd">
+          <h2>Send a message</h2>
+          <p>I typically respond within 1–2 business days.</p>
+        </div>
+        {{ partial "shared/contact-form.html" . }}
+      </div>
+
+    </div>
+  </div>
+</main>
+{{ end }}

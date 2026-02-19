@@ -369,6 +369,53 @@ text_align_right: false
   .ab-acc-item.open .ab-acc-body { padding: 0 1rem 1rem; }
   .ab-event { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
 }
+.ab-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ab-card-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(128,128,128,0.13);
+  background: rgba(128,128,128,0.03);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.ab-card-row:hover {
+  border-color: var(--ab-accent-bdr);
+  background: var(--ab-accent-bg);
+}
+.ab-card-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--ab-accent-bg);
+  border: 1px solid var(--ab-accent-bdr);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--ab-accent);
+  flex-shrink: 0;
+}
+.ab-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.ab-card-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ab-card-sub {
+  font-size: 0.78rem;
+  opacity: 0.55;
+  letter-spacing: 0.01em;
+}
 </style>
 <div class="ab-wrap">
 <div class="ab-hero">
@@ -379,15 +426,6 @@ text_align_right: false
 <span class="ab-role-pill"><i class="fa-solid fa-cube"></i> 3D Vision &amp; Generative CAD</span>
 </div>
 <p class="ab-hero-bio">I am a PhD student at <a href="https://rptu.de/en/home-1" target="_blank">RPTU Kaiserslautern</a> and <a href="https://av.dfki.de/members/sadil-khan/" target="_blank">DFKI</a>, supervised by <a href="https://scholar.google.com/citations?user=ImhXfxgAAAAJ&hl=en" target="_blank">Prof. Dr. Didier Stricker</a>. I am currently a research intern at Huawei's Noah's Ark Lab, London, working with <a href="https://therevanchist.github.io/" target="_blank">Ismail Elezi</a> and <a href="https://jiankangdeng.github.io/" target="_blank">Jiankang Deng</a>.</p>
-<div class="ab-link-row">
-<a class="ab-link-btn" href="/projects"><i class="fa-solid fa-diagram-project"></i> Projects</a>
-<a class="ab-link-btn" href="/publications/"><i class="fa-solid fa-file-lines"></i> Publications</a>
-<a class="ab-link-btn" href="/cv"><i class="fa-solid fa-id-card"></i> CV</a>
-</div>
-</div>
-<div class="ab-looking">
-<div class="ab-looking-icon">🙋</div>
-<p class="ab-looking-text"><strong>Open to 2026 Summer Research Internship</strong> or Student Researcher positions in — 3D Generative AI, Image Generation, Novel View Synthesis, Avatar Generation, Spatial Reasoning, Finetuning LLMs for 3D Generation or 3D Editing.</p>
 </div>
 <div class="ab-section">
 <h2 class="ab-section-label"><em>Research</em> Domains</h2>
@@ -454,13 +492,44 @@ text_align_right: false
 <span class="ab-rev-chip">SIGGRAPH Asia '25</span>
 <span class="ab-rev-chip">ICPR '24</span>
 </div>
+<p style="font-size:0.88rem;opacity:0.6;margin-bottom:0.85rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding-top:1.85rem">Courses</p>
+<div class="ab-card-list">
+<div class="ab-card-row">
+<span class="ab-card-badge"><i class="fa-solid fa-chalkboard-teacher"></i></span>
+<div class="ab-card-info">
+<span class="ab-card-title">Very Deep Learning 2025 — 3D Computer Vision</span>
+<span class="ab-card-sub">RPTU Kaiserslautern</span>
+</div>
+</div>
+</div>
+
+<p style="font-size:0.88rem;opacity:0.6;margin-bottom:0.85rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding-top:1.85rem">Mentored Students</p>
+<div class="ab-card-list">
+<div class="ab-card-row">
+<span class="ab-card-badge"><i class="fa-solid fa-user-graduate"></i></span>
+<div class="ab-card-info">
+<span class="ab-card-title">Benjamin Dinkelmann</span>
+<span class="ab-card-sub">Master Thesis · MSc Computer Science · RPTU Kaiserslautern · 2025–2026</span>
+</div>
+</div>
+<div class="ab-card-row">
+<span class="ab-card-badge"><i class="fa-solid fa-user-graduate"></i></span>
+<div class="ab-card-info">
+<span class="ab-card-title">Muhammad Usama</span>
+<span class="ab-card-sub">Master Thesis · MSc Computer Science · RPTU Kaiserslautern · 2025–2026</span>
+</div>
+</div>
+</div>
+
+
+
 </div>
 <div class="ab-section" style="animation-delay:0.35s;">
 <h2 class="ab-section-label"><em>Recent</em> Events</h2>
 <div class="ab-events">
 <div class="ab-event">
 <span class="ab-event-date">Nov 2025</span>
-<p class="ab-event-text">🎉 <strong>NURBGen</strong> accepted at <strong>AAAI 2026</strong>. Details coming soon.</p>
+<p class="ab-event-text">🎉 <strong>NURBGen</strong> accepted at <strong>AAAI 2026</strong>. Check paper <a href="https://arxiv.org/abs/2511.06194" target="_blank"> here </a> .</p>
 </div>
 <div class="ab-event">
 <span class="ab-event-date">May 2025</span>

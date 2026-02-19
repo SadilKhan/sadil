@@ -158,12 +158,12 @@ allowHTML = true
     title = "Contact form"
     url = "/contact/"
     weight = 7
-  [[menu.header]]
-    name = "Search"
-    title = "Search"
-    url = "/search/"
-    weight = 8
-    pre = true
+ # [[menu.header]]
+ #   name = "Search"
+ #   title = "Search"
+ #   url = "/search/"
+ #   weight = 8
+  #  pre = true
     
 
    

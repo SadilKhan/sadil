@@ -229,8 +229,9 @@ if (!doNotTrack) {
 </head>
 <body>
       <div class="grid-container single-series">
-<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
-  <script>
+
+
+<script>
   MathJax = {
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -253,93 +254,394 @@ if (!doNotTrack) {
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <nav class="site-nav db dt-l w-100" role="navigation">
-    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
-      <span class="f4 fw7">Home</span>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --nav-accent: #0ea5e9;
+  --nav-accent2: #14b8a6;
+  --nav-bdr: rgba(128,128,128,0.1);
+}
+.sk-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 9999 !important;
+  width: 100% !important;
+  font-family: 'DM Sans', sans-serif !important;
+  background: transparent !important;
+  border-bottom: 1px solid transparent !important;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.sk-nav.scrolled {
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  background: rgba(255,255,255,0.92) !important;
+  border-bottom: 1px solid var(--nav-bdr) !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.07) !important;
+}
+.dark .sk-nav.scrolled,
+[data-theme="dark"] .sk-nav.scrolled {
+  background: rgba(15,18,28,0.92) !important;
+}
+ 
+.sk-nav-inner {
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 0 2.5rem !important;
+  height: 56px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+ 
+.sk-brand {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+}
+.sk-brand-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--nav-accent), var(--nav-accent2));
+  flex-shrink: 0;
+  display: inline-block;
+}
+.sk-brand img { height: 26px; width: auto; }
+ 
+.sk-nav-right {
+  display: flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  padding-left: 1rem !important;
+}
+ 
+.sk-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-wrap: nowrap !important;
+}
+.sk-links li { display: list-item !important; }
+.sk-links a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.28rem !important;
+  padding: 0.35rem 0.68rem !important;
+  border-radius: 7px !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  opacity: 0.58 !important;
+  transition: opacity 0.18s, background 0.18s, color 0.18s !important;
+  white-space: nowrap !important;
+}
+.sk-links a:hover {
+  opacity: 1 !important;
+  background: rgba(14,165,233,0.07) !important;
+  color: var(--nav-accent) !important;
+}
+.sk-links a.sk-active {
+  opacity: 1 !important;
+  color: var(--nav-accent) !important;
+  background: rgba(14,165,233,0.09) !important;
+  font-weight: 600 !important;
+}
+.sk-links a.sk-search-btn {
+  padding: 0.35rem 0.55rem !important;
+  opacity: 0.45 !important;
+}
+.sk-links a.sk-search-btn:hover { opacity: 1 !important; }
+ 
+.sk-burger {
+  display: none !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  cursor: pointer !important;
+  padding: 6px !important;
+  border: none !important;
+  background: none !important;
+  border-radius: 7px !important;
+  transition: background 0.18s !important;
+  margin-left: 0.5rem !important;
+}
+.sk-burger:hover { background: rgba(14,165,233,0.08) !important; }
+.sk-burger span {
+  display: block !important;
+  width: 20px !important;
+  height: 2px !important;
+  border-radius: 2px !important;
+  background: currentColor !important;
+  opacity: 0.65 !important;
+  transition: transform 0.25s ease, opacity 0.25s ease, width 0.25s ease !important;
+  transform-origin: center !important;
+}
+.sk-burger.sk-open span:nth-child(1) { transform: translateY(7px) rotate(45deg) !important; opacity: 1 !important; }
+.sk-burger.sk-open span:nth-child(2) { opacity: 0 !important; width: 0 !important; }
+.sk-burger.sk-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg) !important; opacity: 1 !important; }
+ 
+.sk-drawer {
+  display: none !important;
+  flex-direction: column !important;
+  gap: 0.15rem !important;
+  padding: 0.6rem 1.25rem 0.9rem !important;
+  border-top: 1px solid var(--nav-bdr) !important;
+}
+.sk-drawer.sk-open { display: flex !important; }
+.sk-drawer a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  padding: 0.5rem 0.7rem !important;
+  border-radius: 8px !important;
+  font-size: 0.855rem !important;
+  font-weight: 500 !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  opacity: 0.62 !important;
+  transition: opacity 0.18s, background 0.18s, color 0.18s !important;
+}
+.sk-drawer a:hover, .sk-drawer a.sk-active {
+  opacity: 1 !important;
+  background: rgba(14,165,233,0.08) !important;
+  color: var(--nav-accent) !important;
+}
+@media (max-width: 740px) {
+  .sk-links { display: none !important; }
+  .sk-burger { display: flex !important; }
+  .sk-nav-inner { padding: 0 1.2rem !important; }
+}
+</style>
+
+<header class="sk-nav" id="sk-nav" role="banner">
+  <div class="sk-nav-inner">
+
+    
+    <a class="sk-brand" href="/" title="Home">
+      
+        <span class="sk-brand-dot"></span>
+        <i class="fa-solid fa-house" style="font-size:0.72rem;"></i>
+        Home
+      
     </a>
-    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
-      
+
+    
+    <div class="sk-nav-right">
+      <ul class="sk-links">
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/about/" title="About me">
           
-            About
+            
+            
+            
+            <li>
+              <a href="/about/" title="About me"
+                 class="">
+                <i class="fa-solid fa-user"></i>
+                
+                About
+              </a>
+            </li>
           
-        </a>
-      
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 active" href="/blog/" title="Blogs">
           
-            Blogs
+            
+            
+            
+            <li>
+              <a href="/blog/" title="Blogs"
+                 class="sk-active">
+                <i class="fa-solid fa-pen-nib"></i>
+                
+                Blogs
+              </a>
+            </li>
           
-        </a>
-      
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/projects/" title="Projects">
           
-            Projects
+            
+            
+            
+            <li>
+              <a href="/projects/" title="Projects"
+                 class="">
+                <i class="fa-solid fa-diagram-project"></i>
+                
+                Projects
+              </a>
+            </li>
           
-        </a>
-      
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/publications/" title="Publications">
           
-            Publications
+            
+            
+            
+            <li>
+              <a href="/publications/" title="Publications"
+                 class="">
+                <i class="fa-solid fa-file-lines"></i>
+                
+                Publications
+              </a>
+            </li>
           
-        </a>
-      
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/cv/" title="CV">
           
-            CV
+            
+            
+            
+            <li>
+              <a href="/cv/" title="CV"
+                 class="">
+                <i class="fa-solid fa-id-card"></i>
+                
+                CV
+              </a>
+            </li>
           
-        </a>
-      
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/travel_video/" title="Video">
           
-            Video
+            
+            
+            
+            <li>
+              <a href="/travel_video/" title="Video"
+                 class="">
+                <i class="fa-solid fa-film"></i>
+                
+                Video
+              </a>
+            </li>
           
-        </a>
-      
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/contact/" title="Contact form">
           
-            Contact
+            
+            
+            
+            <li>
+              <a href="/contact/" title="Contact form"
+                 class="">
+                <i class="fa-solid fa-paper-plane"></i>
+                
+                Contact
+              </a>
+            </li>
           
-        </a>
-      
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/search/" title="Search">
-          
-            <i class="fas fa-search" aria-hidden="true"></i>
-          
-        </a>
-      
-      
+      </ul>
+      <button class="sk-burger" id="sk-burger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
 
-    
-    
+  </div>
 
-      </nav>
+  
+  <div class="sk-drawer" id="sk-drawer">
     
+      
+      
+      
+      <a href="/about/" title="About me" class="">
+        <i class="fa-solid fa-user"></i>
+        
+        About
+      </a>
+    
+      
+      
+      
+      <a href="/blog/" title="Blogs" class="sk-active">
+        <i class="fa-solid fa-pen-nib"></i>
+        
+        Blogs
+      </a>
+    
+      
+      
+      
+      <a href="/projects/" title="Projects" class="">
+        <i class="fa-solid fa-diagram-project"></i>
+        
+        Projects
+      </a>
+    
+      
+      
+      
+      <a href="/publications/" title="Publications" class="">
+        <i class="fa-solid fa-file-lines"></i>
+        
+        Publications
+      </a>
+    
+      
+      
+      
+      <a href="/cv/" title="CV" class="">
+        <i class="fa-solid fa-id-card"></i>
+        
+        CV
+      </a>
+    
+      
+      
+      
+      <a href="/travel_video/" title="Video" class="">
+        <i class="fa-solid fa-film"></i>
+        
+        Video
+      </a>
+    
+      
+      
+      
+      <a href="/contact/" title="Contact form" class="">
+        <i class="fa-solid fa-paper-plane"></i>
+        
+        Contact
+      </a>
+    
+  </div>
 </header>
+
+<script>
+(function() {
+  var nav    = document.getElementById('sk-nav');
+  var burger = document.getElementById('sk-burger');
+  var drawer = document.getElementById('sk-drawer');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 10) { nav.classList.add('scrolled'); }
+    else { nav.classList.remove('scrolled'); }
+  });
+  burger.addEventListener('click', function() {
+    burger.classList.toggle('sk-open');
+    drawer.classList.toggle('sk-open');
+  });
+})();
+</script>
+
+
 
                        
 <main class="page-main pa4" role="main">

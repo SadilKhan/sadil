@@ -229,8 +229,9 @@ if (!doNotTrack) {
 </head>
 <body>
       <div class="grid-container">
-<header class="site-header pt4 pb2 mb4 bb b--transparent ph5 headroom z-max" role="banner">
-  <script>
+
+
+<script>
   MathJax = {
     tex: {
       inlineMath: [['$', '$'], ['\\(', '\\)']],
@@ -253,274 +254,570 @@ if (!doNotTrack) {
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
-  <nav class="site-nav db dt-l w-100" role="navigation">
-    <a class="site-brand db dtc-l v-mid link no-underline w-100 w-33-l tc tl-l" href="/" title="Home">
-      <span class="f4 fw7">Home</span>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --nav-accent: #0ea5e9;
+  --nav-accent2: #14b8a6;
+  --nav-bdr: rgba(128,128,128,0.1);
+}
+.sk-nav {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 9999 !important;
+  width: 100% !important;
+  font-family: 'DM Sans', sans-serif !important;
+  background: transparent !important;
+  border-bottom: 1px solid transparent !important;
+  transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.sk-nav.scrolled {
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  background: rgba(255,255,255,0.92) !important;
+  border-bottom: 1px solid var(--nav-bdr) !important;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.07) !important;
+}
+.dark .sk-nav.scrolled,
+[data-theme="dark"] .sk-nav.scrolled {
+  background: rgba(15,18,28,0.92) !important;
+}
+ 
+.sk-nav-inner {
+  max-width: 1100px !important;
+  margin: 0 auto !important;
+  padding: 0 2.5rem !important;
+  height: 56px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+ 
+.sk-brand {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.02em !important;
+  text-decoration: none !important;
+  color: inherit !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+}
+.sk-brand-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--nav-accent), var(--nav-accent2));
+  flex-shrink: 0;
+  display: inline-block;
+}
+.sk-brand img { height: 26px; width: auto; }
+ 
+.sk-nav-right {
+  display: flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+  margin-left: auto !important;
+  padding-left: 1rem !important;
+}
+ 
+.sk-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0 !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-wrap: nowrap !important;
+}
+.sk-links li { display: list-item !important; }
+.sk-links a {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.28rem !important;
+  padding: 0.35rem 0.68rem !important;
+  border-radius: 7px !important;
+  font-size: 0.78rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  opacity: 0.58 !important;
+  transition: opacity 0.18s, background 0.18s, color 0.18s !important;
+  white-space: nowrap !important;
+}
+.sk-links a:hover {
+  opacity: 1 !important;
+  background: rgba(14,165,233,0.07) !important;
+  color: var(--nav-accent) !important;
+}
+.sk-links a.sk-active {
+  opacity: 1 !important;
+  color: var(--nav-accent) !important;
+  background: rgba(14,165,233,0.09) !important;
+  font-weight: 600 !important;
+}
+.sk-links a.sk-search-btn {
+  padding: 0.35rem 0.55rem !important;
+  opacity: 0.45 !important;
+}
+.sk-links a.sk-search-btn:hover { opacity: 1 !important; }
+ 
+.sk-burger {
+  display: none !important;
+  flex-direction: column !important;
+  gap: 5px !important;
+  cursor: pointer !important;
+  padding: 6px !important;
+  border: none !important;
+  background: none !important;
+  border-radius: 7px !important;
+  transition: background 0.18s !important;
+  margin-left: 0.5rem !important;
+}
+.sk-burger:hover { background: rgba(14,165,233,0.08) !important; }
+.sk-burger span {
+  display: block !important;
+  width: 20px !important;
+  height: 2px !important;
+  border-radius: 2px !important;
+  background: currentColor !important;
+  opacity: 0.65 !important;
+  transition: transform 0.25s ease, opacity 0.25s ease, width 0.25s ease !important;
+  transform-origin: center !important;
+}
+.sk-burger.sk-open span:nth-child(1) { transform: translateY(7px) rotate(45deg) !important; opacity: 1 !important; }
+.sk-burger.sk-open span:nth-child(2) { opacity: 0 !important; width: 0 !important; }
+.sk-burger.sk-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg) !important; opacity: 1 !important; }
+ 
+.sk-drawer {
+  display: none !important;
+  flex-direction: column !important;
+  gap: 0.15rem !important;
+  padding: 0.6rem 1.25rem 0.9rem !important;
+  border-top: 1px solid var(--nav-bdr) !important;
+}
+.sk-drawer.sk-open { display: flex !important; }
+.sk-drawer a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.4rem !important;
+  padding: 0.5rem 0.7rem !important;
+  border-radius: 8px !important;
+  font-size: 0.855rem !important;
+  font-weight: 500 !important;
+  color: inherit !important;
+  text-decoration: none !important;
+  opacity: 0.62 !important;
+  transition: opacity 0.18s, background 0.18s, color 0.18s !important;
+}
+.sk-drawer a:hover, .sk-drawer a.sk-active {
+  opacity: 1 !important;
+  background: rgba(14,165,233,0.08) !important;
+  color: var(--nav-accent) !important;
+}
+@media (max-width: 740px) {
+  .sk-links { display: none !important; }
+  .sk-burger { display: flex !important; }
+  .sk-nav-inner { padding: 0 1.2rem !important; }
+}
+</style>
+
+<header class="sk-nav" id="sk-nav" role="banner">
+  <div class="sk-nav-inner">
+
+    
+    <a class="sk-brand" href="/" title="Home">
+      
+        <span class="sk-brand-dot"></span>
+        <i class="fa-solid fa-house" style="font-size:0.72rem;"></i>
+        Home
+      
     </a>
-    <div class="site-links db dtc-l v-mid w-100 w-47-l tc tr-l mt3 mt0-l ttu tracked">
+
+    
+    <div class="sk-nav-right">
+      <ul class="sk-links">
+        
+          
+            
+            
+            
+            <li>
+              <a href="/about/" title="About me"
+                 class="sk-active">
+                <i class="fa-solid fa-user"></i>
+                
+                About
+              </a>
+            </li>
+          
+        
+          
+            
+            
+            
+            <li>
+              <a href="/blog/" title="Blogs"
+                 class="">
+                <i class="fa-solid fa-pen-nib"></i>
+                
+                Blogs
+              </a>
+            </li>
+          
+        
+          
+            
+            
+            
+            <li>
+              <a href="/projects/" title="Projects"
+                 class="">
+                <i class="fa-solid fa-diagram-project"></i>
+                
+                Projects
+              </a>
+            </li>
+          
+        
+          
+            
+            
+            
+            <li>
+              <a href="/publications/" title="Publications"
+                 class="">
+                <i class="fa-solid fa-file-lines"></i>
+                
+                Publications
+              </a>
+            </li>
+          
+        
+          
+            
+            
+            
+            <li>
+              <a href="/cv/" title="CV"
+                 class="">
+                <i class="fa-solid fa-id-card"></i>
+                
+                CV
+              </a>
+            </li>
+          
+        
+          
+            
+            
+            
+            <li>
+              <a href="/travel_video/" title="Video"
+                 class="">
+                <i class="fa-solid fa-film"></i>
+                
+                Video
+              </a>
+            </li>
+          
+        
+          
+            
+            
+            
+            <li>
+              <a href="/contact/" title="Contact form"
+                 class="">
+                <i class="fa-solid fa-paper-plane"></i>
+                
+                Contact
+              </a>
+            </li>
+          
+        
+      </ul>
+      <button class="sk-burger" id="sk-burger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+  </div>
+
+  
+  <div class="sk-drawer" id="sk-drawer">
+    
       
-        
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 active" href="/about/" title="About me">
-          
-            About
-          
-        </a>
       
-        
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/blog/" title="Blogs">
-          
-            Blogs
-          
-        </a>
       
+      <a href="/about/" title="About me" class="sk-active">
+        <i class="fa-solid fa-user"></i>
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/projects/" title="Projects">
-          
-            Projects
-          
-        </a>
+        About
+      </a>
+    
       
-        
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/publications/" title="Publications">
-          
-            Publications
-          
-        </a>
       
-        
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/cv/" title="CV">
-          
-            CV
-          
-        </a>
       
+      <a href="/blog/" title="Blogs" class="">
+        <i class="fa-solid fa-pen-nib"></i>
         
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/travel_video/" title="Video">
-          
-            Video
-          
-        </a>
+        Blogs
+      </a>
+    
       
-        
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/contact/" title="Contact form">
-          
-            Contact
-          
-        </a>
       
-        
-        
-        
-        <a class="link f6 f5-l dib pv1 ph2 " href="/search/" title="Search">
-          
-            <i class="fas fa-search" aria-hidden="true"></i>
-          
-        </a>
       
+      <a href="/projects/" title="Projects" class="">
+        <i class="fa-solid fa-diagram-project"></i>
+        
+        Projects
+      </a>
+    
+      
+      
+      
+      <a href="/publications/" title="Publications" class="">
+        <i class="fa-solid fa-file-lines"></i>
+        
+        Publications
+      </a>
+    
+      
+      
+      
+      <a href="/cv/" title="CV" class="">
+        <i class="fa-solid fa-id-card"></i>
+        
+        CV
+      </a>
+    
+      
+      
+      
+      <a href="/travel_video/" title="Video" class="">
+        <i class="fa-solid fa-film"></i>
+        
+        Video
+      </a>
+    
+      
+      
+      
+      <a href="/contact/" title="Contact form" class="">
+        <i class="fa-solid fa-paper-plane"></i>
+        
+        Contact
+      </a>
+    
+  </div>
+</header>
+
+<script>
+(function() {
+  var nav    = document.getElementById('sk-nav');
+  var burger = document.getElementById('sk-burger');
+  var drawer = document.getElementById('sk-drawer');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 10) { nav.classList.add('scrolled'); }
+    else { nav.classList.remove('scrolled'); }
+  });
+  burger.addEventListener('click', function() {
+    burger.classList.toggle('sk-open');
+    drawer.classList.toggle('sk-open');
+  });
+})();
+</script>
+
+
+
+
+
+<style>
+.page-main.ab-page {
+  padding: 0 !important;
+  max-width: none !important;
+}
+.ab-outer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem 5rem;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0 3.5rem;
+  align-items: start;
+}
+
+ 
+.ab-sidebar {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.ab-avatar-frame {
+  position: relative;
+  width: 140px;
+  height: 140px;
+}
+.ab-avatar-frame::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #14b8a6);
+  opacity: 0.15;
+}
+.ab-avatar-frame::after {
+  content: '';
+  position: absolute;
+  bottom: 5px; right: 5px;
+  width: 13px; height: 13px;
+  border-radius: 50%;
+  background: #22c55e;
+  border: 2px solid white;
+  z-index: 2;
+}
+.ab-avatar-frame img {
+  width: 140px; height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  position: relative;
+  z-index: 1;
+  border: 2px solid rgba(14,165,233,0.2);
+}
+ 
+.ab-sidebar .site-social-links {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 0.3rem !important;
+}
+.ab-sidebar .site-social-links a {
+  width: 28px !important; height: 28px !important;
+  border-radius: 7px !important;
+  border: 1px solid rgba(128,128,128,0.15) !important;
+  display: flex !important; align-items: center !important; justify-content: center !important;
+  font-size: 0.68rem !important;
+  opacity: 0.82 !important;
+  transition: opacity 0.18s, color 0.18s, border-color 0.18s, transform 0.18s !important;
+}
+.ab-sidebar .site-social-links a:hover {
+  opacity: 1 !important;
+  color: #0ea5e9 !important;
+  border-color: rgba(14,165,233,0.3) !important;
+  transform: translateY(-2px) !important;
+}
+
+ 
+.ab-linklist {
+  width: 100%;
+  margin-top: 0.5rem;
+}
+.ab-linklist-title {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.95;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+.ab-linklist ul {
+  list-style: none !important;
+  padding: 0 !important; margin: 0 !important;
+  display: flex; flex-direction: column; gap: 0.1rem;
+}
+.ab-linklist ul li {
+  padding: 0 !important; border: none !important;
+}
+.ab-linklist ul li a {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  border-radius: 7px;
+  font-size: 0.75rem; font-weight: 500;
+  color: inherit; text-decoration: none;
+  opacity: 0.98;
+  transition: opacity 0.18s, background 0.18s, color 0.18s;
+  border: none !important;
+}
+.ab-linklist ul li a:hover {
+  opacity: 1;
+  background: rgba(14,165,233,0.07);
+  color: #0ea5e9;
+}
+.ab-linklist ul li a i { font-size: 0.52rem; opacity: 0.5; }
+
+ 
+.ab-content { min-width: 0; }
+
+ 
+@media (max-width: 860px) {
+  .ab-outer {
+    grid-template-columns: 1fr;
+    padding: 2rem 1.5rem 4rem;
+    gap: 2rem;
+  }
+  .ab-sidebar {
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .ab-avatar-frame { width: 90px; height: 90px; }
+  .ab-avatar-frame img { width: 90px; height: 90px; }
+  .ab-linklist { display: none; }
+}
+</style>
+
+<main class="page-main ab-page" role="main">
+<div class="ab-outer">
+
+  
+  
+  
+  
+  <aside class="ab-sidebar">
+
+    
+    <div class="ab-avatar-frame">
+      
+          <img src="/about/sidebar/avatar.jpg" alt="Mohammad Sadil Khan">
+        
       
     </div>
 
     
     
 
-      </nav>
-    
-</header>
-
-
-<style>
-
-  .page-content {
-    width: 100%;
-  }
-.page-header {
-  text-align: justify;
-  width: 100%;
-}
-
-@media screen and (min-width: 768px) {
-.column-header {
-  display: grid;
-  grid-template-columns: 1fr 2fr;
-  column-gap: 2%;
-}
-
-.about-sidebar {
-  background-color: rgba(255, 255, 255, 0.0);
-  border: 2px solid rgba(180, 180, 180, 0.4);
-  border-radius: 4px;
-}
-.dark-mode .about-sidebar {
-  border: 2px solid rgba(180, 180, 180, 0);
-}
-
-}
-
- 
-@media screen and (max-width: 768px) {
-  .column-header {
-    grid-template-columns: auto;  
-    grid-template-rows: 1fr 1fr;  
-    row-gap: 2%;  
-  }
-
-  .page-header {
-    width: 100%;
-  }
-
-  .f-subheadline {
-    font-size: 20px;
-  }
-}
-
-
-
-.row-header {
-  display: flex;
-}
-</style>
-<main class="page-main pa4" role="main">
-  <section class="page-content mw8 center">
-    
-    <div class="column-header">
     
     
-    
-    
-        <sidebar class="about-sidebar" id="profile">
-          <div class="pt3 pb1 pb2-ns tc ph4">
-            
-              
-                <img src="/about/sidebar/avatar.jpg" style="width: 80%; height:auto;" class="h4 w4 dib br-100" alt="avatar">
-              
-            
-            <h2 class="f-subheadline f4-ns fw6">Mohammad Sadil Khan</h2>
-            <h5 style="text-transform: capitalize;" class="f-subheadline f4 fw2 ttu tracked">3D Computer Vision | 3D Reconstruction | Vision-Language Modeling | Generative Models</h5>
-            
-              <div class="site-social-links db v-mid pv2">
-              <div class="social-icon-links" aria-hidden="true">
+
+  </aside>
   
-  
-    
-    
-    
-      
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/SadilKhan" title="github" target="_blank" rel="noopener">
-      <i class="fab fa-github fa-lg fa-fw"></i>
-    </a>
-  
-    
-    
-    
-      
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.facebook.com/profile.php?id=100043829644032" title="facebook" target="_blank" rel="noopener">
-      <i class="fab fa-facebook fa-lg fa-fw"></i>
-    </a>
-  
-    
-    
-    
-      
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.linkedin.com/in/mohammad-sadil-khan-a96568170/" title="linkedin" target="_blank" rel="noopener">
-      <i class="fab fa-linkedin fa-lg fa-fw"></i>
-    </a>
-  
-    
-    
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=XIDQo_IAAAAJ&amp;hl=en&amp;authuser=1" title="google-scholar" target="_blank" rel="noopener">
-      <i class="ai ai-google-scholar fa-lg fa-fw"></i>
-    </a>
-  
-    
-    
-    
-      
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.youtube.com/channel/UC3TCC__F3NbO2I18D7nSP6g" title="youtube" target="_blank" rel="noopener">
-      <i class="fab fa-youtube fa-lg fa-fw"></i>
-    </a>
-  
-</div>
 
-              </div>
-            
-            </div>
-
-            
-
-          <div class="pa1 pa2-ns tc ph4">
-            <h5 class="f-subheadline f4 fw2 ttu tracked">Interests</h5>
-            <ul class="list measure center ph4 pb4">
-            
-              <li class="lh-copy pv2 ba bl-0 bt-0 br-0 b--dotted b--black-20">
-                <a href="https://www.youtube.com/channel/UC3TCC__F3NbO2I18D7nSP6g" target="_blank">Videography</a>
-              </li>
-            
-              <li class="lh-copy pv2 ba bl-0 bt-0 br-0 b--dotted b--black-20">
-                <a href="https://github.com/SadilKhan" target="_blank">Coding</a>
-              </li>
-            
-            </ul>
-          </div>
-        </sidebar>
-        
-
+  
+  <div class="ab-content">
     
     
-    
-    
-      <header class="page-header bb b--black-10 bw1 pb4 mb5 ">
-      <h1 class="f2 f1-m f-headline-l fw5-ns mv4 lh-solid tracked-tight-ns db"></h1>
-      
-        <div class="pt2 f4 measure-wide lh-copy dib"><link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -887,6 +1184,53 @@ if (!doNotTrack) {
   .ab-acc-item.open .ab-acc-body { padding: 0 1rem 1rem; }
   .ab-event { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
 }
+.ab-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ab-card-row {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.7rem 1rem;
+  border-radius: 10px;
+  border: 1px solid rgba(128,128,128,0.13);
+  background: rgba(128,128,128,0.03);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+.ab-card-row:hover {
+  border-color: var(--ab-accent-bdr);
+  background: var(--ab-accent-bg);
+}
+.ab-card-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--ab-accent-bg);
+  border: 1px solid var(--ab-accent-bdr);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  color: var(--ab-accent);
+  flex-shrink: 0;
+}
+.ab-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.ab-card-title {
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.ab-card-sub {
+  font-size: 0.78rem;
+  opacity: 0.55;
+  letter-spacing: 0.01em;
+}
 </style>
 <div class="ab-wrap">
 <div class="ab-hero">
@@ -897,15 +1241,6 @@ if (!doNotTrack) {
 <span class="ab-role-pill"><i class="fa-solid fa-cube"></i> 3D Vision &amp; Generative CAD</span>
 </div>
 <p class="ab-hero-bio">I am a PhD student at <a href="https://rptu.de/en/home-1" target="_blank">RPTU Kaiserslautern</a> and <a href="https://av.dfki.de/members/sadil-khan/" target="_blank">DFKI</a>, supervised by <a href="https://scholar.google.com/citations?user=ImhXfxgAAAAJ&hl=en" target="_blank">Prof. Dr. Didier Stricker</a>. I am currently a research intern at Huawei's Noah's Ark Lab, London, working with <a href="https://therevanchist.github.io/" target="_blank">Ismail Elezi</a> and <a href="https://jiankangdeng.github.io/" target="_blank">Jiankang Deng</a>.</p>
-<div class="ab-link-row">
-<a class="ab-link-btn" href="/projects"><i class="fa-solid fa-diagram-project"></i> Projects</a>
-<a class="ab-link-btn" href="/publications/"><i class="fa-solid fa-file-lines"></i> Publications</a>
-<a class="ab-link-btn" href="/cv"><i class="fa-solid fa-id-card"></i> CV</a>
-</div>
-</div>
-<div class="ab-looking">
-<div class="ab-looking-icon">🙋</div>
-<p class="ab-looking-text"><strong>Open to 2026 Summer Research Internship</strong> or Student Researcher positions in — 3D Generative AI, Image Generation, Novel View Synthesis, Avatar Generation, Spatial Reasoning, Finetuning LLMs for 3D Generation or 3D Editing.</p>
 </div>
 <div class="ab-section">
 <h2 class="ab-section-label"><em>Research</em> Domains</h2>
@@ -972,13 +1307,40 @@ if (!doNotTrack) {
 <span class="ab-rev-chip">SIGGRAPH Asia '25</span>
 <span class="ab-rev-chip">ICPR '24</span>
 </div>
+<p style="font-size:0.88rem;opacity:0.6;margin-bottom:0.85rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding-top:1.85rem">Courses</p>
+<div class="ab-card-list">
+<div class="ab-card-row">
+<span class="ab-card-badge"><i class="fa-solid fa-chalkboard-teacher"></i></span>
+<div class="ab-card-info">
+<span class="ab-card-title">Very Deep Learning 2025 — 3D Computer Vision</span>
+<span class="ab-card-sub">RPTU Kaiserslautern</span>
+</div>
+</div>
+</div>
+<p style="font-size:0.88rem;opacity:0.6;margin-bottom:0.85rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;padding-top:1.85rem">Mentored Students</p>
+<div class="ab-card-list">
+<div class="ab-card-row">
+<span class="ab-card-badge"><i class="fa-solid fa-user-graduate"></i></span>
+<div class="ab-card-info">
+<span class="ab-card-title">Benjamin Dinkelmann</span>
+<span class="ab-card-sub">Master Thesis · MSc Computer Science · RPTU Kaiserslautern · 2025–2026</span>
+</div>
+</div>
+<div class="ab-card-row">
+<span class="ab-card-badge"><i class="fa-solid fa-user-graduate"></i></span>
+<div class="ab-card-info">
+<span class="ab-card-title">Muhammad Usama</span>
+<span class="ab-card-sub">Master Thesis · MSc Computer Science · RPTU Kaiserslautern · 2025–2026</span>
+</div>
+</div>
+</div>
 </div>
 <div class="ab-section" style="animation-delay:0.35s;">
 <h2 class="ab-section-label"><em>Recent</em> Events</h2>
 <div class="ab-events">
 <div class="ab-event">
 <span class="ab-event-date">Nov 2025</span>
-<p class="ab-event-text">🎉 <strong>NURBGen</strong> accepted at <strong>AAAI 2026</strong>. Details coming soon.</p>
+<p class="ab-event-text">🎉 <strong>NURBGen</strong> accepted at <strong>AAAI 2026</strong>. Check paper <a href="https://arxiv.org/abs/2511.06194" target="_blank"> here </a> .</p>
 </div>
 <div class="ab-event">
 <span class="ab-event-date">May 2025</span>
@@ -1003,95 +1365,11 @@ document.querySelectorAll('[data-acc] .ab-acc-trigger').forEach(btn => {
   });
 });
 </script>
+
+    
+  </div>
+
 </div>
-      
-      </header>
-      
-      
-    </div>
-    
-    
-
-    <section>
-      
-      <div>
-
-        
-        
-        <div>
-          <section class="featured-content">
- 
-
-
-
-
-
-
-
-
-  <article>
-  <h5 class="f4 mv4 ttu tracked lh-title bt pv3">Featured categories</h5>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/deep-learning/">Deep Learning (9)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/computer-vision/">Computer Vision (7)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/mlp/">MLP (7)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/travelling/">Travelling (6)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/computational-theory/">Computational Theory (4)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/point-cloud/">Point Cloud (4)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/segmentation/">Segmentation (4)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/vc-dimension/">VC Dimension (4)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/adventure/">Adventure (3)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/graph/">Graph (3)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/image-annotation/">Image Annotation (3)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/object-detection/">Object Detection (3)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/vacation/">Vacation (3)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/videography/">Videography (3)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/voxel/">Voxel (3)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/conferences/">Conferences (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/decoder/">Decoder (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/encoder/">Encoder (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/java/">Java (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/journals/">Journals (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/macos/">MacOS (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/papers/">Papers (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/publication/">Publication (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/software/">Software (1)</a>
-  
-      <a class="f6 link dim ba ph3 pv2 mb2 dib mr2" href="/categories/swift/">Swift (1)</a>
-  
-  </article>
-
-</section>
-
-        </div> 
-        
-
-      </div>    
-    </section>  
-  </section>    
 </main>
 
 

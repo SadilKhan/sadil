@@ -1,7 +1,8 @@
+{{ define "header" }}{{/* empty — no navbar on home page */}}{{ end }}
+
 {{ define "main" }}
 {{ $page := . }}
 
-<!-- particles.js -->
 <script>
   fetch("{{ .Site.BaseURL }}index.json")
     .then((r) => r.json())
@@ -21,12 +22,20 @@
   --h-accent-bdr: rgba(14,165,233,0.2);
   --h-ease: cubic-bezier(0.22,1,0.36,1);
 }
+#neural-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
 .h-root {
   font-family: 'DM Sans', sans-serif;
   width: 100%;
   grid-column: 1 / -1;
+  position: relative;
+  z-index: 1;
 }
-/* ── HERO ── */
 .h-hero {
   max-width: 1080px;
   margin: 0 auto;
@@ -338,11 +347,13 @@
 }
 </style>
 
+<canvas id="neural-canvas"></canvas>
+
 <div class="h-root">
 <div class="h-hero">
 <div>
 <span class="h-eyebrow">{{ .Params.subtitle }}</span>
-<h1 class="h-name">Mohammad Sadil <br> Khan</h1>
+<h1 class="h-name">Mohammad Sadil<br>Khan</h1>
 <p class="h-desc">{{ .Params.description }}</p>
 {{ if .Params.show_social_links }}
 <div class="h-social">
@@ -363,8 +374,6 @@
 {{ end }}
 <div class="h-btns">
 <a class="h-btn-fill" href="/about"><i class="fa-solid fa-user"></i> About Me</a>
-<a class="h-btn-out" href="/publications/"><i class="fa-solid fa-file-lines"></i> Publications</a>
-<a class="h-btn-out" href="/cv"><i class="fa-solid fa-id-card"></i> CV</a>
 </div>
 </div>
 {{ with .Params.images }}
@@ -422,7 +431,84 @@
 </div>
 </a>
 </div>
+</div>
+</div>
 
-</div>
-</div>
+<script>
+(function () {
+  const canvas = document.getElementById('neural-canvas');
+  const ctx    = canvas.getContext('2d');
+  const PALETTE = [
+    { fill: 'rgba(14,165,233,',  glow: 'rgba(14,165,233,'  },
+    { fill: 'rgba(20,184,166,',  glow: 'rgba(20,184,166,'  },
+    { fill: 'rgba(99,102,241,',  glow: 'rgba(99,102,241,'  },
+  ];
+  const NODE_COUNT   = 65;
+  const CONNECT_DIST = 155;
+  const SPEED        = 0.42;
+  const MOUSE_RADIUS = 140;
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const mouse = { x: -9999, y: -9999 };
+  window.addEventListener('mousemove', function(e) { mouse.x = e.clientX; mouse.y = e.clientY; });
+  const nodes = [];
+  for (let i = 0; i < NODE_COUNT; i++) {
+    nodes.push({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      vx: (Math.random() - 0.5) * SPEED,
+      vy: (Math.random() - 0.5) * SPEED,
+      r: Math.random() * 1.8 + 1.0,
+      phase: Math.random() * Math.PI * 2,
+      col: PALETTE[Math.floor(Math.random() * PALETTE.length)],
+    });
+  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      n.x += n.vx; n.y += n.vy; n.phase += 0.016;
+      if (n.x < 0 || n.x > canvas.width)  n.vx = -n.vx;
+      if (n.y < 0 || n.y > canvas.height) n.vy = -n.vy;
+    }
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const a = nodes[i], b = nodes[j];
+        const dx = a.x - b.x, dy = a.y - b.y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d >= CONNECT_DIST) continue;
+        const mx = (a.x + b.x) * 0.5 - mouse.x, my = (a.y + b.y) * 0.5 - mouse.y;
+        const near = (mx * mx + my * my) < (MOUSE_RADIUS * MOUSE_RADIUS);
+        const alpha = (near ? 0.5 : 0.12) * (1 - d / CONNECT_DIST);
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = 'rgba(14,165,233,' + alpha + ')';
+        ctx.lineWidth = near ? 1.2 : 0.8;
+        ctx.stroke();
+      }
+    }
+    for (let i = 0; i < nodes.length; i++) {
+      const n = nodes[i];
+      const dx = n.x - mouse.x, dy = n.y - mouse.y;
+      const nearMouse = (dx * dx + dy * dy) < (MOUSE_RADIUS * MOUSE_RADIUS);
+      const radius = nearMouse ? n.r * 2.4 : n.r * (Math.sin(n.phase) * 0.25 + 1);
+      ctx.beginPath();
+      ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = n.col.fill + (nearMouse ? 1.0 : 0.55) + ')';
+      ctx.fill();
+      if (nearMouse) {
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, radius * 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = n.col.glow + '0.08)';
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
 {{ end }}
