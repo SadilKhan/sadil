@@ -520,405 +520,489 @@ if (!doNotTrack) {
       <header class="page-header bb b--black-10 bw1 pb4 mb5 ">
       <h1 class="f2 f1-m f-headline-l fw5-ns mv4 lh-solid tracked-tight-ns db"></h1>
       
-        <div class="pt2 f4 measure-wide lh-copy dib"><style>
-/* ===== Hero Section ===== */
-.hero {
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  background: radial-gradient(circle at 50% 30%, rgba(136,170,255,0.1), transparent 70%);
-  animation: fadeIn 1.4s ease forwards;
+        <div class="pt2 f4 measure-wide lh-copy dib"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+:root {
+  --ab-accent: #0ea5e9;
+  --ab-accent2: #14b8a6;
+  --ab-accent-bg: rgba(14,165,233,0.08);
+  --ab-accent-glow: rgba(14,165,233,0.18);
+  --ab-accent-bdr: rgba(14,165,233,0.22);
+  --ab-amber: rgba(251,146,60,0.9);
+  --ab-amber-bg: rgba(251,146,60,0.08);
+  --ab-amber-bdr: rgba(251,146,60,0.22);
+  --ab-ease: cubic-bezier(0.22,1,0.36,1);
 }
-
-.hand-wave {
+.ab-wrap {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 0.5rem 0 5rem;
+  font-family: 'DM Sans', sans-serif;
+}
+.ab-hero {
+  margin-bottom: 3rem;
+  animation: abFadeUp 0.6s var(--ab-ease) both;
+}
+.ab-hero-wave {
+  font-size: 2.8rem;
   display: inline-block;
-  animation: wave 1.6s infinite;
+  animation: abWave 2s ease 0.5s 2;
   transform-origin: 70% 70%;
-  font-size: 72px;
+  margin-bottom: 0.4rem;
 }
-
-.welcome {
-  font-size: 72px;
-  font-weight: 700;
-  margin: 0;
-  background: linear-gradient(90deg, var(--accent, #4062bb), var(--highlight, #f45b69));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.subtext {
-  font-size: 1.1rem;
-  color: var(--fg-muted, #555);
-  margin-top: -10px;
-  opacity: 0.9;
-}
-
-/* Wave keyframes */
-@keyframes wave {
-  0% { transform: rotate(0deg); }
+@keyframes abWave {
+  0%,60%,100% { transform: rotate(0deg); }
   10% { transform: rotate(14deg); }
   20% { transform: rotate(-8deg); }
   30% { transform: rotate(14deg); }
   40% { transform: rotate(-4deg); }
   50% { transform: rotate(10deg); }
-  60%, 100% { transform: rotate(0deg); }
 }
-
-/* ===== Content Section ===== */
-.about-content {
-  max-width: 900px;
-  margin: 0 auto;
-  line-height: 1.7;
-  font-size: 1.05rem;
-  color: var(--fg, #111);
-  opacity: 0;
-  animation: slideUp 1s ease forwards 0.4s;
+.ab-hero-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.2rem, 6vw, 3.2rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.5rem;
 }
-
-/* ===== Research Cards ===== */
-.research-grid {
+.ab-hero-name em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--ab-accent), var(--ab-accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.ab-hero-roles {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 2rem;
-  margin: 2.5rem auto;
-  max-width: 1100px;
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
 }
-
-.research-card {
-  width: 300px;
-  height: 230px;
-  perspective: 1000px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  position: relative;
+.ab-role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.28rem 0.85rem;
+  border-radius: 20px;
+  border: 1.5px solid var(--ab-accent-bdr);
+  color: var(--ab-accent);
+  background: var(--ab-accent-bg);
 }
-
-.research-card:hover { transform: scale(1.04); }
-
-.research-front, .research-back {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  padding: 1.5rem;
-  box-sizing: border-box;
-  backface-visibility: hidden;
-  transition: transform 0.6s ease;
-  overflow: hidden;
+.ab-hero-bio {
+  font-size: 1rem;
+  line-height: 1.75;
+  opacity: 0.82;
+  max-width: 680px;
 }
-
-/* FRONT FACE */
-.research-front {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* vertically center */
-  align-items: center;       /* horizontally center */
-  text-align: center;        /* center text lines */
-  background: color-mix(in srgb, var(--bg, #fff) 90%, var(--accent, #4062bb) 5%);
-  border: 1px solid color-mix(in srgb, var(--accent, #4062bb) 30%, transparent);
-  box-shadow: 0 0 15px rgba(0,0,0,0.05);
-  border-radius: 16px;
-  padding: 1rem;
-  height: 100%;
-  box-sizing: border-box;
-}
-.research-front h3 {
-  text-align: center;
-}
-.research-front p {
-  text-align: center;
-}
-
-.dark-mode .research-front h3 {
-  color: #CA61C3;
-}
-
-.dark-mode p {
-color: white;
-}
-
-.dark-mode .research-front p {
-color: black;
-}
-
-/* BACK FACE */
-.research-back {
-  background: color-mix(in srgb, var(--accent, #4062bb) 10%, var(--highlight, #f45b69) 10%, var(--bg, #fff) 80%);
-  border: 1px solid color-mix(in srgb, var(--accent, #4062bb) 40%, transparent);
-  color: var(--fg, #111);
-  transform: rotateY(180deg);
-  box-shadow: 0 0 20px rgba(0,0,0,0.05);
-  overflow-y: auto;
-}
-.research-back ul {
-  margin: 0.5rem 0 0;
-  padding-left: 1rem;
-  font-size: 0.9rem;
-  list-style-type: square;
-}
-.research-back li { margin-bottom: 0.4rem; }
-.research-back a {
-  color: var(--accent, #4062bb);
+.ab-hero-bio a {
+  color: var(--ab-accent);
   text-decoration: none;
   font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
 }
-.research-back a:hover { text-decoration: underline; }
-
-.dark-mode .research-back li {
-color: white;
-}
-
-.dark-mode li {
-color:white;
-}
-
-/* FLIP ANIMATION */
-.research-card:hover .research-front { transform: rotateY(180deg); }
-.research-card:hover .research-back { transform: rotateY(0deg); }
-
-/* ===== Headings ===== */
-h2 {
-  margin-top: 3rem;
-  color: var(--accent, #4062bb);
-  text-align: center;
-  font-weight: 700;
-  font-size: 1.8rem;
-}
-
-/* ===== Recent Events ===== */
-.events {
-  background: color-mix(in srgb, var(--bg, #fff) 95%, var(--accent, #4062bb) 5%);
-  border: 1px solid color-mix(in srgb, var(--accent, #4062bb) 20%, transparent);
+.ab-hero-bio a:hover { border-bottom-color: var(--ab-accent); }
+.ab-looking {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.1rem 1.3rem;
   border-radius: 12px;
-  padding: 1.5rem;
-  margin-top: 3rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.05);
-  animation: fadeIn 1.2s ease forwards;
+  border: 1.5px solid var(--ab-amber-bdr);
+  background: var(--ab-amber-bg);
+  margin: 1.8rem 0 2.5rem;
+  animation: abFadeUp 0.6s var(--ab-ease) 0.15s both;
 }
-.events ul {
+.ab-looking-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+}
+.ab-looking-text {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  opacity: 0.85;
+}
+.ab-looking-text strong {
+  color: var(--ab-amber);
+  opacity: 1;
+}
+.ab-section {
+  margin-bottom: 2.5rem;
+  animation: abFadeUp 0.6s var(--ab-ease) 0.2s both;
+}
+.ab-section-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.45rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid;
+  border-image: linear-gradient(90deg, var(--ab-accent), var(--ab-accent2), transparent 80%) 1;
+}
+.ab-section-label em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--ab-accent), var(--ab-accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.ab-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.ab-acc-item {
+  border: 1px solid rgba(128,128,128,0.15);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+.ab-acc-item.open {
+  border-color: var(--ab-accent-bdr);
+  box-shadow: 0 4px 20px var(--ab-accent-glow);
+}
+.ab-acc-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.95rem 1.25rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: inherit;
+  text-align: left;
+  gap: 1rem;
+  transition: background 0.18s ease;
+}
+.ab-acc-trigger:hover { background: rgba(128,128,128,0.05); }
+.ab-acc-trigger-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.ab-acc-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--ab-accent-bg);
+  border: 1px solid var(--ab-accent-bdr);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: var(--ab-accent);
+}
+.ab-acc-chevron {
+  font-size: 0.7rem;
+  color: var(--ab-accent);
+  opacity: 0.6;
+  transition: transform 0.3s var(--ab-ease), opacity 0.2s ease;
+  flex-shrink: 0;
+}
+.ab-acc-item.open .ab-acc-chevron {
+  transform: rotate(90deg);
+  opacity: 1;
+}
+.ab-acc-body {
+  padding: 0 1.25rem;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.38s var(--ab-ease), padding 0.3s ease;
+}
+.ab-acc-item.open .ab-acc-body {
+  max-height: 600px;
+  padding: 0 1.25rem 1.25rem;
+  border-top: 1px solid rgba(128,128,128,0.1);
+}
+.ab-acc-body p {
+  font-size: 0.875rem;
+  line-height: 1.7;
+  opacity: 0.72;
+  margin-bottom: 0.75rem;
+  margin-top: 0.85rem;
+}
+.ab-acc-body h4 {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ab-accent2);
+  margin-bottom: 0.55rem;
+}
+.ab-acc-body ul {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
-.events li {
-  margin: 0.75rem 0;
-  font-size: 1rem;
-  color: var(--fg, #111);
+.ab-acc-body li {
+  font-size: 0.875rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  opacity: 0.82;
+  line-height: 1.5;
 }
-.events strong {
-  color: var(--accent, #4062bb);
+.ab-acc-body li::before {
+  content: '→';
+  font-size: 0.72rem;
+  color: var(--ab-accent);
+  opacity: 0.7;
+  flex-shrink: 0;
 }
-
-/* ===== Animations ===== */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+.ab-acc-body a {
+  color: var(--ab-accent);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
 }
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
+.ab-acc-body a:hover { border-bottom-color: var(--ab-accent); }
+.ab-pub-venue {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--ab-accent2);
+  background: rgba(20,184,166,0.1);
+  border: 1px solid rgba(20,184,166,0.2);
+  padding: 0.1rem 0.5rem;
+  border-radius: 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ab-reviewer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+.ab-rev-chip {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 0.28rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid rgba(128,128,128,0.18);
+  opacity: 0.7;
+  transition: opacity 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.ab-rev-chip:hover {
+  opacity: 1;
+  border-color: var(--ab-accent-bdr);
+  color: var(--ab-accent);
+}
+.ab-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.ab-event {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(128,128,128,0.1);
+  animation: abFadeUp 0.5s var(--ab-ease) both;
+}
+.ab-event:last-child { border-bottom: none; }
+.ab-event:nth-child(1) { animation-delay: 0.05s; }
+.ab-event:nth-child(2) { animation-delay: 0.1s; }
+.ab-event:nth-child(3) { animation-delay: 0.15s; }
+.ab-event-date {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ab-accent);
+  background: var(--ab-accent-bg);
+  border: 1px solid var(--ab-accent-bdr);
+  border-radius: 6px;
+  padding: 0.22rem 0.6rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-width: 90px;
+  text-align: center;
+}
+.ab-event-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  opacity: 0.8;
+  margin: 0;
+}
+.ab-link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.ab-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--ab-accent-bdr);
+  color: var(--ab-accent);
+  background: var(--ab-accent-bg);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.ab-link-btn:hover {
+  background: var(--ab-accent);
+  color: #fff;
+  border-color: var(--ab-accent);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px var(--ab-accent-glow);
+}
+@keyframes abFadeUp {
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-/* ===== Responsive ===== */
-@media (max-width: 768px) {
-  .welcome { font-size: 52px; }
-  .hand-wave { font-size: 48px; }
-  .subtext { font-size: 1rem; }
-  .about-content { font-size: 1rem; padding: 0 1rem; }
-  .research-grid { flex-direction: column; align-items: center; }
-  .research-card { width: 90%; height: auto; }
-  .research-front, .research-back {
-    position: relative;
-    transform: none !important;
-    border-radius: 12px;
-    box-shadow: none;
-  }
-  .research-back { margin-top: 0.8rem; }
+@media (max-width: 540px) {
+  .ab-hero-name { font-size: 2rem; }
+  .ab-section-label { font-size: 1.25rem; }
+  .ab-acc-trigger { padding: 0.85rem 1rem; }
+  .ab-acc-item.open .ab-acc-body { padding: 0 1rem 1rem; }
+  .ab-event { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
 }
-
-.collaboration-highlight {
-    background-color: rgba(255, 165, 0, 0.1); /* Light orange (FFA500) with 10% opacity */
-    padding: 1rem 1.5rem;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 165, 0, 0.2); /* Subtle orange border */
-    margin-top: 2rem; /* Add some space above the box */
-}
-.dark-mode .collaboration-highlight {
-    /* 1. Frosted Effect */
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); /* Safari support */
-    /* 2. Transparent Background */
-    background-color: rgba(255, 165, 0, 0.3); /* Very light orange tint */
-    /* 3. Subtle Border & Shadow */
-    border: 2px solid rgba(255, 255, 255, 0.4); /* Frosted white border */
-    border-radius:20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
-}
-
-
-/* ===== NEW Collapsible Research Sections (Accordion) ===== */
-.research-accordion {
-    margin: 2rem auto;
-    max-width: 900px;
-}
-
-.research-accordion details {
-    border: 1px solid var(--fg-muted, #ccc);
-    border-radius: 8px;
-    margin-bottom: 12px;
-    background: color-mix(in srgb, var(--bg, #fff) 95%, var(--accent, #4062bb) 3%);
-    transition: all 0.3s ease;
-}
-
-/* Style for when the section is open */
-.research-accordion details[open] {
-    border-color: var(--accent, #4062bb);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-}
-
-.research-accordion summary {
-    cursor: pointer;
-    padding: 1rem 1.5rem;
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--accent, #4062bb);
-    outline: none;
-    list-style: none; /* Hide default triangle/arrow */
-    position: relative;
-}
-
-/* Custom arrow icon using content property */
-.research-accordion summary::after {
-    content: "▶";
-    position: absolute;
-    right: 1.5rem;
-    top: 50%;
-    transform: translateY(-50%) rotate(0deg);
-    transition: transform 0.25s ease;
-    color: var(--accent, #4062bb);
-    font-size: 0.8rem;
-}
-
-.research-accordion details[open] summary::after {
-    transform: translateY(-50%) rotate(90deg);
-}
-
-/* === MODIFIED for Animation: Default (Closed State) === */
-.research-accordion-content {
-    padding: 0 1.5rem 0 1.5rem; /* Remove bottom padding in closed state */
-    line-height: 1.6;
-    color: var(--fg, #111);
-    font-size: 1rem;
-    /* Animation Properties */
-    max-height: 0; 
-    overflow: hidden; 
-    transition: max-height 0.4s ease-in-out, padding 0.4s ease-in-out;
-}
-
-/* === MODIFIED for Animation: Open State === */
-.research-accordion details[open] .research-accordion-content {
-    /* Set a large enough max-height to ensure all content fits */
-    max-height: 1000px; 
-    padding: 0 1.5rem 1.5rem 1.5rem; /* Restore bottom padding when open */
-    border-top: 1px solid var(--fg-muted, #eee); 
-}
-.research-accordion-content h4 {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--highlight, #f45b69);
-    font-weight: 500;
-}
-
-.research-accordion-content ul {
-    list-style-type: square;
-    padding-left: 1.2rem;
-    margin: 0.5rem 0 0;
-}
-.research-accordion-content li {
-    margin-bottom: 0.5rem;
-}
-.research-accordion-content a {
-    color: var(--accent, #4062bb);
-    text-decoration: none;
-    font-weight: 500;
-}
-.research-accordion-content a:hover { text-decoration: underline; }
-
-/* Dark Mode Adjustments */
-.dark-mode .research-accordion details {
-    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
-    background: #222; /* Darker background */
-}
-
-.dark-mode .research-accordion-content {
-    border-top: 1px solid #333;
-}
-
 </style>
-<!-- ========================= HERO ========================= -->
-<div class="hero">
-  <div class="heading">
-    <span class="welcome">Welcome</span>
-    <span class="hand-wave">👋</span>
-  </div>
-  <p class="subtext">PhD Student • Research Intern • 3D Vision & Generative CAD</p>
+<div class="ab-wrap">
+<div class="ab-hero">
+<h1 class="ab-hero-name">Mohammad Sadil <em> Khan</em></h1>
+<div class="ab-hero-roles">
+<span class="ab-role-pill"><i class="fa-solid fa-graduation-cap"></i> PhD Researcher</span>
+<span class="ab-role-pill"><i class="fa-solid fa-flask"></i> Research Intern · Huawei Noah's Ark</span>
+<span class="ab-role-pill"><i class="fa-solid fa-cube"></i> 3D Vision &amp; Generative CAD</span>
 </div>
-<!-- ========================= ABOUT ========================= -->
-<div class="about-content">
-<p>Hello, My name is <strong>Mohammad Sadil Khan</strong>. I am a PhD student at <a href="https://rptu.de/en/home-1" target="_blank">RPTU Kaiserslaurern</a> and <a href="https://av.dfki.de/members/sadil-khan/" target="_blank">DFKI</a>, under the supervision of <a href="https://scholar.google.com/citations?user=ImhXfxgAAAAJ&hl=en" target="_blank">Prof. Dr. Didier Stricker</a>. I am currently a research intern at Huawei’s Noah’s Ark Lab, London where I work with <a href="https://therevanchist.github.io/" target="_blank">Ismail Elezi</a> and <a href="https://jiankangdeng.github.io/" target="_blank">Jiankang Deng</a>.</p>
-<div class="collaboration-highlight">
-<p>🙋 I am looking for 2026 Summer Research Internship or Student Researcher position in 3D Generative AI, Image Generation, Novel View Synthesis, Avatar Generation, Spatial Reasoning, Finetuning LLM for 3D Generation or 3D Editing.
-</div>
-<h2 style="text-align:center; margin-top:1rem;"> 👨🏻‍💻Research Domains</h2>
-<div class="research-accordion">
-    <details open>
-        <summary>CAD Generative AI</summary>
-        <div class="research-accordion-content">
-            <p>Leveraging AI to accelerate computer-aided design by creating parametric and editable 3D models from multimodal inputs.</p>
-            <h4>Key Publications:</h4>
-            <ul>
-                <li><a href="" target="_blank">NURBGen</a> — NURBS based CAD from texts (AAAI-2026).</li>
-                <li><a href="https://sadilkhan.github.io/text2cad-project/" target="_blank">TextCAD</a> — Text-to-Editable CAD (NeurIPS 2024 Spotlight)</li>
-                <li><a href="http://skazizali.com/cadsignet.github.io/" target="_blank">CAD-SIGNet</a> — CAD design history from point clouds (CVPR 2024 Highlight)</li>
-            </ul>
-        </div>
-    </details>
-    <details>
-        <summary>3D Reconstruction</summary>
-        <div class="research-accordion-content">
-            <p>Generating high-fidelity 3D models and scenes from multimodal inputs (texts, images, video, etc.) focusing on scalability and realism.</p>
-            <h4>Key Publications:</h4>
-            <ul>
-                <li><a href="https://arxiv.org/abs/2411.17945" target="_blank">MARVEL-40M+</a> — Largest 3D Captioning Dataset (CVPR 2025)</li>
-            </ul>
-        </div>
-    </details>
-    <details>
-        <summary>3D Understanding</summary>
-        <div class="research-accordion-content">
-            <p>Bridging geometry, perception, and semantics to enable AI systems to reason about and interact with 3D environments.</p>
-            <p>Current work focuses on geometric-semantic alignment. Coming soon 🚧</p>
-        </div>
-    </details>
-    <details>
-        <summary>Efficient 3D Representation</summary>
-        <div class="research-accordion-content">
-            <p>Exploring compact and efficient 3D representations (e.g., parametric surfaces) for high resolution mesh generation.</p>
-            <p>Coming soon 🚧</p>
-        </div>
-    </details>
-</div>
-<p>Check out my <a href="/projects"><b>Projects</b></a> and <a href="/publications/"><b>Publications</b></a> page.</p>
-<p><strong>Reviewer: </strong> ICML'26 &nbsp; ECCV'26 &nbsp; CVPR'26 &nbsp; AAAI'26 &nbsp; NeurIPS'25 &nbsp; SIGGRAPH Asia'25 &nbsp; ICPR'24</p>
-<h2>🗓 Recent Events</h2>
-<div class="events">
-  <ul>
-  <li><strong>[08-11-2025]</strong> 🎉 NURBGen accepted in AAAI 2026. Details coming Soon.</li>
-    <li><strong>[01-05-2025]</strong> Started my summer research internship at Huawei, London.</li>
-  </ul>
+<p class="ab-hero-bio">I am a PhD student at <a href="https://rptu.de/en/home-1" target="_blank">RPTU Kaiserslautern</a> and <a href="https://av.dfki.de/members/sadil-khan/" target="_blank">DFKI</a>, supervised by <a href="https://scholar.google.com/citations?user=ImhXfxgAAAAJ&hl=en" target="_blank">Prof. Dr. Didier Stricker</a>. I am currently a research intern at Huawei's Noah's Ark Lab, London, working with <a href="https://therevanchist.github.io/" target="_blank">Ismail Elezi</a> and <a href="https://jiankangdeng.github.io/" target="_blank">Jiankang Deng</a>.</p>
+<div class="ab-link-row">
+<a class="ab-link-btn" href="/projects"><i class="fa-solid fa-diagram-project"></i> Projects</a>
+<a class="ab-link-btn" href="/publications/"><i class="fa-solid fa-file-lines"></i> Publications</a>
+<a class="ab-link-btn" href="/cv"><i class="fa-solid fa-id-card"></i> CV</a>
 </div>
 </div>
+<div class="ab-looking">
+<div class="ab-looking-icon">🙋</div>
+<p class="ab-looking-text"><strong>Open to 2026 Summer Research Internship</strong> or Student Researcher positions in — 3D Generative AI, Image Generation, Novel View Synthesis, Avatar Generation, Spatial Reasoning, Finetuning LLMs for 3D Generation or 3D Editing.</p>
+</div>
+<div class="ab-section">
+<h2 class="ab-section-label"><em>Research</em> Domains</h2>
+<div class="ab-accordion" id="abAccordion">
+<div class="ab-acc-item open" data-acc>
+<button class="ab-acc-trigger" aria-expanded="true">
+<span class="ab-acc-trigger-left"><span class="ab-acc-icon"><i class="fa-solid fa-pen-ruler"></i></span>CAD Generative AI</span>
+<i class="fa-solid fa-chevron-right ab-acc-chevron"></i>
+</button>
+<div class="ab-acc-body">
+<p>Leveraging AI to accelerate computer-aided design by creating parametric and editable 3D models from multimodal inputs.</p>
+<h4>Key Publications</h4>
+<ul>
+<li><span><a href="" target="_blank">NURBGen</a> — NURBS-based CAD generation from text</span><span class="ab-pub-venue">AAAI 2026</span></li>
+<li><span><a href="https://sadilkhan.github.io/text2cad-project/" target="_blank">TextCAD</a> — Text-to-Editable CAD generation</span><span class="ab-pub-venue">NeurIPS 2024 Spotlight</span></li>
+<li><span><a href="http://skazizali.com/cadsignet.github.io/" target="_blank">CAD-SIGNet</a> — CAD design history from point clouds</span><span class="ab-pub-venue">CVPR 2024 Highlight</span></li>
+</ul>
+</div>
+</div>
+<div class="ab-acc-item" data-acc>
+<button class="ab-acc-trigger" aria-expanded="false">
+<span class="ab-acc-trigger-left"><span class="ab-acc-icon"><i class="fa-solid fa-cubes"></i></span>3D Reconstruction</span>
+<i class="fa-solid fa-chevron-right ab-acc-chevron"></i>
+</button>
+<div class="ab-acc-body">
+<p>Generating high-fidelity 3D models and scenes from multimodal inputs — text, images, video — focusing on scalability and realism.</p>
+<h4>Key Publications</h4>
+<ul>
+<li><span><a href="https://arxiv.org/abs/2411.17945" target="_blank">MARVEL-40M+</a> — Largest 3D captioning dataset</span><span class="ab-pub-venue">CVPR 2025</span></li>
+</ul>
+</div>
+</div>
+<div class="ab-acc-item" data-acc>
+<button class="ab-acc-trigger" aria-expanded="false">
+<span class="ab-acc-trigger-left"><span class="ab-acc-icon"><i class="fa-solid fa-brain"></i></span>3D Understanding</span>
+<i class="fa-solid fa-chevron-right ab-acc-chevron"></i>
+</button>
+<div class="ab-acc-body">
+<p>Bridging geometry, perception, and semantics to enable AI systems to reason about and interact with 3D environments. Current work focuses on geometric-semantic alignment.</p>
+<p style="opacity:0.5;font-size:0.82rem;">🚧 Coming soon</p>
+</div>
+</div>
+<div class="ab-acc-item" data-acc>
+<button class="ab-acc-trigger" aria-expanded="false">
+<span class="ab-acc-trigger-left"><span class="ab-acc-icon"><i class="fa-solid fa-microchip"></i></span>Efficient 3D Representation</span>
+<i class="fa-solid fa-chevron-right ab-acc-chevron"></i>
+</button>
+<div class="ab-acc-body">
+<p>Exploring compact and efficient 3D representations — e.g., parametric surfaces — for high-resolution mesh generation.</p>
+<p style="opacity:0.5;font-size:0.82rem;">🚧 Coming soon</p>
+</div>
+</div>
+</div>
+</div>
+<div class="ab-section" style="animation-delay:0.3s;">
+<h2 class="ab-section-label"><em>Academic</em> Service</h2>
+<p style="font-size:0.88rem;opacity:0.6;margin-bottom:0.85rem;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;">Reviewer</p>
+<div class="ab-reviewer">
+<span class="ab-rev-chip">ICML '26</span>
+<span class="ab-rev-chip">ECCV '26</span>
+<span class="ab-rev-chip">CVPR '26</span>
+<span class="ab-rev-chip">AAAI '26</span>
+<span class="ab-rev-chip">NeurIPS '25</span>
+<span class="ab-rev-chip">SIGGRAPH Asia '25</span>
+<span class="ab-rev-chip">ICPR '24</span>
+</div>
+</div>
+<div class="ab-section" style="animation-delay:0.35s;">
+<h2 class="ab-section-label"><em>Recent</em> Events</h2>
+<div class="ab-events">
+<div class="ab-event">
+<span class="ab-event-date">Nov 2025</span>
+<p class="ab-event-text">🎉 <strong>NURBGen</strong> accepted at <strong>AAAI 2026</strong>. Details coming soon.</p>
+</div>
+<div class="ab-event">
+<span class="ab-event-date">May 2025</span>
+<p class="ab-event-text">Started summer research internship at <strong>Huawei Noah's Ark Lab</strong>, London.</p>
+</div>
+</div>
+</div>
+</div>
+<script>
+document.querySelectorAll('[data-acc] .ab-acc-trigger').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.closest('[data-acc]');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('[data-acc]').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.ab-acc-trigger').setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+</script>
 </div>
       
       </header>

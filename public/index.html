@@ -21,12 +21,12 @@
   
     
   
-<meta name="description" content="3D Computer Vision | Deep Learning | Generative AI">
+<meta name="description" content="3D Reconstruction | Generative AI | Multimodal LLM">
 
 
 <meta property="og:site_name" content="Home">
 <meta property="og:title" content="Mohammad Sadil Khan">
-<meta property="og:description" content="3D Computer Vision | Deep Learning | Generative AI" />
+<meta property="og:description" content="3D Reconstruction | Generative AI | Multimodal LLM" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="/" />
 <meta property="og:locale" content="en">
@@ -36,7 +36,7 @@
 <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:image" content="/img/featured.jpg"/>
 
   <meta itemprop="name" content="Mohammad Sadil Khan">
-<meta itemprop="description" content="3D Computer Vision | Deep Learning | Generative AI">
+<meta itemprop="description" content="3D Reconstruction | Generative AI | Multimodal LLM">
   
 <script type="application/javascript">
 var dnt = (navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack);
@@ -338,117 +338,446 @@ if (!doNotTrack) {
 
 
 
-<div id="particles-js">
-</div> 
-<div class="count-particles">
-  <span class="js-count-particles"></span>
-</div>
-  
-<script src="/js/stats.js"></script>
-<script src="/js/particles.min.js"></script>
-<script src="/js/particles.js"></script>
+
 <script>
-  
   fetch("\/index.json")
-    .then((response) => response.json())
-    .then((data) => (window.pagesIndex = data));
+    .then((r) => r.json())
+    .then((d) => (window.pagesIndex = d));
 </script>
 
-<main class="page-main pa4" role="main">
-  <section class="page-content mw9 center">
-    <div class="flex-l items-center" style="flex-direction: row-reverse;">
-      <div class="mh4 w-50-l tr">
-        <h1 class="f2 f1-m f-subheadline-l fw5-ns mv4 lh-solid">Mohammad Sadil Khan</h1>
-        <h2 class="f5 fw7 mt0 mb4 ttu tracked">PhD in Computer Science</h2>
-        <div class="social-icon-links" aria-hidden="true">
-  
-  
-    
-    
-    
-      
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://github.com/SadilKhan" title="github" target="_blank" rel="noopener">
-      <i class="fab fa-github fa-lg fa-fw"></i>
-    </a>
-  
-    
-    
-    
-      
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.facebook.com/profile.php?id=100043829644032" title="facebook" target="_blank" rel="noopener">
-      <i class="fab fa-facebook fa-lg fa-fw"></i>
-    </a>
-  
-    
-    
-    
-      
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.linkedin.com/in/mohammad-sadil-khan-a96568170/" title="linkedin" target="_blank" rel="noopener">
-      <i class="fab fa-linkedin fa-lg fa-fw"></i>
-    </a>
-  
-    
-    
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://scholar.google.com/citations?user=XIDQo_IAAAAJ&amp;hl=en&amp;authuser=1" title="google-scholar" target="_blank" rel="noopener">
-      <i class="ai ai-google-scholar fa-lg fa-fw"></i>
-    </a>
-  
-    
-    
-    
-      
-    
-    
-    
-    
-    
-      
-    
-    <a class="link dib h1 w1 ml0 mr2 f6 o-90 glow" href="https://www.youtube.com/channel/UC3TCC__F3NbO2I18D7nSP6g" title="youtube" target="_blank" rel="noopener">
-      <i class="fab fa-youtube fa-lg fa-fw"></i>
-    </a>
-  
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root {
+  --h-accent: #0ea5e9;
+  --h-accent2: #14b8a6;
+  --h-accent-bg: rgba(14,165,233,0.08);
+  --h-accent-glow: rgba(14,165,233,0.14);
+  --h-accent-bdr: rgba(14,165,233,0.2);
+  --h-ease: cubic-bezier(0.22,1,0.36,1);
+}
+.h-root {
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+  grid-column: 1 / -1;
+}
+ 
+.h-hero {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 5rem 3rem 4rem;
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 4rem;
+  align-items: center;
+}
+.h-wave {
+  font-size: 2rem;
+  display: inline-block;
+  animation: hWave 2s ease 0.6s 2;
+  transform-origin: 70% 70%;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+@keyframes hWave {
+  0%,60%,100% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+}
+.h-eyebrow {
+  display: block;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--h-accent);
+  margin-bottom: 0.8rem;
+  animation: hUp 0.6s var(--h-ease) 0.05s both;
+}
+.h-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.6rem, 4vw, 4rem);
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+  margin: 0 0 1rem;
+  animation: hUp 0.6s var(--h-ease) 0.1s both;
+}
+.h-name em {
+  font-style: italic;
+  background: linear-gradient(90deg, var(--h-accent), var(--h-accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.h-desc {
+  font-size: 0.975rem;
+  line-height: 1.78;
+  opacity: 0.62;
+  max-width: 480px;
+  margin: 0 0 1.6rem;
+  animation: hUp 0.6s var(--h-ease) 0.15s both;
+}
+.h-social {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.4rem;
+  animation: hUp 0.6s var(--h-ease) 0.2s both;
+}
+.h-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1.5px solid rgba(128,128,128,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: inherit;
+  opacity: 0.5;
+  text-decoration: none;
+  transition: opacity .2s, border-color .2s, color .2s, background .2s, transform .2s;
+}
+.h-social a:hover {
+  opacity: 1;
+  border-color: var(--h-accent-bdr);
+  color: var(--h-accent);
+  background: var(--h-accent-bg);
+  transform: translateY(-2px);
+}
+.h-btns {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  animation: hUp 0.6s var(--h-ease) 0.25s both;
+}
+.h-btn-fill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.35rem;
+  border-radius: 8px;
+  background: var(--h-accent);
+  border: 1.5px solid var(--h-accent);
+  color: #fff !important;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.845rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background .2s, transform .2s, box-shadow .2s;
+}
+.h-btn-fill:hover {
+  background: #0284c7;
+  border-color: #0284c7;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 18px var(--h-accent-glow);
+}
+.h-btn-out {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.35rem;
+  border-radius: 8px;
+  background: transparent;
+  border: 1.5px solid rgba(128,128,128,0.18);
+  color: inherit !important;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.845rem;
+  font-weight: 600;
+  text-decoration: none !important;
+  opacity: 0.7;
+  transition: opacity .2s, border-color .2s, color .2s, background .2s, transform .2s;
+}
+.h-btn-out:hover {
+  opacity: 1;
+  border-color: var(--h-accent-bdr);
+  color: var(--h-accent) !important;
+  background: var(--h-accent-bg);
+  transform: translateY(-1px);
+}
+.h-photo-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: hUp 0.6s var(--h-ease) 0.08s both;
+}
+.h-photo-frame {
+  position: relative;
+  width: 210px;
+  height: 230px;
+}
+.h-photo-frame::before {
+  content: '';
+  position: absolute;
+  inset: -7px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, var(--h-accent), var(--h-accent2));
+  opacity: 0.1;
+  z-index: 0;
+}
+.h-photo-frame::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  right: -5px;
+  width: 55%;
+  height: 55%;
+  border-bottom: 2px solid var(--h-accent);
+  border-right: 2px solid var(--h-accent);
+  border-radius: 0 0 16px 0;
+  opacity: 0.28;
+  z-index: 0;
+}
+.h-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  position: relative;
+  z-index: 1;
+  border: 1.5px solid var(--h-accent-bdr);
+  box-shadow: 0 10px 36px rgba(0,0,0,0.1);
+}
+.h-div {
+  max-width: 1080px;
+  margin: 0 auto 3rem;
+  padding: 0 3rem;
+}
+.h-div-line {
+  height: 1px;
+  background: linear-gradient(90deg, var(--h-accent), var(--h-accent2), transparent);
+  opacity: 0.18;
+}
+.h-cards-wrap {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 3rem 5rem;
+}
+.h-cards-label {
+  display: block;
+  font-family: 'DM Serif Display', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  font-style: italic;
+  opacity: 0.35;
+  margin-bottom: 1rem;
+}
+.h-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+  margin-bottom: 2rem;
+}
+.h-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1.1rem 1.15rem;
+  border: 1px solid rgba(128,128,128,0.11);
+  border-radius: 12px;
+  text-decoration: none !important;
+  color: inherit !important;
+  transition: border-color .22s, box-shadow .22s, transform .22s;
+  position: relative;
+  overflow: hidden;
+  animation: hUp 0.5s var(--h-ease) both;
+}
+.h-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--h-accent), var(--h-accent2));
+  opacity: 0;
+  transition: opacity .22s;
+}
+.h-card:hover { border-color: var(--h-accent-bdr); box-shadow: 0 6px 22px var(--h-accent-glow); transform: translateY(-3px); }
+.h-card:hover::after { opacity: 1; }
+.h-card:nth-child(1) { animation-delay: .04s; }
+.h-card:nth-child(2) { animation-delay: .09s; }
+.h-card:nth-child(3) { animation-delay: .14s; }
+.h-card:nth-child(4) { animation-delay: .19s; }
+.h-card:nth-child(5) { animation-delay: .24s; }
+.h-card:nth-child(6) { animation-delay: .29s; }
+.h-card-ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: var(--h-accent-bg);
+  border: 1px solid var(--h-accent-bdr);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  color: var(--h-accent);
+  flex-shrink: 0;
+}
+.h-card-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.2rem;
+  display: flex;
+  align-items: center;
+}
+.h-card-arr {
+  font-size: 0.56rem;
+  color: var(--h-accent);
+  opacity: 0;
+  margin-left: auto;
+  transition: opacity .2s, transform .2s;
+}
+.h-card:hover .h-card-arr { opacity: 1; transform: translateX(2px); }
+.h-card-sub { font-size: 0.73rem; opacity: 0.4; line-height: 1.45; }
+.h-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.42rem;
+  animation: hUp 0.55s var(--h-ease) 0.3s both;
+}
+.h-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.26rem 0.72rem;
+  border-radius: 20px;
+  border: 1px solid rgba(128,128,128,0.11);
+  font-size: 0.72rem;
+  font-weight: 500;
+  opacity: 0.5;
+  transition: opacity .2s, border-color .2s, color .2s;
+  cursor: default;
+}
+.h-tag:hover { opacity: 1; border-color: var(--h-accent-bdr); color: var(--h-accent); }
+.h-tag i { font-size: 0.62rem; color: var(--h-accent); }
+@keyframes hUp {
+  from { opacity: 0; transform: translateY(13px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (max-width: 860px) {
+  .h-hero { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.5rem 2.5rem; }
+  .h-photo-col { order: -1; }
+  .h-photo-frame { width: 140px; height: 155px; }
+  .h-grid { grid-template-columns: 1fr 1fr; }
+  .h-div { padding: 0 1.5rem; }
+  .h-cards-wrap { padding: 0 1.5rem 4rem; }
+}
+@media (max-width: 500px) {
+  .h-grid { grid-template-columns: 1fr; }
+  .h-name { font-size: 2.4rem; }
+}
+</style>
+
+<div class="h-root">
+<div class="h-hero">
+<div>
+<div class="h-wave">👋</div>
+<span class="h-eyebrow">PhD in Computer Science</span>
+<h1 class="h-name">Mohammad Sadil <br> Khan</h1>
+<p class="h-desc">3D Reconstruction | Generative AI | Multimodal LLM</p>
+
+<div class="h-social">
+
+<a href="https://github.com/SadilKhan" target="_blank" title="github">
+<i class="fa-brands fa-github"></i>
+
+</a>
+
+<a href="https://www.facebook.com/profile.php?id=100043829644032" target="_blank" title="facebook">
+<i class="fa-brands fa-facebook"></i>
+
+</a>
+
+<a href="https://www.linkedin.com/in/mohammad-sadil-khan-a96568170/" target="_blank" title="linkedin">
+<i class="fa-brands fa-linkedin"></i>
+
+</a>
+
+<a href="https://scholar.google.com/citations?user=XIDQo_IAAAAJ&amp;hl=en&amp;authuser=1" target="_blank" title="google-scholar">
+
+<i class="fa-solid fa-graduation-cap"></i>
+
+
+</a>
+
+<a href="https://www.youtube.com/channel/UC3TCC__F3NbO2I18D7nSP6g" target="_blank" title="youtube">
+<i class="fa-brands fa-youtube"></i>
+
+</a>
+
 </div>
 
-        <p class="f4 mt4 lh-copy">3D Computer Vision | Deep Learning | Generative AI</p>
-        <a class="mt4 action " href="/"></a>
-      </div>
-      <div class="tr w-50-l ml4">
-      
-        <img class="mv0 w-70-m" src="img/featured.jpg"/>
-      
-      </div>
-    </div>
-  </section>
-</main>
+<div class="h-btns">
+<a class="h-btn-fill" href="/about"><i class="fa-solid fa-user"></i> About Me</a>
+<a class="h-btn-out" href="/publications/"><i class="fa-solid fa-file-lines"></i> Publications</a>
+<a class="h-btn-out" href="/cv"><i class="fa-solid fa-id-card"></i> CV</a>
+</div>
+</div>
+
+<div class="h-photo-col">
+<div class="h-photo-frame">
+<img class="h-photo" src="img/featured.jpg" alt="Mohammad Sadil Khan">
+</div>
+</div>
+
+</div>
+<div class="h-div"><div class="h-div-line"></div></div>
+<div class="h-cards-wrap">
+<span class="h-cards-label">Explore</span>
+<div class="h-grid">
+<a class="h-card" href="/publications/">
+<div class="h-card-ico"><i class="fa-solid fa-file-lines"></i></div>
+<div>
+<div class="h-card-label">Publications <i class="fa-solid fa-arrow-right h-card-arr"></i></div>
+<div class="h-card-sub">CVPR · NeurIPS · AAAI · ICCV</div>
+</div>
+</a>
+<a class="h-card" href="/projects">
+<div class="h-card-ico"><i class="fa-solid fa-diagram-project"></i></div>
+<div>
+<div class="h-card-label">Projects <i class="fa-solid fa-arrow-right h-card-arr"></i></div>
+<div class="h-card-sub">3D Vision · Generative CAD · LLMs</div>
+</div>
+</a>
+<a class="h-card" href="/cv">
+<div class="h-card-ico"><i class="fa-solid fa-id-card"></i></div>
+<div>
+<div class="h-card-label">CV / Resume <i class="fa-solid fa-arrow-right h-card-arr"></i></div>
+<div class="h-card-sub">Experience · Education · Awards</div>
+</div>
+</a>
+<a class="h-card" href="/blog">
+<div class="h-card-ico"><i class="fa-solid fa-pen-nib"></i></div>
+<div>
+<div class="h-card-label">Blog <i class="fa-solid fa-arrow-right h-card-arr"></i></div>
+<div class="h-card-sub">Research notes · Tutorials</div>
+</div>
+</a>
+<a class="h-card" href="/travel_video">
+<div class="h-card-ico"><i class="fa-solid fa-film"></i></div>
+<div>
+<div class="h-card-label">Travel Films <i class="fa-solid fa-arrow-right h-card-arr"></i></div>
+<div class="h-card-sub">Cinematic stories from the road</div>
+</div>
+</a>
+<a class="h-card" href="/contact">
+<div class="h-card-ico"><i class="fa-solid fa-paper-plane"></i></div>
+<div>
+<div class="h-card-label">Contact <i class="fa-solid fa-arrow-right h-card-arr"></i></div>
+<div class="h-card-sub">Collaborations · Internships</div>
+</div>
+</a>
+</div>
+
+</div>
+</div>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WSFM8WQJW6"></script>

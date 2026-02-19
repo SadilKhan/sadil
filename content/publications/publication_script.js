@@ -371,7 +371,7 @@ function buildCard(pub, q) {
   const imgHtml     = pub.image ? '<img src="' + pub.image + '" alt="' + pub.title + '" loading="lazy">' : '<div class="paper-image-placeholder">&#9703;</div>';
   const captionHtml = pub.metadata ? '<div class="paper-metadata">' + pub.metadata + '</div>' : '';
   const btns = [
-    pub.paperLink && btn('<i class="fa-regular fa-file-lines"></i>&nbsp;Paper',     pub.paperLink),
+    pub.paperLink && btn('<i class="fa-solid fa-file-lines" style="color: rgb(17, 19, 172);"></i>&nbsp;Paper',     pub.paperLink),
     pub.arxiv     && btn('<i class="fa-solid fa-scroll"></i>&nbsp;arXiv',           pub.arxiv),
     pub.project   && btn('<i class="fa-solid fa-globe"></i>&nbsp;Project',          pub.project),
     pub.codeLink  && btn('<i class="fa-brands fa-github"></i>&nbsp;Code',           pub.codeLink),

@@ -1,288 +1,1197 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Catalog</title>
-    <link rel="stylesheet" href="/css/fontawesome/css/all.min.css"> 
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="/css/travel_video/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/travel_video/templatemo-video-catalog.css">
-    <link rel="stylesheet" href="/css/travel_video.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Films — Mohammad Sadil Khan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+   
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:           #0c0f18;
+    --bg2:          #111520;
+    --surface:      #161b28;
+    --surface2:     #1c2233;
+    --border:       rgba(255,255,255,0.07);
+    --border-h:     rgba(14,165,233,0.35);
+    --text:         #e8eaf2;
+    --text-muted:   #6b7594;
+    --text-faint:   #3a4260;
+    --accent:       #0ea5e9;
+    --accent2:      #14b8a6;
+    --accent-bg:    rgba(14,165,233,0.09);
+    --accent-glow:  rgba(14,165,233,0.22);
+    --red:          #f43f5e;
+    --ease:         cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+   
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 0 2rem;
+    transition: background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    border-bottom: 1px solid transparent;
+  }
+
+  .nav.scrolled {
+    background: rgba(12, 15, 24, 0.9);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom-color: var(--border);
+    box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+  }
+
+  .nav-inner {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+  }
+  .nav-logo:hover { color: var(--accent); }
+  .nav-logo em {
+    font-style: italic;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    display: inline-block;
+    padding: 0.38rem 0.8rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: color 0.2s ease, background 0.2s ease;
+    white-space: nowrap;
+  }
+  .nav-links a:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.06);
+  }
+  .nav-links a.active {
+    color: var(--accent);
+    background: var(--accent-bg);
+  }
+
+   
+  .nav-burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+  }
+  .nav-burger:hover { background: rgba(255,255,255,0.06); }
+  .nav-burger span {
+    display: block;
+    width: 20px;
+    height: 1.5px;
+    background: var(--text-muted);
+    border-radius: 2px;
+    transition: transform 0.3s var(--ease), opacity 0.3s ease, width 0.3s ease;
+    transform-origin: center;
+  }
+  .nav-burger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-burger.open span:nth-child(2) { opacity: 0; width: 0; }
+  .nav-burger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+   
+  .nav-mobile {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: rgba(11, 14, 22, 0.97);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 1.5rem 1.25rem;
+    z-index: 999;
+    flex-direction: column;
+    gap: 0.2rem;
+    animation: mobileMenuIn 0.25s var(--ease);
+  }
+  .nav-mobile.open { display: flex; }
+
+  @keyframes mobileMenuIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .nav-mobile a {
+    display: block;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 8px;
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+  .nav-mobile a:hover,
+  .nav-mobile a.active {
+    color: var(--accent);
+    background: var(--accent-bg);
+  }
+
+  @media (max-width: 780px) {
+    .nav-links { display: none; }
+    .nav-burger { display: flex; }
+  }
+
+   
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  #heroVideo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    filter: brightness(0.42) saturate(0.75);
+  }
+
+   
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background:
+      linear-gradient(to bottom,
+        rgba(12,15,24,0.25) 0%,
+        rgba(12,15,24,0.05) 35%,
+        rgba(12,15,24,0.65) 75%,
+        var(--bg) 100%
+      );
+  }
+
+   
+  .hero-grain {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background-image:
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255,255,255,0.012) 2px,
+        rgba(255,255,255,0.012) 4px
+      );
+    pointer-events: none;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 0 1.5rem;
+    max-width: 720px;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.4rem;
+    animation: fadeUp 0.9s var(--ease) 0.1s both;
+  }
+  .hero-eyebrow::before,
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent));
+    opacity: 0.7;
+  }
+  .hero-eyebrow::after {
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 5.8rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    margin-bottom: 1.25rem;
+    animation: fadeUp 0.9s var(--ease) 0.2s both;
+  }
+
+  .hero-title em {
+    display: block;
+    font-style: italic;
+    font-weight: 400;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.48);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    margin-bottom: 2.8rem;
+    animation: fadeUp 0.9s var(--ease) 0.3s both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.85rem 2rem;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: rgba(255,255,255,0.85);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    animation: fadeUp 0.9s var(--ease) 0.4s both;
+  }
+  .hero-cta:hover {
+    background: rgba(255,255,255,0.14);
+    border-color: rgba(255,255,255,0.32);
+    color: #fff;
+    transform: translateY(-2px);
+  }
+  .hero-cta i { font-size: 0.72rem; animation: bounce 1.6s ease infinite; }
+
+   
+  .hero-ctrl {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 4;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.16);
+    backdrop-filter: blur(8px);
+    color: rgba(255,255,255,0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+  .hero-ctrl:hover {
+    background: rgba(255,255,255,0.16);
+    transform: scale(1.08);
+    color: #fff;
+  }
+
+   
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0.35;
+    animation: fadeUp 1s var(--ease) 0.8s both;
+  }
+  .hero-scroll span {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+  .hero-scroll-line {
+    width: 1px;
+    height: 36px;
+    background: linear-gradient(to bottom, #fff, transparent);
+    animation: scrollLine 1.8s ease infinite;
+  }
+
+  @keyframes scrollLine {
+    0%   { opacity: 0; transform: scaleY(0); transform-origin: top; }
+    50%  { opacity: 1; transform: scaleY(1); transform-origin: top; }
+    100% { opacity: 0; transform: scaleY(1); transform-origin: bottom; }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(5px); }
+  }
+
+   
+  .main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem 6rem;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.75rem, 4vw, 2.2rem);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .section-title em {
+    font-style: italic;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .section-count {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+    padding-bottom: 0.25rem;
+    white-space: nowrap;
+  }
+  .section-count strong { color: var(--accent); font-weight: 700; }
+
+   
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.8rem;
+    padding: 1rem 1.3rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+  }
+
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 160px;
+    max-width: 260px;
+  }
+  .search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+  .tv-search {
+    width: 100%;
+    padding: 0.5rem 1rem 0.5rem 2rem;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    background: var(--bg2);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .tv-search::placeholder { color: var(--text-muted); }
+  .tv-search:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-bg);
+  }
+
+  .ctrl-divider {
+    width: 1px;
+    height: 22px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+  @media (max-width: 500px) { .ctrl-divider { display: none; } }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.42rem;
+  }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    background: transparent;
+    color: var(--text-muted);
+    transition: all 0.18s ease;
+    white-space: nowrap;
+  }
+  .chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-bg);
+  }
+  .chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 12px var(--accent-glow);
+  }
+
+   
+  .tv-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  @media (max-width: 900px) { .tv-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 540px)  { .tv-grid { grid-template-columns: 1fr; gap: 1rem; } }
+
+   
+  .tv-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.32s var(--ease), box-shadow 0.32s ease, border-color 0.32s ease;
+    animation: fadeUp 0.5s var(--ease) both;
+  }
+  .tv-card:nth-child(1) { animation-delay: 0.04s; }
+  .tv-card:nth-child(2) { animation-delay: 0.09s; }
+  .tv-card:nth-child(3) { animation-delay: 0.14s; }
+  .tv-card:nth-child(4) { animation-delay: 0.19s; }
+  .tv-card:nth-child(5) { animation-delay: 0.24s; }
+  .tv-card:nth-child(6) { animation-delay: 0.29s; }
+  .tv-card:nth-child(7) { animation-delay: 0.34s; }
+
+  .tv-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 0 1px var(--border-h);
+    border-color: var(--border-h);
+  }
+
+   
+  .tv-thumb {
+    position: relative;
+    aspect-ratio: 16/9;
+    overflow: hidden;
+    background: var(--bg2);
+  }
+
+  .tv-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.55s var(--ease), filter 0.35s ease;
+    filter: brightness(0.88) saturate(0.82);
+  }
+  .tv-card:hover .tv-thumb img {
+    transform: scale(1.08);
+    filter: brightness(0.72) saturate(1.1);
+  }
+
+   
+  .tv-play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.28);
+    opacity: 0;
+    transition: opacity 0.28s ease;
+  }
+  .tv-card:hover .tv-play-overlay { opacity: 1; }
+
+  .tv-play-btn {
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: scale(0.78);
+    transition: transform 0.3s var(--ease), box-shadow 0.3s ease;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+  .tv-card:hover .tv-play-btn {
+    transform: scale(1);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.55);
+  }
+  .tv-play-btn i { color: #0c0f18; font-size: 1.1rem; margin-left: 3px; }
+
+   
+  .tv-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 20px;
+    background: rgba(0,0,0,0.65);
+    color: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+   
+  .tv-card-body {
+    padding: 1rem 1.1rem 1.15rem;
+  }
+
+  .tv-card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .tv-card-desc {
+    font-size: 0.79rem;
+    color: var(--text-muted);
+    line-height: 1.62;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+   
+  .tv-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 5rem 2rem;
+    color: var(--text-faint);
+  }
+  .tv-empty i { font-size: 2rem; margin-bottom: 0.85rem; display: block; }
+  .tv-empty p { font-size: 0.9rem; }
+
+   
+  .tv-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.93);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .tv-modal.open {
+    display: flex;
+    animation: modalIn 0.28s ease;
+  }
+
+  @keyframes modalIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .tv-modal-inner {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    animation: modalSlide 0.32s var(--ease);
+  }
+
+  @keyframes modalSlide {
+    from { opacity: 0; transform: scale(0.93) translateY(28px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .tv-modal-video-wrap {
+    position: relative;
+    aspect-ratio: 16/9;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.75), 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .tv-modal-video-wrap iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  .tv-modal-close {
+    position: absolute;
+    top: -16px;
+    right: -16px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    z-index: 10;
+  }
+  .tv-modal-close:hover {
+    transform: rotate(90deg);
+    background: rgba(244,63,94,0.15);
+    color: var(--red);
+    border-color: rgba(244,63,94,0.3);
+  }
+
+  .tv-modal-info {
+    margin-top: 1.1rem;
+    text-align: center;
+  }
+  .tv-modal-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 0.3rem;
+  }
+  .tv-modal-desc {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.35);
+    max-width: 560px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+   
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 1.8rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .footer-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+  .footer-links {
+    display: flex;
+    gap: 1.4rem;
+    list-style: none;
+  }
+  .footer-links a {
+    font-size: 0.78rem;
+    color: var(--text-faint);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .footer-links a:hover { color: var(--accent); }
+
+   
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--surface2); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+  @media (max-width: 480px) {
+    .main { padding: 2.5rem 1.2rem 5rem; }
+    .controls { padding: 0.85rem 1rem; }
+    .search-wrap { max-width: 100%; }
+    .nav { padding: 0 1.25rem; }
+    .hero-ctrl { bottom: 1.2rem; right: 1.2rem; }
+  }
+  </style>
 </head>
 
 <body>
 
-<div class="tm-page-wrap mx-auto">
-        <div class="position-relative">
-            <div class="position-absolute tm-site-header">
-                <div class="container-fluid position-relative">
-                    <div class="row">
-                        <div class="col-7 col-md-4">
-                        </div>
-                        <div class="col-5 col-md-8 ml-auto mr-0">
-                          <input type="checkbox" id="burger-toggle">
-                            
-                          
-                          <label for="burger-toggle" class="burger-menu">
-                            <div class="circle">
-                            <div class="line"></div>
-                            <div class="line"></div>
-                            <div class="line"></div>
-                            </div>
-                          </label>
-                            <div class="menu">
-  <div class="menu-inner">
-    <ul class="menu-nav">
-      <li class="menu-nav-item"><a class="menu-nav-link" href="/"><span>
-            <div>Home</div>
-          </span></a></li>
-      <li class="menu-nav-item"><a class="menu-nav-link" href="/about"><span>
-            <div>About</div>
-          </span></a></li>
-      <li class="menu-nav-item"><a class="menu-nav-link" href="/blog"><span>
-            <div>Blogs</div>
-          </span></a></li>
-      <li class="menu-nav-item"><a class="menu-nav-link" href="/projects"><span>
-            <div>Projects</div>
-          </span></a></li>
-      <li class="menu-nav-item"><a class="menu-nav-link" href="/publications/"><span>
-            <div>Publications</div>
-          </span></a></li>
-      <li class="menu-nav-item"><a class="menu-nav-link" href="/cv"><span>
-            <div>Resume</div>
-          </span></a></li>
-      <li class="menu-nav-item"><a class="menu-nav-link" href="/travel_video"><span>
-            <div>Video</div>
-          </span></a></li>
-      <li class="menu-nav-item"><a class="menu-nav-link" href="/contact"><span>
-            <div>Contact</div>
-          </span></a></li>
+
+<nav class="nav" id="mainNav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">Mohammad Sadil <em>Khan</em></a>
+
+    <ul class="nav-links">
+      <li><a href="/about">About</a></li>
+      <li><a href="/blog">Blogs</a></li>
+      <li><a href="/projects">Projects</a></li>
+      <li><a href="/publications">Publications</a></li>
+      <li><a href="/cv">CV</a></li>
+      <li><a href="/contact">Contact</a></li>
     </ul>
-    <div class="gallery">
-      <div class="title">
-        <h1>My Videos</h1>
+
+    <button class="nav-burger" id="navBurger" aria-label="Toggle navigation menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+
+<nav class="nav-mobile" id="navMobile" aria-label="Mobile navigation">
+  <a href="/about">About</a>
+  <a href="/blog">Blogs</a>
+  <a href="/projects">Projects</a>
+  <a href="/publications">Publications</a>
+  <a href="/cv">CV</a>
+  <a href="/contact">Contact</a>
+</nav>
+
+
+<section class="hero" id="hero">
+  <video autoplay muted loop playsinline id="heroVideo">
+    <source src="/video/featured.mp4" type="video/mp4">
+  </video>
+  <div class="hero-overlay"></div>
+  <div class="hero-grain"></div>
+
+  <div class="hero-content">
+    <div class="hero-eyebrow">Travel Films</div>
+    <h1 class="hero-title">
+      Stories from<br><em>the road</em>
+    </h1>
+    <p class="hero-sub">Cinematic moments from across Europe &amp; beyond</p>
+    <a href="#content" class="hero-cta">
+      <span>Explore videos</span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </a>
+  </div>
+
+  <button class="hero-ctrl" id="heroCtrl" onclick="toggleVideo()" title="Pause/play background video">
+    <i class="fa-solid fa-pause" id="heroCtrlIcon"></i>
+  </button>
+
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+
+<main class="main" id="content">
+
+  <div class="section-head">
+    <h2 class="section-title">My <em>Films</em></h2>
+    <span class="section-count"><strong id="tvCountNum">7</strong> videos</span>
+  </div>
+
+  
+  <div class="controls">
+    <div class="search-wrap">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input class="tv-search" id="tvSearch" type="text" placeholder="Search videos…" oninput="tvFilter()" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="ctrl-divider"></div>
+    <div class="chips" id="tvChips">
+      <button class="chip active" data-filter="">All</button>
+      <button class="chip" data-filter="cinematic">Cinematic</button>
+      <button class="chip" data-filter="stories">Stories</button>
+      <button class="chip" data-filter="france">France</button>
+      <button class="chip" data-filter="germany">Germany</button>
+    </div>
+  </div>
+
+  
+  <div class="tv-grid" id="tvGrid">
+
+    <div class="tv-card"
+         data-tags="cinematic portugal"
+         data-title="Madeira Cinematic Video, Portugal"
+         data-desc="Three days on Madeira Island, Portugal in August 2023 — dramatic landscapes, levadas, and ocean cliffs."
+         data-embed="https://www.youtube.com/embed/Jh-1BNnBwkM?si=ktiLjCNojCSjjsZq"
+         onclick="tvOpenModal(this)">
+      <div class="tv-thumb">
+        <img src="http://img.youtube.com/vi/Jh-1BNnBwkM/maxresdefault.jpg" alt="Madeira, Portugal" loading="lazy">
+        <div class="tv-badge">Cinematic · Portugal</div>
+        <div class="tv-play-overlay">
+          <div class="tv-play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
       </div>
-      <div class="images">
-        <a class="image-link" href="https://www.youtube.com/embed/Jh-1BNnBwkM?si=ktiLjCNojCSjjsZq">
-          <div class="image"><img src="http://img.youtube.com/vi/Jh-1BNnBwkM/maxresdefault.jpg" alt=""></div>
-        </a>
-      
-        <a class="image-link" href="https://www.youtube.com/embed/zA9hGUqkyao">
-          <div class="image"><img src="http://img.youtube.com/vi/zA9hGUqkyao/maxresdefault.jpg" alt=""></div>
-        </a>
-        
-        <a class="image-link" href="https://youtu.be/YPsySs8Myv8">
-          <div class="image"><img src="http://img.youtube.com/vi/YPsySs8Myv8/maxresdefault.jpg" alt=""></div>
-        </a>
-        
-        <a class="image-link" href="https://youtu.be/N-rkopyzMac">
-          <div class="image"><img src="http://img.youtube.com/vi/N-rkopyzMac/maxresdefault.jpg" alt=""></div>
-        </a>
-        
+      <div class="tv-card-body">
+        <div class="tv-card-title">Madeira Cinematic Video</div>
+        <p class="tv-card-desc">Three days on Madeira Island — dramatic landscapes, levadas, and ocean cliffs.</p>
       </div>
+    </div>
+
+    <div class="tv-card"
+         data-tags="cinematic france"
+         data-title="Lyon Cinematic Video, France"
+         data-desc="I lived in Lyon for six months but created memories of a lifetime. This cinematic video portrays the quiet, beautiful side of the city."
+         data-embed="https://www.youtube.com/embed/zA9hGUqkyao"
+         onclick="tvOpenModal(this)">
+      <div class="tv-thumb">
+        <img src="http://img.youtube.com/vi/zA9hGUqkyao/maxresdefault.jpg" alt="Lyon, France" loading="lazy">
+        <div class="tv-badge">Cinematic · France</div>
+        <div class="tv-play-overlay">
+          <div class="tv-play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+      </div>
+      <div class="tv-card-body">
+        <div class="tv-card-title">Lyon Cinematic Video</div>
+        <p class="tv-card-desc">Six months in Lyon — the quiet, timeless side of France's gastronomic capital.</p>
+      </div>
+    </div>
+
+    <div class="tv-card"
+         data-tags="cinematic belgium"
+         data-title="Namur Cinematic Video, Belgium"
+         data-desc="A day trip to the charming citadel city of Namur, Belgium with the Lisel Group."
+         data-embed="https://www.youtube.com/embed/YPsySs8Myv8"
+         onclick="tvOpenModal(this)">
+      <div class="tv-thumb">
+        <img src="http://img.youtube.com/vi/YPsySs8Myv8/maxresdefault.jpg" alt="Namur, Belgium" loading="lazy">
+        <div class="tv-badge">Cinematic · Belgium</div>
+        <div class="tv-play-overlay">
+          <div class="tv-play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+      </div>
+      <div class="tv-card-body">
+        <div class="tv-card-title">Namur Cinematic Video</div>
+        <p class="tv-card-desc">A day trip to the charming citadel city of Namur, Belgium.</p>
+      </div>
+    </div>
+
+    <div class="tv-card"
+         data-tags="cinematic germany"
+         data-title="Cochem Cinematic Video, Germany"
+         data-desc="On 13th May 2023, I went to Cochem, Germany with Lisel Luxembourg — medieval castles and the Moselle River."
+         data-embed="https://www.youtube.com/embed/TMUFaoU0-KU"
+         onclick="tvOpenModal(this)">
+      <div class="tv-thumb">
+        <img src="http://img.youtube.com/vi/TMUFaoU0-KU/maxresdefault.jpg" alt="Cochem, Germany" loading="lazy">
+        <div class="tv-badge">Cinematic · Germany</div>
+        <div class="tv-play-overlay">
+          <div class="tv-play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+      </div>
+      <div class="tv-card-body">
+        <div class="tv-card-title">Cochem Cinematic Video</div>
+        <p class="tv-card-desc">Medieval castles and the Moselle River — a day in Cochem, Germany.</p>
+      </div>
+    </div>
+
+    <div class="tv-card"
+         data-tags="stories switzerland"
+         data-title="Switzerland Travel Stories"
+         data-desc="A 3-day hiking trip with WHATTRIPS — Jaunbach Gorge, Lauterbrunnen, and Seelisberg in August 2022."
+         data-embed="https://www.youtube.com/embed/N-rkopyzMac"
+         onclick="tvOpenModal(this)">
+      <div class="tv-thumb">
+        <img src="http://img.youtube.com/vi/N-rkopyzMac/maxresdefault.jpg" alt="Switzerland" loading="lazy">
+        <div class="tv-badge">Stories · Switzerland</div>
+        <div class="tv-play-overlay">
+          <div class="tv-play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+      </div>
+      <div class="tv-card-body">
+        <div class="tv-card-title">Switzerland Travel Stories</div>
+        <p class="tv-card-desc">Hiking through Jaunbach Gorge, Lauterbrunnen, and Seelisberg with WHATTRIPS.</p>
+      </div>
+    </div>
+
+    <div class="tv-card"
+         data-tags="stories germany"
+         data-title="Düsseldorf Christmas Market, Germany"
+         data-desc="The stunning Christmas markets of Düsseldorf — magical lights, delicious sweets, and a festive Rhine River atmosphere."
+         data-embed="https://www.youtube.com/embed/MUzDmbCigfM"
+         onclick="tvOpenModal(this)">
+      <div class="tv-thumb">
+        <img src="http://img.youtube.com/vi/MUzDmbCigfM/maxresdefault.jpg" alt="Düsseldorf Christmas" loading="lazy">
+        <div class="tv-badge">Stories · Germany</div>
+        <div class="tv-play-overlay">
+          <div class="tv-play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+      </div>
+      <div class="tv-card-body">
+        <div class="tv-card-title">Düsseldorf Christmas Market</div>
+        <p class="tv-card-desc">Magical lights and warm mulled wine beside the Rhine in December.</p>
+      </div>
+    </div>
+
+    <div class="tv-card"
+         data-tags="stories italy"
+         data-title="Italy Travel Stories"
+         data-desc="Turin, Genoa, Cinque Terre, Certaldo, Florence — the quiet yet lively, modern yet medieval side of Italian towns."
+         data-embed="https://www.youtube.com/embed/uZuM4s21-3w"
+         onclick="tvOpenModal(this)">
+      <div class="tv-thumb">
+        <img src="http://img.youtube.com/vi/uZuM4s21-3w/maxresdefault.jpg" alt="Italy" loading="lazy">
+        <div class="tv-badge">Stories · Italy</div>
+        <div class="tv-play-overlay">
+          <div class="tv-play-btn"><i class="fa-solid fa-play"></i></div>
+        </div>
+      </div>
+      <div class="tv-card-body">
+        <div class="tv-card-title">Italy Travel Stories</div>
+        <p class="tv-card-desc">From Turin to Cinque Terre — medieval towns and coastal cliffs.</p>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="footer-name">Mohammad Sadil Khan</span>
+    <ul class="footer-links">
+      <li><a href="/about">About</a></li>
+      <li><a href="/publications">Publications</a></li>
+      <li><a href="/cv">CV</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+  </div>
+</footer>
+
+
+<div class="tv-modal" id="tvModal" onclick="tvCloseOnBg(event)">
+  <div class="tv-modal-inner">
+    <button class="tv-modal-close" onclick="tvCloseModal()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <div class="tv-modal-video-wrap">
+      <iframe id="tvModalIframe" src="" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+    </div>
+    <div class="tv-modal-info">
+      <div class="tv-modal-title" id="tvModalTitle"></div>
+      <p class="tv-modal-desc" id="tvModalDesc"></p>
     </div>
   </div>
 </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tm-welcome-container text-center text-white">
-                <div class="tm-welcome-container-inner">
-                    <p class="tm-welcome-text mb-1 text-white">Welcome to my Video Page</p>
-                    
-                    <a href="#content" class="btn tm-btn-animate tm-btn-cta tm-icon-down">
-                        <span>Discover</span>
-                    </a>
-                </div>
-            </div>
 
-            <div id="tm-video-container">
-                <video autoplay muted loop id="tm-video">
-                    
-                        <source src="/video/featured.mp4" type="video/mp4">
-                </video>    
-            </div>
-            
-            <i id="tm-video-control-button" class="fas fa-pause"></i>
-        </div>
+<script>
+ 
+const mainNav = document.getElementById('mainNav');
+window.addEventListener('scroll', () => {
+  mainNav.classList.toggle('scrolled', window.scrollY > 30);
+}, { passive: true });
 
-        <div class="container-fluid">
-            <div id="content" class="mx-auto tm-content-container">
-                <main>
-                    <div class="row">
-                        <div class="col-12">
-                            <h2 class="tm-page-title mb-4">My Travel Videos</h2>
-                           <div class="tm-categories-container mb-5">
-    
-    <div class="tm-search-container">
-        <input type="text" id="searchInput" placeholder="Search..." oninput="searchVideos()">
-</div> <h3 class="tm-text-primary tm-categories-text">Keywords:</h3>
-      <div id="myBtnContainer">
-    <button class="btn active" onclick="updateSearchInput('')"> All</button>
-    <button class="btn " onclick="updateSearchInput('cinematic')"> Cinematic</button>
-    <button class="btn" onclick="updateSearchInput('stories')"> Stories</button>
-    <button class="btn" onclick="updateSearchInput('france')"> France</button>
-    <button class="btn" onclick="updateSearchInput('germany')"> Germany</button>
-</div>
-</div>
-                        </div>
-                    </div>
-                    
-                    <div class="row tm-catalog-item-list">
-                      
-                        <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item category-Cinematic">
-                            <div class="position-relative tm-thumbnail-container">
-                               <a href="https://www.youtube.com/embed/Jh-1BNnBwkM?si  =ktiLjCNojCSjjsZq">
-          <div><img class="thumbnail" src="http://img.youtube.com/vi/Jh-1BNnBwkM/maxresdefault.jpg" alt=""></div>
-        </a>
-                            </div>    
-                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
-                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title">Madeira Cinematic Video Portugal</h3>
-                                <p class="tm-catalog-item-text">I visited Madeira Island, Portugal for three days in August 2023. It's a beautiful island that has a lot to offer. This is a short cinematic video of all the places I have visited so far. Hope you enjoy the video.</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
-                            <div class="position-relative tm-thumbnail-container">
-                                
-        <a href="https://www.youtube.com/embed/zA9hGUqkyao">
-          <div ><img class="thumbnail" src="http://img.youtube.com/vi/zA9hGUqkyao/maxresdefault.jpg" alt=""></div>
-        </a>
-                            </div>
-                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
-                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title">Lyon cinematic Video France</h3>
-                                <p class="tm-catalog-item-text">This is a cinematic video of Lyon, France. I lived in this city for six months but created memories of a lifetime. This cinematic video portrays the quiet side of Lyon.</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
-                            <div class="position-relative tm-thumbnail-container">
-                              <a class="image-link" href="https://youtu.be/YPsySs8Myv8">
-          <div><img class="thumbnail" src="http://img.youtube.com/vi/YPsySs8Myv8/maxresdefault.jpg" alt=""></div>
-        </a>
-                            </div>                            
-                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
-                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title">Namur cinematic Video Belgium</h3>
-                                <p class="tm-catalog-item-text">I visited Namur, Belgium on a day trip with Lisel Group. Hope you enjoy the video..</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
-                            <div class="position-relative tm-thumbnail-container">
-                                <a href="https://www.youtube.com/embed/TMUFaoU0-KU">
-          <div ><img class="thumbnail" src="http://img.youtube.com/vi/TMUFaoU0-KU/maxresdefault.jpg" alt=""></div>
-        </a>
-                            </div>    
-                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
-                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title">Cochem Cinematic Video Germany</h3>
-                                <p class="tm-catalog-item-text">On 13th May, 2023. I went to Cochem, Germany with Lisel Luxembourg.
-Hope you enjoy the video.</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
-                            <div class="position-relative tm-thumbnail-container">
-                                <a href="https://youtu.be/N-rkopyzMac">
-          <div ><img class="thumbnail" src="http://img.youtube.com/vi/N-rkopyzMac/maxresdefault.jpg" alt=""></div>
-        </a>
-                            </div>
-                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
-                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title">Switzerland Travel Stories</h3>
-                                <p class="tm-catalog-item-text">On 12th August 2022, I took a hiking trip to Switzerland with WHATTRIPS for 3 days. I went to Jaunbach Gorge, Lauterbrunnen and Seelisberg. This video captures some beautiful moments with our hiking group.</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
-                            <div class="position-relative tm-thumbnail-container">
-                                <a href="https://youtu.be/MUzDmbCigfM">
-          <div ><img class="thumbnail" src="http://img.youtube.com/vi/MUzDmbCigfM/maxresdefault.jpg" alt=""></div>
-        </a>
-                            </div>                            
-                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
-                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title">Düsseldorf Chrismas Market Germany</h3>
-                                <p class="tm-catalog-item-text">This video is about my trip to the beautiful city of Düsseldorf in Germany on 5th December 2021 with the ESN group of KU Leuven. Every year, the city hosts stunning Christmas markets with beautiful lights, delicious sweets, and a magical environment besides the Rhine River.
-</p>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
-                            <div class="position-relative tm-thumbnail-container">
-                                <a href="https://youtu.be/uZuM4s21-3w">
-          <div ><img class="thumbnail" src="http://img.youtube.com/vi/uZuM4s21-3w/maxresdefault.jpg" alt=""></div>
-        </a>
-                            </div>    
-                            <div class="p-4 tm-bg-gray tm-catalog-item-description">
-                                <h3 class="tm-text-primary mb-3 tm-catalog-item-title">Italy Travel Stories</h3>
-                                <p class="tm-catalog-item-text">On 25th May 2022, I took a short trip to Italy with my friend Arghya. I visited Turin, Genoa, Cinque Terre, Certaldo, Florence. This video is about the quiet yet lively, modern yet medieval side of Italian towns. Hope you enjoy it. </p>
-                            </div>
-                        </div>
-                        
-                        
-                    </div>
+ 
+const burger     = document.getElementById('navBurger');
+const mobileMenu = document.getElementById('navMobile');
 
-                    
-                    <div>
-                        <ul class="nav tm-paging-links">
-                            <li class="nav-item active"><a href="#" class="nav-link tm-paging-link">1</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">></a></li>
-                            
-                        </ul>
-                    </div>
-                </main>
+burger.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  burger.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
 
-                
-                <div class="row mt-5 pt-3">
-                    <div class="col-xl-6 col-lg-12 mb-4">
-                        <div class="tm-bg-gray p-5 h-100">
-                            <h3 class="tm-text-primary mb-3">Do you want to get my latest updates?</h3>
-                            <p class="mb-5">Please subscribe our newsletter for upcoming new videos and latest information about my
-                                work. Thank you.</p>
-                            <form action="" method="GET" class="tm-subscribe-form">
-                                <input type="text" name="email" placeholder="Your Email..." required>
-                                <button type="submit" class="btn rounded-0 btn-primary tm-btn-small">Subscribe</button>
-                            </form>
-                        </div>
-                    </div>
-                                         
-                    </div>
-                </div> 
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
 
-                
-            </div> 
-        </div>
+ 
+const heroVid  = document.getElementById('heroVideo');
+const heroIcon = document.getElementById('heroCtrlIcon');
 
-    </div> 
-    
-    <script src="/js/travel_video/filter.js"></script>
-    <script src="/js/travel_video/travel_video.js"></script>
-    <script>
-      function filterVideos(searchQuery) {
-    const videos = document.querySelectorAll('.tm-catalog-item');
-
-    videos.forEach(video => {
-        const title = video.querySelector('.tm-catalog-item-title').textContent.toLowerCase();
-        const description = video.querySelector('.tm-catalog-item-description').textContent.toLowerCase();
-
-        const shouldShowSearch = searchQuery === '' || title.includes(searchQuery) || description.includes(searchQuery);
-
-        video.style.display = shouldShowSearch ? 'block' : 'none';
-    });
+function toggleVideo() {
+  if (heroVid.paused) {
+    heroVid.play();
+    heroIcon.className = 'fa-solid fa-pause';
+  } else {
+    heroVid.pause();
+    heroIcon.className = 'fa-solid fa-play';
+  }
 }
 
-function updateSearchInput(category) {
-    const searchInput = document.getElementById('searchInput');
-    searchInput.value = capitalizeFirstLetter(category) 
-    searchVideos(); 
+ 
+let activeFilter = '';
+
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    activeFilter = chip.dataset.filter;
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    document.getElementById('tvSearch').value = '';
+    tvFilter();
+  });
+});
+
+function tvFilter() {
+  const q     = document.getElementById('tvSearch').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.tv-card');
+  let visible = 0;
+
+  cards.forEach(card => {
+    const tags  = (card.dataset.tags  || '').toLowerCase();
+    const title = (card.dataset.title || '').toLowerCase();
+    const desc  = (card.dataset.desc  || '').toLowerCase();
+    const matchFilter = !activeFilter || tags.includes(activeFilter);
+    const matchSearch = !q || title.includes(q) || desc.includes(q) || tags.includes(q);
+    const show = matchFilter && matchSearch;
+
+    card.style.display = show ? '' : 'none';
+    if (show) {
+      card.style.animationDelay = (visible * 0.05) + 's';
+      card.style.animation = 'none';
+      void card.offsetWidth;  
+      card.style.animation = '';
+      visible++;
+    }
+  });
+
+  document.getElementById('tvCountNum').textContent = visible;
+
+  let empty = document.getElementById('tvEmpty');
+  if (visible === 0 && !empty) {
+    empty = document.createElement('div');
+    empty.id = 'tvEmpty';
+    empty.className = 'tv-empty';
+    empty.innerHTML = '<i class="fa-regular fa-film"></i><p>No videos found. Try a different search.</p>';
+    document.getElementById('tvGrid').appendChild(empty);
+  } else if (visible > 0 && empty) {
+    empty.remove();
+  }
 }
 
-function searchVideos() {
-    const searchQuery = document.getElementById('searchInput').value.toLowerCase();
-    filterVideos(searchQuery);
+ 
+function tvOpenModal(card) {
+  const embed = card.dataset.embed;
+  const sep   = embed.includes('?') ? '&' : '?';
+  document.getElementById('tvModalIframe').src  = embed + sep + 'autoplay=1';
+  document.getElementById('tvModalTitle').textContent = card.dataset.title;
+  document.getElementById('tvModalDesc').textContent  = card.dataset.desc;
+  document.getElementById('tvModal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+function tvCloseModal() {
+  document.getElementById('tvModal').classList.remove('open');
+  document.getElementById('tvModalIframe').src = '';
+  document.body.style.overflow = '';
 }
-    </script>
+
+function tvCloseOnBg(e) {
+  if (e.target === document.getElementById('tvModal')) tvCloseModal();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    tvCloseModal();
+    if (mobileMenu.classList.contains('open')) {
+      mobileMenu.classList.remove('open');
+      burger.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+});
+
+ 
+const scrollIndicator = document.querySelector('.hero-scroll');
+if (scrollIndicator) {
+  window.addEventListener('scroll', () => {
+    scrollIndicator.style.opacity = window.scrollY > 80 ? '0' : '0.35';
+  }, { passive: true });
+}
+</script>
 
 </body>
-
 </html>
