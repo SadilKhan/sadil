@@ -6,242 +6,353 @@ excerpt: In August 2025, we took a week-long campervan trip around Iceland — f
 date: 2025-08-24
 draft: false
 commentable: true
+layout: single-post
 show-related: true
+show_post_thumbnail: true
 ---
 
-In August 2025, we took a week-long campervan trip around Iceland — from *Golden Circle hot springs* to *South Coast waterfalls*, *glacier lagoons*, *Eastfjords fishing villages*, and the *wildlife of the north and Snæfellsnes*.  
+<link rel="stylesheet" href="iceland.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Lora:ital,wght@0,400;0,500;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 
-It was seven days of *drone flights, hot river soaks, black sand beaches, endless waterfalls, and fresh fish dinners* — each day with its own theme and adventure.  
+<div class="ic-wrap">
 
-Here’s our *day-by-day itinerary* and the highlights that made this trip unforgettable.  
-
-
-## Day 1 — Arrival in Iceland 🚐✈️ 
-
-  <p style="font-size:1.1em; color:#34495e;">
-    We landed in Keflavík in the afternoon, picked up our campervan that we rented before from 
-    <a href="https://www.starcarrental.is/" target="_blank" style="color:#2980b9; text-decoration:none;">
-      Star Car Rental
-    </a>, and began our journey. 
-    The first day was all about <strong>getting settled</strong>, stocking up on essentials, 
-    and preparing for the road ahead.
-  </p>
-
-  <ol style="padding:0; margin:1.5em 0; list-style-position:inside; font-size:1.05em;">
-
-  <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#f9f9f9;">
-    <span style="font-weight:bold;">Keflavík Airport →</span> 
-    collected the campervan, did the checks and paperwork.
-  </li>
-
-  <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#fdfdfd;">
-    <span style="font-weight:bold;">Reykjavík →</span> 
-    Visited Hallgrimskirkja Church and Skólavörðustígur Rainbow Street.
-    <div style="margin-top:0.5em; display:flex; justify-content:center; gap:20px; flex-wrap:wrap; text-align:center;">
-      <div>
-        <img src="day_1_0.jpeg" alt="Hallgrimskirkja" width="200"/><br/>
-        <sub>Hallgrimskirkja</sub>
-      </div>
-      <div>
-        <img src="day_1_1.jpeg" alt="Skólavörðustígur Rainbow Street" width="200"/><br/>
-        <sub>Skólavörðustígur Rainbow Street</sub>
-      </div>
+  <!-- ═══════════════════════════════════════════
+       HERO
+  ═══════════════════════════════════════════ -->
+  <header class="ic-hero">
+    <div class="ic-hero__badge">August 2025 · Campervan Journey</div>
+    <h1 class="ic-hero__title">Iceland</h1>
+    <p class="ic-hero__sub">Seven days. One campervan. An entire island of fire and ice.</p>
+    <div class="ic-hero__stats">
+      <div class="ic-stat"><span class="ic-stat__num">7</span><span class="ic-stat__lbl">Days</span></div>
+      <div class="ic-stat__div"></div>
+      <div class="ic-stat"><span class="ic-stat__num">~2 400</span><span class="ic-stat__lbl">km driven</span></div>
+      <div class="ic-stat__div"></div>
+      <div class="ic-stat"><span class="ic-stat__num">∞</span><span class="ic-stat__lbl">Waterfalls</span></div>
     </div>
-  </li>
+  </header>
 
-  <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#f9f9f9;">
-    <span style="font-weight:bold;">Groceries at Bónus →</span> 
-    stocked up on essentials (oil, salt, pasta sauce, cookies). 
-    One of Iceland’s cheapest supermarkets — sometimes with free coffee or hot chocolate at the entrance.
-  </li>
-
-  <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#fdfdfd;">
-    <span style="font-weight:bold;">Happy Campsite (Keflavík) →</span> 
-    our first overnight stop, just a short drive from the airport. 
-    Booked via 
-    <a href="https://parka.is/happycampsitekeflavik/" target="_blank" style="color:#27ae60; text-decoration:none;">
-      Parka
-    </a>.
-    <div style="margin-top:0.5em; text-align:center;">
-      <img src="day_1_3.JPG" alt="Scenic Routes from Airport to Campsite" width="400"/><br/>
-      <sub>Scenic routes from airport to campsite</sub>
-    </div>
-  </li>
-
-</ol>
-
-
-
-## Day 2 — Hot Rivers & Golden Circle 🌊♨️  
-
-<section style="font-family: Arial, sans-serif; margin: 2em 0; line-height: 1.6;">
-
-  <p style="font-size:1.1em; color:#34495e;">
-    On our second day, we set out early to explore Iceland’s famous Golden Circle and enjoy our first natural hot spring soak. 
-    The day was packed with <strong>geothermal wonders, powerful waterfalls, and scenic drives</strong>.
-  </p>
-
-  <ol style="padding:0; margin:1.5em 0; list-style-position:inside; font-size:1.05em;">
-  <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#f9f9f9;">
-  <span style="font-weight:bold;">Sunnumörk Shopping Center (Hveragerði) →</span>  
-  our first stop of the day is this shopping mall where Eurasian and North American tectonic plates meet.
-  <div style="margin-top:0.5em; text-align:center;">
-    <img src="shopping_center.jpeg" alt="Sunnumörk Shopping Center Hveragerði" width="200"/><br/>
-    <sub>Sunnumörk Shopping Center in Hveragerði</sub>
+  <!-- intro prose -->
+  <div class="ic-intro">
+    <p>In August 2025, we took a week-long campervan trip around Iceland — from <em>Golden Circle hot springs</em> to <em>South Coast waterfalls</em>, <em>glacier lagoons</em>, <em>Eastfjords fishing villages</em>, and the <em>wildlife of the north and Snæfellsnes</em>.</p>
+    <p>It was seven days of drone flights, hot river soaks, black sand beaches, endless waterfalls, and fresh fish dinners — each day with its own theme and adventure. Here's our day-by-day itinerary and the highlights that made this trip unforgettable.</p>
   </div>
-</li>
-    <li style="margin-bottom:1em; padding:1em; border-radius:8px; background:#f9f9f9;">
-      <span style="font-weight:bold;">Reykjadalur Hot River →</span> 
-      a 1.5 hr hike up to steaming valleys, rewarded with a soak in the naturally heated river.
-     <div style="margin-top:0.5em; display:flex; justify-content:center; gap:20px; flex-wrap:wrap; text-align:center;">
-  <div>
-    <img src="hike_1.JPG" alt="Sunnumörk Shopping Center Hveragerði" width="300"/><br/>
-  </div>
-  <div>
-    <img src="hike_2.JPG" alt="Reykjadalur Hot River Hike" width="300"/><br/>
-    <sub>Reykjadalur Hot River hike</sub>
-  </div>
-</div>
-    </li>
-    <li style="margin-bottom:1em; padding:1em; border-radius:8px;background:#f9f9f9;">
-      <span style="font-weight:bold;">Brúarfoss →</span> 
-      a striking turquoise-blue waterfall tucked away along the Golden Circle route.
-      <div style="margin-top:0.5em; text-align:center;">
-    <img src="bruarfoss.jpeg" alt="Brúarfoss Waterall" width="400"/><br/>
-    <sub>Brúarfoss Waterfall</sub>
-  </div>
-    </li>
-    <li style="margin-bottom:1em; padding:1em; border-radius:8px;background:#f9f9f9;">
-      <span style="font-weight:bold;">Gullfoss →</span> 
-      the mighty Golden Falls — one of Iceland’s most iconic waterfalls, roaring through a canyon.
-      <div style="margin-top:0.5em; text-align:center;">
-  <video width="400" autoplay muted loop playsinline>
-    <source src="gullfoss.mov" type="video/quicktime">
-    Your browser does not support the video tag.
-  </video><br/>
-  <sub>Gullfoss Waterfall</sub>
-</div>
-    </li>
-    <li style="margin-bottom:1em; padding:1em; border-radius:8px;background:#f9f9f9;">
-      <span style="font-weight:bold;">Geysir geothermal area →</span> 
-      saw Strokkur erupt every few minutes, shooting boiling water into the air.
-      <div style="margin-top:0.5em; text-align:center;">
-  <video width="400" autoplay muted loop playsinline>
-    <source src="geysir.mov" type="video/quicktime">
-    Your browser does not support the video tag.
-  </video><br/>
-  <sub>Strokkur Geyser</sub>
-</div>
-  </ol>
 
-  <p style="font-size:1.05em; margin-top:1.5em;">
-    <strong>Campsite:</strong> Hellisholar Campsite - No pre-booking required. Just go to the reception and book a spot.
-  </p>
+  <!-- ═══════════════════════════════════════════
+       TIMELINE
+  ═══════════════════════════════════════════ -->
+  <div class="ic-timeline">
+    <!-- ──────────────── DAY 1 ──────────────── -->
+    <article class="ic-day" id="day-1">
+      <div class="ic-day__marker">
+        <div class="ic-day__dot"></div>
+        <div class="ic-day__line"></div>
+      </div>
+      <div class="ic-day__body">
+        <div class="ic-day__header">
+          <span class="ic-day__num">Day 1</span>
+          <h2 class="ic-day__title">Arrival in Iceland <span class="ic-day__emoji">🚐✈️</span></h2>
+          <p class="ic-day__tagline">Getting settled, stocking up, hitting the road.</p>
+        </div>
+        <p class="ic-day__lead">We landed in Keflavík in the afternoon, picked up our campervan from <a href="https://www.starcarrental.is/" target="_blank" class="ic-link">Star Car Rental</a>, and began our journey. The first day was all about getting settled, stocking up on essentials, and preparing for the road ahead.</p>
+        <div class="ic-stops">
+          <div class="ic-stop">
+            <div class="ic-stop__icon">📍</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Keflavík Airport</h3>
+              <p>Collected the campervan, completed the checks and paperwork. The adventure officially begins.</p>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">🏛️</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Reykjavík</h3>
+              <p>Visited Hallgrímskirkja Church and the colourful Skólavörðustígur Rainbow Street.</p>
+              <div class="ic-gallery ic-gallery--2">
+                <figure class="ic-fig">
+                  <img src="day_1_0.jpeg" alt="Hallgrimskirkja" loading="lazy"/>
+                  <figcaption>Hallgrímskirkja</figcaption>
+                </figure>
+                <figure class="ic-fig">
+                  <img src="day_1_1.jpeg" alt="Rainbow Street" loading="lazy"/>
+                  <figcaption>Skólavörðustígur Rainbow Street</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">🛒</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Bónus Supermarket</h3>
+              <p>Stocked up on essentials — oil, salt, pasta sauce, cookies. One of Iceland's cheapest supermarkets, sometimes with free coffee or hot chocolate at the entrance.</p>
+            </div>
+          </div>
+          <div class="ic-stop ic-stop--camp">
+            <div class="ic-stop__icon">🏕️</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Happy Campsite, Keflavík <span class="ic-badge ic-badge--camp">Night 1</span></h3>
+              <p>Our first overnight stop, just a short drive from the airport. Booked via <a href="https://parka.is/happycampsitekeflavik/" target="_blank" class="ic-link">Parka</a>.</p>
+              <figure class="ic-fig ic-fig--wide">
+                <img src="day_1_3.JPG" alt="Scenic routes from airport" loading="lazy"/>
+                <figcaption>Scenic routes from airport to campsite</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div><!-- /ic-stops -->
+      </div><!-- /ic-day__body -->
+    </article>
+    <!-- ──────────────── DAY 2 ──────────────── -->
+    <article class="ic-day" id="day-2">
+      <div class="ic-day__marker">
+        <div class="ic-day__dot"></div>
+        <div class="ic-day__line"></div>
+      </div>
+      <div class="ic-day__body">
+        <div class="ic-day__header">
+          <span class="ic-day__num">Day 2</span>
+          <h2 class="ic-day__title">Hot Rivers &amp; Golden Circle <span class="ic-day__emoji">🌊♨️</span></h2>
+          <p class="ic-day__tagline">Geothermal wonders, powerful waterfalls, and our first hot spring soak.</p>
+        </div>
+        <p class="ic-day__lead">On our second day, we set out early to explore Iceland's famous Golden Circle and enjoy our first natural hot spring soak. The day was packed with geothermal wonders, powerful waterfalls, and scenic drives.</p>
+        <div class="ic-stops">
+          <div class="ic-stop">
+            <div class="ic-stop__icon">🌋</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Sunnumörk Shopping Center, Hveragerði</h3>
+              <p>Our first stop — a shopping mall where the Eurasian and North American tectonic plates meet beneath your feet.</p>
+              <figure class="ic-fig">
+                <img src="shopping_center.jpeg" alt="Sunnumörk Shopping Center" loading="lazy"/>
+                <figcaption>Sunnumörk Shopping Center in Hveragerði</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">♨️</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Reykjadalur Hot River</h3>
+              <p>A 1.5 hr hike up through steaming valleys, rewarded with a long soak in a naturally heated river. Unmissable.</p>
+              <div class="ic-gallery ic-gallery--2">
+                <figure class="ic-fig">
+                  <img src="hike_1.JPG" alt="Reykjadalur hike" loading="lazy"/>
+                </figure>
+                <figure class="ic-fig">
+                  <img src="hike_2.JPG" alt="Reykjadalur hot river" loading="lazy"/>
+                  <figcaption>Reykjadalur Hot River hike</figcaption>
+                </figure>
+              </div>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">💙</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Brúarfoss</h3>
+              <p>A striking turquoise-blue waterfall tucked away along the Golden Circle route — far fewer crowds than the main stops.</p>
+              <figure class="ic-fig ic-fig--wide">
+                <img src="bruarfoss.jpeg" alt="Brúarfoss" loading="lazy"/>
+                <figcaption>Brúarfoss Waterfall</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">🌊</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Gullfoss</h3>
+              <p>The mighty Golden Falls — one of Iceland's most iconic waterfalls, roaring through a deep canyon.</p>
+              <figure class="ic-fig ic-fig--wide">
+                <video autoplay muted loop playsinline>
+                  <source src="gullfoss.mov" type="video/quicktime">
+                  <source src="gullfoss.mp4" type="video/mp4">
+                </video>
+                <figcaption>Gullfoss Waterfall</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">💨</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Geysir Geothermal Area</h3>
+              <p>Watched Strokkur erupt every few minutes, shooting boiling water high into the cool Icelandic air.</p>
+              <figure class="ic-fig ic-fig--wide">
+                <video autoplay muted loop playsinline>
+                  <source src="geysir.mov" type="video/quicktime">
+                  <source src="geysir.mp4" type="video/mp4">
+                </video>
+                <figcaption>Strokkur Geyser</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="ic-stop ic-stop--camp">
+            <div class="ic-stop__icon">🏕️</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Hellishólar Campsite <span class="ic-badge ic-badge--camp">Night 2</span></h3>
+              <p>No pre-booking required — just go to the reception and book a spot on arrival.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ic-tip">
+          <span class="ic-tip__icon">💡</span>
+          <p><strong>Tips:</strong> Start Reykjadalur early to beat the crowds and bring quick-dry clothes for the hot river. For Gullfoss and Geysir, late afternoon has far fewer tour buses.</p>
+        </div>
+      </div>
+    </article>
+    <!-- ──────────────── DAY 3 ──────────────── -->
+    <article class="ic-day" id="day-3">
+      <div class="ic-day__marker">
+        <div class="ic-day__dot"></div>
+        <div class="ic-day__line"></div>
+      </div>
+      <div class="ic-day__body">
+        <div class="ic-day__header">
+          <span class="ic-day__num">Day 3</span>
+          <h2 class="ic-day__title">South Coast Waterfalls &amp; Black Beaches <span class="ic-day__emoji">🏞️</span></h2>
+          <p class="ic-day__tagline">The most photogenic day of the trip — waterfalls, arches, and dramatic black sand.</p>
+        </div>
+        <p class="ic-day__lead">Day 3 took us along Iceland's dramatic South Coast — home to some of the country's most famous waterfalls and black sand beaches. Plenty of chances to fly the drone and capture Iceland's iconic landscapes.</p>
+        <div class="ic-stops">
+          <div class="ic-stop">
+            <div class="ic-stop__icon">🌊</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Seljalandsfoss</h3>
+              <p>The waterfall you can walk <em>behind</em> — an unforgettable experience, but prepare to get thoroughly soaked!</p>
+              <!-- Slideshow -->
+              <div class="ic-slideshow" id="slideshow-sela">
+                <div class="ic-slide active">
+                  <img src="sela_1.JPG" alt="Seljalandsfoss 1" loading="lazy"/>
+                </div>
+                <div class="ic-slide">
+                  <img src="sela_2.jpeg" alt="Seljalandsfoss 2" loading="lazy"/>
+                </div>
+                <div class="ic-slide">
+                  <img src="sela_3.jpeg" alt="Seljalandsfoss 3" loading="lazy"/>
+                </div>
+                <div class="ic-slide">
+                  <img src="sela_4.jpeg" alt="Seljalandsfoss 4" loading="lazy"/>
+                </div>
+                <button class="ic-slide__btn ic-slide__btn--prev" onclick="moveSlide('slideshow-sela',-1)" aria-label="Previous">&#8249;</button>
+                <button class="ic-slide__btn ic-slide__btn--next" onclick="moveSlide('slideshow-sela', 1)" aria-label="Next">&#8250;</button>
+                <div class="ic-slide__dots" id="dots-slideshow-sela"></div>
+                <figcaption class="ic-slide__caption">Seljalandsfoss</figcaption>
+              </div>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">🏔️</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Gljúfrabúi</h3>
+              <p>A hidden canyon waterfall just a few minutes' walk from Seljalandsfoss — most tourists walk straight past it.</p>
+              <figure class="ic-fig ic-fig--wide">
+                <img src="day_3_1.jpeg" alt="Gljúfrabúi" loading="lazy"/>
+                <figcaption>Gljúfrabúi tucked inside a canyon</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">🌈</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Skógafoss</h3>
+              <p>One of Iceland's most famous waterfalls, with rainbows appearing almost constantly in the mist on sunny days.</p>
+              <figure class="ic-fig ic-fig--wide">
+                <img src="day_3_2.jpeg" alt="Skógafoss" loading="lazy"/>
+                <figcaption>Skógafoss in the morning light</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">🦜</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Dyrhólaey Arch</h3>
+              <p>Dramatic coastal cliffs and a massive sea arch, with puffins nesting in the rocks in summer.</p>
+              <figure class="ic-fig ic-fig--wide">
+                <img src="day_3_3.jpeg" alt="Dyrhólaey Arch" loading="lazy"/>
+                <figcaption>Dyrhólaey arch and cliffs</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="ic-stop">
+            <div class="ic-stop__icon">⚫</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Reynisfjara Black Sand Beach</h3>
+              <p>Famous for its basalt columns and roaring Atlantic waves. <strong>Never turn your back to the sea here</strong> — the sneaker waves are deadly.</p>
+              <figure class="ic-fig ic-fig--wide">
+                <img src="day_3_4.jpeg" alt="Reynisfjara" loading="lazy"/>
+                <figcaption>Reynisfjara's black sands and sea stacks</figcaption>
+              </figure>
+            </div>
+          </div>
+          <div class="ic-stop ic-stop--camp">
+            <div class="ic-stop__icon">🏕️</div>
+            <div class="ic-stop__content">
+              <h3 class="ic-stop__name">Vík Campsite <span class="ic-badge ic-badge--camp">Night 3</span></h3>
+              <p>A convenient stop with views of cliffs and sea stacks in the distance.</p>
+            </div>
+          </div>
+        </div>
+        <div class="ic-tip">
+          <span class="ic-tip__icon">💡</span>
+          <p><strong>Tips:</strong> Bring full waterproof gear for Seljalandsfoss. Visit Reynisfjara early or late — both for smaller crowds and to stay extra vigilant about the waves.</p>
+        </div>
+      </div>
+    </article>
+     <article class="ic-day" id="day-4">
+     </article>
 
-  <p style="font-size:1.05em; margin-top:0.5em; color:#555;">
-    <strong>Tip:</strong> Start Reykjadalur early in the day to avoid the crowds, and bring quick-dry clothes for the hot river soak. 
-    For Gullfoss and Geysir, late afternoon has fewer tour buses.
-  </p>
-</section>
+  </div><!-- /ic-timeline -->
 
+</div><!-- /ic-wrap -->
 
-## Day 3 — South Coast Waterfalls & Black Beaches 🏞️  
-
-<section style="font-family: Arial, sans-serif; margin: 2em 0; line-height: 1.6;">
-
-  <p style="font-size:1.1em; color:#34495e;">
-    Day 3 took us along Iceland’s dramatic South Coast — home to some of the country’s most famous waterfalls 
-    and black sand beaches. This was one of the most photogenic days of the trip, with plenty of chances to 
-    fly the drone and capture Iceland’s iconic landscapes.
-  </p>
-
-  <ol style="padding:0; margin:1.5em 0; list-style-position:inside; font-size:1.05em;">
-    <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#f9f9f9;">
-      <span style="font-weight:bold;">Seljalandsfoss →</span> 
-      the waterfall you can walk behind — unforgettable experience but prepare to get wet!
-      <div style="max-width:420px; margin:auto; position:relative; text-align:center;">
-  <div class="slide" style="display:block;">
-    <img src="sela_1.JPG" alt="Seljalandsfoss 1" width="200"/>
-    <div><sub>Seljalandsfoss</sub></div>
-  </div>
-  <div class="slide" style="display:none;">
-    <img src="sela_2.jpeg" alt="Seljalandsfoss 2" width="200"/>
-    <div><sub>Seljalandsfoss</sub></div>
-  </div>
-  <div class="slide" style="display:none;">
-    <img src="sela_3.jpeg" alt="Seljalandsfoss 3" width="200"/>
-    <div><sub>Seljalandsfoss</sub></div>
-  </div>
-  <div class="slide" style="display:none;">
-    <img src="sela_4.jpeg" alt="Seljalandsfoss 3" width="200"/>
-    <div><sub>Seljalandsfoss</sub></div>
-  </div>
-  <a class="prev" onclick="plusSlides(-1)" 
-     style="cursor:pointer; position:absolute; top:40%; left:0; font-size:2em; color:#333; padding:5px;">&#10094;</a>
-  <a class="next" onclick="plusSlides(1)" 
-     style="cursor:pointer; position:absolute; top:40%; right:0; font-size:2em; color:#333; padding:5px;">&#10095;</a>
-</div>
 <script>
-let slideIndex = 0;
-showSlides(slideIndex);
-function plusSlides(n) {
-  showSlides(slideIndex += n);
-}
-function showSlides(n) {
-  let slides = document.getElementsByClassName("slide");
-  if (n >= slides.length) { slideIndex = 0 }
-  if (n < 0) { slideIndex = slides.length - 1 }
-  for (let i = 0; i < slides.length; i++) {
-    slides[i].style.display = "none";
+// ── Slideshow ──────────────────────────────────────────
+(function() {
+  function initSlideshow(id) {
+    const wrap   = document.getElementById(id);
+    if (!wrap) return;
+    const slides = wrap.querySelectorAll('.ic-slide');
+    const dotsEl = document.getElementById('dots-' + id);
+    let cur = 0;
+    // build dots
+    slides.forEach(function(_, i) {
+      const d = document.createElement('button');
+      d.className = 'ic-dot' + (i === 0 ? ' ic-dot--active' : '');
+      d.setAttribute('aria-label', 'Slide ' + (i + 1));
+      d.onclick = function() { goTo(i); };
+      dotsEl.appendChild(d);
+    });
+    function goTo(n) {
+      slides[cur].classList.remove('active');
+      dotsEl.querySelectorAll('.ic-dot')[cur].classList.remove('ic-dot--active');
+      cur = (n + slides.length) % slides.length;
+      slides[cur].classList.add('active');
+      dotsEl.querySelectorAll('.ic-dot')[cur].classList.add('ic-dot--active');
+    }
+    wrap._goTo = goTo;
   }
-  slides[slideIndex].style.display = "block";
-}
+
+  window.moveSlide = function(id, dir) {
+    const wrap = document.getElementById(id);
+    if (wrap && wrap._goTo) {
+      const slides = wrap.querySelectorAll('.ic-slide');
+      const cur    = Array.from(slides).findIndex(function(s) { return s.classList.contains('active'); });
+      wrap._goTo(cur + dir);
+    }
+  };
+
+  document.querySelectorAll('.ic-slideshow').forEach(function(el) {
+    initSlideshow(el.id);
+  });
+
+  // ── Scroll-reveal ──────────────────────────────────
+  const io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('ic-visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+
+  document.querySelectorAll('.ic-day, .ic-stop').forEach(function(el) {
+    io.observe(el);
+  });
+})();
 </script>
-    </li>
-    <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#f9f9f9;">
-      <span style="font-weight:bold;">Gljúfrabúi →</span> 
-      a hidden canyon waterfall just a few minutes’ walk from Seljalandsfoss.
-      <div style="margin-top:0.5em; text-align:center;">
-        <img src="day_3_1.jpeg" alt="Gljúfrabúi" width="400"/><br/>
-        <sub>Gljúfrabúi tucked inside a canyon</sub>
-      </div>
-    </li>
-    <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#f9f9f9;">
-      <span style="font-weight:bold;">Skógafoss →</span> 
-      one of Iceland’s most famous waterfalls, with rainbows often appearing in the mist.
-      <div style="margin-top:0.5em; text-align:center;">
-        <img src="day_3_2.jpeg" alt="Skógafoss" width="400"/><br/>
-        <sub>Skógafoss in the morning light</sub>
-      </div>
-    </li>
-    <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#f9f9f9;">
-      <span style="font-weight:bold;">Dyrhólaey Arch →</span> 
-      dramatic coastal cliffs and a massive arch, with puffins nesting in summer.
-      <div style="margin-top:0.5em; text-align:center;">
-        <img src="day_3_3.jpeg" alt="Dyrhólaey Arch" width="400"/><br/>
-        <sub>Dyrhólaey arch and cliffs</sub>
-      </div>
-    </li>
-    <li style="margin-bottom:1.5em; padding:1em; border-radius:8px; background:#f9f9f9;">
-      <span style="font-weight:bold;">Reynisfjara Black Sand Beach →</span> 
-      famous for its basalt columns and roaring Atlantic waves — never turn your back to the sea here.
-      <div style="margin-top:0.5em; text-align:center;">
-        <img src="day_3_4.jpeg" alt="Reynisfjara Black Sand Beach" width="400"/><br/>
-        <sub>Reynisfjara’s black sands and sea stacks</sub>
-      </div>
-    </li>
-  </ol>
-
-  <p style="font-size:1.05em; margin-top:1.5em;">
-    <strong>Campsite:</strong> Vík Campsite — a convenient stop with views of cliffs and sea stacks in the distance.  
-  </p>
-
-  <p style="font-size:1.05em; margin-top:0.5em; color:#555;">
-    <strong>Tip:</strong> Bring waterproof gear for Seljalandsfoss, and visit Reynisfjara early or late to avoid crowds 
-    (and to be extra safe with the waves).
-  </p>
-
-</section>
-
-
-

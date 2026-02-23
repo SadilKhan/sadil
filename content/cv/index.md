@@ -4,6 +4,7 @@ subtitle: ""
 description: "CV"
 author: "Mohammad Sadil Khan"
 publishDate: "2025-10-10"
+show_details: false
 ---
 
 <link rel="preconnect" href="https://fonts.googleapis.com">

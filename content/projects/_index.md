@@ -21,7 +21,8 @@ sidebar:
   show_sidebar_adunit: false # show ad container
   
 # set up common front matter for all individual pages inside project/
-cascade:    
+cascade:
+  layout: single
   show_author_byline: true
   show_post_date: true
   show_disqus_comments: false # see disqusShortname in site config
@@ -32,4 +33,3 @@ cascade:
     show_sidebar_adunit: false # show ad container
 ---
 
-** No content for the project index. This file provides front matter for the project including the layout and boolean options. **

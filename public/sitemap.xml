@@ -8,21 +8,6 @@
     <loc>/projects/autoannotator/</loc>
     <lastmod>2023-01-11T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/blog/vc-nn/introduction/</loc>
-    <lastmod>2022-09-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/pointcloud-series/introduction/</loc>
-    <lastmod>2022-06-22T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/vc-nn/theorems/</loc>
-    <lastmod>2022-09-29T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/pointcloud-series/segmentation/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/vc-nn/nn/</loc>
-    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/cv/</loc>
     <lastmod>2025-10-10T00:00:00+00:00</lastmod>
   </url><url>
@@ -95,24 +80,6 @@
     <loc>/travel_video/</loc>
     <lastmod>2022-12-20T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/categories/computational-theory/</loc>
-    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/deep-learning/</loc>
-    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/mlp/</loc>
-    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/vc-dimension/</loc>
-    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/series/vc-dimension-and-neural-networks/</loc>
-    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/vc-nn/</loc>
-    <lastmod>2022-09-30T00:00:00+00:00</lastmod>
-  </url><url>
     <loc>/categories/java/</loc>
     <lastmod>2022-08-12T00:00:00+00:00</lastmod>
   </url><url>
@@ -121,54 +88,6 @@
   </url><url>
     <loc>/projects/scpa/</loc>
     <lastmod>2022-08-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/deep-learning/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/graph/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/graph/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/mlp/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/point-cloud/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/series/point-cloud/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/point-cloud/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/pointcloud-series/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/segmentation/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/segmentation/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/tags/voxel/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/voxel/</loc>
-    <lastmod>2022-06-28T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/decoder/</loc>
-    <lastmod>2022-05-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/categories/encoder/</loc>
-    <lastmod>2022-05-12T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/randlanet/</loc>
-    <lastmod>2022-05-12T00:00:00+00:00</lastmod>
   </url><url>
     <loc>/</loc>
     <lastmod>2022-02-01T00:00:00+00:00</lastmod>
@@ -185,13 +104,10 @@
     <loc>/projects/dea/</loc>
     <lastmod>2020-09-27T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>/blog/iouloss/</loc>
-    <lastmod>2020-09-27T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>/blog/adventure/introduction/</loc>
-  </url><url>
     <loc>/about/</loc>
   </url><url>
     <loc>/license/</loc>
+  </url><url>
+    <loc>/tags/</loc>
   </url>
 </urlset>

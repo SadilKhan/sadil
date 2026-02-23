@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}" dir="ltr">
+  {{- partial "head.html" . -}}
+  <body class="ma0 {{ .Params.body_class }}">
+    <div class="grid-container{{ if .Params.layout }} {{ .Params.layout }}{{ end }}{{ if .IsHome }} home{{ end }}">
+      {{- block "header" . }}{{- partial "header.html" . -}}{{- end }}
+      <main class="page-main pa4" role="main">
+        {{- block "main" . }}{{- end }}
+      </main>
+      {{- block "footer" . }}{{- partial "footer.html" . -}}{{- end }}
+    </div>
+  </body>
+</html>

@@ -13,6 +13,7 @@ categories:
 commentable: true
 show_related: true
 share: false
+featured_image: "featured.png"
 ---
 
 # Introduction

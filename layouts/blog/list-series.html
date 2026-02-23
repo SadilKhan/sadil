@@ -1,0 +1,344 @@
+{{/*
+  layouts/blog/list-series.html
+  ─────────────────────────────────────────────
+  Level 2 — /blog/Adventure/ (and any series)
+  Hero banner → post grid cards
+  Activated via: layout: list-series in series _index.md
+  ─────────────────────────────────────────────
+*/}}
+{{ define "main" }}
+
+{{/* ── Hero banner ── */}}
+<div class="l2-hero">
+  {{/* Background image from featured resource if available */}}
+  {{ $bg := "" }}
+  {{ range .Resources.ByType "image" }}
+    {{ if findRE "featured" .Name }}{{ $bg = .RelPermalink }}{{ end }}
+  {{ end }}
+  <div class="l2-hero__bg" {{ if $bg }}style="background-image:url('{{ $bg }}')"{{ end }}></div>
+  <div class="l2-hero__overlay"></div>
+
+  <div class="l2-hero__content">
+    <a href="/blog/" class="l2-breadcrumb">← All Series</a>
+    <h1 class="l2-hero__title">{{ .Title }}</h1>
+    {{ with .Description }}
+      <p class="l2-hero__desc">{{ . }}</p>
+    {{ end }}
+    <div class="l2-hero__meta">
+      <span class="l2-hero__count">{{ len .RegularPages }} post{{ if ne (len .RegularPages) 1 }}s{{ end }}</span>
+      {{ with .Params.categories }}
+        {{ range . }}
+          <span class="l2-hero__tag">{{ . }}</span>
+        {{ end }}
+      {{ end }}
+    </div>
+  </div>
+</div>
+
+{{/* ── Post grid ── */}}
+<div class="l2-wrap">
+  {{ if .RegularPages }}
+  <div class="l2-grid">
+    {{ range .RegularPages }}
+    <a href="{{ .RelPermalink }}" class="l2-card">
+
+      {{/* Thumbnail */}}
+      {{ $thumb := "" }}
+      {{ range .Resources.ByType "image" }}
+        {{ if findRE "featured" .Name }}{{ $thumb = .RelPermalink }}{{ end }}
+      {{ end }}
+      {{ if not $thumb }}
+        {{ with .Params.featured_image }}{{ $thumb = . }}{{ end }}
+      {{ end }}
+
+      <div class="l2-card__thumb">
+        {{ if $thumb }}
+          <img src="{{ $thumb }}" alt="{{ .Title }}" loading="lazy"/>
+        {{ else }}
+          <div class="l2-card__thumb-placeholder">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
+              <rect width="40" height="40" rx="8" fill="rgba(255,255,255,0.08)"/>
+              <path d="M10 28L18 16L24 22L28 17L34 28H10Z" fill="rgba(255,255,255,0.25)"/>
+              <circle cx="14" cy="15" r="3" fill="rgba(255,255,255,0.3)"/>
+            </svg>
+          </div>
+        {{ end }}
+        <div class="l2-card__num">{{ .Page.Scratch.Get "n" }}
+          {{/* post number badge */}}
+        </div>
+      </div>
+
+      <div class="l2-card__body">
+        {{ if .Params.show_post_date | default true }}
+          <time class="l2-card__date">{{ .Date.Format "Jan 2, 2006" }}</time>
+        {{ end }}
+        <h2 class="l2-card__title">{{ .Title }}</h2>
+        {{ with .Params.subtitle }}
+          <p class="l2-card__subtitle">{{ . }}</p>
+        {{ end }}
+        {{ with .Summary }}
+          <p class="l2-card__excerpt">{{ . | truncate 110 }}</p>
+        {{ end }}
+        <span class="l2-card__cta">Read post →</span>
+      </div>
+
+    </a>
+    {{ end }}
+  </div>
+  {{ else }}
+    <p class="l2-empty">No posts yet in this series.</p>
+  {{ end }}
+</div>
+
+<style>
+/* ═══════════════════════════════════════
+   LEVEL 2 — Series listing
+   Feel: Warm editorial, earthy tones,
+         Fraunces display + DM Sans body
+═══════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:wght@400;500;600&display=swap');
+
+/* ── Hero ── */
+.l2-hero {
+  position: relative;
+  min-height: 320px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.l2-hero__bg {
+  position: absolute;
+  inset: 0;
+  background: #1c1917;
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.04);
+  transition: transform 8s ease;
+}
+
+.l2-hero:hover .l2-hero__bg { transform: scale(1); }
+
+.l2-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(12,10,9,0.92) 0%,
+    rgba(12,10,9,0.55) 50%,
+    rgba(12,10,9,0.2) 100%
+  );
+}
+
+.l2-hero__content {
+  position: relative;
+  z-index: 1;
+  padding: 2.5rem 3rem 2.8rem;
+  width: 100%;
+  max-width: 860px;
+}
+
+.l2-breadcrumb {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: color 200ms;
+}
+.l2-breadcrumb:hover { color: rgba(255,255,255,0.9); text-decoration: none; }
+
+.l2-hero__title {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: clamp(2.2rem, 6vw, 3.5rem);
+  font-weight: 900;
+  color: #fafaf9;
+  margin: 0 0 0.6rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.l2-hero__desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  color: rgba(255,255,255,0.6);
+  margin: 0 0 1.2rem;
+  max-width: 520px;
+  line-height: 1.6;
+}
+
+.l2-hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.l2-hero__count {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.l2-hero__tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.55);
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 2px 10px;
+}
+
+/* ── Post grid ── */
+.l2-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 4rem;
+}
+
+.l2-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ── Post card ── */
+.l2-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #e7e5e4;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 240ms ease, box-shadow 240ms ease;
+  position: relative;
+}
+
+.l2-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.09);
+  text-decoration: none;
+}
+
+.l2-card__thumb {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #292524;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.l2-card__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 500ms ease;
+}
+
+.l2-card:hover .l2-card__thumb img { transform: scale(1.05); }
+
+.l2-card__thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #292524 0%, #44403c 100%);
+}
+
+.l2-card__body {
+  padding: 1.1rem 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.l2-card__date {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #a8a29e;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+  display: block;
+}
+
+.l2-card__title {
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1c1917;
+  margin: 0 0 0.3rem;
+  line-height: 1.3;
+}
+
+.l2-card__subtitle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: #78716c;
+  margin: 0 0 0.5rem;
+  line-height: 1.4;
+}
+
+.l2-card__excerpt {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  color: #78716c;
+  line-height: 1.6;
+  margin: 0 0 0.8rem;
+  flex: 1;
+}
+
+.l2-card__cta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #a16207;
+  letter-spacing: 0.03em;
+  margin-top: auto;
+  transition: gap 200ms;
+}
+
+.l2-card:hover .l2-card__cta { color: #854d0e; }
+
+.l2-empty {
+  font-family: 'DM Sans', sans-serif;
+  color: #a8a29e;
+  text-align: center;
+  padding: 3rem 0;
+}
+
+/* Dark mode */
+.dark-theme .l2-card {
+  background: #1c1917;
+  border-color: #292524;
+}
+.dark-theme .l2-card__title { color: #fafaf9; }
+.dark-theme .l2-card__excerpt,
+.dark-theme .l2-card__subtitle { color: #78716c; }
+
+@media (max-width: 640px) {
+  .l2-hero__content { padding: 1.8rem 1.25rem 2rem; }
+  .l2-wrap { padding: 1.5rem 1rem 3rem; }
+  .l2-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+{{ end }}

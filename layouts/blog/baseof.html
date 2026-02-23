@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang | default "en" }}">
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body class="ma0 {{ .Site.Params.textFontFamily | default "sans-serif" }} {{ .Site.Params.theme | default "home-theme" }}-theme">
+    <div>
+       {{- block "header" . }}{{- partial "header.html" . -}}{{- end }}
+        {{- block "main" . }}{{- end }}
+        {{- block "footer" . }}{{- partial "footer.html" . -}}{{- end }}
+    </div>
+  </body>
+</html>

@@ -16,23 +16,5 @@
       <description></description>
     </item>
     
-    <item>
-      <title>VC Dimension and Neural Networks</title>
-      <link>/series/vc-dimension-and-neural-networks/</link>
-      <pubDate>Fri, 30 Sep 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/series/vc-dimension-and-neural-networks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Point Cloud</title>
-      <link>/series/point-cloud/</link>
-      <pubDate>Tue, 28 Jun 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/series/point-cloud/</guid>
-      <description></description>
-    </item>
-    
   </channel>
 </rss>
