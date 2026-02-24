@@ -226,8 +226,8 @@ if (!doNotTrack) {
   
   <script src="/toc.min.cbd751154f1d83c5f03e91b54c869201115768e2fe9b1aaad26e0857dd1bcbce.js" type="text/javascript"></script>
 </head>
-<body>
-      <div class="grid-container single-sidebar">
+<body class="ma0 ">
+    <div class="grid-container single-sidebar">
 
 
 <script>
@@ -641,24 +641,69 @@ if (!doNotTrack) {
 
 
 
-<style>
-  .mw7 {
-    max-width: 100% !important;
-  }
-</style>
-<main class="page-main pa4" role="main">
-  <section class="page-content mw7 center">
-    <article class="post-content pa0 ph4-l">
-      <header class="post-header">
-        <h1 class="f1 lh-solid measure-narrow mb3 fw4">Swedish Crossword Puzzle App</h1>
-        <h4 class="f4 mt0 mb4 lh-title measure">A Crossword Puzzle App in Java</h4>
-        <p class="f6 measure lh-copy mv1">By Mohammad Sadil Khan in <a href="/categories/java">Java</a>  <a href="/categories/software">Software</a> </p>
-        <p class="f7 db mv0 ttu">August 12, 2022</p>
+      <main class="page-main pa4" role="main">
+<div class="ps-wrap">
 
+  
+  <div class="ps-progress" id="psProgress"></div>
+
+  <article class="ps">
+
+    
+    <nav class="ps__back-wrap">
+      <a href="/projects/" class="ps__back">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        All Projects
+      </a>
+    </nav>
+
+    
+    <header class="ps__header">
+      
+      <div class="ps__cats">
+        <span class="ps__cat">Java</span><span class="ps__cat">Software</span>
+      </div>
       
 
-      </header>
-      <section class="post-body pt5 pb4">
+      <h1 class="ps__title">Swedish Crossword Puzzle App</h1>
+
+      
+      <p class="ps__subtitle">A Crossword Puzzle App in Java</p>
+      
+
+      <div class="ps__meta-row">
+        
+        <time class="ps__meta-item" datetime="2022-08-12 00:00:00 &#43;0000 UTC">
+          <span class="ps__meta-label">Year</span>
+          <span class="ps__meta-val">2022</span>
+        </time>
+        
+        
+        <div class="ps__meta-item">
+          <span class="ps__meta-label">Author</span>
+          <span class="ps__meta-val">Mohammad Sadil Khan</span>
+        </div>
+        
+        
+        
+        <div class="ps__meta-item">
+          <span class="ps__meta-label">Read</span>
+          <span class="ps__meta-val">1 min</span>
+        </div>
+        
+      </div>
+
+      
+    </header>
+
+    
+    
+
+    
+    <div class="ps__body">
+      <div class="ps__content">
         <p><a href = "https://github.com/SadilKhan/MLDM-2020-2022/tree/main/Semester%203%20-%20KUL/Introduction%20to%20Object%20Oriented%20Programming/Java%20Project">Code</a> <a href = "report_java_scpa.pdf">PDF</a></p>
 <div>&nbsp</div>
 <object data='report_java_scpa.pdf' style='width:100%;height:2100px'>
@@ -666,49 +711,231 @@ if (!doNotTrack) {
     <p><a href="some.pdf">Download Instead</a></p>
 </object>
 
-        
-        <details closed class="f6 fw7 input-reset">
-  <dl class="f6 lh-copy">
-    <dt class="fw7">Posted on:</dt>
-    <dd class="fw5 ml0">August 12, 2022</dd>
-  </dl>
-  <dl class="f6 lh-copy">
-    <dt class="fw7">Length:</dt>
-    <dd class="fw5 ml0">1 minute read, 11 words</dd>
-  </dl>
-  
-  <dl class="f6 lh-copy">
-    <dt class="fw7">Categories:</dt>
-    <dd class="fw5 ml0"> <a href="/categories/java">Java</a>  <a href="/categories/software">Software</a> </dd>
-  </dl>
-  
-  
-  
-  <dl class="f6 lh-copy">
-    <dt class="fw7">See Also:</dt>
-    
-  </dl>
-</details>
+      </div>
 
-      </section>
-      <footer class="post-footer">
-        <div class="post-pagination dt w-100 mt4 mb2">
-  
-    <a class="prev dtc pr2 tl v-top fw6"
-    href="/projects/autoannotator/">&larr; AutoAnnotator - MacOS Utility App</a>
-  
-  
-    <a class="next dtc pl2 tr v-top fw6"
-    href="/projects/autolabelme/">AutoLabelMe &rarr;</a>
-  
+      
+      
+    </div>
+
+  </article>
 </div>
 
-      </footer>
-    </article>
-    
-  </section>
-</main>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 
+:root {
+  --ink:    #0f0f0f;
+  --paper:  #f5f3ee;
+  --warm:   #e8e3d9;
+  --accent: #c9773a;
+  --muted:  #8a857d;
+  --border: rgba(15,15,15,.12);
+  --ease:   cubic-bezier(.22,1,.36,1);
+}
+
+.ps-wrap {
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--ink);
+}
+
+ 
+.ps-progress {
+  position: fixed; top: 0; left: 0; z-index: 100;
+  height: 2px; width: 0%; background: var(--accent);
+  transition: width .1s linear;
+}
+
+ 
+.ps {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 5rem 2rem 8rem;
+  animation: fadeUp .8s var(--ease) both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: none; }
+}
+
+ 
+.ps__back-wrap { margin-bottom: 3.5rem; }
+.ps__back {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .8rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--muted); text-decoration: none;
+  transition: color .2s, gap .3s var(--ease);
+}
+.ps__back:hover { color: var(--accent); gap: .75rem; }
+
+ 
+.ps__header { margin-bottom: 3rem; }
+.ps__cats { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.ps__cat {
+  font-size: .68rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); border: 1px solid currentColor;
+  padding: .15rem .55rem; border-radius: 2px;
+}
+.ps__title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 400; line-height: 1.1;
+  margin: 0 0 1rem; letter-spacing: -.025em;
+}
+.ps__subtitle {
+  font-size: 1.15rem; color: var(--muted);
+  line-height: 1.6; font-weight: 300;
+  margin: 0 0 2rem; max-width: 600px;
+}
+
+ 
+.ps__meta-row {
+  display: flex; flex-wrap: wrap; gap: 2rem;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.ps__meta-item { display: flex; flex-direction: column; gap: .25rem; }
+.ps__meta-label { font-size: .65rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+.ps__meta-val { font-size: .9rem; font-weight: 400; color: var(--ink); }
+
+ 
+.ps__ctas { display: flex; flex-wrap: wrap; gap: .75rem; }
+.ps__cta {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .85rem; font-weight: 500;
+  color: var(--ink); text-decoration: none;
+  border: 1px solid var(--border); border-radius: 3px;
+  padding: .55rem 1.1rem;
+  background: transparent;
+  transition: background .25s, color .25s, border-color .25s, gap .3s var(--ease);
+}
+.ps__cta:hover { background: var(--accent); color: #fff; border-color: var(--accent); gap: .75rem; }
+
+ 
+.ps__hero { margin: 0 0 3.5rem; }
+.ps__hero-inner {
+  border-radius: 6px;
+  overflow: hidden;
+  line-height: 0;
+  border: 1px solid var(--border);
+}
+.ps__hero-img {
+  width: 100%;
+  max-height: 520px;
+  object-fit: cover;
+  display: block;
+  transition: transform .8s var(--ease);
+}
+.ps__hero-inner:hover .ps__hero-img { transform: scale(1.02); }
+.ps__caption {
+  font-size: .8rem; color: var(--muted); font-style: italic;
+  text-align: center; margin-top: .75rem;
+}
+
+ 
+.ps__body { position: relative; }
+.ps__content {
+  font-size: 1.05rem; line-height: 1.8;
+  color: #1a1a1a;
+}
+.ps__content > * + * { margin-top: 1.5rem; }
+.ps__content h2 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.75rem; font-weight: 400;
+  letter-spacing: -.015em; margin-top: 3.5rem; margin-bottom: .5rem;
+}
+.ps__content h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.3rem; font-weight: 400;
+  margin-top: 2.5rem; margin-bottom: .4rem;
+}
+.ps__content a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  transition: text-decoration-color .2s;
+}
+.ps__content a:hover { text-decoration-color: currentColor; }
+.ps__content img {
+  width: 100%; border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.ps__content blockquote {
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  border-left: 3px solid var(--accent);
+  background: rgba(201,119,58,.06);
+  border-radius: 0 4px 4px 0;
+  color: #333;
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.65;
+}
+.ps__content pre {
+  background: var(--ink); color: #e8e3d9;
+  padding: 1.5rem; border-radius: 6px;
+  overflow-x: auto;
+  font-size: .85rem; line-height: 1.6;
+  border: 1px solid #2a2a2a;
+}
+.ps__content code:not(pre code) {
+  background: var(--warm); color: var(--accent);
+  padding: .15em .4em; border-radius: 3px;
+  font-size: .9em;
+}
+.ps__content hr {
+  border: none; border-top: 1px solid var(--border);
+  margin: 3rem 0;
+}
+
+ 
+.ps__tags {
+  display: flex; align-items: flex-start; gap: 1.5rem;
+  margin-top: 4rem; padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.ps__tags-label {
+  font-size: .65rem; font-weight: 500;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--muted); padding-top: .3rem;
+  white-space: nowrap;
+}
+.ps__tags-list { display: flex; flex-wrap: wrap; gap: .4rem; }
+.ps__tag {
+  font-size: .78rem; color: var(--muted);
+  border: 1px solid var(--border);
+  padding: .2rem .65rem; border-radius: 2px;
+  text-decoration: none;
+  transition: border-color .2s, color .2s;
+}
+.ps__tag:hover { color: var(--accent); border-color: currentColor; }
+
+@media (max-width: 600px) {
+  .ps { padding: 3rem 1.25rem 5rem; }
+  .ps__meta-row { gap: 1.25rem; }
+}
+</style>
+
+<script>
+  (function() {
+    var bar = document.getElementById('psProgress');
+    if (!bar) return;
+    function update() {
+      var h = document.documentElement;
+      var pct = (h.scrollTop || document.body.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+      bar.style.width = Math.min(pct, 100) + '%';
+    }
+    window.addEventListener('scroll', update, { passive: true });
+  })();
+</script>
+
+      </main>
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WSFM8WQJW6"></script>
 <script>
@@ -812,6 +1039,6 @@ if (!doNotTrack) {
   </nav>
 </footer>
 
-      </div>
-    </body>
+    </div>
+  </body>
 </html>

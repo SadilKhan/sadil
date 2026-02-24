@@ -255,6 +255,12 @@ if (!doNotTrack) {
   z-index: 0;
   pointer-events: none;
 }
+#nurbs-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 16px;
+}
 .h-root {
   font-family: 'DM Sans', sans-serif;
   width: 100%;
@@ -267,7 +273,7 @@ if (!doNotTrack) {
   margin: 0 auto;
   padding: 5rem 3rem 4rem;
   display: grid;
-  grid-template-columns: 1fr 240px;
+  grid-template-columns: 1fr 320px;
   gap: 4rem;
   align-items: center;
 }
@@ -399,50 +405,19 @@ if (!doNotTrack) {
   background: var(--h-accent-bg);
   transform: translateY(-1px);
 }
-.h-photo-col {
+
+ 
+.h-nurbs-col {
   display: flex;
   align-items: center;
   justify-content: center;
   animation: hUp 0.6s var(--h-ease) 0.08s both;
-}
-.h-photo-frame {
-  position: relative;
-  width: 210px;
-  height: 230px;
-}
-.h-photo-frame::before {
-  content: '';
-  position: absolute;
-  inset: -7px;
-  border-radius: 24px;
-  background: linear-gradient(135deg, var(--h-accent), var(--h-accent2));
-  opacity: 0.1;
-  z-index: 0;
-}
-.h-photo-frame::after {
-  content: '';
-  position: absolute;
-  bottom: -5px;
-  right: -5px;
-  width: 55%;
-  height: 55%;
-  border-bottom: 2px solid var(--h-accent);
-  border-right: 2px solid var(--h-accent);
-  border-radius: 0 0 16px 0;
-  opacity: 0.28;
-  z-index: 0;
-}
-.h-photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 300px;
   border-radius: 16px;
-  display: block;
-  position: relative;
-  z-index: 1;
-  border: 1.5px solid var(--h-accent-bdr);
-  box-shadow: 0 10px 36px rgba(0,0,0,0.1);
+  overflow: hidden;
+  background: transparent;
 }
+
 .h-div {
   max-width: 1080px;
   margin: 0 auto 3rem;
@@ -561,8 +536,7 @@ if (!doNotTrack) {
 }
 @media (max-width: 860px) {
   .h-hero { grid-template-columns: 1fr; gap: 2rem; padding: 3rem 1.5rem 2.5rem; }
-  .h-photo-col { order: -1; }
-  .h-photo-frame { width: 140px; height: 155px; }
+  .h-nurbs-col { height:320px; }
   .h-grid { grid-template-columns: 1fr 1fr; }
   .h-div { padding: 0 1.5rem; }
   .h-cards-wrap { padding: 0 1.5rem 4rem; }
@@ -618,10 +592,9 @@ if (!doNotTrack) {
 </div>
 </div>
 
-<div class="h-photo-col">
-<div class="h-photo-frame">
-<img class="h-photo" src="img/featured.jpg" alt="Mohammad Sadil Khan">
-</div>
+
+<div class="h-nurbs-col">
+  <canvas id="nurbs-canvas"></canvas>
 </div>
 
 </div>
@@ -675,82 +648,344 @@ if (!doNotTrack) {
 </div>
 </div>
 
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function () {
-  const canvas = document.getElementById('neural-canvas');
-  const ctx    = canvas.getContext('2d');
-  const PALETTE = [
-    { fill: 'rgba(14,165,233,',  glow: 'rgba(14,165,233,'  },
-    { fill: 'rgba(20,184,166,',  glow: 'rgba(20,184,166,'  },
-    { fill: 'rgba(99,102,241,',  glow: 'rgba(99,102,241,'  },
-  ];
-  const NODE_COUNT   = 65;
-  const CONNECT_DIST = 155;
-  const SPEED        = 0.42;
-  const MOUSE_RADIUS = 140;
-  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+
+  
+  const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+  const THEME = isDark ? {
+    
+    meshC0: new THREE.Color(0x38bdf8),   
+    meshC1: new THREE.Color(0x2dd4bf),   
+    meshC2: new THREE.Color(0x818cf8),   
+    meshOpacity: 0.70,
+    
+    polyColor: 0xfbbf24,                 
+    polyOpacity: 0.55,
+    
+    cpColor: 0xfbbf24,                   
+    cpOpacity: 0.80,
+    cpSize: 0.055,
+    
+    cornerColor: 0xf87171,              
+    cornerOpacity: 1.0,
+    cornerSize: 0.095,
+  } : {
+    
+    meshC0: new THREE.Color(0x0284c7),   
+    meshC1: new THREE.Color(0x0f766e),   
+    meshC2: new THREE.Color(0x4338ca),   
+    meshOpacity: 0.65,
+    
+    polyColor: 0xd97706,                 
+    polyOpacity: 0.90,
+    
+    cpColor: 0xd97706,                   
+    cpOpacity: 0.85,
+    cpSize: 0.055,
+    
+    cornerColor: 0xdc2626,              
+    cornerOpacity: 1.0,
+    cornerSize: 0.095,
+  };
+
+  
+  function knotVector(n, p) {
+    const m = n + p + 1;
+    const knots = [];
+    for (let i = 0; i <= m; i++) {
+      if (i <= p) knots.push(0);
+      else if (i >= m - p) knots.push(1);
+      else knots.push((i - p) / (n - p + 1));
+    }
+    return knots;
+  }
+
+  function evalNURBS(u, v, cps, nu, nv, p, q, knotsU, knotsV) {
+    function findSpan(n, deg, t, knots) {
+      if (t >= knots[n + 1]) return n;
+      let lo = deg, hi = n + 1, mid = Math.floor((lo + hi) / 2);
+      while (t < knots[mid] || t >= knots[mid + 1]) {
+        if (t < knots[mid]) hi = mid; else lo = mid;
+        mid = Math.floor((lo + hi) / 2);
+      }
+      return mid;
+    }
+    function basisAll(span, deg, t, knots) {
+      const N = new Array(deg + 1).fill(0);
+      const left = new Array(deg + 1).fill(0);
+      const right = new Array(deg + 1).fill(0);
+      N[0] = 1;
+      for (let j = 1; j <= deg; j++) {
+        left[j]  = t - knots[span + 1 - j];
+        right[j] = knots[span + j] - t;
+        let saved = 0;
+        for (let r = 0; r < j; r++) {
+          const denom = right[r + 1] + left[j - r];
+          const temp  = denom > 1e-14 ? N[r] / denom : 0;
+          N[r] = saved + right[r + 1] * temp;
+          saved = left[j - r] * temp;
+        }
+        N[j] = saved;
+      }
+      return N;
+    }
+
+    const spanU = findSpan(nu, p, u, knotsU);
+    const spanV = findSpan(nv, q, v, knotsV);
+    const Nu = basisAll(spanU, p, u, knotsU);
+    const Nv = basisAll(spanV, q, v, knotsV);
+
+    let x = 0, y = 0, z = 0, w = 0;
+    for (let i = 0; i <= p; i++) {
+      for (let j = 0; j <= q; j++) {
+        const cp = cps[(spanU - p + i) * (nv + 1) + (spanV - q + j)];
+        const ww = cp.w * Nu[i] * Nv[j];
+        x += cp.x * ww; y += cp.y * ww; z += cp.z * ww; w += ww;
+      }
+    }
+    return { x: x / w, y: y / w, z: z / w };
+  }
+
+  
+  const canvas   = document.getElementById('nurbs-canvas');
+  const parent   = canvas.parentElement;
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(window.devicePixelRatio);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+  camera.position.set(0, 2.2, 5.5);
+  camera.lookAt(0, 0, 0);
+
+  function resize() {
+    const w = parent.clientWidth, h = parent.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
   resize();
   window.addEventListener('resize', resize);
-  const mouse = { x: -9999, y: -9999 };
-  window.addEventListener('mousemove', function(e) { mouse.x = e.clientX; mouse.y = e.clientY; });
-  const nodes = [];
-  for (let i = 0; i < NODE_COUNT; i++) {
-    nodes.push({
-      x: Math.random() * window.innerWidth,
-      y: Math.random() * window.innerHeight,
-      vx: (Math.random() - 0.5) * SPEED,
-      vy: (Math.random() - 0.5) * SPEED,
-      r: Math.random() * 1.8 + 1.0,
-      phase: Math.random() * Math.PI * 2,
-      col: PALETTE[Math.floor(Math.random() * PALETTE.length)],
-    });
-  }
-  function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < nodes.length; i++) {
-      const n = nodes[i];
-      n.x += n.vx; n.y += n.vy; n.phase += 0.016;
-      if (n.x < 0 || n.x > canvas.width)  n.vx = -n.vx;
-      if (n.y < 0 || n.y > canvas.height) n.vy = -n.vy;
+
+  
+  const NU = 4, NV = 4;
+  const P  = 3, Q  = 3;
+  const knotsU = knotVector(NU, P);
+  const knotsV = knotVector(NV, Q);
+
+  const baseCPs = [];
+  const animCPs = [];
+  for (let i = 0; i <= NU; i++) {
+    for (let j = 0; j <= NV; j++) {
+      const x = (i / NU) * 4 - 2;
+      const z = (j / NV) * 4 - 2;
+      const phase = (i * 1.3 + j * 0.9) * Math.PI / 2.0;
+      baseCPs.push({ x, y: 0, z, w: 1, phase, amp: 0.4 + Math.random() * 0.4 });
+      animCPs.push({ x, y: 0, z, w: 1 });
     }
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const a = nodes[i], b = nodes[j];
-        const dx = a.x - b.x, dy = a.y - b.y;
-        const d = Math.sqrt(dx * dx + dy * dy);
-        if (d >= CONNECT_DIST) continue;
-        const mx = (a.x + b.x) * 0.5 - mouse.x, my = (a.y + b.y) * 0.5 - mouse.y;
-        const near = (mx * mx + my * my) < (MOUSE_RADIUS * MOUSE_RADIUS);
-        const alpha = (near ? 0.5 : 0.12) * (1 - d / CONNECT_DIST);
-        ctx.beginPath();
-        ctx.moveTo(a.x, a.y);
-        ctx.lineTo(b.x, b.y);
-        ctx.strokeStyle = 'rgba(14,165,233,' + alpha + ')';
-        ctx.lineWidth = near ? 1.2 : 0.8;
-        ctx.stroke();
+  }
+
+  
+  function isCorner(i, j) {
+    return (i === 0 || i === NU) && (j === 0 || j === NV);
+  }
+
+  
+  const SAMPLES   = 40;
+  const vertCount = SAMPLES * SAMPLES;
+  const positions = new Float32Array(vertCount * 3);
+  const colors    = new Float32Array(vertCount * 3);
+
+  const surfGeom = new THREE.BufferGeometry();
+  surfGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  surfGeom.setAttribute('color',    new THREE.BufferAttribute(colors, 3));
+
+  const indices = [];
+  for (let i = 0; i < SAMPLES - 1; i++) {
+    for (let j = 0; j < SAMPLES - 1; j++) {
+      const a = i * SAMPLES + j;
+      const b = a + 1, c = a + SAMPLES, d = c + 1;
+      indices.push(a, c, b, b, c, d);
+    }
+  }
+  surfGeom.setIndex(indices);
+
+  const surfMat  = new THREE.MeshBasicMaterial({
+    vertexColors: true,
+    wireframe: true,
+    transparent: true,
+    opacity: THEME.meshOpacity,
+  });
+  const surfMesh = new THREE.Mesh(surfGeom, surfMat);
+  scene.add(surfMesh);
+
+  
+  
+  
+
+  const NCP = (NU + 1) * (NV + 1); 
+
+  
+  
+  const rowSegs = (NU + 1) * NV;       
+  const colSegs = (NV + 1) * NU;       
+  const totalPolySegs = rowSegs + colSegs;
+
+  const polyPos = new Float32Array(totalPolySegs * 2 * 3); 
+  const polyGeom = new THREE.BufferGeometry();
+  polyGeom.setAttribute('position', new THREE.BufferAttribute(polyPos, 3));
+
+  const polyMat = new THREE.LineDashedMaterial({
+    color: THEME.polyColor,
+    opacity: THEME.polyOpacity,
+    transparent: true,
+    dashSize: 0.12,
+    gapSize: 0.08,
+    linewidth: 1,
+  });
+
+  
+  const polyLines = new THREE.LineSegments(polyGeom, polyMat);
+  scene.add(polyLines);
+
+  
+  
+  const cpGeoInner   = new THREE.SphereGeometry(THEME.cpSize, 8, 8);
+  const cpMatInner   = new THREE.MeshBasicMaterial({
+    color: THEME.cpColor,
+    transparent: true,
+    opacity: THEME.cpOpacity,
+  });
+  
+  const cpGeoCorner  = new THREE.SphereGeometry(THEME.cornerSize, 10, 10);
+  const cpMatCorner  = new THREE.MeshBasicMaterial({
+    color: THEME.cornerColor,
+    transparent: true,
+    opacity: THEME.cornerOpacity,
+  });
+
+  
+  const cpMeshes = [];
+  for (let i = 0; i <= NU; i++) {
+    for (let j = 0; j <= NV; j++) {
+      const corner = isCorner(i, j);
+      const m = new THREE.Mesh(
+        corner ? cpGeoCorner : cpGeoInner,
+        corner ? cpMatCorner : cpMatInner
+      );
+      scene.add(m);
+      cpMeshes.push({ mesh: m, i, j });
+    }
+  }
+
+  
+  function updateScene(t) {
+    
+    for (let i = 0; i <= NU; i++) {
+      for (let j = 0; j <= NV; j++) {
+        const idx = i * (NV + 1) + j;
+        const b = baseCPs[idx];
+        animCPs[idx].x = b.x;
+        animCPs[idx].y = Math.sin(t * 0.7 + b.phase) * b.amp
+                       + Math.cos(t * 0.4 + b.phase * 1.3) * b.amp * 0.5;
+        animCPs[idx].z = b.z;
+        animCPs[idx].w = 1;
       }
     }
-    for (let i = 0; i < nodes.length; i++) {
-      const n = nodes[i];
-      const dx = n.x - mouse.x, dy = n.y - mouse.y;
-      const nearMouse = (dx * dx + dy * dy) < (MOUSE_RADIUS * MOUSE_RADIUS);
-      const radius = nearMouse ? n.r * 2.4 : n.r * (Math.sin(n.phase) * 0.25 + 1);
-      ctx.beginPath();
-      ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
-      ctx.fillStyle = n.col.fill + (nearMouse ? 1.0 : 0.55) + ')';
-      ctx.fill();
-      if (nearMouse) {
-        ctx.beginPath();
-        ctx.arc(n.x, n.y, radius * 3.5, 0, Math.PI * 2);
-        ctx.fillStyle = n.col.glow + '0.08)';
-        ctx.fill();
+
+    
+    let vi = 0;
+    for (let i = 0; i < SAMPLES; i++) {
+      const u = i / (SAMPLES - 1);
+      for (let j = 0; j < SAMPLES; j++) {
+        const v = j / (SAMPLES - 1);
+        const pt = evalNURBS(
+          u >= 1 ? 0.9999 : u,
+          v >= 1 ? 0.9999 : v,
+          animCPs, NU, NV, P, Q, knotsU, knotsV
+        );
+        positions[vi * 3]     = pt.x;
+        positions[vi * 3 + 1] = pt.y;
+        positions[vi * 3 + 2] = pt.z;
+
+        const h   = (pt.y + 1) * 0.5;
+        const col = new THREE.Color().lerpColors(THEME.meshC0, THEME.meshC1, u)
+                                     .lerp(THEME.meshC2, h * 0.5);
+        colors[vi * 3]     = col.r;
+        colors[vi * 3 + 1] = col.g;
+        colors[vi * 3 + 2] = col.b;
+        vi++;
       }
     }
-    requestAnimationFrame(draw);
+    surfGeom.attributes.position.needsUpdate = true;
+    surfGeom.attributes.color.needsUpdate    = true;
+
+    
+    let si = 0;
+    
+    for (let i = 0; i <= NU; i++) {
+      for (let j = 0; j < NV; j++) {
+        const a = animCPs[i * (NV + 1) + j];
+        const b = animCPs[i * (NV + 1) + j + 1];
+        polyPos[si * 6 + 0] = a.x; polyPos[si * 6 + 1] = a.y; polyPos[si * 6 + 2] = a.z;
+        polyPos[si * 6 + 3] = b.x; polyPos[si * 6 + 4] = b.y; polyPos[si * 6 + 5] = b.z;
+        si++;
+      }
+    }
+    
+    for (let j = 0; j <= NV; j++) {
+      for (let i = 0; i < NU; i++) {
+        const a = animCPs[i * (NV + 1) + j];
+        const b = animCPs[(i + 1) * (NV + 1) + j];
+        polyPos[si * 6 + 0] = a.x; polyPos[si * 6 + 1] = a.y; polyPos[si * 6 + 2] = a.z;
+        polyPos[si * 6 + 3] = b.x; polyPos[si * 6 + 4] = b.y; polyPos[si * 6 + 5] = b.z;
+        si++;
+      }
+    }
+    polyGeom.attributes.position.needsUpdate = true;
+    polyLines.computeLineDistances(); 
+
+    
+    for (const { mesh, i, j } of cpMeshes) {
+      const cp = animCPs[i * (NV + 1) + j];
+      mesh.position.set(cp.x, cp.y, cp.z);
+    }
   }
-  draw();
+
+  
+  let camAngle = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = performance.now() * 0.001;
+
+    updateScene(t);
+
+    camAngle += 0.003;
+    const R = 7.5;
+    camera.position.x = Math.sin(camAngle) * R;
+    camera.position.z = Math.cos(camAngle) * R;
+    camera.position.y = 4.2 + Math.sin(camAngle * 0.4) * 0.6;
+    camera.lookAt(0, 0, 0);
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  
+  
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+    window.location.reload();
+  });
+
 })();
 </script>
+
+
+
 
 
 
