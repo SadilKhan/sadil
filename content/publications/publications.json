@@ -8,7 +8,7 @@
         "codeLink": "https://github.com/SadilKhan/DreamCAD",
         "poster": "",
         "bibtex": "@article{khan2026dreamcad,title= {DreamCAD: Scaling Multimodal CAD Generation using Differentiable Parametric Surfaces},author= {Mohammad Sadil Khan, Muhammad Usama, Rolandos Alexandros Potamias, Didier Stricker, Muhammad Zeshan Afzal, Jiankang Deng, Ismail Elezi},journal = {Arxiv},year= {2026}}",
-        "arxiv": "",
+        "arxiv": "https://sadilkhan.github.io/dreamcad2026/",
         "video": "",
         "dataset": "https://huggingface.co/datasets/SadilKhan/CADCap-1M",
         "paperLink": "",
