@@ -5,7 +5,7 @@ show_post_date: false
 categories: [Publication, Papers, Conferences, Journals]
 show_related: true
 publishDate: "2023-08-10T00:00:00Z"
-layput: list
+layout: list
 ---
 <link rel="stylesheet" href="styles.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">

@@ -8,7 +8,7 @@
         "codeLink": "https://github.com/SadilKhan/DreamCAD",
         "poster": "",
         "bibtex": "@article{khan2026dreamcad,title= {DreamCAD: Scaling Multimodal CAD Generation using Differentiable Parametric Surfaces},author= {Mohammad Sadil Khan, Muhammad Usama, Rolandos Alexandros Potamias, Didier Stricker, Muhammad Zeshan Afzal, Jiankang Deng, Ismail Elezi},journal = {Arxiv},year= {2026}}",
-        "arxiv": "https://sadilkhan.github.io/dreamcad2026/",
+        "arxiv": "https://arxiv.org/abs/2603.05607",
         "video": "",
         "dataset": "https://huggingface.co/datasets/SadilKhan/CADCap-1M",
         "paperLink": "",
@@ -28,7 +28,7 @@
         "arxiv": "https://arxiv.org/pdf/2511.06194",
         "video": "",
         "dataset": "https://huggingface.co/datasets/SadilKhan/PartABC",
-        "paperLink": "",
+        "paperLink": "https://ojs.aaai.org/index.php/AAAI/article/view/37922",
         "categories": "CAD, LLM, Nurbs, Lora",
         "image": "data/nurbgen.png",
         "metadata": "First LLM-based framwork that generates editable CAD models directly from text using NURBs representation."

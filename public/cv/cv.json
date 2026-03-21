@@ -1,0 +1,75 @@
+{
+  "experience": [
+    {
+      "role": "Research Intern",
+      "org": "Huawei Noah's Ark Lab",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/04/Huawei-Logo.png",
+      "location": "London, UK",
+      "date": "May 2025 – Present",
+      "desc": "3D Reconstruction and Parametric Surface Modeling."
+    },
+    {
+      "role": "Research Assistant",
+      "org": "DFKI, RPTU",
+      "logo": "https://av.dfki.de/wp-content/themes/av-dfki/images/logo_dfki_av.png",
+      "location": "Kaiserslautern, Germany",
+      "date": "Jun 2024 – Apr 2025",
+      "desc": "Vision-Language Architectures for 3D Scene and Shape Reconstruction."
+    },
+    {
+      "role": "Student Researcher",
+      "org": "SnT, University of Luxembourg",
+      "logo": "https://www.uni.lu/wp-content/uploads/sites/9/2026/03/01193429/universite-du-luxembourg-logo.svg",
+      "location": "Kirchberg, Luxembourg",
+      "date": "Jan 2023 – Feb 2024",
+      "desc": "3D Shape Modelling with Deep Geometric-Language Models."
+    },
+    {
+      "role": "Research Intern",
+      "org": "Creatis, INSA Lyon",
+      "logo": "https://www.creatis.insa-lyon.fr/site/sites/default/files/logo-creatis_0-1.png",
+      "location": "Lyon, France",
+      "date": "Feb 2022 – Jul 2022",
+      "desc": "3D Medical Image Segmentation using Point Clouds."
+    },
+    {
+      "role": "Research Intern",
+      "org": "Laboratoire Hubert Curien, Université Jean Monnet",
+      "logo": "https://www.jobmania.fr/wp-content/uploads/2019/01/Universite-Jean-Monnet-Saint-Etienne.png",
+      "location": "Saint-Étienne, France",
+      "date": "Apr 2021 – Aug 2021",
+      "desc": "Reconstructing historical ornament vignettes under Prof. Rémi Emonet and Prof. Thierry Fournel."
+    },
+    {
+      "role": "Data Analyst Intern",
+      "org": "Accenture Digital",
+      "logo": "https://logos-world.net/wp-content/uploads/2020/06/Accenture-Emblem.png",
+      "location": "India",
+      "date": "May 2020 – Jul 2020",
+      "desc": "Intelligent Inventory Planning — automatic forecast hedging to cover demand gaps using AI."
+    }
+  ],
+  "education": [
+    {
+      "role": "PhD in Computer Science",
+      "org": "RPTU",
+      "logo": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFgVQ6hIlxSbOUTvD_X2_V_JTRvdXUTdWHtw&s",
+      "location": "Kaiserslautern, Germany",
+      "date": "2024 – Present"
+    },
+    {
+      "role": "M.Sc. Machine Learning & Data Mining",
+      "org": "Université Jean Monnet",
+      "logo": "https://www.jobmania.fr/wp-content/uploads/2019/01/Universite-Jean-Monnet-Saint-Etienne.png",
+      "location": "Saint-Étienne, France",
+      "date": "2020 – 2022"
+    },
+    {
+      "role": "B.Sc. Mathematics",
+      "org": "Ramakrishna Mission Residential College",
+      "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Emblem-Ramakrishna-Mission-Transparent.png/250px-Emblem-Ramakrishna-Mission-Transparent.png",
+      "location": "Kolkata, India",
+      "date": "2016 – 2019"
+    }
+  ]
+}
