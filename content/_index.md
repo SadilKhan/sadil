@@ -1,7 +1,6 @@
 ---
 title: "Mohammad Sadil Khan"
 subtitle: "PhD in Computer Science"
-description: "3D Reconstruction | Generative AI | Multimodal LLM"
 date: 2022-02-01
 images:
  - img/featured.jpg

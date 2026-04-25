@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Hugo: live server",
+      "type": "process",
+      "command": "${env:HOME}/Library/Application Support/Hugo/0.101.0/hugo",
+      "args": [
+        "server",
+        "-D",
+        "--disableFastRender",
+        "--navigateToChanged",
+        "--baseURL",
+        "http://localhost:1314/",
+        "--port",
+        "1314"
+      ],
+      "isBackground": true,
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Hugo: build",
+      "type": "process",
+      "command": "${env:HOME}/Library/Application Support/Hugo/0.101.0/hugo",
+      "args": [],
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    }
+  ]
+}

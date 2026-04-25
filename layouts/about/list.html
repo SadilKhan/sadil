@@ -1,201 +1,1297 @@
 {{ define "main" }}
-{{ $page := . }}
+{{ $profile := .Params.profile }}
+{{ $service := .Params.service }}
+{{ $sidebarPath := printf "/%s/%s" .Section "sidebar/index.md" }}
+{{ $sidebar := site.GetPage $sidebarPath }}
+{{ $heroVideoDarkURL := printf "/%s/assets/about_hero_dark.mp4" .Section | relURL }}
+{{ $heroVideoLightURL := printf "/%s/assets/about_hero_light.mp4" .Section | relURL }}
 
 <style>
-.page-main.ab-page {
-  padding: 0 !important;
+/* ================================================================
+   ABOUT PAGE
+   ================================================================ */
+
+.page-main.about-page {
   max-width: none !important;
-}
-.ab-outer {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 3rem 2.5rem 5rem;
-  box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 180px 1fr;
-  gap: 0 3.5rem;
-  align-items: start;
+  padding: 0 !important;
 }
 
-/* ── Left sidebar: avatar + social + links ── */
-.ab-sidebar {
+/* ── Design tokens ── */
+.about-page {
+  --c-bg:          #f8fafc;
+  --c-surface:     #ffffff;
+  --c-surface-2:   #f1f5f9;
+  --c-text:        #0f172a;
+  --c-muted:       #475569;
+  --c-faint:       #94a3b8;
+  --c-line:        rgba(15, 23, 42, 0.09);
+
+  --c-indigo:      #4f46e5;
+  --c-violet:      #7c3aed;
+  --c-teal:        #0d9488;
+  --c-emerald:     #059669;
+  --c-amber:       #d97706;
+
+  --glow-indigo:   rgba(79, 70, 229, 0.14);
+  --glow-teal:     rgba(13, 148, 136, 0.12);
+
+  --sh-sm: 0 1px 3px rgba(15,23,42,0.08), 0 1px 2px rgba(15,23,42,0.04);
+  --sh-md: 0 4px 16px rgba(15,23,42,0.09), 0 2px 4px rgba(15,23,42,0.04);
+  --sh-lg: 0 12px 36px rgba(15,23,42,0.11), 0 4px 10px rgba(15,23,42,0.06);
+
+  --r-sm:  6px;
+  --r-md:  10px;
+  --r-lg:  16px;
+
+  color: var(--c-text);
+  background: var(--c-bg);
+}
+
+.dark-mode .about-page {
+  --c-bg:          #040b18;
+  --c-surface:     #0c1628;
+  --c-surface-2:   #162038;
+  --c-text:        #e2e8f0;
+  --c-muted:       #8fa3bf;
+  --c-faint:       #5a7391;
+  --c-line:        rgba(226, 232, 240, 0.07);
+
+  --c-indigo:      #818cf8;
+  --c-violet:      #a78bfa;
+  --c-teal:        #2dd4bf;
+  --c-emerald:     #34d399;
+  --c-amber:       #fbbf24;
+
+  --glow-indigo:   rgba(129, 140, 248, 0.12);
+  --glow-teal:     rgba(45, 212, 191, 0.10);
+
+  --sh-sm: 0 1px 3px rgba(0,0,0,0.35);
+  --sh-md: 0 4px 16px rgba(0,0,0,0.40);
+  --sh-lg: 0 12px 36px rgba(0,0,0,0.50);
+}
+
+/* ── Shell ── */
+.about-shell {
+  width: min(1160px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 72px 0 100px;
+  display: grid;
+  grid-template-columns: 264px minmax(0, 1fr);
+  gap: 64px;
+  box-sizing: border-box;
+}
+
+/* ================================================================
+   SIDEBAR RAIL
+   ================================================================ */
+.about-rail {
   position: sticky;
-  top: 80px;
+  top: 96px;
+  align-self: start;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1rem;
+  gap: 26px;
 }
-.ab-avatar-frame {
+
+/* Spinning gradient avatar ring */
+.about-avatar-wrap {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: fit-content;
+  padding: 4px;
+  border-radius: 50%;
 }
-.ab-avatar-frame::before {
-  content: '';
+
+.about-avatar-ring {
   position: absolute;
-  inset: -5px;
+  inset: 0;
   border-radius: 50%;
-  background: linear-gradient(135deg, #0ea5e9, #14b8a6);
-  opacity: 0.15;
+  background: conic-gradient(
+    from 0deg,
+    var(--c-indigo),
+    var(--c-teal),
+    var(--c-emerald),
+    var(--c-violet),
+    var(--c-indigo)
+  );
+  animation: spinRing 9s linear infinite;
+  opacity: 0.72;
 }
-.ab-avatar-frame::after {
-  content: '';
-  position: absolute;
-  bottom: 5px; right: 5px;
-  width: 13px; height: 13px;
-  border-radius: 50%;
-  background: #22c55e;
-  border: 2px solid white;
-  z-index: 2;
+
+.dark-mode .about-page .about-avatar-ring {
+  opacity: 0.9;
 }
-.ab-avatar-frame img {
-  width: 140px; height: 140px;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
+
+@keyframes spinRing {
+  to { transform: rotate(360deg); }
+}
+
+.about-photo {
   position: relative;
   z-index: 1;
-  border: 2px solid rgba(14,165,233,0.2);
-}
-/* Social links — override Apero's default vertical stacking */
-.ab-sidebar .site-social-links {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
-  gap: 0.3rem !important;
-}
-.ab-sidebar .site-social-links a {
-  width: 28px !important; height: 28px !important;
-  border-radius: 7px !important;
-  border: 1px solid rgba(128,128,128,0.15) !important;
-  display: flex !important; align-items: center !important; justify-content: center !important;
-  font-size: 0.68rem !important;
-  opacity: 0.82 !important;
-  transition: opacity 0.18s, color 0.18s, border-color 0.18s, transform 0.18s !important;
-}
-.ab-sidebar .site-social-links a:hover {
-  opacity: 1 !important;
-  color: #0ea5e9 !important;
-  border-color: rgba(14,165,233,0.3) !important;
-  transform: translateY(-2px) !important;
+  width: 150px;
+  height: 150px;
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid var(--c-bg);
+  box-shadow: var(--sh-md);
 }
 
-/* Link list */
-.ab-linklist {
-  width: 100%;
-  margin-top: 0.5rem;
+/* Name / role */
+.about-rail-name {
+  margin: 0;
+  font-size: 1.08rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
 }
-.ab-linklist-title {
-  font-size: 0.6rem;
-  font-weight: 700;
-  letter-spacing: 0.15em;
+
+.about-rail-role {
+  margin: 6px 0 0;
+  color: var(--c-muted);
+  font-size: 0.84rem;
+  line-height: 1.6;
+}
+
+/* Social icons */
+.about-social .social-icon-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.about-social .social-icon-links a {
+  width: 36px !important;
+  height: 36px !important;
+  margin: 0 !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: var(--c-surface);
+  color: var(--c-muted) !important;
+  box-shadow: var(--sh-sm);
+  transition: color 200ms, border-color 200ms, transform 200ms, box-shadow 200ms;
+}
+
+.about-social .social-icon-links a:hover {
+  color: var(--c-indigo) !important;
+  border-color: var(--c-indigo);
+  transform: translateY(-3px);
+  box-shadow: 0 0 0 3px var(--glow-indigo), var(--sh-sm);
+}
+
+/* Quick links */
+.about-link-label {
+  margin: 0 0 8px;
+  color: var(--c-faint);
+  font-size: 0.7rem;
+  font-weight: 800;
   text-transform: uppercase;
-  opacity: 0.95;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  letter-spacing: 0.09em;
 }
-.ab-linklist ul {
-  list-style: none !important;
-  padding: 0 !important; margin: 0 !important;
-  display: flex; flex-direction: column; gap: 0.1rem;
+
+.about-link-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.ab-linklist ul li {
-  padding: 0 !important; border: none !important;
+
+.about-link-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 9px 11px;
+  border-radius: var(--r-md);
+  color: var(--c-muted);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 180ms, color 180ms, transform 180ms;
 }
-.ab-linklist ul li a {
-  display: flex; align-items: center; gap: 0.4rem;
-  padding: 0.35rem 0.5rem;
-  border-radius: 7px;
-  font-size: 0.75rem; font-weight: 500;
-  color: inherit; text-decoration: none;
-  opacity: 0.98;
-  transition: opacity 0.18s, background 0.18s, color 0.18s;
-  border: none !important;
+
+.about-link-list a:hover {
+  background: var(--c-surface-2);
+  color: var(--c-indigo);
+  transform: translateX(3px);
 }
-.ab-linklist ul li a:hover {
+
+.about-link-list .lnk-arrow {
+  font-size: 0.68rem;
+  opacity: 0.45;
+  transition: opacity 180ms, transform 180ms;
+}
+
+.about-link-list a:hover .lnk-arrow {
   opacity: 1;
-  background: rgba(14,165,233,0.07);
-  color: #0ea5e9;
+  transform: translateX(2px);
 }
-.ab-linklist ul li a i { font-size: 0.52rem; opacity: 0.5; }
 
-/* ── Right: full about content ── */
-.ab-content { min-width: 0; }
+/* ================================================================
+   MAIN CONTENT
+   ================================================================ */
+.about-main { min-width: 0; }
 
-/* Responsive */
-@media (max-width: 860px) {
-  .ab-outer {
+/* ── Hero ── */
+.about-hero {
+  position: relative;
+  min-height: 560px;
+  padding: clamp(46px, 6vw, 78px);
+  border: 1px solid rgba(226, 232, 240, 0.10);
+  border-radius: 28px;
+  overflow: hidden;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background:
+    radial-gradient(circle at 76% 20%, rgba(45, 212, 191, 0.22), transparent 34%),
+    radial-gradient(circle at 18% 78%, rgba(129, 140, 248, 0.18), transparent 38%),
+    #030712;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+}
+
+.about-hero-media,
+.about-hero-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.about-hero-media {
+  z-index: 0;
+  background: #030712;
+}
+
+.about-hero-video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  opacity: 0.78;
+  filter: saturate(1.08) contrast(1.08);
+}
+
+.about-hero-video-dark {
+  display: none;
+}
+
+.dark-mode .about-page .about-hero-video-light {
+  display: none;
+}
+
+.dark-mode .about-page .about-hero-video-dark {
+  display: block;
+}
+
+.about-hero-overlay {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(3, 7, 18, 0.92) 0%, rgba(3, 7, 18, 0.66) 48%, rgba(3, 7, 18, 0.26) 100%),
+    linear-gradient(0deg, rgba(3, 7, 18, 0.82) 0%, rgba(3, 7, 18, 0.22) 52%, rgba(3, 7, 18, 0.62) 100%);
+}
+
+/* Decorative ambient blobs */
+.about-hero-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+}
+
+.about-hero-blob-a {
+  top: -60px; right: -80px;
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, var(--glow-indigo) 0%, transparent 70%);
+}
+
+.about-hero-blob-b {
+  bottom: 0; left: -60px;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, var(--glow-teal) 0%, transparent 70%);
+}
+
+.about-hero > *:not(.about-hero-media):not(.about-hero-overlay):not(.about-hero-blob) {
+  position: relative;
+  z-index: 3;
+}
+
+/* Kicker badge */
+.about-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px;
+  padding: 5px 14px;
+  border: 1px solid rgba(13, 148, 136, 0.22);
+  border-radius: 999px;
+  color: var(--c-teal);
+  background: rgba(13, 148, 136, 0.06);
+  font-size: 0.79rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.about-kicker-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-teal);
+  flex-shrink: 0;
+  animation: dotPulse 2.2s ease infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1);   }
+  50%       { opacity: 0.45; transform: scale(0.75); }
+}
+
+/* Animated gradient headline */
+.about-title {
+  margin: 0;
+  font-size: clamp(2rem, 3.8vw, 3.1rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.about-title-grad {
+  display: inline;
+  background: linear-gradient(
+    130deg,
+    var(--c-indigo)  0%,
+    var(--c-violet)  40%,
+    var(--c-teal)    100%
+  );
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradShift 7s ease infinite;
+}
+
+@keyframes gradShift {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
+}
+
+.about-summary {
+  max-width: 680px;
+  margin: 22px 0 0;
+  color: var(--c-muted);
+  font-size: 1.04rem;
+  line-height: 1.78;
+}
+
+.about-hero .about-kicker {
+  width: fit-content;
+  border-color: rgba(45, 212, 191, 0.34);
+  color: #7dd3fc;
+  background: rgba(8, 47, 73, 0.34);
+  backdrop-filter: blur(14px);
+}
+
+.about-hero .about-title {
+  max-width: 760px;
+  font-size: clamp(2.35rem, 5vw, 4.8rem);
+  letter-spacing: -0.045em;
+}
+
+.about-hero .about-title-grad {
+  background: linear-gradient(120deg, #ffffff 0%, #a5f3fc 42%, #c4b5fd 100%);
+  background-size: 220% 220%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about-hero .about-summary {
+  max-width: 640px;
+  color: rgba(226, 232, 240, 0.78);
+  text-shadow: 0 1px 18px rgba(0,0,0,0.34);
+}
+
+.about-hero .about-chip,
+.about-hero .about-action,
+.about-hero .about-stat {
+  border-color: rgba(226, 232, 240, 0.13);
+  background: rgba(15, 23, 42, 0.38);
+  color: rgba(226, 232, 240, 0.84);
+  backdrop-filter: blur(16px);
+}
+
+.about-hero .about-chip:hover,
+.about-hero .about-action:hover,
+.about-hero .about-stat:hover {
+  border-color: rgba(45, 212, 191, 0.38);
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.12), 0 14px 34px rgba(0,0,0,0.20);
+}
+
+.about-hero .about-action-primary {
+  background: linear-gradient(135deg, #2563eb 0%, #14b8a6 100%);
+  color: #fff;
+}
+
+.about-hero .about-stat {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.about-hero .about-stat-label {
+  color: rgba(203, 213, 225, 0.72);
+}
+
+/* Affiliation chips */
+.about-affiliations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.about-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 12px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  color: var(--c-muted);
+  background: var(--c-surface);
+  font-size: 0.83rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--sh-sm);
+  transition: transform 180ms, border-color 180ms, color 180ms, box-shadow 180ms;
+}
+
+.about-chip:hover {
+  transform: translateY(-2px);
+  border-color: var(--c-teal);
+  color: var(--c-teal);
+  box-shadow: 0 0 0 3px var(--glow-teal), var(--sh-sm);
+}
+
+/* Action buttons */
+.about-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.about-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  color: var(--c-text);
+  background: var(--c-surface);
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: var(--sh-sm);
+  transition: transform 200ms, border-color 200ms, box-shadow 200ms;
+}
+
+.about-action:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-indigo);
+  box-shadow: 0 0 0 3px var(--glow-indigo), var(--sh-md);
+}
+
+.about-action-primary {
+  background: linear-gradient(135deg, var(--c-indigo) 0%, var(--c-violet) 100%);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.38);
+}
+
+.about-action-primary:hover {
+  border-color: transparent;
+  box-shadow: 0 6px 22px rgba(79, 70, 229, 0.55), 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+/* Stats row */
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.about-stat {
+  position: relative;
+  padding: 18px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  box-shadow: var(--sh-sm);
+  overflow: hidden;
+  transition: transform 200ms, box-shadow 200ms, border-color 200ms;
+}
+
+.about-stat::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--c-indigo), var(--c-teal));
+}
+
+.about-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--sh-md);
+  border-color: rgba(79, 70, 229, 0.2);
+}
+
+.about-stat-value {
+  display: block;
+  background: linear-gradient(135deg, var(--c-indigo), var(--c-teal));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.65rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.about-stat-label {
+  display: block;
+  margin-top: 8px;
+  color: var(--c-muted);
+  font-size: 0.83rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+/* ── Section wrapper ── */
+.about-section { margin-top: 54px; }
+
+.about-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.about-section-title {
+  margin: 0;
+  font-size: 1.22rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.about-section-note {
+  margin: 0;
+  color: var(--c-faint);
+  font-size: 0.84rem;
+}
+
+/* ── Research cards ── */
+.about-research-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.about-card {
+  position: relative;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  overflow: hidden;
+  box-shadow: var(--sh-sm);
+  transition: border-color 220ms, box-shadow 220ms, transform 220ms;
+}
+
+.about-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(140deg, var(--glow-indigo) 0%, transparent 55%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms;
+}
+
+.about-card:hover,
+.about-card[open] {
+  border-color: rgba(79, 70, 229, 0.28);
+  box-shadow: var(--sh-md);
+}
+
+.about-card:hover { transform: translateY(-2px); }
+
+.about-card:hover::after,
+.about-card[open]::after { opacity: 1; }
+
+.about-card summary {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 16px;
+  gap: 14px;
+  align-items: center;
+  padding: 20px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.about-card summary::-webkit-details-marker { display: none; }
+
+.about-card-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  color: var(--c-indigo);
+  background: var(--c-surface-2);
+  font-size: 1.05rem;
+  transition: background 200ms, border-color 200ms;
+}
+
+.about-card:hover .about-card-icon,
+.about-card[open] .about-card-icon {
+  background: var(--glow-indigo);
+  border-color: rgba(79, 70, 229, 0.22);
+}
+
+.about-card-title {
+  display: block;
+  font-size: 0.97rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.about-card-text {
+  display: block;
+  margin-top: 5px;
+  color: var(--c-muted);
+  font-size: 0.83rem;
+  line-height: 1.5;
+}
+
+.about-card-arrow {
+  position: relative; z-index: 1;
+  color: var(--c-faint);
+  font-size: 0.78rem;
+  transition: transform 220ms, color 220ms;
+}
+
+.about-card[open] .about-card-arrow {
+  color: var(--c-indigo);
+  transform: rotate(90deg);
+}
+
+.about-card-body {
+  position: relative; z-index: 1;
+  padding: 0 20px 20px 78px;
+  border-top: 1px solid var(--c-line);
+}
+
+/* Publication list inside cards */
+.about-pub-list {
+  margin: 0; padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-pub-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.about-pub-list li:last-child { border-bottom: none; padding-bottom: 0; }
+.about-pub-list li:first-child { padding-top: 12px; }
+
+.about-pub-list a {
+  color: var(--c-text);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 180ms;
+}
+
+.about-pub-list a:hover { color: var(--c-indigo); }
+
+.about-pub-detail {
+  display: block;
+  margin-top: 3px;
+  color: var(--c-muted);
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+
+.about-venue {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 1px;
+  padding: 4px 8px;
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  border-radius: var(--r-sm);
+  color: var(--c-teal);
+  background: rgba(13, 148, 136, 0.06);
+  font-size: 0.71rem;
+  font-weight: 800;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.about-empty {
+  margin: 12px 0 0;
+  color: var(--c-faint);
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+/* ── Academic Service ── */
+.about-service-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.about-service-block {
+  padding: 20px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  box-shadow: var(--sh-sm);
+  transition: border-color 200ms, box-shadow 200ms, transform 200ms;
+}
+
+.about-service-block:hover {
+  border-color: rgba(79, 70, 229, 0.18);
+  box-shadow: var(--sh-md);
+  transform: translateY(-2px);
+}
+
+.about-block-label {
+  margin: 0 0 12px;
+  color: var(--c-faint);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+}
+
+.about-review-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.about-review-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-sm);
+  color: var(--c-muted);
+  background: var(--c-surface-2);
+  font-size: 0.79rem;
+  font-weight: 700;
+  transition: border-color 180ms, color 180ms, transform 180ms;
+}
+
+.about-review-chip:hover {
+  border-color: var(--c-violet);
+  color: var(--c-violet);
+  transform: translateY(-1px);
+}
+
+.about-mini-list {
+  margin: 0; padding: 0;
+  list-style: none;
+}
+
+.about-mini-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid var(--c-line);
+}
+
+.about-mini-list li:last-child { border-bottom: none; padding-bottom: 0; }
+.about-mini-list li:first-child { padding-top: 0; }
+
+.about-mini-title {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.about-mini-detail {
+  display: block;
+  margin-top: 3px;
+  color: var(--c-muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+/* ── Events timeline ── */
+.about-events {
+  position: relative;
+  margin: 0; padding: 0;
+  list-style: none;
+}
+
+.about-events::before {
+  content: "";
+  position: absolute;
+  left: 88px;
+  top: 10px; bottom: 10px;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--c-line) 12%,
+    var(--c-line) 88%,
+    transparent
+  );
+}
+
+.about-event {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 0 28px;
+  padding: 18px 0;
+  position: relative;
+}
+
+.about-event::before {
+  content: "";
+  position: absolute;
+  left: 88px;
+  top: 24px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--c-indigo), var(--c-teal));
+  transform: translateX(-4.5px);
+  box-shadow: 0 0 0 3px var(--c-bg), 0 0 0 5px var(--glow-indigo);
+  z-index: 1;
+}
+
+.about-event-date {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding-top: 4px;
+  color: var(--c-amber);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.about-event-text {
+  margin: 0;
+  color: var(--c-muted);
+  font-size: 0.93rem;
+  line-height: 1.68;
+}
+
+.about-event-text a {
+  color: var(--c-indigo);
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 180ms;
+}
+
+.about-event-text a:hover { color: var(--c-violet); }
+
+/* ================================================================
+   ANIMATIONS
+   ================================================================ */
+
+/* Entry animations for above-fold elements */
+@keyframes aEnter {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.a-in-1 { animation: aEnter 620ms cubic-bezier(0.22,1,0.36,1) both; }
+.a-in-2 { animation: aEnter 620ms cubic-bezier(0.22,1,0.36,1) 110ms both; }
+.a-in-3 { animation: aEnter 620ms cubic-bezier(0.22,1,0.36,1) 220ms both; }
+
+/* Scroll-reveal for below-fold sections */
+.sr {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 640ms cubic-bezier(0.22,1,0.36,1),
+              transform 640ms cubic-bezier(0.22,1,0.36,1);
+}
+
+.sr.sr-d1 { transition-delay: 80ms;  }
+.sr.sr-d2 { transition-delay: 160ms; }
+.sr.sr-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (max-width: 960px) {
+  .about-shell {
     grid-template-columns: 1fr;
-    padding: 2rem 1.5rem 4rem;
-    gap: 2rem;
+    gap: 32px;
+    padding-top: 40px;
   }
-  .ab-sidebar {
+
+  .about-hero {
+    min-height: 520px;
+  }
+
+  /* Rail becomes a 2-col grid: [avatar | name/role] then full-width rows */
+  .about-rail {
     position: static;
-    flex-direction: row;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto;
+    column-gap: 20px;
+    row-gap: 18px;
+    align-items: start;
   }
-  .ab-avatar-frame { width: 90px; height: 90px; }
-  .ab-avatar-frame img { width: 90px; height: 90px; }
-  .ab-linklist { display: none; }
+
+  /* Row 1: avatar */
+  .about-avatar-wrap { grid-column: 1; grid-row: 1; }
+
+  /* Row 1: name + role alongside avatar */
+  .about-rail-info { grid-column: 2; grid-row: 1; align-self: center; }
+
+  /* Row 2: social — spans both columns */
+  .about-social { grid-column: 1 / -1; grid-row: 2; }
+
+  /* Row 3: quick links — spans both columns */
+  .about-link-list-wrap { grid-column: 1 / -1; grid-row: 3; }
+
+  .about-photo { width: 88px; height: 88px; }
+}
+
+@media (max-width: 700px) {
+  .about-shell {
+    width: calc(100% - 32px);
+    padding: 32px 0 64px;
+  }
+
+  .about-photo { width: 72px; height: 72px; }
+  .about-title { font-size: 1.82rem; }
+  .about-hero {
+    min-height: 560px;
+    padding: 34px 22px;
+    border-radius: 22px;
+  }
+  .about-hero-overlay {
+    background:
+      linear-gradient(90deg, rgba(3, 7, 18, 0.94), rgba(3, 7, 18, 0.60)),
+      linear-gradient(0deg, rgba(3, 7, 18, 0.86), rgba(3, 7, 18, 0.34));
+  }
+  .about-hero .about-title {
+    font-size: clamp(2.18rem, 13vw, 3.25rem);
+  }
+  .about-hero .about-summary {
+    font-size: 0.96rem;
+    line-height: 1.68;
+  }
+
+  .about-stats,
+  .about-research-grid,
+  .about-service-grid { grid-template-columns: 1fr; }
+
+  .about-section-head { display: block; }
+  .about-section-note { margin-top: 6px; }
+
+  .about-card summary {
+    grid-template-columns: 40px minmax(0, 1fr) 14px;
+    padding: 16px;
+  }
+
+  .about-card-icon { width: 40px; height: 40px; }
+  .about-card-body { padding: 0 16px 16px; }
+  .about-pub-list li { grid-template-columns: 1fr; gap: 5px; }
+  .about-venue { width: fit-content; }
+
+  .about-events::before { left: 76px; }
+  .about-event { grid-template-columns: 84px minmax(0, 1fr); gap: 0 20px; }
+  .about-event::before { left: 76px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-avatar-ring,
+  .about-kicker-dot,
+  .about-title-grad    { animation: none; }
+  .about-hero-video    { display: none; }
+  .a-in-1, .a-in-2, .a-in-3 { animation: none; }
+  .sr                  { opacity: 1; transform: none; transition: none; }
+  .about-card,
+  .about-action,
+  .about-chip,
+  .about-stat,
+  .about-service-block,
+  .about-social .social-icon-links a,
+  .about-link-list a   { transition: none; }
 }
 </style>
 
-<main class="page-main ab-page" role="main">
-<div class="ab-outer">
+<main class="page-main about-page" role="main">
+  <div class="about-shell">
 
-  {{/* ── LEFT SIDEBAR ── */}}
-  {{ $sidebar := printf "/%s/%s" .Section "sidebar/index.md" }}
-  {{ $sidebar_pg := site.GetPage $sidebar }}
-  {{ with $sidebar_pg }}
-  <aside class="ab-sidebar">
+    {{/* ── SIDEBAR ── */}}
+    {{ with $sidebar }}
+    <aside class="about-rail a-in-1" aria-label="Profile sidebar">
 
-    {{/* Avatar */}}
-    <div class="ab-avatar-frame">
-      {{ if .Params.avatar_shape }}
-        {{- $avatar := (.Resources.ByType "image").GetMatch "*avatar*" -}}
-        {{ with $avatar }}
-          <img src="{{ .RelPermalink }}" alt="{{ $sidebar_pg.Params.author }}">
-        {{ end }}
+      {{ $avatar := (.Resources.ByType "image").GetMatch "*avatar*" }}
+      {{ with $avatar }}
+      <div class="about-avatar-wrap" aria-hidden="true">
+        <div class="about-avatar-ring"></div>
+        <img class="about-photo" src="{{ .RelPermalink }}" alt="{{ $sidebar.Params.author }}">
+      </div>
       {{ end }}
-    </div>
 
-    {{/* Social */}}
-    {{ if .Params.show_social_links }}
-    <div class="site-social-links">
-      {{ partial "shared/social-links.html" . }}
-    </div>
+      <div class="about-rail-info">
+        <p class="about-rail-name">{{ .Params.author }}</p>
+        <p class="about-rail-role">{{ .Params.role }}</p>
+      </div>
+
+      {{ if .Params.show_social_links }}
+      <div class="about-social">
+        {{ partial "shared/social-links.html" . }}
+      </div>
+      {{ end }}
+
+      {{ if .Params.link_list }}
+      <div class="about-link-list-wrap">
+        <p class="about-link-label">{{ .Params.link_list_label | default "Quick links" }}</p>
+        <nav class="about-link-list" aria-label="{{ .Params.link_list_label | default "Quick links" }}">
+          {{ range .Params.link_list }}
+            {{ $link := .url }}
+            {{ $scheme := (urls.Parse $link).Scheme }}
+            <a href="{{ $link | safeURL }}" {{ if in (slice "http" "https") $scheme }}target="_blank" rel="noopener"{{ end }}>
+              <span>{{ .name }}</span>
+              <i class="fa-solid fa-arrow-right lnk-arrow" aria-hidden="true"></i>
+            </a>
+          {{ end }}
+        </nav>
+      </div>
+      {{ end }}
+
+    </aside>
     {{ end }}
 
-    {{/* Link list */}}
-    {{ if .Params.link_list }}
-    <div class="ab-linklist">
-      <div class="ab-linklist-title">{{ .Params.link_list_label | default "Links" }}</div>
-      <ul>
-        {{ range .Params.link_list }}
-        <li>
-          <a href="{{ .url }}" target="_blank">
-            <i class="fa-solid fa-arrow-up-right-from-square"></i>{{ .name }}
-          </a>
-        </li>
+    {{/* ── MAIN ── */}}
+    <div class="about-main">
+
+      {{/* Hero */}}
+      <section class="about-hero a-in-2" aria-labelledby="about-heading">
+        <div class="about-hero-media" aria-hidden="true">
+          <video class="about-hero-video about-hero-video-light" autoplay muted loop playsinline preload="metadata">
+            <source src="{{ $heroVideoLightURL }}" type="video/mp4">
+          </video>
+          <video class="about-hero-video about-hero-video-dark" autoplay muted loop playsinline preload="metadata">
+            <source src="{{ $heroVideoDarkURL }}" type="video/mp4">
+          </video>
+        </div>
+        <div class="about-hero-overlay" aria-hidden="true"></div>
+        <div class="about-hero-blob about-hero-blob-a" aria-hidden="true"></div>
+        <div class="about-hero-blob about-hero-blob-b" aria-hidden="true"></div>
+
+        {{ with $profile.eyebrow }}
+        <p class="about-kicker">
+          <span class="about-kicker-dot" aria-hidden="true"></span>
+          {{ . }}
+        </p>
         {{ end }}
-      </ul>
+
+        <h1 id="about-heading" class="about-title">
+          <span class="about-title-grad">{{ $profile.title | default $profile.name }}</span>
+        </h1>
+
+        {{ with $profile.summary }}
+        <p class="about-summary">{{ . }}</p>
+        {{ end }}
+
+        {{ with $profile.affiliations }}
+        <div class="about-affiliations" aria-label="Affiliations">
+          {{ range . }}
+          <a class="about-chip" href="{{ .url | safeURL }}" target="_blank" rel="noopener">
+            <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+            {{ .label }}
+          </a>
+          {{ end }}
+        </div>
+        {{ end }}
+
+        {{ with $profile.actions }}
+        <div class="about-actions" aria-label="Primary links">
+          {{ range . }}
+          <a class="about-action{{ if eq .style "primary" }} about-action-primary{{ end }}" href="{{ .url | relURL }}">
+            <i class="fa-solid {{ .icon }}" aria-hidden="true"></i>
+            {{ .label }}
+          </a>
+          {{ end }}
+        </div>
+        {{ end }}
+
+        {{ with $profile.stats }}
+        <div class="about-stats" aria-label="Research focus areas">
+          {{ range . }}
+          <div class="about-stat">
+            <span class="about-stat-value">{{ .value }}</span>
+            <span class="about-stat-label">{{ .label }}</span>
+          </div>
+          {{ end }}
+        </div>
+        {{ end }}
+      </section>
+
+      {{/* Research areas */}}
+      {{ with .Params.research }}
+      <section class="about-section sr" aria-labelledby="about-research-h">
+        <div class="about-section-head">
+          <h2 id="about-research-h" class="about-section-title">Research Areas</h2>
+          <p class="about-section-note">Tap to expand with selected work.</p>
+        </div>
+        <div class="about-research-grid">
+          {{ range $i, $item := . }}
+          <details class="about-card" {{ if eq $i 0 }}open{{ end }}>
+            <summary>
+              <span class="about-card-icon" aria-hidden="true">
+                <i class="fa-solid {{ $item.icon }}"></i>
+              </span>
+              <span>
+                <span class="about-card-title">{{ $item.title }}</span>
+                <span class="about-card-text">{{ $item.summary }}</span>
+              </span>
+              <i class="fa-solid fa-chevron-right about-card-arrow" aria-hidden="true"></i>
+            </summary>
+            <div class="about-card-body">
+              {{ if $item.publications }}
+              <ul class="about-pub-list">
+                {{ range $item.publications }}
+                <li>
+                  <span>
+                    <a href="{{ .url | safeURL }}" target="_blank" rel="noopener">{{ .title }}</a>
+                    <span class="about-pub-detail">{{ .detail }}</span>
+                  </span>
+                  <span class="about-venue">{{ .venue }}</span>
+                </li>
+                {{ end }}
+              </ul>
+              {{ else }}
+              <p class="about-empty">Work in progress.</p>
+              {{ end }}
+            </div>
+          </details>
+          {{ end }}
+        </div>
+      </section>
+      {{ end }}
+
+      {{/* Academic service */}}
+      {{ with $service }}
+      <section class="about-section sr sr-d1" aria-labelledby="about-service-h">
+        <div class="about-section-head">
+          <h2 id="about-service-h" class="about-section-title">Academic Service</h2>
+        </div>
+        <div class="about-service-grid">
+
+          {{ with .reviewers }}
+          <div class="about-service-block">
+            <p class="about-block-label">Reviewer</p>
+            <div class="about-review-list">
+              {{ range . }}<span class="about-review-chip">{{ . }}</span>{{ end }}
+            </div>
+          </div>
+          {{ end }}
+
+          {{ with .teaching }}
+          <div class="about-service-block">
+            <p class="about-block-label">Teaching</p>
+            <ul class="about-mini-list">
+              {{ range . }}
+              <li>
+                <span class="about-mini-title">{{ .title }}</span>
+                <span class="about-mini-detail">{{ .detail }}</span>
+              </li>
+              {{ end }}
+            </ul>
+          </div>
+          {{ end }}
+
+          {{ with .students }}
+          <div class="about-service-block">
+            <p class="about-block-label">Mentored Students</p>
+            <ul class="about-mini-list">
+              {{ range . }}
+              <li>
+                <span class="about-mini-title">{{ .name }}</span>
+                <span class="about-mini-detail">{{ .detail }}</span>
+              </li>
+              {{ end }}
+            </ul>
+          </div>
+          {{ end }}
+
+        </div>
+      </section>
+      {{ end }}
+
+      {{/* Events timeline */}}
+      {{ with .Params.events }}
+      <section class="about-section sr sr-d2" aria-labelledby="about-events-h">
+        <div class="about-section-head">
+          <h2 id="about-events-h" class="about-section-title">Recent Events</h2>
+        </div>
+        <ul class="about-events">
+          {{ range $ev := . }}
+          <li class="about-event">
+            <span class="about-event-date">{{ $ev.date }}</span>
+            <p class="about-event-text">
+              {{ $ev.text }}
+              {{ with $ev.url }}<a href="{{ . | safeURL }}" target="_blank" rel="noopener">{{ $ev.link_label | default "Read more" }}</a>{{ end }}
+            </p>
+          </li>
+          {{ end }}
+        </ul>
+      </section>
+      {{ end }}
+
     </div>
-    {{ end }}
-
-  </aside>
-  {{ end }}
-
-  {{/* ── RIGHT: render header/index.md content directly ── */}}
-  <div class="ab-content">
-    {{ $header := printf "/%s/%s" .Section "header/index.md" }}
-    {{ with site.GetPage $header }}
-      {{ .Content }}
-    {{ end }}
   </div>
-
-</div>
 </main>
+
+<script>
+(function () {
+  var els = document.querySelectorAll('.sr');
+  if (!els.length || !('IntersectionObserver' in window)) {
+    els.forEach(function(el) { el.classList.add('sr-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('sr-visible');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
 {{ end }}
