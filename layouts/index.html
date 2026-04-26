@@ -29,6 +29,13 @@
   --gshine: rgba(255,255,255,0.20);
 }
 
+html,
+body,
+.grid-container.home {
+  background: #0d1117 !important;
+  color: #fff !important;
+}
+
 /* ── Root wrapper ──────────────────────────────────────────── */
 .hp {
   font-family: 'DM Sans', sans-serif;
@@ -36,6 +43,7 @@
   grid-column: 1 / -1;
   position: relative;
   overflow-x: hidden;
+  color: #fff;
 }
 
 /* ── Neural BG ─────────────────────────────────────────────── */
@@ -388,7 +396,7 @@
 }
 .hp-stat {
   padding: 1.4rem 1.5rem; text-align: center;
-  color: #0f1c2e;
+  color: #fff;
   border: 1px solid var(--gbdr); border-radius: 16px;
   background: linear-gradient(160deg, rgba(255,255,255,0.08) 0%, rgba(14,165,233,0.04) 100%);
   backdrop-filter: blur(24px) saturate(180%);
@@ -430,7 +438,7 @@
 .hp-card {
   display: flex; align-items: flex-start; gap: 1rem;
   padding: 1.25rem 1.3rem; border: 1px solid var(--gbdr); border-radius: 16px;
-  text-decoration: none !important; color: #0f1c2e !important;
+  text-decoration: none !important; color: #fff !important;
   background: linear-gradient(160deg, rgba(255,255,255,0.08) 0%, rgba(14,165,233,0.04) 100%);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
@@ -471,50 +479,6 @@
 .hp-card-arr { font-size: 0.6rem; color: var(--a); margin-left: auto; opacity: 0; transition: opacity 0.2s, transform 0.2s; }
 .hp-card:hover .hp-card-arr { opacity: 1; transform: translateX(3px); }
 .hp-card-sub { font-size: 0.73rem; opacity: 0.55; line-height: 1.5; }
-
-/* ── Light mode overrides ──────────────────────────────────── */
-@media (prefers-color-scheme: light) {
-  :root {
-    --glass:  rgba(255,255,255,0.72);
-    --gbdr:   rgba(0,0,0,0.12);
-    --gshine: rgba(255,255,255,0.90);
-    --abg:    rgba(14,165,233,0.10);
-    --abdr:   rgba(14,165,233,0.35);
-    --aglow:  rgba(14,165,233,0.18);
-  }
-  .hp-stat,
-  .hp-card {
-    background: rgba(255,255,255,0.72) !important;
-    border-color: rgba(0,0,0,0.12) !important;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.95) inset, 0 8px 32px rgba(0,0,0,0.10) !important;
-  }
-  /* carousel stays dark in light mode — animations need a dark viewport */
-  .hp-anim-carousel {
-    background: rgba(6,14,30,0.92) !important;
-    border-color: rgba(255,255,255,0.10) !important;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.08) inset, 0 20px 60px rgba(0,0,0,0.55) !important;
-  }
-  .hp-stat:hover,
-  .hp-card:hover {
-    background: rgba(14,165,233,0.10) !important;
-    border-color: rgba(14,165,233,0.35) !important;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.95) inset, 0 16px 48px rgba(0,0,0,0.14), 0 0 0 1px rgba(14,165,233,0.30) !important;
-  }
-  .hp-anim-nav {
-    background: rgba(6,14,30,0.72) !important;
-    border-color: rgba(255,255,255,0.14) !important;
-    color: rgba(255,255,255,0.75) !important;
-  }
-  .hp-social a {
-    border-color: rgba(0,0,0,0.12) !important;
-    box-shadow: none !important;
-  }
-  .hp-btn-out {
-    background: rgba(255,255,255,0.72) !important;
-    border-color: rgba(0,0,0,0.14) !important;
-    box-shadow: 0 1px 0 rgba(255,255,255,0.95) inset !important;
-  }
-}
 
 /* ── Animations ────────────────────────────────────────────── */
 @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
@@ -571,7 +535,12 @@
     rgba(0,0,0,0.15),
     rgba(0,0,0,0.55)
   );
-  z-index: -1;
+  pointer-events: none;
+  z-index: 0;
+}
+.hp > * {
+  position: relative;
+  z-index: 1;
 }
 </style>
 
