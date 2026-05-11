@@ -81,6 +81,7 @@ research:
 
 service:
   reviewers:
+    - "NeurIPS'26"
     - "ICML '26"
     - "ECCV '26"
     - "CVPR '26"
