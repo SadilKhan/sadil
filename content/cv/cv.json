@@ -1,6 +1,14 @@
 {
   "experience": [
     {
+      "role": "Research Scientist",
+      "org": "Spectral Labs",
+      "logo": "spectral.png",
+      "location": "San Fransisco, USA",
+      "date": "May 2026 – ",
+      "desc": "Foundation Model for CAD and 3D Design."
+    },
+    {
       "role": "Research Intern",
       "org": "Huawei Noah's Ark Lab",
       "logo": "https://logos-world.net/wp-content/uploads/2020/04/Huawei-Logo.png",

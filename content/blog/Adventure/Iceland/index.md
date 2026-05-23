@@ -9,6 +9,7 @@ commentable: true
 layout: single-post
 show-related: true
 show_post_thumbnail: true
+custom_hero: true
 ---
 
 <link rel="stylesheet" href="iceland.css">

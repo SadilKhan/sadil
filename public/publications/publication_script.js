@@ -4,6 +4,24 @@
    ============================================================ */
 let publications = [];
 let chartInstances = {};
+let activeFilter = 'all';
+
+function esc(value) {
+  return String(value || '').replace(/[&<>"']/g, function(char) {
+    return ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    })[char];
+  });
+}
+
+function attr(value) {
+  return esc(value).replace(/`/g, '&#96;');
+}
+
 function loadChartJs(callback) {
   if (window.Chart && window.ChartDataLabels) { callback(); return; }
   const s = document.createElement('script');
@@ -68,6 +86,7 @@ const PALETTE = [
 function buildStatsPanel(pubs) {
   const existing = document.getElementById('stats-panel');
   if (existing) existing.remove();
+  const mount = document.getElementById('pub-stats-zone');
   const total   = pubs.length;
   const years   = [...new Set(pubs.map(function(p) { return p.year; }))].length;
   const venues  = [...new Set(pubs.map(function(p) { return cleanVenue(p.conference); }))].length;
@@ -76,8 +95,12 @@ function buildStatsPanel(pubs) {
   panel.id = 'stats-panel';
   panel.innerHTML =
     '<div class="stats-header">' +
-      '<button class="stats-toggle" id="statsToggleBtn" onclick="toggleStats()">' +
-        '<i class="fa-solid fa-chart-bar"></i> Research Stats' +
+      '<div>' +
+        '<p class="stats-eyebrow">Research Stats</p>' +
+        '<h2 class="stats-title">Publication Overview</h2>' +
+      '</div>' +
+      '<button class="stats-toggle" id="statsToggleBtn" onclick="toggleStats()" aria-expanded="false" aria-controls="statsBody">' +
+        '<i class="fa-solid fa-chart-bar"></i> Details' +
         '<span class="stats-toggle-arrow" id="statsArrow" style="transform:rotate(0deg);">&#9662;</span>' +
       '</button>' +
     '</div>' +
@@ -95,14 +118,21 @@ function buildStatsPanel(pubs) {
         '<div class="chart-card"><div class="chart-card-title">Co-author Frequency</div><div class="chart-wrap"><canvas id="chartCoauth"></canvas></div></div>' +
       '</div>' +
     '</div>';
-  const list = document.getElementById('publication-list');
-  list.parentNode.insertBefore(panel, list);
+  if (mount) {
+    mount.innerHTML = '';
+    mount.appendChild(panel);
+  } else {
+    const list = document.getElementById('publication-list');
+    list.parentNode.insertBefore(panel, list);
+  }
 }
 function toggleStats() {
   const body  = document.getElementById('statsBody');
   const arrow = document.getElementById('statsArrow');
+  const btn = document.getElementById('statsToggleBtn');
   const nowCollapsed = body.classList.toggle('stats-body--collapsed');
   arrow.style.transform = nowCollapsed ? 'rotate(0deg)' : 'rotate(180deg)';
+  if (btn) btn.setAttribute('aria-expanded', nowCollapsed ? 'false' : 'true');
   if (!nowCollapsed) {
     setTimeout(function() { renderCharts(publications); }, 80);
   }
@@ -327,7 +357,7 @@ function updateResultsMeta(count, searchText) {
     list.parentNode.insertBefore(meta, list);
   }
   meta.innerHTML = searchText
-    ? '<span>' + count + '</span> result' + (count !== 1 ? 's' : '') + ' for "<em>' + searchText + '</em>"'
+    ? '<span>' + count + '</span> result' + (count !== 1 ? 's' : '') + ' for "<em>' + esc(searchText) + '</em>"'
     : '<span>' + count + '</span> publication' + (count !== 1 ? 's' : '');
 }
 function setupFadeIn() {
@@ -350,13 +380,14 @@ function formatAuthors(str, q) {
   q = q || '';
   return str.split(',').map(function(a) {
     a = a.trim();
-    const html = q ? highlight(a, q) : a;
+    const clean = esc(a);
+    const html = q ? highlight(clean, q) : clean;
     return a.toLowerCase().includes('sadil') ? '<u><b>' + html + '</b></u>' : html;
   }).join(' &nbsp;&#183;&nbsp; ');
 }
 function formatConference(text, q) {
   q = q || '';
-  let t = (text || '').replace(/(highlight|spotlight|oral)/gi, function(m) { return '<span style="color:var(--red);">' + m + '</span>'; });
+  let t = esc(text || '').replace(/(highlight|spotlight|oral)/gi, function(m) { return '<span class="venue-accent">' + m + '</span>'; });
   return q ? highlight(t, q) : t;
 }
 function highlight(text, term) {
@@ -368,8 +399,16 @@ function buildCard(pub, q) {
   q = q || '';
   const el = document.createElement('div');
   el.classList.add('publication');
-  const imgHtml     = pub.image ? '<img src="' + pub.image + '" alt="' + pub.title + '" loading="lazy">' : '<div class="paper-image-placeholder">&#9703;</div>';
-  const captionHtml = pub.metadata ? '<div class="paper-metadata">' + pub.metadata + '</div>' : '';
+  const cats = getCategories(pub);
+  const isFeatured = /(spotlight|highlight|oral)/i.test(pub.conference || '');
+  if (isFeatured) el.classList.add('publication-featured');
+  const imgHtml = pub.image
+    ? '<img src="' + attr(pub.image) + '" alt="' + attr(pub.title) + '" loading="lazy">'
+    : '<div class="paper-image-placeholder"><i class="fa-regular fa-file-lines"></i></div>';
+  const captionHtml = pub.metadata ? '<div class="paper-metadata">' + esc(pub.metadata) + '</div>' : '';
+  const tagHtml = cats.slice(0, 5).map(function(cat) {
+    return '<span class="paper-tag">' + esc(cat) + '</span>';
+  }).join('');
   const btns = [
     pub.paperLink && btn('<i class="fa-solid fa-file-lines" style="color: rgb(17, 19, 172);"></i>&nbsp;Paper',     pub.paperLink),
     pub.arxiv     && btn('<i class="fa-solid fa-scroll"></i>&nbsp;arXiv',           pub.arxiv),
@@ -380,15 +419,24 @@ function buildCard(pub, q) {
     pub.video     && btn('<i class="fa-brands fa-youtube"></i>&nbsp;Video',         pub.video),
     pub.bibtex    && bibtexBtn(pub.bibtex)
   ].filter(Boolean).join('');
-  const titleHtml = q ? highlight(pub.title, q) : pub.title;
+  const titleClean = esc(pub.title);
+  const titleHtml = q ? highlight(titleClean, q) : titleClean;
   el.innerHTML =
     '<div class="publication-content">' +
-      '<div class="paper-image">' + imgHtml + captionHtml + '</div>' +
+      '<div class="paper-image">' +
+        '<div class="paper-year-ribbon">' + esc(pub.year) + '</div>' +
+        imgHtml +
+        captionHtml +
+      '</div>' +
       '<div class="paper-body">' +
         '<div class="paper-info">' +
+          '<div class="paper-topline">' +
+            '<span class="paper-venue-pill">' + formatConference(pub.conference, q) + '</span>' +
+            (isFeatured ? '<span class="paper-featured-pill"><i class="fa-solid fa-star"></i> Featured</span>' : '') +
+          '</div>' +
           '<div class="paper-title">' + titleHtml + '</div>' +
           '<div class="paper-authors">' + formatAuthors(pub.authors, q) + '</div>' +
-          '<div class="paper-conference">' + formatConference(pub.conference, q) + '</div>' +
+          (tagHtml ? '<div class="paper-tags">' + tagHtml + '</div>' : '') +
         '</div>' +
         '<div class="links">' + btns + '</div>' +
       '</div>' +
@@ -396,11 +444,10 @@ function buildCard(pub, q) {
   return el;
 }
 function btn(label, url) {
-  return '<button class="button" onclick="window.open(\'' + url + '\',\'_blank\')">' + label + '</button>';
+  return '<a class="button" href="' + attr(url) + '" target="_blank" rel="noopener">' + label + '</a>';
 }
 function bibtexBtn(raw) {
-  const safe = raw.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
-  return '<button class="button" onclick="showBibtex(\'' + safe + '\')"><i class="fa-solid fa-quote-left"></i>&nbsp;BibTeX</button>';
+  return '<button class="button bibtex-trigger" type="button"><i class="fa-solid fa-quote-left"></i>&nbsp;BibTeX</button>';
 }
 function buildYearSection(year, pubs, q) {
   q = q || '';
@@ -418,7 +465,12 @@ function buildYearSection(year, pubs, q) {
   yearContent.setAttribute('data-year', year);
   const inner = document.createElement('div');
   inner.classList.add('year-content-inner');
-  pubs.forEach(function(pub) { inner.appendChild(buildCard(pub, q)); });
+  pubs.forEach(function(pub) {
+    const card = buildCard(pub, q);
+    const bib = card.querySelector('.bibtex-trigger');
+    if (bib) bib.addEventListener('click', function() { showBibtex(pub.bibtex); });
+    inner.appendChild(card);
+  });
   yearContent.appendChild(inner);
   section.appendChild(yearContent);
   return section;
@@ -444,11 +496,16 @@ function displayPublications(pubs, q) {
 function filterPublications(q) {
   const lq = q.toLowerCase();
   return publications.filter(function(p) {
-    return p.title.toLowerCase().includes(lq) ||
+    const filterText = [p.title, p.authors, p.conference, p.categories, p.metadata, p.year].join(' ').toLowerCase();
+    const matchesQuickFilter = activeFilter === 'all' || filterText.includes(activeFilter);
+    const matchesSearch = !lq ||
+           p.title.toLowerCase().includes(lq) ||
            p.authors.toLowerCase().includes(lq) ||
            p.year.toString().includes(lq) ||
            (p.conference || '').toLowerCase().includes(lq) ||
-           (p.categories || '').toLowerCase().includes(lq);
+           (p.categories || '').toLowerCase().includes(lq) ||
+           (p.metadata || '').toLowerCase().includes(lq);
+    return matchesQuickFilter && matchesSearch;
   });
 }
 const debounce = function(fn, ms) {
@@ -461,7 +518,7 @@ const debounce = function(fn, ms) {
 };
 function updatePublications() {
   const q = document.getElementById('search').value.trim();
-  const results = q ? filterPublications(q) : publications;
+  const results = filterPublications(q);
   updateResultsMeta(results.length, q);
   displayPublications(results, q);
 }
@@ -520,5 +577,19 @@ document.addEventListener('click', function(e) {
   const m = document.getElementById('bibtexModal');
   if (m && e.target === m) closeBibtexModal();
 });
-document.getElementById('search').addEventListener('input', debounce(updatePublications, 200));
+document.getElementById('search').addEventListener('input', debounce(updatePublications, 160));
+const filterBar = document.getElementById('pub-filter-bar');
+if (filterBar) {
+  filterBar.addEventListener('click', function(e) {
+    const btn = e.target.closest('.pub-filter');
+    if (!btn) return;
+    activeFilter = btn.dataset.filter || 'all';
+    filterBar.querySelectorAll('.pub-filter').forEach(function(item) {
+      const pressed = item === btn;
+      item.classList.toggle('is-active', pressed);
+      item.setAttribute('aria-pressed', pressed ? 'true' : 'false');
+    });
+    updatePublications();
+  });
+}
 fetchPublications();

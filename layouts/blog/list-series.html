@@ -1,344 +1,924 @@
 {{/*
   layouts/blog/list-series.html
   ─────────────────────────────────────────────
-  Level 2 — /blog/Adventure/ (and any series)
-  Hero banner → post grid cards
-  Activated via: layout: list-series in series _index.md
+  Series listing — editorial magazine treatment.
+  Hero banner → Lead Story → Numbered backlist.
   ─────────────────────────────────────────────
 */}}
 {{ define "main" }}
 
-{{/* ── Hero banner ── */}}
-<div class="l2-hero">
-  {{/* Background image from featured resource if available */}}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  html, body, body.water-theme {
+    background: var(--bs-paper) !important;
+  }
+
+  body, .grid-container, .grid-container.single, .page-main {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .grid-container, .grid-container.single { display: block !important; }
+  .page-main { padding: 0 !important; }
+
+  .post-meta, .post-footer, .article-content > dl, .see-also { display: none !important; }
+
+  :root {
+    --bs-paper: #faf7f2;
+    --bs-cream: #f1ebe0;
+    --bs-ink: #1a1311;
+    --bs-ink-soft: #5b4f47;
+    --bs-ink-muted: #8d8076;
+    --bs-rule: rgba(26, 19, 17, 0.10);
+    --bs-rule-strong: rgba(26, 19, 17, 0.22);
+    --bs-accent: #b8421e;
+    --bs-accent-deep: #8c2d12;
+    --bs-card: #ffffff;
+    --bs-hero-ink: #f8f1e8;
+    --bs-overlay-from: rgba(15, 11, 9, 0.86);
+    --bs-overlay-mid: rgba(15, 11, 9, 0.50);
+    --bs-overlay-to: rgba(15, 11, 9, 0.08);
+    --bs-card-shadow: 0 1px 2px rgba(26, 19, 17, 0.05), 0 14px 36px rgba(26, 19, 17, 0.08);
+    --bs-card-shadow-hover: 0 2px 4px rgba(26, 19, 17, 0.07), 0 24px 56px rgba(26, 19, 17, 0.12);
+    --bs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --bs-serif: 'Fraunces', Georgia, serif;
+    --bs-sans: 'DM Sans', system-ui, sans-serif;
+    --bs-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  body.dark-mode {
+    --bs-paper: #100c0a;
+    --bs-cream: #1d1714;
+    --bs-ink: #f3eadf;
+    --bs-ink-soft: #b8ada1;
+    --bs-ink-muted: #7d7167;
+    --bs-rule: rgba(243, 234, 223, 0.12);
+    --bs-rule-strong: rgba(243, 234, 223, 0.24);
+    --bs-accent: #e8855a;
+    --bs-accent-deep: #f0a484;
+    --bs-card: #1a1411;
+    --bs-card-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 14px 36px rgba(0,0,0,0.55);
+    --bs-card-shadow-hover: 0 2px 4px rgba(0,0,0,0.50), 0 24px 56px rgba(0,0,0,0.65);
+  }
+
+  .bs-stage {
+    background: var(--bs-paper);
+    color: var(--bs-ink);
+    font-family: var(--bs-sans);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    overflow: hidden;
+  }
+
+  /* ───── HERO ───── */
+  .bs-hero {
+    position: relative;
+    min-height: clamp(440px, 78vh, 720px);
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    color: var(--bs-hero-ink);
+  }
+
+  .bs-hero__bg {
+    position: absolute;
+    inset: 0;
+    background: #100c0a;
+    overflow: hidden;
+  }
+
+  .bs-hero__bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.10);
+    filter: saturate(0.92) contrast(0.96);
+    animation: bsZoom 18s var(--bs-ease) forwards;
+  }
+
+  @keyframes bsZoom { to { transform: scale(1.0); } }
+
+  .bs-hero__veil {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 25% 90%, var(--bs-overlay-from) 0%, transparent 62%),
+      linear-gradient(to top, var(--bs-overlay-from) 0%, var(--bs-overlay-mid) 48%, var(--bs-overlay-to) 100%);
+  }
+
+  .bs-hero__grain {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.022) 1px, transparent 0);
+    background-size: 4px 4px;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.55;
+  }
+
+  .bs-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: min(1200px, 100% - 4rem);
+    margin: 0 auto;
+    padding: 7rem 0 4.4rem;
+  }
+
+  .bs-hero__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: rgba(248, 241, 232, 0.60);
+    font-family: var(--bs-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 2.6rem;
+    transition: color 220ms var(--bs-ease), gap 220ms var(--bs-ease);
+  }
+
+  .bs-hero__back svg { width: 14px; height: 14px; opacity: 0.75; }
+  .bs-hero__back:hover { color: var(--bs-hero-ink); text-decoration: none; gap: 13px; }
+
+  .bs-hero__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 1.6rem;
+  }
+
+  .bs-hero__kicker-line {
+    width: 36px;
+    height: 1px;
+    background: var(--bs-accent);
+  }
+
+  .bs-hero__kicker-text {
+    font-family: var(--bs-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bs-accent);
+  }
+
+  .bs-hero__title {
+    font-family: var(--bs-serif);
+    font-size: clamp(2.8rem, 7.2vw, 6.2rem);
+    font-weight: 800;
+    font-optical-sizing: auto;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    color: #ffffff;
+    margin: 0 0 1.4rem;
+    text-shadow: 0 4px 32px rgba(0,0,0,0.30);
+  }
+
+  .bs-hero__lede {
+    font-family: var(--bs-serif);
+    font-size: clamp(1.05rem, 1.6vw, 1.32rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.55;
+    color: rgba(248, 241, 232, 0.85);
+    max-width: 640px;
+    margin: 0 0 3.2rem;
+  }
+
+  .bs-hero__stats {
+    display: flex;
+    align-items: stretch;
+    border-top: 1px solid rgba(248, 241, 232, 0.18);
+    border-bottom: 1px solid rgba(248, 241, 232, 0.18);
+    padding: 1.1rem 0;
+    max-width: 760px;
+  }
+
+  .bs-stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 1.6rem;
+    border-right: 1px solid rgba(248, 241, 232, 0.13);
+    min-width: 0;
+  }
+
+  .bs-stat:first-child { padding-left: 0; }
+  .bs-stat:last-child { border-right: 0; padding-right: 0; }
+
+  .bs-stat__num {
+    font-family: var(--bs-serif);
+    font-size: 2.1rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bs-stat__lbl {
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(248, 241, 232, 0.52);
+  }
+
+  .bs-hero__scroll {
+    position: absolute;
+    bottom: 1.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+    color: rgba(248, 241, 232, 0.45);
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+  }
+
+  .bs-hero__scroll svg {
+    width: 12px;
+    height: 14px;
+    animation: bsBounce 2.4s ease-in-out infinite;
+  }
+
+  @keyframes bsBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.45; }
+    50% { transform: translateY(4px); opacity: 0.80; }
+  }
+
+  /* ───── Section scaffolding ───── */
+  .bs-section {
+    width: min(1200px, 100% - 4rem);
+    margin: 0 auto;
+    padding: 6rem 0 0;
+  }
+
+  .bs-section__head {
+    display: flex;
+    align-items: baseline;
+    gap: 1.4rem;
+    margin-bottom: 2.6rem;
+  }
+
+  .bs-section__tag {
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--bs-accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .bs-section__tag::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bs-accent);
+  }
+
+  .bs-section__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--bs-rule);
+  }
+
+  /* ───── LEAD STORY ───── */
+  .bs-lead {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 3.6rem;
+    align-items: center;
+    padding: 0 0 3.5rem;
+    border-bottom: 1px solid var(--bs-rule);
+    margin-bottom: 0;
+  }
+
+  .bs-lead__media-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .bs-lead__media-link:hover { text-decoration: none; }
+
+  .bs-lead__media {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 4px;
+    background: var(--bs-cream);
+    box-shadow: var(--bs-card-shadow);
+    transition: box-shadow 320ms var(--bs-ease);
+  }
+
+  .bs-lead__media:hover { box-shadow: var(--bs-card-shadow-hover); }
+
+  .bs-lead__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 1100ms var(--bs-ease);
+  }
+
+  .bs-lead__media:hover img { transform: scale(1.04); }
+
+  .bs-lead__badge {
+    position: absolute;
+    top: 1.2rem;
+    left: 1.2rem;
+    padding: 0.42rem 0.95rem;
+    background: rgba(15, 11, 9, 0.72);
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(10px) saturate(160%);
+    color: var(--bs-hero-ink);
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    border-radius: 999px;
+  }
+
+  .bs-lead__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+    min-width: 0;
+  }
+
+  .bs-lead__meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-family: var(--bs-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bs-ink-muted);
+  }
+
+  .bs-lead__meta .bs-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--bs-ink-muted);
+  }
+
+  .bs-lead__title {
+    font-family: var(--bs-serif);
+    font-size: clamp(2rem, 4vw, 3.4rem);
+    font-weight: 700;
+    font-optical-sizing: auto;
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    color: var(--bs-ink);
+    margin: 0;
+  }
+
+  .bs-lead__title a {
+    color: inherit;
+    text-decoration: none;
+    background-image: linear-gradient(var(--bs-accent), var(--bs-accent));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0 2px;
+    transition: background-size 460ms var(--bs-ease);
+  }
+
+  .bs-lead:hover .bs-lead__title a { background-size: 100% 2px; }
+
+  .bs-lead__subtitle {
+    font-family: var(--bs-serif);
+    font-size: 1.12rem;
+    font-style: italic;
+    font-weight: 500;
+    color: var(--bs-ink-soft);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .bs-lead__excerpt {
+    font-family: var(--bs-sans);
+    font-size: 1.02rem;
+    font-weight: 400;
+    line-height: 1.78;
+    color: var(--bs-ink-soft);
+    margin: 0;
+    max-width: 580px;
+  }
+
+  .bs-lead__excerpt em { color: var(--bs-ink); font-style: italic; font-weight: 500; }
+
+  .bs-lead__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    margin-top: 0.4rem;
+    padding-bottom: 6px;
+    font-family: var(--bs-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--bs-accent);
+    text-decoration: none;
+    border-bottom: 1px solid var(--bs-accent);
+    align-self: flex-start;
+    transition: gap 240ms var(--bs-ease), color 240ms var(--bs-ease), border-color 240ms var(--bs-ease);
+  }
+
+  .bs-lead__cta svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 280ms var(--bs-ease);
+  }
+
+  .bs-lead__cta:hover {
+    gap: 16px;
+    color: var(--bs-accent-deep);
+    border-color: var(--bs-accent-deep);
+    text-decoration: none;
+  }
+
+  .bs-lead__cta:hover svg { transform: translateX(4px); }
+
+  /* ───── BACKLIST ───── */
+  .bs-list {
+    margin-top: 0;
+    padding-bottom: 6rem;
+  }
+
+  .bs-row {
+    display: grid;
+    grid-template-columns: 60px 160px 1fr 200px 28px;
+    gap: 1.8rem;
+    align-items: center;
+    padding: 1.9rem 0;
+    border-top: 1px solid var(--bs-rule);
+    color: var(--bs-ink);
+    text-decoration: none;
+    position: relative;
+  }
+
+  .bs-row:last-child { border-bottom: 1px solid var(--bs-rule); }
+  .bs-row:hover { text-decoration: none; }
+
+  .bs-row::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(184, 66, 30, 0.05) 32%, transparent 100%);
+    opacity: 0;
+    transition: opacity 360ms var(--bs-ease);
+    pointer-events: none;
+  }
+
+  .bs-row:hover::after { opacity: 1; }
+
+  .bs-row__num {
+    font-family: var(--bs-mono);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--bs-ink-muted);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+  }
+
+  .bs-row__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bs-ink-muted);
+  }
+
+  .bs-row__date { color: var(--bs-ink-soft); }
+
+  .bs-row__main {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    min-width: 0;
+  }
+
+  .bs-row__title {
+    font-family: var(--bs-serif);
+    font-size: 1.55rem;
+    font-weight: 700;
+    font-optical-sizing: auto;
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+    color: var(--bs-ink);
+    margin: 0;
+    transition: color 220ms var(--bs-ease);
+  }
+
+  .bs-row:hover .bs-row__title { color: var(--bs-accent); }
+
+  .bs-row__excerpt {
+    font-family: var(--bs-sans);
+    font-size: 0.93rem;
+    font-weight: 400;
+    line-height: 1.62;
+    color: var(--bs-ink-soft);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .bs-row__thumb {
+    aspect-ratio: 4 / 3;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--bs-cream);
+  }
+
+  .bs-row__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 700ms var(--bs-ease);
+  }
+
+  .bs-row:hover .bs-row__thumb img { transform: scale(1.08); }
+
+  .bs-row__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--bs-ink-muted);
+    font-family: var(--bs-mono);
+    font-size: 18px;
+    transition: color 220ms var(--bs-ease), transform 280ms var(--bs-ease);
+  }
+
+  .bs-row:hover .bs-row__arrow {
+    color: var(--bs-accent);
+    transform: translateX(4px);
+  }
+
+  /* ───── Footer note ───── */
+  .bs-footnote {
+    width: min(1200px, 100% - 4rem);
+    margin: 0 auto;
+    padding: 0 0 6rem;
+    text-align: center;
+  }
+
+  .bs-footnote__line {
+    width: 64px;
+    height: 1px;
+    background: var(--bs-rule-strong);
+    margin: 0 auto 1.6rem;
+  }
+
+  .bs-footnote__text {
+    font-family: var(--bs-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--bs-ink-muted);
+    margin: 0 0 0.4rem;
+  }
+
+  .bs-footnote__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--bs-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+    color: var(--bs-accent);
+    text-decoration: none;
+    margin-top: 1rem;
+    transition: gap 220ms var(--bs-ease), color 220ms var(--bs-ease);
+  }
+
+  .bs-footnote__cta:hover { gap: 12px; color: var(--bs-accent-deep); text-decoration: none; }
+
+  /* ───── Reveal ───── */
+  .bs-reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 720ms var(--bs-ease), transform 720ms var(--bs-ease);
+  }
+
+  .bs-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ───── Empty ───── */
+  .bs-empty {
+    font-family: var(--bs-serif);
+    font-style: italic;
+    color: var(--bs-ink-muted);
+    text-align: center;
+    padding: 4rem 0;
+    font-size: 1.1rem;
+  }
+
+  /* ───── Responsive ───── */
+  @media (max-width: 980px) {
+    .bs-hero__inner { padding: 5.5rem 0 3.6rem; }
+    .bs-hero__stats { max-width: 100%; flex-wrap: wrap; }
+    .bs-stat { padding: 0 1.1rem; }
+    .bs-stat__num { font-size: 1.65rem; }
+    .bs-section { width: min(100% - 2.5rem, 920px); padding-top: 4.6rem; }
+    .bs-lead { grid-template-columns: 1fr; gap: 2.2rem; padding-bottom: 3rem; }
+    .bs-lead__media { aspect-ratio: 16 / 10; }
+    .bs-row { grid-template-columns: 44px 1fr 128px 22px; gap: 1.3rem; padding: 1.5rem 0; }
+    .bs-row__meta { display: none; }
+    .bs-row__title { font-size: 1.22rem; }
+    .bs-footnote { width: min(100% - 2.5rem, 920px); }
+  }
+
+  @media (max-width: 620px) {
+    .bs-hero { min-height: 380px; }
+    .bs-hero__inner { padding: 4rem 0 2.6rem; }
+    .bs-hero__title { font-size: 2.6rem; }
+    .bs-hero__lede { font-size: 0.98rem; }
+    .bs-hero__stats { padding: 0.9rem 0; gap: 0; }
+    .bs-stat {
+      flex: 1 1 50%;
+      border-right: 0;
+      padding: 0.5rem 0;
+    }
+    .bs-stat:nth-child(odd) { border-right: 1px solid rgba(248, 241, 232, 0.13); padding-right: 0.9rem; }
+    .bs-stat:nth-child(even) { padding-left: 0.9rem; }
+    .bs-stat__num { font-size: 1.4rem; }
+    .bs-section { width: calc(100% - 1.8rem); padding-top: 3.5rem; }
+    .bs-lead__title { font-size: 1.75rem; }
+    .bs-lead__subtitle { font-size: 1rem; }
+    .bs-row { grid-template-columns: 36px 1fr 22px; gap: 1rem; padding: 1.3rem 0; }
+    .bs-row__thumb { display: none; }
+    .bs-row__title { font-size: 1.1rem; }
+    .bs-row__excerpt { -webkit-line-clamp: 2; font-size: 0.86rem; }
+    .bs-footnote { width: calc(100% - 1.8rem); padding-bottom: 4rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bs-hero__bg img { animation: none; transform: none; }
+    .bs-hero__scroll svg { animation: none; }
+    .bs-reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+
+<div class="bs-stage">
+
+  {{/* ────────── HERO ────────── */}}
   {{ $bg := "" }}
   {{ range .Resources.ByType "image" }}
     {{ if findRE "featured" .Name }}{{ $bg = .RelPermalink }}{{ end }}
   {{ end }}
-  <div class="l2-hero__bg" {{ if $bg }}style="background-image:url('{{ $bg }}')"{{ end }}></div>
-  <div class="l2-hero__overlay"></div>
-
-  <div class="l2-hero__content">
-    <a href="/blog/" class="l2-breadcrumb">← All Series</a>
-    <h1 class="l2-hero__title">{{ .Title }}</h1>
-    {{ with .Description }}
-      <p class="l2-hero__desc">{{ . }}</p>
+  {{ if not $bg }}
+    {{ range .Resources.ByType "image" }}
+      {{ if not $bg }}{{ $bg = .RelPermalink }}{{ end }}
     {{ end }}
-    <div class="l2-hero__meta">
-      <span class="l2-hero__count">{{ len .RegularPages }} post{{ if ne (len .RegularPages) 1 }}s{{ end }}</span>
-      {{ with .Params.categories }}
-        {{ range . }}
-          <span class="l2-hero__tag">{{ . }}</span>
-        {{ end }}
+  {{ end }}
+
+  <header class="bs-hero">
+    <div class="bs-hero__bg">
+      {{ if $bg }}
+        <img src="{{ $bg }}" alt="" aria-hidden="true" loading="eager"/>
       {{ end }}
     </div>
-  </div>
-</div>
+    <div class="bs-hero__veil"></div>
+    <div class="bs-hero__grain"></div>
 
-{{/* ── Post grid ── */}}
-<div class="l2-wrap">
-  {{ if .RegularPages }}
-  <div class="l2-grid">
-    {{ range .RegularPages }}
-    <a href="{{ .RelPermalink }}" class="l2-card">
+    <div class="bs-hero__inner">
+      <a href="/blog/" class="bs-hero__back">
+        <svg viewBox="0 0 16 16" fill="none">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        All Series
+      </a>
 
-      {{/* Thumbnail */}}
-      {{ $thumb := "" }}
-      {{ range .Resources.ByType "image" }}
-        {{ if findRE "featured" .Name }}{{ $thumb = .RelPermalink }}{{ end }}
+      <div class="bs-hero__kicker">
+        <span class="bs-hero__kicker-line"></span>
+        <span class="bs-hero__kicker-text">A Series · The Notebook</span>
+      </div>
+
+      <h1 class="bs-hero__title">{{ .Title }}</h1>
+
+      {{ with .Description }}
+        <p class="bs-hero__lede">{{ . }}</p>
       {{ end }}
-      {{ if not $thumb }}
-        {{ with .Params.featured_image }}{{ $thumb = . }}{{ end }}
-      {{ end }}
 
-      <div class="l2-card__thumb">
-        {{ if $thumb }}
-          <img src="{{ $thumb }}" alt="{{ .Title }}" loading="lazy"/>
-        {{ else }}
-          <div class="l2-card__thumb-placeholder">
-            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="36" height="36">
-              <rect width="40" height="40" rx="8" fill="rgba(255,255,255,0.08)"/>
-              <path d="M10 28L18 16L24 22L28 17L34 28H10Z" fill="rgba(255,255,255,0.25)"/>
-              <circle cx="14" cy="15" r="3" fill="rgba(255,255,255,0.3)"/>
-            </svg>
+      <div class="bs-hero__stats">
+        <div class="bs-stat">
+          <span class="bs-stat__num">{{ len .RegularPages }}</span>
+          <span class="bs-stat__lbl">{{ if eq (len .RegularPages) 1 }}Story{{ else }}Stories{{ end }}</span>
+        </div>
+        {{ if .RegularPages }}
+          {{ $totalRead := 0 }}
+          {{ range .RegularPages }}{{ $totalRead = add $totalRead .ReadingTime }}{{ end }}
+          <div class="bs-stat">
+            <span class="bs-stat__num">~{{ $totalRead }}m</span>
+            <span class="bs-stat__lbl">Total Read</span>
+          </div>
+          <div class="bs-stat">
+            <span class="bs-stat__num">{{ (index .RegularPages 0).Date.Format "2006" }}</span>
+            <span class="bs-stat__lbl">Last Updated</span>
           </div>
         {{ end }}
-        <div class="l2-card__num">{{ .Page.Scratch.Get "n" }}
-          {{/* post number badge */}}
+        {{ with .Params.categories }}
+          <div class="bs-stat">
+            <span class="bs-stat__num">{{ index . 0 }}</span>
+            <span class="bs-stat__lbl">Theme</span>
+          </div>
+        {{ end }}
+      </div>
+    </div>
+
+    <div class="bs-hero__scroll" aria-hidden="true">
+      <span>Read</span>
+      <svg viewBox="0 0 12 14" fill="none">
+        <path d="M6 1V13M1 8L6 13L11 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </header>
+
+  {{/* ────────── BODY ────────── */}}
+  {{ if .RegularPages }}
+    {{ $first := index .RegularPages 0 }}
+
+    <section class="bs-section">
+      <div class="bs-section__head bs-reveal">
+        <span class="bs-section__tag">Lead Story</span>
+        <span class="bs-section__rule"></span>
+      </div>
+
+      <article class="bs-lead bs-reveal">
+        <a href="{{ $first.RelPermalink }}" class="bs-lead__media-link" aria-label="{{ $first.Title }}">
+          <div class="bs-lead__media">
+            {{ $thumb := "" }}
+            {{ range $first.Resources.ByType "image" }}
+              {{ if findRE "featured" .Name }}{{ $thumb = .RelPermalink }}{{ end }}
+            {{ end }}
+            {{ if not $thumb }}
+              {{ with $first.Params.featured_image }}{{ $thumb = . }}{{ end }}
+            {{ end }}
+            {{ if $thumb }}
+              <img src="{{ $thumb }}" alt="{{ $first.Title }}" loading="eager"/>
+            {{ end }}
+            <span class="bs-lead__badge">{{ $first.Date.Format "January 2006" }}</span>
+          </div>
+        </a>
+
+        <div class="bs-lead__body">
+          <div class="bs-lead__meta">
+            <span>No. 01</span>
+            <span class="bs-dot"></span>
+            <span>{{ $first.ReadingTime }} min read</span>
+            {{ with $first.Params.categories }}
+              <span class="bs-dot"></span>
+              <span>{{ index . 0 }}</span>
+            {{ end }}
+          </div>
+
+          <h2 class="bs-lead__title">
+            <a href="{{ $first.RelPermalink }}">{{ $first.Title }}</a>
+          </h2>
+
+          {{ with $first.Params.subtitle }}
+            {{ if . }}<p class="bs-lead__subtitle">{{ . }}</p>{{ end }}
+          {{ end }}
+
+          {{ with $first.Params.excerpt }}
+            <div class="bs-lead__excerpt">{{ . | markdownify }}</div>
+          {{ else }}
+            {{ with $first.Summary }}
+              <p class="bs-lead__excerpt">{{ . }}</p>
+            {{ end }}
+          {{ end }}
+
+          <a href="{{ $first.RelPermalink }}" class="bs-lead__cta">
+            Read the story
+            <svg viewBox="0 0 14 14" fill="none">
+              <path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
         </div>
-      </div>
+      </article>
+    </section>
 
-      <div class="l2-card__body">
-        {{ if .Params.show_post_date | default true }}
-          <time class="l2-card__date">{{ .Date.Format "Jan 2, 2006" }}</time>
-        {{ end }}
-        <h2 class="l2-card__title">{{ .Title }}</h2>
-        {{ with .Params.subtitle }}
-          <p class="l2-card__subtitle">{{ . }}</p>
-        {{ end }}
-        {{ with .Summary }}
-          <p class="l2-card__excerpt">{{ . | truncate 110 }}</p>
-        {{ end }}
-        <span class="l2-card__cta">Read post →</span>
-      </div>
+    {{/* ── Numbered backlist (when 2+ posts) ── */}}
+    {{ if gt (len .RegularPages) 1 }}
+      <section class="bs-section">
+        <div class="bs-section__head bs-reveal">
+          <span class="bs-section__tag">The Backlist</span>
+          <span class="bs-section__rule"></span>
+        </div>
 
-    </a>
+        <div class="bs-list">
+          {{ range $i, $p := after 1 .RegularPages }}
+            <a class="bs-row bs-reveal" href="{{ $p.RelPermalink }}" style="transition-delay: {{ mul $i 80 }}ms">
+              <span class="bs-row__num">{{ printf "%02d" (add $i 2) }}</span>
+
+              <div class="bs-row__meta">
+                <span class="bs-row__date">{{ $p.Date.Format "Jan 2, 2006" }}</span>
+                <span>{{ $p.ReadingTime }} min read</span>
+              </div>
+
+              <div class="bs-row__main">
+                <h3 class="bs-row__title">{{ $p.Title }}</h3>
+                {{ with $p.Params.excerpt }}
+                  <p class="bs-row__excerpt">{{ . | plainify | truncate 140 }}</p>
+                {{ else }}
+                  {{ with $p.Summary }}
+                    <p class="bs-row__excerpt">{{ . | plainify | truncate 140 }}</p>
+                  {{ end }}
+                {{ end }}
+              </div>
+
+              <div class="bs-row__thumb">
+                {{ $thumb := "" }}
+                {{ range $p.Resources.ByType "image" }}
+                  {{ if findRE "featured" .Name }}{{ $thumb = .RelPermalink }}{{ end }}
+                {{ end }}
+                {{ if not $thumb }}{{ with $p.Params.featured_image }}{{ $thumb = . }}{{ end }}{{ end }}
+                {{ if $thumb }}
+                  <img src="{{ $thumb }}" alt="{{ $p.Title }}" loading="lazy"/>
+                {{ end }}
+              </div>
+
+              <span class="bs-row__arrow" aria-hidden="true">→</span>
+            </a>
+          {{ end }}
+        </div>
+      </section>
     {{ end }}
-  </div>
+
+    <div class="bs-footnote bs-reveal">
+      <div class="bs-footnote__line"></div>
+      <p class="bs-footnote__text">End of series.</p>
+      <a href="/blog/" class="bs-footnote__cta">
+        Browse other series
+        <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
+          <path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+
   {{ else }}
-    <p class="l2-empty">No posts yet in this series.</p>
+    <section class="bs-section">
+      <p class="bs-empty">No stories published in this series yet.</p>
+    </section>
   {{ end }}
+
 </div>
 
-<style>
-/* ═══════════════════════════════════════
-   LEVEL 2 — Series listing
-   Feel: Warm editorial, earthy tones,
-         Fraunces display + DM Sans body
-═══════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;0,900;1,600&family=DM+Sans:wght@400;500;600&display=swap');
-
-/* ── Hero ── */
-.l2-hero {
-  position: relative;
-  min-height: 320px;
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
-  margin-bottom: 0;
-}
-
-.l2-hero__bg {
-  position: absolute;
-  inset: 0;
-  background: #1c1917;
-  background-size: cover;
-  background-position: center;
-  transform: scale(1.04);
-  transition: transform 8s ease;
-}
-
-.l2-hero:hover .l2-hero__bg { transform: scale(1); }
-
-.l2-hero__overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(12,10,9,0.92) 0%,
-    rgba(12,10,9,0.55) 50%,
-    rgba(12,10,9,0.2) 100%
-  );
-}
-
-.l2-hero__content {
-  position: relative;
-  z-index: 1;
-  padding: 2.5rem 3rem 2.8rem;
-  width: 100%;
-  max-width: 860px;
-}
-
-.l2-breadcrumb {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-  text-decoration: none;
-  margin-bottom: 1rem;
-  transition: color 200ms;
-}
-.l2-breadcrumb:hover { color: rgba(255,255,255,0.9); text-decoration: none; }
-
-.l2-hero__title {
-  font-family: 'Fraunces', Georgia, serif;
-  font-size: clamp(2.2rem, 6vw, 3.5rem);
-  font-weight: 900;
-  color: #fafaf9;
-  margin: 0 0 0.6rem;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-}
-
-.l2-hero__desc {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 1rem;
-  color: rgba(255,255,255,0.6);
-  margin: 0 0 1.2rem;
-  max-width: 520px;
-  line-height: 1.6;
-}
-
-.l2-hero__meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.l2-hero__count {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.45);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.l2-hero__tag {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.55);
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
-  border-radius: 20px;
-  padding: 2px 10px;
-}
-
-/* ── Post grid ── */
-.l2-wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2.5rem 2rem 4rem;
-}
-
-.l2-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
-}
-
-/* ── Post card ── */
-.l2-card {
-  display: flex;
-  flex-direction: column;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-  border: 1px solid #e7e5e4;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 240ms ease, box-shadow 240ms ease;
-  position: relative;
-}
-
-.l2-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.09);
-  text-decoration: none;
-}
-
-.l2-card__thumb {
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: #292524;
-  position: relative;
-  flex-shrink: 0;
-}
-
-.l2-card__thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 500ms ease;
-}
-
-.l2-card:hover .l2-card__thumb img { transform: scale(1.05); }
-
-.l2-card__thumb-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #292524 0%, #44403c 100%);
-}
-
-.l2-card__body {
-  padding: 1.1rem 1.25rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.l2-card__date {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  color: #a8a29e;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 0.4rem;
-  display: block;
-}
-
-.l2-card__title {
-  font-family: 'Fraunces', serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #1c1917;
-  margin: 0 0 0.3rem;
-  line-height: 1.3;
-}
-
-.l2-card__subtitle {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  font-style: italic;
-  color: #78716c;
-  margin: 0 0 0.5rem;
-  line-height: 1.4;
-}
-
-.l2-card__excerpt {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.85rem;
-  color: #78716c;
-  line-height: 1.6;
-  margin: 0 0 0.8rem;
-  flex: 1;
-}
-
-.l2-card__cta {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: #a16207;
-  letter-spacing: 0.03em;
-  margin-top: auto;
-  transition: gap 200ms;
-}
-
-.l2-card:hover .l2-card__cta { color: #854d0e; }
-
-.l2-empty {
-  font-family: 'DM Sans', sans-serif;
-  color: #a8a29e;
-  text-align: center;
-  padding: 3rem 0;
-}
-
-/* Dark mode */
-.dark-theme .l2-card {
-  background: #1c1917;
-  border-color: #292524;
-}
-.dark-theme .l2-card__title { color: #fafaf9; }
-.dark-theme .l2-card__excerpt,
-.dark-theme .l2-card__subtitle { color: #78716c; }
-
-@media (max-width: 640px) {
-  .l2-hero__content { padding: 1.8rem 1.25rem 2rem; }
-  .l2-wrap { padding: 1.5rem 1rem 3rem; }
-  .l2-grid { grid-template-columns: 1fr; }
-}
-</style>
+<script>
+(function () {
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.bs-reveal').forEach(function (el) { el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' });
+  document.querySelectorAll('.bs-reveal').forEach(function (el) { io.observe(el); });
+})();
+</script>
 
 {{ end }}

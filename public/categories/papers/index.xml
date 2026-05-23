@@ -2,20 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Papers on Home</title>
-    <link>/categories/papers/</link>
+    <link>//localhost:1313/categories/papers/</link>
     <description>Recent content in Papers on Home</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 10 Aug 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/papers/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Aug 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="//localhost:1313/categories/papers/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>My Publications</title>
-      <link>/publications/</link>
+      <link>//localhost:1313/publications/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
-      
-      <guid>/publications/</guid>
-      <description> * Equal Contributions
-× BibTeX Entry 📋 Copy </description>
+      <guid>//localhost:1313/publications/</guid>
+      <description>&lt;link rel=&#34;stylesheet&#34; href=&#34;styles.css&#34;&gt;&#xA;&lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.googleapis.com&#34;&gt;&#xA;&lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.gstatic.com&#34; crossorigin&gt;&#xA;&lt;link href=&#34;https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt;&#xA;&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css&#34;&gt;&#xA;&lt;div class=&#34;container&#34;&gt;&#xA;  &lt;div id=&#34;search-container&#34;&gt;&#xA;    &lt;form onsubmit=&#34;return false;&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-magnifying-glass&#34; id=&#34;search-icon&#34;&gt;&lt;/i&gt;&#xA;      &lt;input&#xA;        type=&#34;text&#34;&#xA;        name=&#34;search&#34;&#xA;        id=&#34;search&#34;&#xA;        placeholder=&#34;Search by title, author, venue, year …&#34;&#xA;        autocomplete=&#34;off&#34;&#xA;        spellcheck=&#34;false&#34;&gt;&#xA;    &lt;/form&gt;&#xA;  &lt;/div&gt;&#xA;  &lt;div&gt;&#xA;    &lt;p&gt;* &lt;span style=&#34;font-weight:600;&#34;&gt;Equal Contributions&lt;/span&gt;&lt;/p&gt;&#xA;  &lt;/div&gt;&#xA;  &lt;div id=&#34;publication-list&#34;&gt;&lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;div id=&#34;bibtexModal&#34; class=&#34;bibtex-modal&#34; role=&#34;dialog&#34; aria-modal=&#34;true&#34; aria-label=&#34;BibTeX Entry&#34;&gt;&#xA;  &lt;div class=&#34;bibtex-card&#34;&gt;&#xA;    &lt;button class=&#34;close-btn&#34; onclick=&#34;closeBibtexModal()&#34; aria-label=&#34;Close&#34;&gt;×&lt;/button&gt;&#xA;    &lt;h3&gt;BibTeX Entry&lt;/h3&gt;&#xA;    &lt;pre id=&#34;bibtexContent&#34; class=&#34;bibtex-text&#34;&gt;&lt;/pre&gt;&#xA;    &lt;button class=&#34;copy-btn&#34; onclick=&#34;copyBibtexFromModal()&#34;&gt;📋 Copy&lt;/button&gt;&#xA;  &lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;script src=&#34;publication_script.js&#34;&gt;&lt;/script&gt;</description>
     </item>
-    
   </channel>
 </rss>

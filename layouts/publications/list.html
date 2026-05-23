@@ -8,13 +8,31 @@
 
 <style>
   /* ── Fix Apero grid ───────────────────────────── */
-  .grid-container.list { display: block !important; }
+  html,
+  body {
+    background: var(--pub-page-bg, #f6f8fb) !important;
+  }
+
+  .dark-mode {
+    --pub-page-bg: #080b12;
+  }
+
+  .grid-container.list,
+  .grid-container,
+  .page-main {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .page-main { padding: 0 !important; }
 
   /* ── Hero shell ───────────────────────────────── */
   .pub-hero {
     position: relative;
     width: 100%;
-    height: 440px;
+    height: 410px;
     overflow: hidden;
     background: #04091a;
   }
@@ -41,6 +59,32 @@
     pointer-events: none;
   }
 
+  .pub-hero::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 150px;
+    pointer-events: none;
+    background: linear-gradient(
+      to bottom,
+      rgba(4,9,26,0) 0%,
+      rgba(4,9,26,0.44) 48%,
+      var(--pub-page-bg, #f6f8fb) 100%
+    );
+    z-index: 2;
+  }
+
+  .dark-mode .pub-hero::after {
+    background: linear-gradient(
+      to bottom,
+      rgba(4,9,26,0) 0%,
+      rgba(4,9,26,0.55) 48%,
+      #080b12 100%
+    );
+  }
+
   /* ── Hero text ────────────────────────────────── */
   .pub-hero-content {
     position: absolute;
@@ -52,6 +96,7 @@
     text-align: center;
     padding: 0 1.5rem;
     pointer-events: none;
+    z-index: 3;
   }
 
   .pub-eyebrow {
@@ -111,8 +156,9 @@
 
   /* ── Search ───────────────────────────────────── */
   .pub-search-zone {
-    max-width: 640px;
-    margin: -26px auto 0;
+    width: min(1360px, calc(100% - 72px));
+    max-width: none;
+    margin: -28px auto 0;
     padding: 0 1.5rem;
     position: relative;
     z-index: 10;
@@ -174,24 +220,77 @@
   /* ── Below search ─────────────────────────────── */
   .pub-meta {
     text-align: center; font-family: 'Geist', sans-serif;
-    font-size: 0.93rem; color: #94a3b8; margin: 0.85rem 0 0;
+    font-size: 0.82rem; color: #64748b; margin: 0;
   }
   .pub-meta strong { color: #64748b; font-weight: 500; }
 
+  .pub-controls {
+    width: min(1360px, calc(100% - 72px));
+    margin: 18px auto 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-family: 'Geist', sans-serif;
+  }
+
+  .pub-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .pub-filter {
+    border: 1px solid rgba(15,23,42,0.10);
+    border-radius: 999px;
+    min-height: 32px;
+    padding: 0 13px;
+    background: rgba(255,255,255,0.78);
+    color: #475569;
+    font: 700 0.76rem 'Geist', sans-serif;
+    cursor: pointer;
+    transition: transform 180ms, color 180ms, background 180ms, border-color 180ms, box-shadow 180ms;
+  }
+
+  .pub-filter:hover,
+  .pub-filter.is-active {
+    color: #0f172a;
+    background: #ffffff;
+    border-color: rgba(37,99,235,0.28);
+    box-shadow: 0 8px 24px rgba(37,99,235,0.10);
+    transform: translateY(-1px);
+  }
+
+  .dark-mode .pub-filter {
+    color: #a8b0cc;
+    border-color: rgba(226,232,240,0.10);
+    background: rgba(20,25,38,0.82);
+  }
+
+  .dark-mode .pub-filter:hover,
+  .dark-mode .pub-filter.is-active {
+    color: #e6e9f4;
+    background: rgba(31,38,55,0.92);
+    border-color: rgba(91,156,246,0.38);
+  }
+
   .pub-rule {
-    max-width: 900px; margin: 1.5rem auto 0;
+    max-width: 1360px; margin: 1.25rem auto 0;
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(37,99,235,0.2) 30%, rgba(99,102,241,0.2) 70%, transparent);
   }
 
   .pub-cards {
-    max-width: 960px; margin: 0 auto;
-    padding: 2rem 1.5rem 5rem;
+    max-width: 1360px; margin: 0 auto;
+    padding: 1.6rem 1.5rem 5rem;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 760px) {
     .pub-hero { height: 340px; }
-    .pub-search-zone { padding: 0 1rem; }
+    .pub-search-zone,
+    .pub-controls { width: calc(100% - 32px); padding: 0; }
+    .pub-controls { display: block; }
+    .pub-meta { text-align: left; margin-top: 12px; }
     .pub-cards { padding: 1.5rem 1rem 4rem; }
   }
 </style>
@@ -225,7 +324,19 @@
   </div>
 </div>
 
-<p class="pub-meta">* <strong>Equal Contributions</strong></p>
+<div class="pub-controls">
+  <div class="pub-filter-bar" id="pub-filter-bar" aria-label="Filter publications">
+    <button class="pub-filter is-active" type="button" data-filter="all" aria-pressed="true">All</button>
+    <button class="pub-filter" type="button" data-filter="cad" aria-pressed="false">CAD</button>
+    <button class="pub-filter" type="button" data-filter="llm" aria-pressed="false">LLM</button>
+    <button class="pub-filter" type="button" data-filter="3d" aria-pressed="false">3D</button>
+    <button class="pub-filter" type="button" data-filter="point cloud" aria-pressed="false">Point Cloud</button>
+  </div>
+  <p class="pub-meta">* <strong>Equal Contributions</strong></p>
+</div>
+
+<div class="pub-stats-zone" id="pub-stats-zone"></div>
+
 <div class="pub-rule"></div>
 
 <div class="pub-cards">
@@ -273,7 +384,6 @@
     W = canvas.width  = canvas.offsetWidth;
     H = canvas.height = canvas.offsetHeight;
     buildNodes();
-    buildCAD();
     buildGrid();
   }
 
@@ -307,68 +417,7 @@
   }
 
   /* ════════════════════════════
-     2. CAD WIREFRAME CUBE
-     A rotating box with edge lines — represents 3D shape generation
-  ════════════════════════════ */
-  var cadAngle = 0;
-  var CAD_CUBES = [];   /* array so we can have 2–3 scattered */
-
-  function buildCAD() {
-    CAD_CUBES = [
-      { cx: W * 0.12, cy: H * 0.22, size: 42, speed: 0.007, phase: 0.0 },
-      { cx: W * 0.88, cy: H * 0.28, size: 36, speed: 0.009, phase: 1.1 },
-      { cx: W * 0.50, cy: H * 0.82, size: 28, speed: 0.006, phase: 2.3 },
-    ];
-  }
-
-  function project(px, py, pz, cx, cy, rx, ry) {
-    /* rotate around Y then X */
-    var cosY = Math.cos(ry), sinY = Math.sin(ry);
-    var x1 = px * cosY - pz * sinY;
-    var z1 = px * sinY + pz * cosY;
-    var cosX = Math.cos(rx), sinX = Math.sin(rx);
-    var y2 = py * cosX - z1 * sinX;
-    var z2 = py * sinX + z1 * cosX;
-    var fov = 3.5;
-    var sc  = fov / (fov + z2);
-    return { x: cx + x1 * sc, y: cy + y2 * sc };
-  }
-
-  function drawCube(c, t) {
-    var s   = c.size;
-    var ry  = t * c.speed + c.phase;
-    var rx  = t * c.speed * 0.6 + c.phase * 0.7;
-    var v   = [
-      [-s,-s,-s],[s,-s,-s],[s,s,-s],[-s,s,-s],
-      [-s,-s, s],[s,-s, s],[s,s, s],[-s,s, s],
-    ].map(function (p) { return project(p[0],p[1],p[2], c.cx, c.cy, rx, ry); });
-
-    var edges = [
-      [0,1],[1,2],[2,3],[3,0],
-      [4,5],[5,6],[6,7],[7,4],
-      [0,4],[1,5],[2,6],[3,7],
-    ];
-    var alpha = 0.28 + 0.12 * Math.sin(t * 0.8 + c.phase);
-    ctx.strokeStyle = 'rgba(251,191,36,' + alpha + ')';
-    ctx.lineWidth   = 0.8;
-    edges.forEach(function (e) {
-      ctx.beginPath();
-      ctx.moveTo(v[e[0]].x, v[e[0]].y);
-      ctx.lineTo(v[e[1]].x, v[e[1]].y);
-      ctx.stroke();
-    });
-
-    /* Control-point dots at vertices */
-    v.forEach(function (p, i) {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 1.8, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(251,191,36,' + (alpha * 1.6) + ')';
-      ctx.fill();
-    });
-  }
-
-  /* ════════════════════════════
-     3. PARAMETRIC SURFACE GRID
+     2. PARAMETRIC SURFACE GRID
      A gently rippling u-v grid — represents NURBS/Bézier surfaces
   ════════════════════════════ */
   var GRID_W = 14, GRID_H = 8;
@@ -419,7 +468,7 @@
   }
 
   /* ════════════════════════════
-     4. FLOATING DATA TOKENS
+     3. FLOATING DATA TOKENS
      Small labelled chips drifting up — "text → CAD", "point → mesh" etc.
   ════════════════════════════ */
   var TOKENS = [];
@@ -490,7 +539,7 @@
   }
 
   /* ════════════════════════════
-     5. SCAN LINES (subtle CRT / data scan feel)
+     4. SCAN LINES (subtle CRT / data scan feel)
   ════════════════════════════ */
   var scanY = 0;
   function drawScan(t) {
@@ -516,8 +565,6 @@
 
     /* ── Layer 1: scan line ── */
     drawScan(t);
-
-    /* ── Layer 2: CAD wireframe cubes ── */
 
     /* ── Layer 3: Neural network ── */
     /* Update activations */
@@ -614,6 +661,7 @@
     });
 
     /* ── Layer 4: floating data tokens ── */
+    drawTokens();
 
     animId = setTimeout(function() {
   requestAnimationFrame(draw);
@@ -624,7 +672,7 @@
   resize();
   draw();
   window.addEventListener('resize', function () {
-    cancelAnimationFrame(animId);
+    clearTimeout(animId);
     resize();
     draw();
   });

@@ -12,7 +12,7 @@
         "video": "",
         "dataset": "https://huggingface.co/datasets/SadilKhan/CADCap-1M",
         "paperLink": "",
-        "categories": "CAD, LLM, Nurbs, Bezier Surface, VAE, Sparse Voxel",
+        "categories": "CAD, LLM, Nurbs, Point Cloud, Image, Text, VAE, Sparse Voxel",
         "image": "data/dreamcad.png",
         "metadata": "(i) Multimodal CAD generation via editable Bézier surfaces and (ii) Largest Captioning dataset."
     },
@@ -63,7 +63,7 @@
         "video": "",
         "dataset": "https://sadilkhan.github.io/Marvel-Explorer/",
         "paperLink": "https://openaccess.thecvf.com/content/CVPR2025/papers/Sinha_MARVEL-40M_Multi-Level_Visual_Elaboration_for_High-Fidelity_Text-to-3D_Content_Creation_CVPR_2025_paper.pdf",
-        "categories": "Text-to-3D, Stable Diffusion, 3D, LLM, VLM, Lora",
+        "categories": "Text, Stable Diffusion, 3D, LLM, VLM, Lora",
         "image": "data/marvel.png",
         "metadata": "Largest 3D captioning dataset (40M+) with domain-specific and multi-level visual reasoning."
     },
@@ -80,7 +80,7 @@
         "video": "",
         "dataset": "https://huggingface.co/datasets/SadilKhan/Text2CAD",
         "paperLink": "https://openreview.net/pdf?id=5k9XeHIK3L",
-        "categories": "Point Cloud, Text-to-CAD, LLM, VLM, CAD, Annotation",
+        "categories": "Text, LLM, VLM, CAD",
         "image": "data/text2cad.png",
             "metadata": "First framework that generates CAD design history from natural-language prompts of varying expertise levels."
     },
