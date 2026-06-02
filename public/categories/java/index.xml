@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Java on Home</title>
-    <link>//localhost:1313/categories/java/</link>
+    <link>/categories/java/</link>
     <description>Recent content in Java on Home</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Fri, 12 Aug 2022 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/categories/java/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/categories/java/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Swedish Crossword Puzzle App</title>
-      <link>//localhost:1313/projects/scpa/</link>
+      <title>Swedish Crossword Puzzle, Built from Scratch in Java</title>
+      <link>/projects/scpa/</link>
       <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/projects/scpa/</guid>
-      <description>A Crossword Puzzle App in Java</description>
+      <guid>/projects/scpa/</guid>
+      <description>A complete Swedish-style crossword game in Java Swing — 19 classes across three packages, with abstract square hierarchies, an on-screen random-key keyboard for hint squares, and a single-keyboard listener that swaps cleanly as the user clicks around the board.</description>
     </item>
   </channel>
 </rss>

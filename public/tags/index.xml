@@ -2,10 +2,46 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on Home</title>
-    <link>//localhost:1313/tags/</link>
+    <link>/tags/</link>
     <description>Recent content in Tags on Home</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <atom:link href="//localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 Aug 2022 00:00:00 +0000</lastBuildDate>
+    <atom:link href="/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Inheritance</title>
+      <link>/tags/inheritance/</link>
+      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>/tags/inheritance/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Java</title>
+      <link>/tags/java/</link>
+      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>/tags/java/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>OOP</title>
+      <link>/tags/oop/</link>
+      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>/tags/oop/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Polymorphism</title>
+      <link>/tags/polymorphism/</link>
+      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>/tags/polymorphism/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Swing</title>
+      <link>/tags/swing/</link>
+      <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
+      <guid>/tags/swing/</guid>
+      <description></description>
+    </item>
   </channel>
 </rss>

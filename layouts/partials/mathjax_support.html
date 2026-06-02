@@ -1,0 +1,29 @@
+{{/*
+  Local override of the theme's partial.
+  The theme version loaded https://polyfill.io/v3/polyfill.min.js, which was
+  taken over in 2024 (Funnull) and now serves malware / fake sign-in prompts.
+  ES6 polyfills are no longer needed for any browser shipped in the last
+  ~8 years and MathJax 3 itself does not require them, so the script is
+  removed entirely.
+*/}}
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$','$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
+
+  window.addEventListener('load', function () {
+    document.querySelectorAll('mjx-container').forEach(function (x) {
+      x.parentElement.classList += 'has-jax';
+    });
+  });
+</script>
+<script type="text/javascript" id="MathJax-script" async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>

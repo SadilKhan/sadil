@@ -16,72 +16,73 @@
       </a>
     </nav>
 
-    {{/* ── Header ── */}}
-    <header class="ps__header">
-      {{ with .Params.categories }}
-      <div class="ps__cats">
-        {{ range . }}<span class="ps__cat">{{ . }}</span>{{ end }}
-      </div>
-      {{ end }}
-
-      <h1 class="ps__title">{{ .Title }}</h1>
-
-      {{ with .Params.subtitle }}
-      <p class="ps__subtitle">{{ . }}</p>
-      {{ end }}
-
-      <div class="ps__meta-row">
-        {{ with .Date }}
-        <time class="ps__meta-item" datetime="{{ . }}">
-          <span class="ps__meta-label">Year</span>
-          <span class="ps__meta-val">{{ dateFormat "2006" . }}</span>
-        </time>
-        {{ end }}
-        {{ with .Params.author }}
-        <div class="ps__meta-item">
-          <span class="ps__meta-label">Author</span>
-          <span class="ps__meta-val">{{ . }}</span>
+    {{/* ── Magazine spread: header + hero ── */}}
+    <div class="ps__spread{{ if not .Params.featured_image }} ps__spread--text-only{{ end }}">
+      <header class="ps__header">
+        {{ with .Params.categories }}
+        <div class="ps__cats">
+          {{ range . }}<span class="ps__cat">{{ . }}</span>{{ end }}
         </div>
         {{ end }}
-        {{ with .Params.role }}
-        <div class="ps__meta-item">
-          <span class="ps__meta-label">Role</span>
-          <span class="ps__meta-val">{{ . }}</span>
+
+        <h1 class="ps__title">{{ .Title }}</h1>
+
+        {{ with .Params.subtitle }}
+        <p class="ps__subtitle">{{ . }}</p>
+        {{ end }}
+
+        <div class="ps__meta-row">
+          {{ with .Date }}
+          <time class="ps__meta-item" datetime="{{ . }}">
+            <span class="ps__meta-label">Year</span>
+            <span class="ps__meta-val">{{ dateFormat "2006" . }}</span>
+          </time>
+          {{ end }}
+          {{ with .Params.author }}
+          <div class="ps__meta-item">
+            <span class="ps__meta-label">Author</span>
+            <span class="ps__meta-val">{{ . }}</span>
+          </div>
+          {{ end }}
+          {{ with .Params.role }}
+          <div class="ps__meta-item">
+            <span class="ps__meta-label">Role</span>
+            <span class="ps__meta-val">{{ . }}</span>
+          </div>
+          {{ end }}
+          {{ with .ReadingTime }}
+          <div class="ps__meta-item">
+            <span class="ps__meta-label">Read</span>
+            <span class="ps__meta-val">{{ . }} min</span>
+          </div>
+          {{ end }}
+        </div>
+
+        {{ with .Params.links }}
+        <div class="ps__ctas">
+          {{ range . }}
+          <a href="{{ .url }}" class="ps__cta" target="_blank" rel="noopener">
+            {{ .name }}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M2.5 7h9M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          {{ end }}
         </div>
         {{ end }}
-        {{ with .ReadingTime }}
-        <div class="ps__meta-item">
-          <span class="ps__meta-label">Read</span>
-          <span class="ps__meta-val">{{ . }} min</span>
+      </header>
+
+      {{ with .Params.featured_image }}
+      <figure class="ps__hero">
+        <div class="ps__hero-inner">
+          <img src="{{ . }}" alt="{{ $.Title }}" class="ps__hero-img" />
         </div>
+        {{ with $.Params.featured_image_caption }}
+        <figcaption class="ps__caption">{{ . }}</figcaption>
         {{ end }}
-      </div>
-
-      {{ with .Params.links }}
-      <div class="ps__ctas">
-        {{ range . }}
-        <a href="{{ .url }}" class="ps__cta" target="_blank" rel="noopener">
-          {{ .name }}
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M2.5 7h9M7.5 3.5L11 7l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
-        {{ end }}
-      </div>
+      </figure>
       {{ end }}
-    </header>
-
-    {{/* ── Hero image ── */}}
-    {{ with .Params.featured_image }}
-    <figure class="ps__hero">
-      <div class="ps__hero-inner">
-        <img src="{{ . }}" alt="{{ $.Title }}" class="ps__hero-img" />
-      </div>
-      {{ with $.Params.featured_image_caption }}
-      <figcaption class="ps__caption">{{ . }}</figcaption>
-      {{ end }}
-    </figure>
-    {{ end }}
+    </div>
 
     {{/* ── Content ── */}}
     <div class="ps__body">
@@ -108,6 +109,19 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap');
 
+/* Override hugo-apero's sidebar grid so the content actually centers in the viewport */
+html, body, body.water-theme { background: var(--paper, #f5f3ee) !important; }
+body, .grid-container, .grid-container.single, .grid-container.single-sidebar, .page-main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+.grid-container,
+.grid-container.single,
+.grid-container.single-sidebar { display: block !important; }
+.page-main { padding: 0 !important; }
+.sidebar, aside.sidebar, .page-aside { display: none !important; }
+
 :root {
   --ink:    #0f0f0f;
   --paper:  #f5f3ee;
@@ -131,12 +145,20 @@
   transition: width .1s linear;
 }
 
-/* Layout */
+/* Layout — full-width container; inner blocks set their own max-widths */
 .ps {
-  max-width: 780px;
-  margin: 0 auto;
-  padding: 5rem 2rem 8rem;
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 1.8rem 2.4rem 5rem;
   animation: fadeUp .8s var(--ease) both;
+}
+
+.ps__back-wrap,
+.ps__body {
+  max-width: 880px;
+  margin-left: auto;
+  margin-right: auto;
 }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(28px); }
@@ -144,18 +166,24 @@
 }
 
 /* Back link */
-.ps__back-wrap { margin-bottom: 3.5rem; }
+.ps__back-wrap { margin-bottom: 1.6rem; }
 .ps__back {
   display: inline-flex; align-items: center; gap: .5rem;
-  font-size: .8rem; font-weight: 500;
-  letter-spacing: .1em; text-transform: uppercase;
+  font-size: .76rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
   color: var(--muted); text-decoration: none;
   transition: color .2s, gap .3s var(--ease);
 }
 .ps__back:hover { color: var(--accent); gap: .75rem; }
 
-/* Header */
-.ps__header { margin-bottom: 3rem; }
+/* Stacked spread: header (narrow) → hero (wide) → body (narrow) */
+.ps__spread { margin-bottom: 3rem; }
+
+/* Header — centered narrow column for readability */
+.ps__header {
+  max-width: 880px;
+  margin: 0 auto 2.6rem;
+}
 .ps__cats { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
 .ps__cat {
   font-size: .68rem; font-weight: 500;
@@ -165,53 +193,63 @@
 }
 .ps__title {
   font-family: 'DM Serif Display', serif;
-  font-size: clamp(2.4rem, 5vw, 3.8rem);
-  font-weight: 400; line-height: 1.1;
-  margin: 0 0 1rem; letter-spacing: -.025em;
+  font-size: clamp(2.2rem, 4.2vw, 3.4rem);
+  font-weight: 400; line-height: 1.04;
+  margin: 0 0 .9rem; letter-spacing: -.025em;
 }
 .ps__subtitle {
-  font-size: 1.15rem; color: var(--muted);
-  line-height: 1.6; font-weight: 300;
-  margin: 0 0 2rem; max-width: 600px;
+  font-size: 1.06rem; color: var(--muted);
+  line-height: 1.55; font-weight: 300;
+  margin: 0 0 1.5rem; max-width: 56ch;
 }
 
 /* Meta row */
 .ps__meta-row {
-  display: flex; flex-wrap: wrap; gap: 2rem;
-  padding: 1.5rem 0;
+  display: flex; flex-wrap: wrap; gap: 1.4rem 1.8rem;
+  padding: 1rem 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
-  margin-bottom: 2rem;
+  margin-bottom: 1.4rem;
 }
-.ps__meta-item { display: flex; flex-direction: column; gap: .25rem; }
-.ps__meta-label { font-size: .65rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
-.ps__meta-val { font-size: .9rem; font-weight: 400; color: var(--ink); }
+.ps__meta-item { display: flex; flex-direction: column; gap: .2rem; }
+.ps__meta-label { font-size: .62rem; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); }
+.ps__meta-val { font-size: .88rem; font-weight: 400; color: var(--ink); }
 
 /* CTAs */
-.ps__ctas { display: flex; flex-wrap: wrap; gap: .75rem; }
+.ps__ctas { display: flex; flex-wrap: wrap; gap: .6rem; }
 .ps__cta {
   display: inline-flex; align-items: center; gap: .5rem;
-  font-size: .85rem; font-weight: 500;
+  font-size: .82rem; font-weight: 500;
   color: var(--ink); text-decoration: none;
   border: 1px solid var(--border); border-radius: 3px;
-  padding: .55rem 1.1rem;
+  padding: .5rem 1rem;
   background: transparent;
   transition: background .25s, color .25s, border-color .25s, gap .3s var(--ease);
 }
 .ps__cta:hover { background: var(--accent); color: #fff; border-color: var(--accent); gap: .75rem; }
 
-/* Hero */
-.ps__hero { margin: 0 0 3.5rem; }
+/* Hero — wider than the text columns, anchors the horizontal composition */
+.ps__hero {
+  margin: 0 auto;
+  max-width: 1400px;
+}
 .ps__hero-inner {
-  border-radius: 6px;
+  position: relative;
+  border-radius: 12px;
   overflow: hidden;
-  line-height: 0;
   border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(15,15,15,0.04), 0 28px 64px rgba(15,15,15,0.10);
+  aspect-ratio: 16 / 10;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(201,119,58,0.06), transparent 60%),
+    linear-gradient(135deg, var(--warm) 0%, #ddd6c5 100%);
 }
 .ps__hero-img {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  max-height: 520px;
-  object-fit: cover;
+  height: 100%;
+  object-fit: contain;
   display: block;
   transition: transform .8s var(--ease);
 }
@@ -221,8 +259,12 @@
   text-align: center; margin-top: .75rem;
 }
 
-/* Body */
-.ps__body { position: relative; }
+/* Body — comfortable reading width, centred under the wider spread */
+.ps__body {
+  position: relative;
+  max-width: 820px;
+  margin: 0 auto;
+}
 .ps__content {
   font-size: 1.05rem; line-height: 1.8;
   color: #1a1a1a;
@@ -230,13 +272,15 @@
 .ps__content > * + * { margin-top: 1.5rem; }
 .ps__content h2 {
   font-family: 'DM Serif Display', serif;
-  font-size: 1.75rem; font-weight: 400;
-  letter-spacing: -.015em; margin-top: 3.5rem; margin-bottom: .5rem;
+  font-size: 1.8rem; font-weight: 400;
+  letter-spacing: -.015em; margin-top: 2.6rem; margin-bottom: .5rem;
+  scroll-margin-top: 80px;
 }
 .ps__content h3 {
   font-family: 'DM Serif Display', serif;
   font-size: 1.3rem; font-weight: 400;
-  margin-top: 2.5rem; margin-bottom: .4rem;
+  margin-top: 2rem; margin-bottom: .4rem;
+  scroll-margin-top: 80px;
 }
 .ps__content a {
   color: var(--accent);
@@ -301,9 +345,19 @@
 }
 .ps__tag:hover { color: var(--accent); border-color: currentColor; }
 
+@media (max-width: 979px) {
+  .ps { padding: 1.4rem 1.5rem 4rem; }
+  .ps__spread { margin-bottom: 2.4rem; }
+  .ps__header { margin-bottom: 1.8rem; }
+}
+
 @media (max-width: 600px) {
-  .ps { padding: 3rem 1.25rem 5rem; }
-  .ps__meta-row { gap: 1.25rem; }
+  .ps { padding: 1.2rem 1.1rem 3.6rem; }
+  .ps__meta-row { gap: 1rem 1.4rem; padding: .8rem 0; }
+  .ps__title { font-size: 2rem; }
+  .ps__subtitle { font-size: .98rem; }
+  .ps__content h2 { font-size: 1.5rem; margin-top: 2.2rem; }
+  .ps__content h3 { font-size: 1.18rem; }
 }
 </style>
 

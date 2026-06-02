@@ -12,6 +12,15 @@
    ABOUT PAGE
    ================================================================ */
 
+html:has(.about-page),
+body:has(.about-page),
+body:has(.about-page) .grid-container,
+body:has(.about-page) .page-main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
 .page-main.about-page {
   max-width: none !important;
   padding: 0 !important;
@@ -1520,6 +1529,217 @@
   }
 }
 
+/* ================================================================
+   STRUCTURAL TIGHTENING (final overrides)
+   Goal: kill the airy whitespace, give the page a clearer rhythm.
+   ================================================================ */
+
+/* Wider shell so the page actually uses the viewport */
+.about-page .about-shell {
+  width: min(1320px, calc(100% - 56px));
+  padding: 28px 0 80px;
+  grid-template-columns: 256px minmax(0, 1fr);
+  gap: 56px;
+}
+
+/* Sidebar: tighter stack, slightly smaller avatar */
+.about-page .about-rail { gap: 18px; top: 78px; }
+.about-page .about-photo { width: 124px; height: 124px; border-width: 3px; }
+.about-page .about-rail-name { font-size: 1rem; }
+.about-page .about-rail-role { margin-top: 4px; font-size: 0.78rem; }
+.about-page .about-rail-info { padding-top: 2px; }
+.about-page .about-link-label { margin-bottom: 6px; }
+.about-page .about-rail-events { margin-top: 4px; }
+
+/* Intro block — tighter, with clearer hierarchy */
+.about-page .about-intro {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+.about-page .about-page-label {
+  margin: 0 0 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+}
+.about-page .about-page-label::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--c-teal);
+}
+.about-page .about-intro .about-kicker { margin-bottom: 10px; padding: 4px 12px; font-size: 0.72rem; }
+.about-page .about-intro .about-title {
+  font-size: clamp(1.85rem, 3.4vw, 2.7rem);
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  max-width: 720px;
+}
+.about-page .about-intro .about-summary {
+  margin-top: 14px;
+  font-size: 0.99rem;
+  line-height: 1.7;
+  max-width: 680px;
+}
+.about-page .about-affiliations { margin-top: 16px; gap: 6px; }
+.about-page .about-chip {
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  border-radius: 6px;
+}
+.about-page .about-intro .about-actions { margin-top: 18px; gap: 8px; }
+.about-page .about-intro .about-action {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+.about-page .about-stats {
+  margin-top: 18px;
+  gap: 8px;
+}
+.about-page .about-stat {
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+.about-page .about-stat::before { display: none; }
+.about-page .about-stat-value { font-size: 1.15rem; font-weight: 800; }
+.about-page .about-stat-label { margin-top: 4px; font-size: 0.72rem; letter-spacing: 0.04em; }
+
+/* Prose between intro and sections — make it part of the rhythm */
+.about-page .about-prose {
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* Sections — clearer, more substantial headers with a top rule */
+.about-page .about-main { counter-reset: about-sec; }
+
+.about-page .about-section {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--c-line);
+}
+.about-page .about-section:first-of-type {
+  margin-top: 18px;
+}
+.about-page .about-collapse { border-bottom: 0; padding-bottom: 0; }
+
+.about-page .about-collapse > summary.about-section-head {
+  align-items: baseline;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  counter-increment: about-sec;
+}
+
+.about-page .about-section-title {
+  font-size: 1.32rem;
+  font-weight: 800;
+  text-transform: none;
+  letter-spacing: -0.015em;
+  color: var(--c-text);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.about-page .about-section-title::before {
+  content: counter(about-sec, decimal-leading-zero);
+  color: var(--c-teal);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: rgba(13, 148, 136, 0.10);
+  align-self: center;
+}
+
+.about-page .about-collapse-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 0.62rem;
+}
+
+.about-page .about-collapse-body { margin-top: 12px; }
+
+/* Research cards — tighter rows */
+.about-page .about-simple-card {
+  padding: 16px 0;
+  gap: 14px;
+  grid-template-columns: 34px minmax(0, 1fr);
+}
+.about-page .about-simple-card:last-child { border-bottom: 0; }
+.about-page .about-simple-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  font-size: 0.88rem;
+}
+.about-page .about-simple-body h3 { font-size: 0.98rem; }
+.about-page .about-simple-body p { margin-top: 4px; font-size: 0.88rem; line-height: 1.55; }
+.about-page .about-work-list { margin-top: 10px; gap: 6px; }
+.about-page .about-work-list li { min-height: 26px; padding: 0 9px; font-size: 0.74rem; }
+
+/* Service grid — tighter, with clearer separation */
+.about-page .about-service-grid { gap: 0; }
+.about-page .about-service-block { padding: 14px 16px 14px 0; }
+.about-page .about-service-block:nth-child(2) { padding-left: 16px; }
+.about-page .about-service-block:last-child { padding-left: 16px; padding-right: 0; }
+.about-page .about-block-label {
+  margin: 0 0 8px;
+  color: var(--c-faint);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.about-page .about-review-list { display: flex; flex-wrap: wrap; gap: 4px; }
+.about-page .about-review-chip {
+  padding: 3px 8px;
+  border: 1px solid var(--c-line);
+  font-size: 0.72rem;
+  color: var(--c-muted);
+}
+.about-page .about-mini-list { margin: 0; padding: 0; list-style: none; }
+.about-page .about-mini-list li {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--c-line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.about-page .about-mini-list li:last-child { border-bottom: 0; }
+.about-page .about-mini-title { font-size: 0.86rem; font-weight: 700; color: var(--c-text); }
+.about-page .about-mini-detail { font-size: 0.76rem; color: var(--c-muted); line-height: 1.45; }
+
+/* Responsive — collapse to single column earlier and tighter */
+@media (max-width: 1000px) {
+  .about-page .about-shell {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    width: calc(100% - 32px);
+    padding: 20px 0 56px;
+  }
+  .about-page .about-rail { position: static; top: auto; }
+  .about-page .about-service-grid { grid-template-columns: 1fr; }
+  .about-page .about-service-block,
+  .about-page .about-service-block:nth-child(2),
+  .about-page .about-service-block:last-child {
+    padding: 12px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--c-line);
+  }
+  .about-page .about-service-block:last-child { border-bottom: 0; }
+}
 </style>
 
 <main class="page-main about-page" role="main">

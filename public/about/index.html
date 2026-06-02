@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr"><head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+<html lang="en" dir="ltr"><head>
   
                            
      
@@ -30,7 +30,7 @@
 <meta property="og:description" content="About Me
 " />
 <meta property="og:type" content="website" />
-<meta property="og:url" content="//localhost:1313/about/" />
+<meta property="og:url" content="/about/" />
 <meta property="og:locale" content="en">
 
 
@@ -63,7 +63,7 @@
   <link rel="shortcut icon" href="" type="image/x-icon">
   <link rel="icon" href="" type="image/x-icon">
   
-    <link rel="alternate" type="application/rss+xml" href="//localhost:1313/about/index.xml" title="Home" />
+    <link rel="alternate" type="application/rss+xml" href="/about/index.xml" title="Home" />
   
   
   <link rel="stylesheet" href="/style.main.min.d4467938a8c18aebdbe989a4c1c29a6549cbffcd4ee748693288b21941d5ec5d.css" integrity="sha256-1EZ5OKjBiuvb6YmkwcKaZUnL/81O50hpMoiyGUHV7F0=" media="screen">
@@ -233,6 +233,7 @@
       <div class="grid-container">
 
 
+
 <script>
   MathJax = {
     tex: {
@@ -246,13 +247,12 @@
     }
   };
 
-  window.addEventListener('load', (event) => {
-      document.querySelectorAll("mjx-container").forEach(function(x){
-        x.parentElement.classList += 'has-jax'})
+  window.addEventListener('load', function () {
+    document.querySelectorAll('mjx-container').forEach(function (x) {
+      x.parentElement.classList += 'has-jax';
     });
-
+  });
 </script>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
 <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
@@ -439,7 +439,7 @@
   <div class="sk-nav-inner">
 
     
-    <a class="sk-brand" href="//localhost:1313/" title="Home">
+    <a class="sk-brand" href="/" title="Home">
       
         <span class="sk-brand-dot"></span>
         <i class="fa-solid fa-house" style="font-size:0.72rem;"></i>
@@ -654,6 +654,15 @@
 
 <style>
  
+
+html:has(.about-page),
+body:has(.about-page),
+body:has(.about-page) .grid-container,
+body:has(.about-page) .page-main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+}
 
 .page-main.about-page {
   max-width: none !important;
@@ -2153,6 +2162,214 @@
   }
 }
 
+ 
+
+ 
+.about-page .about-shell {
+  width: min(1320px, calc(100% - 56px));
+  padding: 28px 0 80px;
+  grid-template-columns: 256px minmax(0, 1fr);
+  gap: 56px;
+}
+
+ 
+.about-page .about-rail { gap: 18px; top: 78px; }
+.about-page .about-photo { width: 124px; height: 124px; border-width: 3px; }
+.about-page .about-rail-name { font-size: 1rem; }
+.about-page .about-rail-role { margin-top: 4px; font-size: 0.78rem; }
+.about-page .about-rail-info { padding-top: 2px; }
+.about-page .about-link-label { margin-bottom: 6px; }
+.about-page .about-rail-events { margin-top: 4px; }
+
+ 
+.about-page .about-intro {
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+.about-page .about-page-label {
+  margin: 0 0 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+}
+.about-page .about-page-label::before {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--c-teal);
+}
+.about-page .about-intro .about-kicker { margin-bottom: 10px; padding: 4px 12px; font-size: 0.72rem; }
+.about-page .about-intro .about-title {
+  font-size: clamp(1.85rem, 3.4vw, 2.7rem);
+  letter-spacing: -0.03em;
+  line-height: 1.04;
+  max-width: 720px;
+}
+.about-page .about-intro .about-summary {
+  margin-top: 14px;
+  font-size: 0.99rem;
+  line-height: 1.7;
+  max-width: 680px;
+}
+.about-page .about-affiliations { margin-top: 16px; gap: 6px; }
+.about-page .about-chip {
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  border-radius: 6px;
+}
+.about-page .about-intro .about-actions { margin-top: 18px; gap: 8px; }
+.about-page .about-intro .about-action {
+  min-height: 36px;
+  padding: 0 14px;
+  font-size: 0.85rem;
+  border-radius: 8px;
+}
+.about-page .about-stats {
+  margin-top: 18px;
+  gap: 8px;
+}
+.about-page .about-stat {
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+.about-page .about-stat::before { display: none; }
+.about-page .about-stat-value { font-size: 1.15rem; font-weight: 800; }
+.about-page .about-stat-label { margin-top: 4px; font-size: 0.72rem; letter-spacing: 0.04em; }
+
+ 
+.about-page .about-prose {
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+ 
+.about-page .about-main { counter-reset: about-sec; }
+
+.about-page .about-section {
+  margin-top: 24px;
+  padding-top: 22px;
+  border-top: 1px solid var(--c-line);
+}
+.about-page .about-section:first-of-type {
+  margin-top: 18px;
+}
+.about-page .about-collapse { border-bottom: 0; padding-bottom: 0; }
+
+.about-page .about-collapse > summary.about-section-head {
+  align-items: baseline;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  counter-increment: about-sec;
+}
+
+.about-page .about-section-title {
+  font-size: 1.32rem;
+  font-weight: 800;
+  text-transform: none;
+  letter-spacing: -0.015em;
+  color: var(--c-text);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.about-page .about-section-title::before {
+  content: counter(about-sec, decimal-leading-zero);
+  color: var(--c-teal);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+  padding: 3px 7px;
+  border-radius: 5px;
+  background: rgba(13, 148, 136, 0.10);
+  align-self: center;
+}
+
+.about-page .about-collapse-icon {
+  width: 24px;
+  height: 24px;
+  font-size: 0.62rem;
+}
+
+.about-page .about-collapse-body { margin-top: 12px; }
+
+ 
+.about-page .about-simple-card {
+  padding: 16px 0;
+  gap: 14px;
+  grid-template-columns: 34px minmax(0, 1fr);
+}
+.about-page .about-simple-card:last-child { border-bottom: 0; }
+.about-page .about-simple-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  font-size: 0.88rem;
+}
+.about-page .about-simple-body h3 { font-size: 0.98rem; }
+.about-page .about-simple-body p { margin-top: 4px; font-size: 0.88rem; line-height: 1.55; }
+.about-page .about-work-list { margin-top: 10px; gap: 6px; }
+.about-page .about-work-list li { min-height: 26px; padding: 0 9px; font-size: 0.74rem; }
+
+ 
+.about-page .about-service-grid { gap: 0; }
+.about-page .about-service-block { padding: 14px 16px 14px 0; }
+.about-page .about-service-block:nth-child(2) { padding-left: 16px; }
+.about-page .about-service-block:last-child { padding-left: 16px; padding-right: 0; }
+.about-page .about-block-label {
+  margin: 0 0 8px;
+  color: var(--c-faint);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.about-page .about-review-list { display: flex; flex-wrap: wrap; gap: 4px; }
+.about-page .about-review-chip {
+  padding: 3px 8px;
+  border: 1px solid var(--c-line);
+  font-size: 0.72rem;
+  color: var(--c-muted);
+}
+.about-page .about-mini-list { margin: 0; padding: 0; list-style: none; }
+.about-page .about-mini-list li {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--c-line);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.about-page .about-mini-list li:last-child { border-bottom: 0; }
+.about-page .about-mini-title { font-size: 0.86rem; font-weight: 700; color: var(--c-text); }
+.about-page .about-mini-detail { font-size: 0.76rem; color: var(--c-muted); line-height: 1.45; }
+
+ 
+@media (max-width: 1000px) {
+  .about-page .about-shell {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    width: calc(100% - 32px);
+    padding: 20px 0 56px;
+  }
+  .about-page .about-rail { position: static; top: auto; }
+  .about-page .about-service-grid { grid-template-columns: 1fr; }
+  .about-page .about-service-block,
+  .about-page .about-service-block:nth-child(2),
+  .about-page .about-service-block:last-child {
+    padding: 12px 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--c-line);
+  }
+  .about-page .about-service-block:last-child { border-bottom: 0; }
+}
 </style>
 
 <main class="page-main about-page" role="main">

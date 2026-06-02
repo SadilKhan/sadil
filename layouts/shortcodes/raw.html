@@ -1,0 +1,7 @@
+{{/*
+  raw — pass inner content through as raw HTML.
+  Use for inline SVG / <style> blocks that contain blank lines, which
+  would otherwise terminate Markdown's HTML-block parsing.
+  Usage: {{< raw >}}<svg>…</svg>{{< /raw >}}
+*/}}
+{{- .Inner | safeHTML -}}

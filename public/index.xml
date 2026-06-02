@@ -2,59 +2,59 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mohammad Sadil Khan on Home</title>
-    <link>//localhost:1313/</link>
+    <link>/</link>
     <description>Recent content in Mohammad Sadil Khan on Home</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Fri, 10 Oct 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="//localhost:1313/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Iceland Trip</title>
-      <link>//localhost:1313/blog/adventure/iceland/</link>
+      <link>/blog/adventure/iceland/</link>
       <pubDate>Sun, 24 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/blog/adventure/iceland/</guid>
+      <guid>/blog/adventure/iceland/</guid>
       <description>&lt;link rel=&#34;stylesheet&#34; href=&#34;iceland.css&#34;&gt;&#xA;&lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.googleapis.com&#34;&gt;&#xA;&lt;link href=&#34;https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&amp;family=Lora:ital,wght@0,400;0,500;1,400&amp;family=DM+Sans:wght@400;500;600&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt;&#xA;&lt;div class=&#34;ic-wrap&#34;&gt;&#xA;  &lt;!-- ═══════════════════════════════════════════&#xA;       HERO&#xA;  ═══════════════════════════════════════════ --&gt;&#xA;  &lt;header class=&#34;ic-hero&#34;&gt;&#xA;    &lt;div class=&#34;ic-hero__badge&#34;&gt;August 2025 · Campervan Journey&lt;/div&gt;&#xA;    &lt;h1 class=&#34;ic-hero__title&#34;&gt;Iceland&lt;/h1&gt;&#xA;    &lt;p class=&#34;ic-hero__sub&#34;&gt;Seven days. One campervan. An entire island of fire and ice.&lt;/p&gt;&#xA;    &lt;div class=&#34;ic-hero__stats&#34;&gt;&#xA;      &lt;div class=&#34;ic-stat&#34;&gt;&lt;span class=&#34;ic-stat__num&#34;&gt;7&lt;/span&gt;&lt;span class=&#34;ic-stat__lbl&#34;&gt;Days&lt;/span&gt;&lt;/div&gt;&#xA;      &lt;div class=&#34;ic-stat__div&#34;&gt;&lt;/div&gt;&#xA;      &lt;div class=&#34;ic-stat&#34;&gt;&lt;span class=&#34;ic-stat__num&#34;&gt;~2 400&lt;/span&gt;&lt;span class=&#34;ic-stat__lbl&#34;&gt;km driven&lt;/span&gt;&lt;/div&gt;&#xA;      &lt;div class=&#34;ic-stat__div&#34;&gt;&lt;/div&gt;&#xA;      &lt;div class=&#34;ic-stat&#34;&gt;&lt;span class=&#34;ic-stat__num&#34;&gt;∞&lt;/span&gt;&lt;span class=&#34;ic-stat__lbl&#34;&gt;Waterfalls&lt;/span&gt;&lt;/div&gt;&#xA;    &lt;/div&gt;&#xA;  &lt;/header&gt;&#xA;  &lt;!-- intro prose --&gt;&#xA;  &lt;div class=&#34;ic-intro&#34;&gt;&#xA;    &lt;p&gt;In August 2025, we took a week-long campervan trip around Iceland — from &lt;em&gt;Golden Circle hot springs&lt;/em&gt; to &lt;em&gt;South Coast waterfalls&lt;/em&gt;, &lt;em&gt;glacier lagoons&lt;/em&gt;, &lt;em&gt;Eastfjords fishing villages&lt;/em&gt;, and the &lt;em&gt;wildlife of the north and Snæfellsnes&lt;/em&gt;.&lt;/p&gt;&#xA;    &lt;p&gt;It was seven days of drone flights, hot river soaks, black sand beaches, endless waterfalls, and fresh fish dinners — each day with its own theme and adventure. Here&#39;s our day-by-day itinerary and the highlights that made this trip unforgettable.&lt;/p&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>//localhost:1313/cv/</link>
+      <link>/cv/</link>
       <pubDate>Fri, 10 Oct 2025 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/cv/</guid>
+      <guid>/cv/</guid>
       <description>&lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.googleapis.com&#34;&gt;&#xA;&lt;link href=&#34;https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt;&#xA;&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css&#34;&gt;&#xA;&lt;style&gt;&#xA;:root {&#xA;  --cv-accent:        #0ea5e9;&#xA;  --cv-accent-teal:   #006494;&#xA;  --cv-accent-bg:     rgba(14,165,233,0.07);&#xA;  --cv-accent-glow:   rgba(14,165,233,0.18);&#xA;  --cv-accent-border: rgba(14,165,233,0.25);&#xA;}&#xA;&#xA;.cv-wrap {&#xA;  max-width: 760px;&#xA;  margin: 0 auto;&#xA;  padding: 1rem 0 5rem;&#xA;  font-family: &#39;DM Sans&#39;, sans-serif;&#xA;}&#xA;&#xA;.cv-download {&#xA;  display: inline-flex;&#xA;  align-items: center;&#xA;  gap: 0.5rem;&#xA;  padding: 0.6rem 1.4rem;&#xA;  border-radius: 8px;&#xA;  border: 1.5px solid var(--cv-accent);&#xA;  font-family: &#39;DM Sans&#39;, sans-serif;&#xA;  font-size: 0.85rem;&#xA;  font-weight: 600;&#xA;  text-decoration: none;&#xA;  color: var(--cv-accent);&#xA;  background: var(--cv-accent-bg);&#xA;  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;&#xA;  margin-bottom: 2.8rem;&#xA;  cursor: pointer;&#xA;}&#xA;.cv-download:hover {&#xA;  background: var(--cv-accent);&#xA;  color: #fff;&#xA;  box-shadow: 0 4px 16px var(--cv-accent-glow);&#xA;  transform: translateY(-1px);&#xA;  text-decoration: none;&#xA;}&#xA;&#xA;.cv-section { margin-bottom: 3rem; }&#xA;&#xA;.cv-section-title {&#xA;  font-family: &#39;DM Serif Display&#39;, serif;&#xA;  font-size: 1.55rem;&#xA;  font-weight: 400;&#xA;  letter-spacing: -0.01em;&#xA;  margin-bottom: 1.1rem;&#xA;  padding-bottom: 0.55rem;&#xA;  border-bottom: 2px solid;&#xA;  border-image: linear-gradient(90deg, var(--cv-accent) 0%, var(--cv-accent-teal) 50%, transparent 100%) 1;&#xA;  opacity: 0.9;&#xA;}&#xA;&#xA;.cv-card {&#xA;  border: 1px solid rgba(128,128,128,0.16);&#xA;  border-radius: 12px;&#xA;  padding: 1.3rem 1.5rem 1.3rem 1.7rem;&#xA;  margin-bottom: 0.85rem;&#xA;  position: relative;&#xA;  overflow: hidden;&#xA;  transition: box-shadow 0.22s, border-color 0.22s, transform 0.22s;&#xA;  animation: cvFadeUp 0.4s ease both;&#xA;}&#xA;.cv-card::before {&#xA;  content: &#39;&#39;;&#xA;  position: absolute;&#xA;  left: 0; top: 20px; bottom: 20px;&#xA;  width: 3px;&#xA;  background: linear-gradient(180deg, var(--cv-accent) 0%, var(--cv-accent-teal) 100%);&#xA;  border-radius: 0 2px 2px 0;&#xA;  opacity: 0.35;&#xA;  transition: opacity 0.22s, top 0.22s, bottom 0.22s;&#xA;}&#xA;.cv-card:hover {&#xA;  box-shadow: 0 4px 24px var(--cv-accent-glow);&#xA;  border-color: var(--cv-accent-border);&#xA;  transform: translateY(-2px);&#xA;}&#xA;.cv-card:hover::before { opacity: 0.85; top: 0; bottom: 0; }&#xA;&#xA;.cv-card-inner {&#xA;  display: flex;&#xA;  justify-content: space-between;&#xA;  align-items: flex-start;&#xA;  gap: 1.2rem;&#xA;}&#xA;&#xA;/* Logo + text side by side */&#xA;.cv-card-left {&#xA;  display: flex;&#xA;  align-items: flex-start;&#xA;  gap: 1rem;&#xA;  flex: 1;&#xA;  min-width: 0;&#xA;}&#xA;&#xA;.cv-logo {&#xA;  width: 52px;&#xA;  height: 52px;&#xA;  border-radius: 8px;&#xA;  object-fit: contain;&#xA;  flex-shrink: 0;&#xA;  border: 1px solid rgba(128,128,128,0.12);&#xA;  padding: 3px;&#xA;  background: #fff;&#xA;}&#xA;&#xA;.cv-logo-placeholder {&#xA;  width: 42px;&#xA;  height: 42px;&#xA;  border-radius: 8px;&#xA;  flex-shrink: 0;&#xA;  background: var(--cv-accent-bg);&#xA;  border: 1px solid var(--cv-accent-border);&#xA;  display: flex;&#xA;  align-items: center;&#xA;  justify-content: center;&#xA;  font-size: 1.1rem;&#xA;  color: var(--cv-accent);&#xA;}&#xA;&#xA;.cv-card-body { flex: 1; min-width: 0; }&#xA;&#xA;.cv-card-date {&#xA;  flex-shrink: 0;&#xA;  font-size: 0.72rem;&#xA;  font-weight: 700;&#xA;  letter-spacing: 0.06em;&#xA;  text-transform: uppercase;&#xA;  color: var(--cv-accent);&#xA;  background: var(--cv-accent-bg);&#xA;  border: 1px solid var(--cv-accent-border);&#xA;  border-radius: 20px;&#xA;  padding: 0.2rem 0.7rem;&#xA;  white-space: nowrap;&#xA;  margin-top: 0.15rem;&#xA;}&#xA;&#xA;.cv-role {&#xA;  font-family: &#39;DM Serif Display&#39;, serif;&#xA;  font-size: 1.1rem;&#xA;  font-weight: 400;&#xA;  margin-bottom: 0.2rem;&#xA;  line-height: 1.3;&#xA;}&#xA;.cv-org {&#xA;  font-size: 0.875rem;&#xA;  font-weight: 600;&#xA;  color: var(--cv-accent-teal);&#xA;  margin-bottom: 0.2rem;&#xA;}&#xA;.cv-loc {&#xA;  font-size: 0.8rem;&#xA;  opacity: 0.45;&#xA;  margin-bottom: 0.65rem;&#xA;}&#xA;.cv-loc i { font-size: 0.7rem; margin-right: 0.25rem; color: var(--cv-accent); opacity: 0.7; }&#xA;.cv-desc { font-size: 0.875rem; line-height: 1.65; opacity: 0.72; margin: 0; }&#xA;&#xA;.cv-card--edu .cv-card-inner { align-items: center; }&#xA;.cv-card--edu .cv-card-left  { align-items: center; }&#xA;.cv-card--edu .cv-loc        { margin-bottom: 0; }&#xA;&#xA;/* Loading / error states */&#xA;.cv-loading {&#xA;  text-align: center;&#xA;  padding: 2rem;&#xA;  opacity: 0.5;&#xA;  font-size: 0.9rem;&#xA;}&#xA;&#xA;@keyframes cvFadeUp {&#xA;  from { opacity: 0; transform: translateY(10px); }&#xA;  to   { opacity: 1; transform: translateY(0); }&#xA;}&#xA;&#xA;@media (max-width: 520px) {&#xA;  .cv-card { padding: 1.1rem 1.2rem 1.1rem 1.5rem; }&#xA;  .cv-card-inner { flex-direction: column; gap: 0.35rem; }&#xA;  .cv-card-date { order: -1; font-size: 0.68rem; }&#xA;  .cv-role { font-size: 1rem; }&#xA;  .cv-section-title { font-size: 1.35rem; }&#xA;  .cv-logo, .cv-logo-placeholder { width: 36px; height: 36px; }&#xA;}&#xA;&lt;/style&gt;&#xA;&lt;div class=&#34;cv-wrap&#34;&gt;&#xA;  &lt;button class=&#34;cv-download&#34; onclick=&#34;window.open(&#39;resume.pdf&#39;,&#39;_blank&#39;)&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-file-arrow-down&#34;&gt;&lt;/i&gt; Download PDF&#xA;  &lt;/button&gt;&#xA;  &lt;div class=&#34;cv-section&#34;&gt;&#xA;    &lt;h2 class=&#34;cv-section-title&#34;&gt;Work Experience&lt;/h2&gt;&#xA;    &lt;div id=&#34;cv-experience&#34;&gt;&lt;div class=&#34;cv-loading&#34;&gt;Loading…&lt;/div&gt;&lt;/div&gt;&#xA;  &lt;/div&gt;&#xA;  &lt;div class=&#34;cv-section&#34;&gt;&#xA;    &lt;h2 class=&#34;cv-section-title&#34;&gt;Education&lt;/h2&gt;&#xA;    &lt;div id=&#34;cv-education&#34;&gt;&lt;div class=&#34;cv-loading&#34;&gt;Loading…&lt;/div&gt;&lt;/div&gt;&#xA;  &lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;script&gt;&#xA;(function () {&#xA;  function buildCard(item, isEdu) {&#xA;    var logoHtml = item.logo&#xA;      ? &#39;&lt;img class=&#34;cv-logo&#34; src=&#34;&#39; + item.logo + &#39;&#34; alt=&#34;&#39; + item.org + &#39; logo&#34; onerror=&#34;this.outerHTML=\&#39;&lt;div class=&amp;quot;cv-logo-placeholder&amp;quot;&gt;&lt;i class=&amp;quot;fa-solid fa-building&amp;quot;&gt;&lt;/i&gt;&lt;/div&gt;\&#39;&#34;&gt;&#39;&#xA;      : &#39;&lt;div class=&#34;cv-logo-placeholder&#34;&gt;&lt;i class=&#34;fa-solid fa-building&#34;&gt;&lt;/i&gt;&lt;/div&gt;&#39;;&#xA;    var descHtml = (!isEdu &amp;&amp; item.desc)&#xA;      ? &#39;&lt;p class=&#34;cv-desc&#34;&gt;&#39; + item.desc + &#39;&lt;/p&gt;</description>
     </item>
     <item>
       <title>My Publications</title>
-      <link>//localhost:1313/publications/</link>
+      <link>/publications/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/publications/</guid>
+      <guid>/publications/</guid>
       <description>&lt;link rel=&#34;stylesheet&#34; href=&#34;styles.css&#34;&gt;&#xA;&lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.googleapis.com&#34;&gt;&#xA;&lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.gstatic.com&#34; crossorigin&gt;&#xA;&lt;link href=&#34;https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt;&#xA;&lt;link rel=&#34;stylesheet&#34; href=&#34;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css&#34;&gt;&#xA;&lt;div class=&#34;container&#34;&gt;&#xA;  &lt;div id=&#34;search-container&#34;&gt;&#xA;    &lt;form onsubmit=&#34;return false;&#34;&gt;&#xA;    &lt;i class=&#34;fa-solid fa-magnifying-glass&#34; id=&#34;search-icon&#34;&gt;&lt;/i&gt;&#xA;      &lt;input&#xA;        type=&#34;text&#34;&#xA;        name=&#34;search&#34;&#xA;        id=&#34;search&#34;&#xA;        placeholder=&#34;Search by title, author, venue, year …&#34;&#xA;        autocomplete=&#34;off&#34;&#xA;        spellcheck=&#34;false&#34;&gt;&#xA;    &lt;/form&gt;&#xA;  &lt;/div&gt;&#xA;  &lt;div&gt;&#xA;    &lt;p&gt;* &lt;span style=&#34;font-weight:600;&#34;&gt;Equal Contributions&lt;/span&gt;&lt;/p&gt;&#xA;  &lt;/div&gt;&#xA;  &lt;div id=&#34;publication-list&#34;&gt;&lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;div id=&#34;bibtexModal&#34; class=&#34;bibtex-modal&#34; role=&#34;dialog&#34; aria-modal=&#34;true&#34; aria-label=&#34;BibTeX Entry&#34;&gt;&#xA;  &lt;div class=&#34;bibtex-card&#34;&gt;&#xA;    &lt;button class=&#34;close-btn&#34; onclick=&#34;closeBibtexModal()&#34; aria-label=&#34;Close&#34;&gt;×&lt;/button&gt;&#xA;    &lt;h3&gt;BibTeX Entry&lt;/h3&gt;&#xA;    &lt;pre id=&#34;bibtexContent&#34; class=&#34;bibtex-text&#34;&gt;&lt;/pre&gt;&#xA;    &lt;button class=&#34;copy-btn&#34; onclick=&#34;copyBibtexFromModal()&#34;&gt;📋 Copy&lt;/button&gt;&#xA;  &lt;/div&gt;&#xA;&lt;/div&gt;&#xA;&lt;script src=&#34;publication_script.js&#34;&gt;&lt;/script&gt;</description>
     </item>
     <item>
       <title></title>
-      <link>//localhost:1313/travel_video/</link>
+      <link>/travel_video/</link>
       <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/travel_video/</guid>
+      <guid>/travel_video/</guid>
       <description></description>
     </item>
     <item>
-      <title>Swedish Crossword Puzzle App</title>
-      <link>//localhost:1313/projects/scpa/</link>
+      <title>Swedish Crossword Puzzle, Built from Scratch in Java</title>
+      <link>/projects/scpa/</link>
       <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/projects/scpa/</guid>
-      <description>A Crossword Puzzle App in Java</description>
+      <guid>/projects/scpa/</guid>
+      <description>A complete Swedish-style crossword game in Java Swing — 19 classes across three packages, with abstract square hierarchies, an on-screen random-key keyboard for hint squares, and a single-keyboard listener that swaps cleanly as the user clicks around the board.</description>
     </item>
     <item>
       <title>Contact</title>
-      <link>//localhost:1313/contact/</link>
+      <link>/contact/</link>
       <pubDate>Tue, 08 Jun 2021 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/contact/</guid>
+      <guid>/contact/</guid>
       <description>&lt;p&gt;** Contact page don&amp;rsquo;t contain a body, just the front matter above.&#xA;See form.html in the layouts folder **&lt;/p&gt;</description>
     </item>
     <item>
       <title>License</title>
-      <link>//localhost:1313/license/</link>
+      <link>/license/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>//localhost:1313/license/</guid>
+      <guid>/license/</guid>
       <description>&lt;p&gt;My blogs are released under a &#xA;&lt;a href=&#34;http://creativecommons.org/licenses/by-sa/4.0/&#34; target=&#34;_blank&#34; rel=&#34;noopener&#34;&gt;Creative Commons Attribution-ShareAlike 4.0 International License&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;center&gt;&#xA;&lt;i class=&#34;fab fa-creative-commons fa-2x&#34;&gt;&lt;/i&gt;&lt;i class=&#34;fab fa-creative-commons-by fa-2x&#34;&gt;&lt;/i&gt;&lt;i class=&#34;fab fa-creative-commons-sa fa-2x&#34;&gt;&lt;/i&gt;&#xA;&lt;/center&gt;</description>
     </item>
   </channel>
