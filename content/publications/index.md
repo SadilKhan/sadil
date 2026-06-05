@@ -25,9 +25,6 @@ layout: list
         spellcheck="false">
     </form>
   </div>
-  <div>
-    <p>* <span style="font-weight:600;">Equal Contributions</span></p>
-  </div>
   <div id="publication-list"></div>
 </div>
 <div id="bibtexModal" class="bibtex-modal" role="dialog" aria-modal="true" aria-label="BibTeX Entry">

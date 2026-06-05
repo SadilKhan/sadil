@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Polymorphism on Home</title>
-    <link>/tags/polymorphism/</link>
+    <link>//localhost:1314/tags/polymorphism/</link>
     <description>Recent content in Polymorphism on Home</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Fri, 12 Aug 2022 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/tags/polymorphism/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1314/tags/polymorphism/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Swedish Crossword Puzzle, Built from Scratch in Java</title>
-      <link>/projects/scpa/</link>
+      <link>//localhost:1314/projects/scpa/</link>
       <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/projects/scpa/</guid>
+      <guid>//localhost:1314/projects/scpa/</guid>
       <description>A complete Swedish-style crossword game in Java Swing — 19 classes across three packages, with abstract square hierarchies, an on-screen random-key keyboard for hint squares, and a single-keyboard listener that swaps cleanly as the user clicks around the board.</description>
     </item>
   </channel>

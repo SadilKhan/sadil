@@ -72,9 +72,9 @@ research:
     summary: "Geometric-semantic alignment for AI systems that can reason about objects, structure, and editable scenes."
     publications: 
       - title: "BRepCLIP"
-        url: ""
+        url: "https://arxiv.org/abs/2606.05515"
         detail: ""
-        venue: ""
+        venue: "Arxiv"
   - title: "Efficient 3D Representation"
     icon: "fa-shapes"
     summary: "Compact surface and mesh representations for high-resolution generation without sacrificing editability."

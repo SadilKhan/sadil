@@ -75,7 +75,9 @@ function getCategories(pub) {
   return pub.categories.split(',').map(function(c) { return c.trim(); }).filter(function(c) { return c.length > 0 && c.length < 35; });
 }
 function getCoauthors(pub) {
-  return pub.authors.split(',').map(function(a) { return a.trim().replace(/\*/g, ''); }).filter(function(a) { return !a.toLowerCase().includes('sadil'); });
+  return pub.authors.split(',').map(function(a) {
+    return a.trim().replace(/\{dagger\}/g, '').replace(/\*/g, '').trim();
+  }).filter(function(a) { return !a.toLowerCase().includes('sadil'); });
 }
 const PALETTE = [
   '#1a73e8','#2dd4bf','#f5a623','#fb7185',
@@ -356,10 +358,93 @@ function updateResultsMeta(count, searchText) {
     const list = document.getElementById('publication-list');
     list.parentNode.insertBefore(meta, list);
   }
-  meta.innerHTML = searchText
-    ? '<span>' + count + '</span> result' + (count !== 1 ? 's' : '') + ' for "<em>' + esc(searchText) + '</em>"'
-    : '<span>' + count + '</span> publication' + (count !== 1 ? 's' : '');
+  const countHtml = searchText
+    ? '<span class="results-count">' + count + '</span> result' + (count !== 1 ? 's' : '') + ' for "<em>' + esc(searchText) + '</em>"'
+    : '<span class="results-count">' + count + '</span> publication' + (count !== 1 ? 's' : '');
+  const legendHtml =
+    '<div class="results-legend" aria-label="Author marker legend">' +
+      '<span class="legend-item"><span class="legend-mark legend-star">&ast;</span>Equal contribution</span>' +
+      '<span class="legend-item"><span class="legend-mark legend-dagger">&dagger;</span>Joint supervision</span>' +
+    '</div>';
+  meta.innerHTML = '<div class="results-count-wrap">' + countHtml + '</div>' + legendHtml;
 }
+function initSlideshows(root) {
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  (root || document).querySelectorAll('.paper-image.has-slideshow').forEach(function(box) {
+    if (box.dataset.slideshowInit) return;
+    box.dataset.slideshowInit = '1';
+
+    const stage   = box.querySelector('.paper-slides');
+    const slides  = Array.prototype.slice.call(box.querySelectorAll('.paper-slide'));
+    const dots    = Array.prototype.slice.call(box.querySelectorAll('.paper-slide-dot'));
+    const currEl  = box.querySelector('.paper-slide-current');
+    const card    = box.closest('.publication');
+    const total   = slides.length;
+    if (total < 2) return;
+
+    let idx = 0;
+    let timer = null;
+    let scanTimer = null;
+    const INTERVAL = 2600;
+    const SCAN_MS  = 720;
+
+    function show(n) {
+      const nextIdx = (n + total) % total;
+      if (nextIdx === idx && slides[idx].classList.contains('is-active')) return;
+      idx = nextIdx;
+      // Trigger the scan animation by restarting the `is-transitioning` class.
+      if (stage) {
+        stage.classList.remove('is-transitioning');
+        // Force a reflow so a new animation iteration plays from scratch.
+        void stage.offsetWidth;
+        stage.classList.add('is-transitioning');
+        if (scanTimer) window.clearTimeout(scanTimer);
+        scanTimer = window.setTimeout(function() {
+          stage.classList.remove('is-transitioning');
+        }, SCAN_MS);
+      }
+      slides.forEach(function(s, i) { s.classList.toggle('is-active', i === idx); });
+      dots.forEach(function(d, i)   { d.classList.toggle('is-active', i === idx); });
+      if (currEl) currEl.textContent = String(idx + 1);
+    }
+    function next() { show(idx + 1); }
+    function prev() { show(idx - 1); }
+    function play() {
+      if (timer || reduceMotion) return;
+      timer = window.setInterval(next, INTERVAL);
+    }
+    function pause() {
+      if (timer) { window.clearInterval(timer); timer = null; }
+    }
+    function restart() { pause(); play(); }
+
+    // Auto-play whenever the card is engaged
+    if (card) {
+      card.addEventListener('mouseenter', play);
+      card.addEventListener('mouseleave', pause);
+      card.addEventListener('focusin', play);
+      card.addEventListener('focusout', pause);
+      card.addEventListener('click', play);          // tap starts on touch devices
+    }
+
+    const prevBtn = box.querySelector('.paper-slide-prev');
+    const nextBtn = box.querySelector('.paper-slide-next');
+    if (prevBtn) prevBtn.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); prev(); restart(); });
+    if (nextBtn) nextBtn.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); next(); restart(); });
+
+    dots.forEach(function(dot, i) {
+      dot.addEventListener('click', function(e) { e.preventDefault(); e.stopPropagation(); show(i); restart(); });
+    });
+
+    // Keyboard support when image area is focused
+    box.setAttribute('tabindex', '0');
+    box.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowLeft')  { e.preventDefault(); prev(); restart(); }
+      if (e.key === 'ArrowRight') { e.preventDefault(); next(); restart(); }
+    });
+  });
+}
+
 function setupFadeIn() {
   const io = new IntersectionObserver(function(entries) {
     entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
@@ -380,9 +465,22 @@ function formatAuthors(str, q) {
   q = q || '';
   return str.split(',').map(function(a) {
     a = a.trim();
-    const clean = esc(a);
+    // Pull markers off the name so they don't pollute search / highlight,
+    // then re-attach them as styled superscripts after the name.
+    //   *         → Equal contribution
+    //   {dagger}  → Joint Supervision
+    const hasStar   = /\*/.test(a);
+    const hasDagger = /\{dagger\}/i.test(a);
+    const plain = a.replace(/\{dagger\}/gi, '').replace(/\*/g, '').trim();
+    const clean = esc(plain);
     const html = q ? highlight(clean, q) : clean;
-    return a.toLowerCase().includes('sadil') ? '<u><b>' + html + '</b></u>' : html;
+    let marks = '';
+    if (hasStar)   marks += '<sup class="paper-star"   title="Equal contribution">&ast;</sup>';
+    if (hasDagger) marks += '<sup class="paper-dagger" title="Joint Supervision">&dagger;</sup>';
+    const withMarks = html + marks;
+    return plain.toLowerCase().includes('sadil')
+      ? '<u><b>' + withMarks + '</b></u>'
+      : withMarks;
   }).join(' &nbsp;&#183;&nbsp; ');
 }
 function formatConference(text, q) {
@@ -395,6 +493,38 @@ function highlight(text, term) {
   const esc = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   return text.replace(new RegExp('(' + esc + ')', 'gi'), '<mark>$1</mark>');
 }
+function buildImageBlock(pub) {
+  const list = Array.isArray(pub.images) && pub.images.length
+    ? pub.images.filter(Boolean)
+    : (pub.image ? [pub.image] : []);
+
+  if (list.length === 0) {
+    return { html: '<div class="paper-image-placeholder"><i class="fa-regular fa-file-lines"></i></div>', isSlideshow: false };
+  }
+  if (list.length === 1) {
+    return { html: '<img src="' + attr(list[0]) + '" alt="' + attr(pub.title) + '" loading="lazy">', isSlideshow: false };
+  }
+
+  const slides = list.map(function(src, i) {
+    return '<img class="paper-slide' + (i === 0 ? ' is-active' : '') + '" ' +
+      'src="' + attr(src) + '" alt="' + attr(pub.title) + (i ? ' — image ' + (i + 1) : '') + '" ' +
+      (i === 0 ? 'loading="eager"' : 'loading="lazy"') + ' draggable="false">';
+  }).join('');
+  const dots = list.map(function(_, i) {
+    return '<button class="paper-slide-dot' + (i === 0 ? ' is-active' : '') + '" ' +
+      'type="button" data-idx="' + i + '" aria-label="Show image ' + (i + 1) + ' of ' + list.length + '"></button>';
+  }).join('');
+  const html =
+    '<div class="paper-slides" aria-live="polite">' + slides + '</div>' +
+    '<button class="paper-slide-nav paper-slide-prev" type="button" aria-label="Previous image">' +
+      '<i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>' +
+    '<button class="paper-slide-nav paper-slide-next" type="button" aria-label="Next image">' +
+      '<i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>' +
+    '<div class="paper-slide-count" aria-hidden="true"><span class="paper-slide-current">1</span> / ' + list.length + '</div>' +
+    '<div class="paper-slide-dots">' + dots + '</div>';
+  return { html: html, isSlideshow: true };
+}
+
 function buildCard(pub, q) {
   q = q || '';
   const el = document.createElement('div');
@@ -402,9 +532,9 @@ function buildCard(pub, q) {
   const cats = getCategories(pub);
   const isFeatured = /(spotlight|highlight|oral)/i.test(pub.conference || '');
   if (isFeatured) el.classList.add('publication-featured');
-  const imgHtml = pub.image
-    ? '<img src="' + attr(pub.image) + '" alt="' + attr(pub.title) + '" loading="lazy">'
-    : '<div class="paper-image-placeholder"><i class="fa-regular fa-file-lines"></i></div>';
+  const imgBlock = buildImageBlock(pub);
+  const imgHtml = imgBlock.html;
+  const imgWrapClass = 'paper-image' + (imgBlock.isSlideshow ? ' has-slideshow' : '');
   const captionHtml = pub.metadata ? '<div class="paper-metadata">' + esc(pub.metadata) + '</div>' : '';
   const tagHtml = cats.slice(0, 5).map(function(cat) {
     return '<span class="paper-tag">' + esc(cat) + '</span>';
@@ -423,7 +553,7 @@ function buildCard(pub, q) {
   const titleHtml = q ? highlight(titleClean, q) : titleClean;
   el.innerHTML =
     '<div class="publication-content">' +
-      '<div class="paper-image">' +
+      '<div class="' + imgWrapClass + '">' +
         '<div class="paper-year-ribbon">' + esc(pub.year) + '</div>' +
         imgHtml +
         captionHtml +
@@ -492,6 +622,7 @@ function displayPublications(pubs, q) {
     list.appendChild(buildYearSection(Number(year), byYear[year], q));
   });
   requestAnimationFrame(function() { setTimeout(setupFadeIn, 50); });
+  initSlideshows();
 }
 function filterPublications(q) {
   const lq = q.toLowerCase();

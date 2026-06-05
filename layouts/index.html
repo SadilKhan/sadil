@@ -388,38 +388,6 @@ body,
 }
 .hp-anim-slide.is-loading .hp-anim-loader { opacity: 0.72; }
 
-/* ── Stats ─────────────────────────────────────────────────── */
-.hp-stats {
-  position: relative; z-index: 1;
-  max-width: 1140px; margin: 0 auto; padding: 0 2.5rem 4rem;
-  display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem;
-}
-.hp-stat {
-  padding: 1.4rem 1.5rem; text-align: center;
-  color: #fff;
-  border: 1px solid var(--gbdr); border-radius: 16px;
-  background: linear-gradient(160deg, rgba(255,255,255,0.08) 0%, rgba(14,165,233,0.04) 100%);
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.18) inset, 0 16px 48px rgba(0,0,0,0.45);
-  transition: color 0.25s var(--ease), border-color 0.3s, background 0.3s, box-shadow 0.3s;
-  cursor: default; position: relative; overflow: hidden; will-change: transform;
-}
-.hp-stat::before {
-  content: ''; position: absolute; inset: 0; border-radius: inherit;
-  background: radial-gradient(circle at var(--sx,50%) var(--sy,-20%), rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.05) 45%, transparent 65%);
-  opacity: 0; transition: opacity 0.35s ease; pointer-events: none;
-}
-.hp-stat:hover { color: #fff; border-color: var(--abdr); background: linear-gradient(160deg, rgba(14,165,233,0.14) 0%, rgba(20,184,166,0.08) 100%); box-shadow: 0 1px 0 rgba(255,255,255,0.22) inset, 0 20px 56px rgba(0,0,0,0.50), 0 0 0 1px var(--abdr); }
-.hp-stat:hover::before { opacity: 1; }
-.hp-stat-num {
-  font-family: 'DM Serif Display', serif; font-size: 2.5rem; font-weight: 400; line-height: 1.1;
-  background: linear-gradient(135deg, var(--a), var(--a2));
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  display: block;
-}
-.hp-stat-lbl { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.55; margin-top: 0.3rem; display: block; }
-
 /* ── Divider ───────────────────────────────────────────────── */
 .hp-div { max-width: 1140px; margin: 0 auto 3.5rem; padding: 0 2.5rem; }
 .hp-div-line { height: 1px; background: linear-gradient(90deg,transparent,var(--a),var(--a2),transparent); opacity: 0.13; }
@@ -492,7 +460,6 @@ body,
   .hp-hero { grid-template-columns:1fr; min-height:auto; padding:3.5rem 1.75rem 2rem; gap:2.5rem; }
   .hp-visual { order:-1; }
   .hp-anim-carousel { height:220px; }
-  .hp-stats { grid-template-columns:repeat(2,1fr); padding:0 1.75rem 3rem; }
   .hp-grid { grid-template-columns:1fr 1fr; }
   .hp-div { padding:0 1.75rem; }
   .hp-cards { padding:0 1.75rem 5rem; }
@@ -506,9 +473,7 @@ body,
   .hp-anim-carousel { height:198px; }
   .hp-anim-meta { padding-inline: 0.74rem; }
   .hp-anim-chip { display: none; }
-  .hp-stat-num { font-size:2rem; }
   .hp-div, .hp-cards { padding-left:1.25rem; padding-right:1.25rem; }
-  .hp-stats { padding-left:1.25rem; padding-right:1.25rem; }
 }
 /* VIDEO BACKGROUND */
 .hp-bg-video {
@@ -676,26 +641,6 @@ body,
       </svg>
     </div>
   </section>
-
-  <!-- ── STATS ──────────────────────────────────────────────── -->
-  <div class="hp-stats reveal">
-    <div class="hp-stat">
-      <span class="hp-stat-num" data-count="7">0</span>
-      <span class="hp-stat-lbl">Publications</span>
-    </div>
-    <div class="hp-stat">
-      <span class="hp-stat-num" data-count="4">0</span>
-      <span class="hp-stat-lbl">Open Source Projects</span>
-    </div>
-    <div class="hp-stat">
-      <span class="hp-stat-num" data-count="4">0</span>
-      <span class="hp-stat-lbl">Years Research</span>
-    </div>
-    <div class="hp-stat">
-      <span class="hp-stat-num" data-count="260">0</span>
-      <span class="hp-stat-lbl">Citations</span>
-    </div>
-  </div>
 
   <!-- ── DIVIDER ────────────────────────────────────────────── -->
   <div class="hp-div"><div class="hp-div-line"></div></div>
@@ -1609,7 +1554,7 @@ body,
 })();
 </script>
 
-<!-- ── Scroll reveals + animated counters ────────────────────── -->
+<!-- ── Scroll reveals ────────────────────────────────────────── -->
 <script>
 (function () {
   const obs = new IntersectionObserver(entries => {
@@ -1618,23 +1563,6 @@ body,
   document.querySelectorAll('.reveal, .hp-card').forEach(el => obs.observe(el));
 
   document.querySelectorAll('.hp-card').forEach((c, i) => { c.style.transitionDelay = (i * 0.065) + 's'; });
-
-  function animCount(el, target) {
-    const plus = target >= 50 ? '+' : '';
-    const dur = 1700, t0 = performance.now();
-    (function tick(now) {
-      const p = Math.min((now - t0) / dur, 1), ease = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(ease * target) + plus;
-      if (p < 1) requestAnimationFrame(tick);
-    })(t0);
-  }
-
-  const cObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { animCount(e.target, +e.target.dataset.count); cObs.unobserve(e.target); }
-    });
-  }, { threshold: 0.35 });
-  document.querySelectorAll('[data-count]').forEach(el => cObs.observe(el));
 })();
 </script>
 
@@ -1724,7 +1652,6 @@ body,
   }
 
   addTilt('.hp-card', 8, 6, 700);
-  addTilt('.hp-stat', 6, 4, 600);
 })();
 </script>
 

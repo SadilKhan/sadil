@@ -218,18 +218,12 @@
   }
 
   /* ── Below search ─────────────────────────────── */
-  .pub-meta {
-    text-align: center; font-family: 'Geist', sans-serif;
-    font-size: 0.82rem; color: #64748b; margin: 0;
-  }
-  .pub-meta strong { color: #64748b; font-weight: 500; }
-
   .pub-controls {
     width: min(1360px, calc(100% - 72px));
     margin: 18px auto 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     gap: 16px;
     font-family: 'Geist', sans-serif;
   }
@@ -237,7 +231,9 @@
   .pub-filter-bar {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
+    width: 100%;
   }
 
   .pub-filter {
@@ -290,7 +286,6 @@
     .pub-search-zone,
     .pub-controls { width: calc(100% - 32px); padding: 0; }
     .pub-controls { display: block; }
-    .pub-meta { text-align: left; margin-top: 12px; }
     .pub-cards { padding: 1.5rem 1rem 4rem; }
   }
 </style>
@@ -332,7 +327,6 @@
     <button class="pub-filter" type="button" data-filter="3d" aria-pressed="false">3D</button>
     <button class="pub-filter" type="button" data-filter="point cloud" aria-pressed="false">Point Cloud</button>
   </div>
-  <p class="pub-meta">* <strong>Equal Contributions</strong></p>
 </div>
 
 <div class="pub-stats-zone" id="pub-stats-zone"></div>

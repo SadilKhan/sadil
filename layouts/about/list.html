@@ -1973,37 +1973,7 @@ body:has(.about-page) .page-main {
   els.forEach(function (el) { io.observe(el); });
 })();
 
-(function () {
-  var ticker = document.querySelector('.about-event-ticker');
-  if (!ticker || ticker.scrollHeight <= ticker.clientHeight) return;
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduceMotion) return;
-
-  var paused = false;
-  var manualPause = null;
-
-  function pauseBriefly() {
-    paused = true;
-    window.clearTimeout(manualPause);
-    manualPause = window.setTimeout(function () { paused = false; }, 1800);
-  }
-
-  ticker.addEventListener('mouseenter', function () { paused = true; });
-  ticker.addEventListener('mouseleave', function () { paused = false; });
-  ticker.addEventListener('focusin', function () { paused = true; });
-  ticker.addEventListener('focusout', function () { paused = false; });
-  ticker.addEventListener('wheel', pauseBriefly, { passive: true });
-  ticker.addEventListener('touchstart', pauseBriefly, { passive: true });
-
-  window.setInterval(function () {
-    if (paused) return;
-    var bottom = ticker.scrollTop + ticker.clientHeight >= ticker.scrollHeight - 2;
-    if (bottom) {
-      ticker.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    ticker.scrollTop += 1;
-  }, 42);
-})();
+/* Recent-events ticker auto-scroll intentionally disabled — the list is
+   static and user-scrollable. */
 </script>
 {{ end }}

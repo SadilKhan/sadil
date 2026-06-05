@@ -1,4 +1,21 @@
 [
+    {
+        "title": "BRepCLIP: Contrastive Multimodal Pretraining on BRep Primitives for CAD Understanding",
+        "authors": "Muhammad Usama, Didier Stricker, Mohammad Sadil Khan{dagger}, Muhammad Zeshan Afzal{dagger}",
+        "conference": "Arxiv 2026",
+        "year": 2026,
+        "project": "https://muhammadusama100.github.io/BrepClip2026/",
+        "codeLink": "",
+        "poster": "",
+        "bibtex": "@misc{usama2026brepclipcontrastivemultimodalpretraining, title={BRepCLIP:Contrastive Multimodal Pretraining on BRep Primitives for CAD Understanding}, author={Muhammad Usama and Didier Stricker and Mohammad Sadil Khan and Muhammad Zeshan Afzal},year={2026},eprint={2606.05515},archivePrefix={arXiv},primaryClass={cs.CV},url={https://arxiv.org/abs/2606.05515},}",
+        "arxiv": "https://arxiv.org/abs/2606.05515",
+        "video": "",
+        "dataset": "",
+        "paperLink": "",
+        "categories": "CAD, Clip, Text, Point Cloud, Image, Text, Encoding",
+        "images": ["data/brepclip.png", "https://arxiv.org/html/2606.05515v1/x2.png", "https://arxiv.org/html/2606.05515v1/x4.png", "https://arxiv.org/html/2606.05515v1/x5.png"],
+        "metadata": "(i) Multimodal representation learning for CAD models (text, image alignment). (ii) New CAD Scoring metric for text-to-CAD generation."
+    },
   {
         "title": "DreamCAD: Scaling Multi-modal CAD Generation using Differentiable Parametric Surfaces",
         "authors": "Mohammad Sadil Khan, Muhammad Usama, Rolandos Alexandros Potamias, Didier Stricker, Muhammad Zeshan Afzal, Jiankang Deng, Ismail Elezi ",
@@ -13,6 +30,7 @@
         "dataset": "https://huggingface.co/datasets/SadilKhan/CADCap-1M",
         "paperLink": "",
         "categories": "CAD, LLM, Nurbs, Point Cloud, Image, Text, VAE, Sparse Voxel",
+        "images": ["data/dreamcad.png", "https://arxiv.org/html/2603.05607v1/x4.png", "https://arxiv.org/html/2603.05607v1/x7.png", "https://arxiv.org/html/2603.05607v1/x5.png", "https://arxiv.org/html/2603.05607v1/x11.png"],
         "image": "data/dreamcad.png",
         "metadata": "(i) Multimodal CAD generation via editable Bézier surfaces and (ii) Largest Captioning dataset."
     },
@@ -30,7 +48,7 @@
         "dataset": "https://huggingface.co/datasets/SadilKhan/PartABC",
         "paperLink": "https://ojs.aaai.org/index.php/AAAI/article/view/37922",
         "categories": "CAD, LLM, Nurbs, Lora",
-        "image": "data/nurbgen.png",
+        "images": ["data/nurbgen.png", "https://arxiv.org/html/2511.06194v2/x4.png", "https://arxiv.org/html/2511.06194v2/x5.png"],
         "metadata": "First LLM-based framwork that generates editable CAD models directly from text using NURBs representation."
     },
     
@@ -64,7 +82,7 @@
         "dataset": "https://sadilkhan.github.io/Marvel-Explorer/",
         "paperLink": "https://openaccess.thecvf.com/content/CVPR2025/papers/Sinha_MARVEL-40M_Multi-Level_Visual_Elaboration_for_High-Fidelity_Text-to-3D_Content_Creation_CVPR_2025_paper.pdf",
         "categories": "Text, Stable Diffusion, 3D, LLM, VLM, Lora",
-        "image": "data/marvel.png",
+        "images": ["data/marvel.png", "https://arxiv.org/html/2411.17945v1/x2.png", "https://arxiv.org/html/2411.17945v1/x3.png"],
         "metadata": "Largest 3D captioning dataset (40M+) with domain-specific and multi-level visual reasoning."
     },
     {
@@ -81,8 +99,8 @@
         "dataset": "https://huggingface.co/datasets/SadilKhan/Text2CAD",
         "paperLink": "https://openreview.net/pdf?id=5k9XeHIK3L",
         "categories": "Text, LLM, VLM, CAD",
-        "image": "data/text2cad.png",
-            "metadata": "First framework that generates CAD design history from natural-language prompts of varying expertise levels."
+        "images": ["data/text2cad.png", "https://arxiv.org/html/2409.17106v1/x1.png", "https://arxiv.org/html/2409.17106v1/x2.png", "https://arxiv.org/html/2409.17106v1/x3.png"],
+        "metadata": "First framework that generates CAD design history from natural-language prompts of varying expertise levels."
     },
     {
         "title": "BRep Boundary and Junction Detection for CAD Reverse Engineering",
@@ -115,7 +133,7 @@
         "dataset": "",
         "paperLink": "https://openaccess.thecvf.com/content/CVPR2024/papers/Khan_CAD-SIGNet_CAD_Language_Inference_from_Point_Clouds_using_Layer-wise_Sketch_CVPR_2024_paper.pdf",
         "categories": "Point Cloud, Attention, CAD",
-        "image": "data/cad_signet.png",
+        "images": ["data/cad_signet.png", "https://arxiv.org/html/2402.17678v1/x3.png", "https://arxiv.org/html/2402.17678v1/x4.png"],
         "metadata": "An autoregressive architecture for generating 3D CAD sequence from Point cloud. Uses a novel sketch-guided Attention mechanism."
     }
     

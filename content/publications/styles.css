@@ -141,16 +141,24 @@ body {
 #results-meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 16px;
   margin-bottom: 1.4rem;
   font-size: 12px;
   color: var(--text-caption);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  flex-wrap: wrap;
 }
 
-#results-meta span {
+#results-meta .results-count-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#results-meta .results-count {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -163,6 +171,48 @@ body {
   font-size: 11px;
   font-weight: 700;
   font-family: monospace;
+}
+
+#results-meta .results-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--text-caption);
+}
+
+#results-meta .legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+#results-meta .legend-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  font-weight: 800;
+  font-size: 13px;
+  line-height: 1;
+  font-family: inherit;
+  background: transparent;
+}
+
+#results-meta .legend-star   { color: #c2710b; background: rgba(194, 113, 11, 0.12); }
+#results-meta .legend-dagger { color: var(--blue, #0b66c2); background: rgba(11, 102, 194, 0.12); }
+.dark-mode #results-meta .legend-star   { color: #f0a45a; background: rgba(240, 164, 90, 0.16); }
+.dark-mode #results-meta .legend-dagger { color: var(--blue, #6fa8dc); background: rgba(111, 168, 220, 0.18); }
+
+@media (max-width: 560px) {
+  #results-meta { gap: 8px; }
+  #results-meta .results-legend { gap: 12px; font-size: 11px; }
 }
 
 /* ============================================================
@@ -364,6 +414,240 @@ body {
   filter: saturate(0.95) brightness(1.01);
 }
 
+/* ── Multi-image slideshow ──────────────────────────────────────
+   Triggered when a publication has an `images: [...]` array.
+   Hover or focus the card → autoplay. Buttons / dots / arrow-keys
+   give manual control.
+
+   Transition: "Scan Reveal" — top-to-bottom clip-path uncover behind a
+   glowing cyan scanline + a faint scientific grid flash. */
+.paper-image.has-slideshow .paper-slides {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  min-height: 180px;
+  --scan-dur: 720ms;
+  --scan-ease: cubic-bezier(0.65, 0, 0.35, 1);
+  --scan-color: 95, 226, 255; /* cyan triplet */
+  isolation: isolate;
+}
+.paper-image.has-slideshow .paper-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  clip-path: inset(0 0 100% 0);          /* hidden by clip (top→bottom) */
+  -webkit-clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  transform: scale(1.012);
+  transition:
+    clip-path var(--scan-dur) var(--scan-ease),
+    -webkit-clip-path var(--scan-dur) var(--scan-ease),
+    opacity 280ms ease,
+    transform var(--scan-dur) var(--scan-ease),
+    filter 300ms ease;
+  filter: saturate(0.95) brightness(1.01);
+  will-change: clip-path, opacity, transform;
+}
+.paper-image.has-slideshow .paper-slide.is-active {
+  clip-path: inset(0);
+  -webkit-clip-path: inset(0);
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Faint cyan grid that flashes briefly during the transition —
+   "lab readout" texture. */
+.paper-image.has-slideshow .paper-slides::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(90deg, rgba(var(--scan-color), 0.08) 1px, transparent 1px),
+    linear-gradient(0deg,  rgba(var(--scan-color), 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  mix-blend-mode: screen;
+  transition: opacity 260ms ease;
+}
+.paper-image.has-slideshow .paper-slides.is-transitioning::before {
+  opacity: 1;
+  animation: paperGridFade var(--scan-dur) ease-out;
+}
+@keyframes paperGridFade {
+  0%   { opacity: 0; }
+  18%  { opacity: 1; }
+  78%  { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
+/* The scanline — glowing horizontal bar that sweeps top→bottom. */
+.paper-image.has-slideshow .paper-slides::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(var(--scan-color), 0)    8%,
+    rgba(var(--scan-color), 0.95) 50%,
+    rgba(var(--scan-color), 0)    92%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 14px rgba(var(--scan-color), 0.75),
+    0 0 36px rgba(var(--scan-color), 0.40),
+    0 0 80px rgba(var(--scan-color), 0.18);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  filter: blur(0.2px);
+}
+.paper-image.has-slideshow .paper-slides.is-transitioning::after {
+  animation: paperScanline var(--scan-dur) var(--scan-ease);
+}
+@keyframes paperScanline {
+  0%   { top: -2px;   opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { top: 100%;   opacity: 0; }
+}
+
+/* Brief brightness/saturation pulse on the incoming slide so it feels
+   "scanned in" rather than just appearing. */
+.paper-image.has-slideshow .paper-slides.is-transitioning .paper-slide.is-active {
+  animation: paperSlideBoost var(--scan-dur) var(--scan-ease);
+}
+@keyframes paperSlideBoost {
+  0%   { filter: saturate(1.35) brightness(1.18) contrast(1.06); }
+  35%  { filter: saturate(1.18) brightness(1.08) contrast(1.03); }
+  100% { filter: saturate(0.95) brightness(1.01); }
+}
+.publication:hover .paper-image.has-slideshow .paper-slide.is-active {
+  transform: scale(1.022);
+  filter: saturate(1.04) brightness(1.0);
+}
+
+/* Prev / next chevron buttons */
+.paper-slide-nav {
+  position: absolute;
+  top: 50%;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(15, 23, 42, 0.62);
+  color: #fff;
+  font-size: 0.78rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease, background 220ms ease, border-color 220ms ease, transform 220ms ease;
+  z-index: 4;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 0;
+}
+.paper-slide-prev { left: 8px; }
+.paper-slide-next { right: 8px; }
+.publication:hover .paper-slide-nav,
+.paper-image.has-slideshow:focus-within .paper-slide-nav {
+  opacity: 1;
+  pointer-events: auto;
+}
+.paper-slide-nav:hover {
+  background: rgba(15, 23, 42, 0.88);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.paper-slide-nav:active { transform: translateY(-50%) scale(0.94); }
+
+/* Dot indicators */
+.paper-slide-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.50);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.publication:hover .paper-slide-dots,
+.paper-image.has-slideshow:focus-within .paper-slide-dots {
+  opacity: 1;
+}
+.paper-slide-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  padding: 0;
+  transition: background 200ms ease, width 220ms ease, border-radius 220ms ease;
+}
+.paper-slide-dot.is-active {
+  background: #ffffff;
+  width: 18px;
+  border-radius: 999px;
+}
+
+/* Count badge (top-right) */
+.paper-slide-count {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-family: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: rgba(15, 23, 42, 0.55);
+  padding: 3px 8px;
+  border-radius: 12px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 3;
+  pointer-events: none;
+  letter-spacing: 0.06em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .paper-image.has-slideshow .paper-slide {
+    transition: opacity 160ms ease !important;
+    clip-path: none !important;
+    -webkit-clip-path: none !important;
+    transform: none !important;
+    opacity: 0;
+  }
+  .paper-image.has-slideshow .paper-slide.is-active { opacity: 1; }
+  .paper-image.has-slideshow .paper-slides::before,
+  .paper-image.has-slideshow .paper-slides::after,
+  .paper-image.has-slideshow .paper-slides.is-transitioning .paper-slide.is-active {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
 .publication:hover .paper-image img {
   transform: scale(1.022);
   filter: saturate(1.04) brightness(1.0);
@@ -438,6 +722,25 @@ body {
 }
 
 .dark-mode .paper-authors { color: var(--text-authors); }
+
+/* Author markers — equal contribution (*) and joint supervision (†) */
+.paper-authors .paper-star,
+.paper-authors .paper-dagger {
+  display: inline-block;
+  margin-left: 3px;
+  font-size: 1em;
+  line-height: 1;
+  font-weight: 800;
+  vertical-align: super;
+  position: relative;
+  top: -0.15em;
+  cursor: help;
+  text-shadow: 0 0 0.4px currentColor;
+}
+.paper-authors .paper-dagger { color: var(--blue,  #0b66c2); }
+.paper-authors .paper-star   { color: #c2710b; }
+.dark-mode .paper-authors .paper-dagger { color: var(--blue, #6fa8dc); }
+.dark-mode .paper-authors .paper-star   { color: #f0a45a; }
 
 /* Conference — bold blue, matches your original */
 .paper-conference {
@@ -1077,7 +1380,7 @@ body {
   color: var(--pub-soft);
 }
 
-#results-meta span {
+#results-meta .results-count {
   background: rgba(26,115,232,0.10);
   color: var(--pub-blue);
 }

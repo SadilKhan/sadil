@@ -2,94 +2,94 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Home</title>
-    <link>/categories/</link>
+    <link>//localhost:1314/categories/</link>
     <description>Recent content in Categories on Home</description>
     <generator>Hugo</generator>
     <language>en</language>
     <lastBuildDate>Sun, 24 Aug 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="/categories/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="//localhost:1314/categories/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Adventure</title>
-      <link>/categories/adventure/</link>
+      <link>//localhost:1314/categories/adventure/</link>
       <pubDate>Sun, 24 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>/categories/adventure/</guid>
+      <guid>//localhost:1314/categories/adventure/</guid>
       <description></description>
     </item>
     <item>
       <title>Travelling</title>
-      <link>/categories/travelling/</link>
+      <link>//localhost:1314/categories/travelling/</link>
       <pubDate>Sun, 24 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>/categories/travelling/</guid>
+      <guid>//localhost:1314/categories/travelling/</guid>
       <description></description>
     </item>
     <item>
       <title>Vacation</title>
-      <link>/categories/vacation/</link>
+      <link>//localhost:1314/categories/vacation/</link>
       <pubDate>Sun, 24 Aug 2025 00:00:00 +0000</pubDate>
-      <guid>/categories/vacation/</guid>
+      <guid>//localhost:1314/categories/vacation/</guid>
       <description></description>
     </item>
     <item>
       <title>Conferences</title>
-      <link>/categories/conferences/</link>
+      <link>//localhost:1314/categories/conferences/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>/categories/conferences/</guid>
+      <guid>//localhost:1314/categories/conferences/</guid>
       <description></description>
     </item>
     <item>
       <title>Journals</title>
-      <link>/categories/journals/</link>
+      <link>//localhost:1314/categories/journals/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>/categories/journals/</guid>
+      <guid>//localhost:1314/categories/journals/</guid>
       <description></description>
     </item>
     <item>
       <title>Papers</title>
-      <link>/categories/papers/</link>
+      <link>//localhost:1314/categories/papers/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>/categories/papers/</guid>
+      <guid>//localhost:1314/categories/papers/</guid>
       <description></description>
     </item>
     <item>
       <title>Publication</title>
-      <link>/categories/publication/</link>
+      <link>//localhost:1314/categories/publication/</link>
       <pubDate>Thu, 10 Aug 2023 00:00:00 +0000</pubDate>
-      <guid>/categories/publication/</guid>
+      <guid>//localhost:1314/categories/publication/</guid>
       <description></description>
     </item>
     <item>
       <title>Videography</title>
-      <link>/categories/videography/</link>
+      <link>//localhost:1314/categories/videography/</link>
       <pubDate>Tue, 20 Dec 2022 00:00:00 +0000</pubDate>
-      <guid>/categories/videography/</guid>
+      <guid>//localhost:1314/categories/videography/</guid>
       <description></description>
     </item>
     <item>
       <title>Game</title>
-      <link>/categories/game/</link>
+      <link>//localhost:1314/categories/game/</link>
       <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/categories/game/</guid>
+      <guid>//localhost:1314/categories/game/</guid>
       <description></description>
     </item>
     <item>
       <title>Java</title>
-      <link>/categories/java/</link>
+      <link>//localhost:1314/categories/java/</link>
       <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/categories/java/</guid>
+      <guid>//localhost:1314/categories/java/</guid>
       <description></description>
     </item>
     <item>
       <title>Object-Oriented Design</title>
-      <link>/categories/object-oriented-design/</link>
+      <link>//localhost:1314/categories/object-oriented-design/</link>
       <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/categories/object-oriented-design/</guid>
+      <guid>//localhost:1314/categories/object-oriented-design/</guid>
       <description></description>
     </item>
     <item>
       <title>Software</title>
-      <link>/categories/software/</link>
+      <link>//localhost:1314/categories/software/</link>
       <pubDate>Fri, 12 Aug 2022 00:00:00 +0000</pubDate>
-      <guid>/categories/software/</guid>
+      <guid>//localhost:1314/categories/software/</guid>
       <description></description>
     </item>
   </channel>
