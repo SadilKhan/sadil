@@ -6,14 +6,77 @@
     <description>Recent content in Mohammad Sadil Khan on Home</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 10 Oct 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 15 Oct 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="//localhost:1314/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PPO Deep Dive</title>
+      <link></link>
+      <pubDate>Fri, 08 May 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
     <item>
       <title>Iceland Trip</title>
       <link>//localhost:1314/blog/adventure/iceland/</link>
       <pubDate>Sun, 24 Aug 2025 00:00:00 +0000</pubDate>
       <guid>//localhost:1314/blog/adventure/iceland/</guid>
       <description>&lt;link rel=&#34;stylesheet&#34; href=&#34;iceland.css&#34;&gt;&#xA;&lt;link rel=&#34;preconnect&#34; href=&#34;https://fonts.googleapis.com&#34;&gt;&#xA;&lt;link href=&#34;https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&amp;family=Lora:ital,wght@0,400;0,500;1,400&amp;family=DM+Sans:wght@400;500;600&amp;display=swap&#34; rel=&#34;stylesheet&#34;&gt;&#xA;&lt;div class=&#34;ic-wrap&#34;&gt;&#xA;  &lt;!-- ═══════════════════════════════════════════&#xA;       HERO&#xA;  ═══════════════════════════════════════════ --&gt;&#xA;  &lt;header class=&#34;ic-hero&#34;&gt;&#xA;    &lt;div class=&#34;ic-hero__badge&#34;&gt;August 2025 · Campervan Journey&lt;/div&gt;&#xA;    &lt;h1 class=&#34;ic-hero__title&#34;&gt;Iceland&lt;/h1&gt;&#xA;    &lt;p class=&#34;ic-hero__sub&#34;&gt;Seven days. One campervan. An entire island of fire and ice.&lt;/p&gt;&#xA;    &lt;div class=&#34;ic-hero__stats&#34;&gt;&#xA;      &lt;div class=&#34;ic-stat&#34;&gt;&lt;span class=&#34;ic-stat__num&#34;&gt;7&lt;/span&gt;&lt;span class=&#34;ic-stat__lbl&#34;&gt;Days&lt;/span&gt;&lt;/div&gt;&#xA;      &lt;div class=&#34;ic-stat__div&#34;&gt;&lt;/div&gt;&#xA;      &lt;div class=&#34;ic-stat&#34;&gt;&lt;span class=&#34;ic-stat__num&#34;&gt;~2 400&lt;/span&gt;&lt;span class=&#34;ic-stat__lbl&#34;&gt;km driven&lt;/span&gt;&lt;/div&gt;&#xA;      &lt;div class=&#34;ic-stat__div&#34;&gt;&lt;/div&gt;&#xA;      &lt;div class=&#34;ic-stat&#34;&gt;&lt;span class=&#34;ic-stat__num&#34;&gt;∞&lt;/span&gt;&lt;span class=&#34;ic-stat__lbl&#34;&gt;Waterfalls&lt;/span&gt;&lt;/div&gt;&#xA;    &lt;/div&gt;&#xA;  &lt;/header&gt;&#xA;  &lt;!-- intro prose --&gt;&#xA;  &lt;div class=&#34;ic-intro&#34;&gt;&#xA;    &lt;p&gt;In August 2025, we took a week-long campervan trip around Iceland — from &lt;em&gt;Golden Circle hot springs&lt;/em&gt; to &lt;em&gt;South Coast waterfalls&lt;/em&gt;, &lt;em&gt;glacier lagoons&lt;/em&gt;, &lt;em&gt;Eastfjords fishing villages&lt;/em&gt;, and the &lt;em&gt;wildlife of the north and Snæfellsnes&lt;/em&gt;.&lt;/p&gt;&#xA;    &lt;p&gt;It was seven days of drone flights, hot river soaks, black sand beaches, endless waterfalls, and fresh fish dinners — each day with its own theme and adventure. Here&#39;s our day-by-day itinerary and the highlights that made this trip unforgettable.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Beyond PPO</title>
+      <link></link>
+      <pubDate>Fri, 15 May 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
+    <item>
+      <title>The Post-Training Guide</title>
+      <link></link>
+      <pubDate>Fri, 22 May 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Agentic RL</title>
+      <link></link>
+      <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
+    <item>
+      <title>LLM Parallelism</title>
+      <link></link>
+      <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Mixture of Experts</title>
+      <link></link>
+      <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Normalization Methods</title>
+      <link></link>
+      <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Attention &amp; FlashAttention</title>
+      <link></link>
+      <pubDate>Sat, 06 Jun 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Positional Encoding</title>
+      <link></link>
+      <pubDate>Thu, 15 Oct 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
     </item>
     <item>
       <title></title>

@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PPO for Transformer People</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+:root {
+  --gs: 'Plus Jakarta Sans', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --bg: #0a0c10;
+  --s1: #111318;
+  --s2: #181c23;
+  --s3: #1e232d;
+  --bdr: #2a3040;
+  --bdr2: #3a4560;
+  --blue: #4285f4;
+  --blue2: #8ab4f8;
+  --blue3: #1a3a7a;
+  --green: #34a853;
+  --green2: #81c995;
+  --red: #ea4335;
+  --red2: #f28b82;
+  --yellow: #fbbc04;
+  --yellow2: #fdd663;
+  --purple: #9b72e8;
+  --purple2: #c4a4f4;
+  --teal: #2dd4bf;
+  --teal2: #5eead4;
+  --text: #e8edf5;
+  --text2: #c8dcf4;
+  --text3: #a8c4e8;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--gs); line-height: 1.65; font-weight: 400;
+}
+.prog {
+  position: fixed; top: 0; left: 0;
+  height: 3px; background: linear-gradient(90deg, var(--blue), var(--purple));
+  z-index: 100; transition: width 0.1s linear;
+}
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(10, 12, 16, 0.92);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border-bottom: 1px solid var(--bdr);
+  padding: 0.6rem 2rem;
+}
+.nav-inner {
+  max-width: 1020px; margin: 0 auto;
+  display: flex; align-items: center; gap: 1.5rem;
+}
+.brand {
+  font-weight: 700; font-size: 0.88rem;
+  text-decoration: none; white-space: nowrap;
+  background: linear-gradient(90deg, var(--blue2), var(--purple2), var(--green2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-links {
+  display: flex; gap: 0.15rem;
+  overflow-x: auto; scrollbar-width: none;
+  flex: 1;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links a {
+  color: #5f6368; text-decoration: none;
+  font-size: 0.72rem; white-space: nowrap;
+  padding: 0.28rem 0.5rem; border-radius: 6px;
+  transition: color 0.15s, background 0.15s;
+  font-weight: 500;
+}
+.nav-links a:hover, .nav-links a.act {
+  color: var(--blue2);
+  background: rgba(66, 133, 244, 0.1);
+}
+
+main { max-width: 940px; margin: 0 auto; padding: 0 2rem 4rem; }
+
+/* HERO — centered, multi-coloured title, eyebrow pill, chip strip */
+.hero {
+  padding: 5rem 0 3rem;
+  text-align: center;
+  position: relative;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 30%, rgba(66,133,244,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  background: rgba(66, 133, 244, 0.08);
+  border: 1px solid rgba(66, 133, 244, 0.20);
+  border-radius: 100px;
+  padding: 0.28rem 1rem;
+  font-size: 0.74rem;
+  color: var(--blue2);
+  margin-bottom: 1.75rem;
+  font-weight: 600;
+  font-family: var(--gs);
+}
+.hero-eye-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--blue);
+  animation: blink 2s ease infinite;
+}
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .hero-eye-dot { animation: none; } }
+
+.hero h1 {
+  font-size: clamp(2.4rem, 6vw, 4.6rem);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  margin: 0 0 1.2rem;
+}
+.hero h1 .w-blue   { color: #8ab4f8; }
+.hero h1 .w-red    { color: #f28b82; }
+.hero h1 .w-yellow { color: #fdd663; }
+.hero h1 .w-green  { color: #81c995; }
+
+.hero-sub {
+  font-size: 1.06rem;
+  color: var(--text2);
+  max-width: 680px;
+  margin: 0 auto 2rem;
+  line-height: 1.7;
+}
+.hero-chips {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.chips { display: flex; flex-wrap: wrap; gap: 0.5rem; justify-content: center; }
+.chip {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.36rem 0.95rem;
+  border-radius: 100px;
+  background: var(--s2);
+  border: 1px solid var(--bdr);
+  color: var(--text2);
+  font-family: var(--gs);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.sec { margin: 4rem 0 0; opacity: 0; transform: translateY(20px); transition: opacity 0.7s, transform 0.7s; }
+.sec.vis { opacity: 1; transform: none; }
+.sec-hdr { display: flex; align-items: baseline; gap: 0.9rem; margin-bottom: 1.2rem; }
+.sec-num {
+  font-family: var(--mono);
+  font-size: 0.7rem; font-weight: 800; letter-spacing: 0.1em;
+  color: var(--blue2);
+  background: rgba(138, 180, 248, 0.10);
+  border: 1px solid rgba(138, 180, 248, 0.22);
+  padding: 4px 9px; border-radius: 5px;
+}
+.sec h2 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.015em; margin: 0; }
+.sec h3 { font-size: 1.15rem; font-weight: 700; margin: 2rem 0 0.6rem; color: var(--text); }
+.sec p { color: var(--text); margin: 0.8rem 0; }
+.sec em { color: var(--blue2); font-style: italic; }
+.sec strong { color: var(--text); font-weight: 700; }
+.sec a { color: var(--blue2); text-decoration: none; border-bottom: 1px solid rgba(138,180,248,0.3); }
+.sec a:hover { border-bottom-color: var(--blue2); }
+
+.tldr {
+  border-left: 3px solid var(--teal);
+  background: rgba(45, 212, 191, 0.06);
+  padding: 0.7rem 1rem;
+  margin: 0.8rem 0 1.4rem;
+  border-radius: 0 6px 6px 0;
+}
+.tldr-label {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  color: var(--teal2); letter-spacing: 0.16em; text-transform: uppercase;
+  margin-right: 0.4rem;
+}
+
+.mb {
+  background: var(--s1);
+  border: 1px solid var(--bdr);
+  border-left: 3px solid var(--blue);
+  border-radius: 7px;
+  padding: 1.1rem 1.3rem;
+  margin: 1.2rem 0;
+  overflow-x: auto;
+}
+.math-d { font-size: 1.05rem; color: var(--text); margin: 0.2rem 0; }
+.mb-label { margin-top: 0.5rem; font-size: 0.82rem; color: var(--text2); font-style: italic; }
+.katex { font-size: 1.04em; }
+
+.cw {
+  background: var(--s1);
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 1.4rem 0;
+}
+.ch {
+  display: flex; justify-content: space-between;
+  padding: 0.55rem 1rem;
+  background: var(--s2);
+  border-bottom: 1px solid var(--bdr);
+}
+.cl { font-family: var(--mono); font-size: 0.78rem; color: var(--text2); display: flex; align-items: center; gap: 0.5rem; }
+.cdot { width: 9px; height: 9px; border-radius: 50%; }
+.cpb {
+  background: var(--bg); border: 1px solid var(--bdr); color: var(--text2);
+  font-family: var(--mono); font-size: 0.72rem;
+  padding: 3px 9px; border-radius: 5px; cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.cpb:hover { color: var(--blue2); border-color: var(--blue2); }
+.cw pre { margin: 0; padding: 1.1rem 1.2rem; overflow-x: auto; font-family: var(--mono); font-size: 0.82rem; line-height: 1.55; }
+.cw code { font-family: var(--mono); }
+
+.ic {
+  font-family: var(--mono); font-size: 0.84em;
+  background: var(--s2); border: 1px solid var(--bdr);
+  border-radius: 4px; padding: 1px 6px; color: var(--blue2);
+}
+
+table.main { width: 100%; border-collapse: collapse; margin: 1.2rem 0; font-size: 0.92rem; }
+.tw { overflow-x: auto; }
+table.main th, table.main td { text-align: left; padding: 0.7rem 0.85rem; border-bottom: 1px solid var(--bdr); }
+table.main th {
+  background: var(--s2); color: var(--blue2);
+  font-weight: 700; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
+}
+table.main tr:last-child td { border-bottom: 0; }
+table.main td { color: var(--text); }
+table.main td:first-child { font-family: var(--mono); font-size: 0.9em; color: var(--blue2); white-space: nowrap; }
+
+.split2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1.2rem 0; }
+.co {
+  border-radius: 8px; padding: 1rem 1.15rem;
+  background: var(--s1); border: 1px solid var(--bdr);
+}
+.co-title { font-weight: 700; margin-bottom: 0.4rem; font-size: 0.95rem; }
+.co p { margin: 0.4rem 0; font-size: 0.93rem; }
+.co.green { background: rgba(52, 168, 83, 0.06); border-color: rgba(52, 168, 83, 0.22); }
+.co.green .co-title { color: var(--green2); }
+.co.red { background: rgba(234, 67, 53, 0.06); border-color: rgba(234, 67, 53, 0.22); }
+.co.red .co-title { color: var(--red2); }
+.co.blue { background: rgba(66, 133, 244, 0.06); border-color: rgba(66, 133, 244, 0.22); }
+.co.blue .co-title { color: var(--blue2); }
+.co.yellow { background: rgba(251, 188, 4, 0.06); border-color: rgba(251, 188, 4, 0.22); }
+.co.yellow .co-title { color: var(--yellow2); }
+.co.purple { background: rgba(155, 114, 232, 0.06); border-color: rgba(155, 114, 232, 0.22); }
+.co.purple .co-title { color: var(--purple2); }
+.co.teal { background: rgba(45, 212, 191, 0.06); border-color: rgba(45, 212, 191, 0.22); }
+.co.teal .co-title { color: var(--teal2); }
+
+.fig {
+  margin: 1.6rem 0;
+  background: var(--s1);
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  padding: 1.3rem;
+}
+.fig-title { font-size: 0.92rem; font-weight: 700; color: var(--blue2); margin-bottom: 0.7rem; }
+.fig-cap { margin-top: 0.7rem; font-size: 0.85rem; color: var(--text2); font-style: italic; line-height: 1.55; }
+.fig svg { width: 100%; height: auto; display: block; }
+
+.quote {
+  border-left: 3px solid var(--purple);
+  background: rgba(155, 114, 232, 0.05);
+  padding: 0.9rem 1.1rem;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: var(--text);
+  margin: 1.1rem 0;
+}
+.quote .qlabel {
+  font-family: var(--mono); font-size: 10.5px; font-weight: 700;
+  color: var(--purple2); letter-spacing: 0.10em; text-transform: uppercase;
+  font-style: normal; display: block; margin-bottom: 0.3rem;
+}
+
+ol, ul { padding-left: 1.3rem; }
+ol li, ul li { margin: 0.45rem 0; color: var(--text); }
+
+.refs ol { padding-left: 1.4rem; }
+.refs li { font-size: 0.88rem; color: var(--text2); }
+.refs em { color: var(--text); font-style: italic; }
+
+@media (max-width: 720px) {
+  .split2 { grid-template-columns: 1fr; }
+  main { padding: 2rem 1rem 4rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="prog" id="prog"></div>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/blog/AI_Blogs/">PPO Deep Dive</a>
+    <div class="nav-links">
+      <a href="#s0">Why RL</a>
+      <a href="#s1">Setup</a>
+      <a href="#s2">Reward</a>
+      <a href="#s3">RL Framing</a>
+      <a href="#s4">SFT vs RL</a>
+      <a href="#s5">Policy Gradient</a>
+      <a href="#s6">Advantage</a>
+      <a href="#s7">Importance</a>
+      <a href="#s8">PPO Clip</a>
+      <a href="#s9">KL</a>
+      <a href="#s10">GAE</a>
+      <a href="#s11">Loop</a>
+      <a href="#s12">Pitfalls</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<header class="hero">
+  <div class="hero-eyebrow"><div class="hero-eye-dot"></div>Complete Technical Reference</div>
+  <h1>
+    <span class="w-blue">Proximal</span> <span class="w-red">Policy</span><br>
+    <span class="w-yellow">Optimization</span> <span class="w-green">Explained</span>
+  </h1>
+  <p class="hero-sub">Every symbol defined. Every intuition built from scratch. A step-by-step animated walkthrough of how PPO trains a language model, from the first token to the final gradient update.</p>
+  <div class="hero-chips">
+    <span class="chip">📖 ~45 min read</span>
+    <span class="chip">📐 18 equations</span>
+    <span class="chip">🎬 6 animations</span>
+    <span class="chip">💻 Full training code</span>
+    <span class="chip">📝 Text examples</span>
+  </div>
+</header>
+
+<!-- S0: WHY -->
+<section class="sec" id="s0">
+  <div class="sec-hdr"><div class="sec-num">00</div><h2>Why do we need RL at all?</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    A pretrained LLM is good at predicting the next token. That is not the same as being useful, polite, or correct. PPO is the bridge from "good at next token" to "good at answering humans."
+  </div>
+  <p>Picture the model you have right now. It saw a few trillion tokens during pretraining. It can finish sentences from books, write code, recite Wikipedia, and even hold a conversation if you nudge it the right way. But it has one big limitation: it was only ever taught to predict the next token. It was never taught that <em>this</em> answer is better than <em>that</em> answer.</p>
+
+  <p>Supervised fine tuning (SFT) helps a little. You take a dataset of question and answer pairs written by humans, and you fine tune the model to imitate them. After SFT, the model knows the shape of a good answer. But SFT teaches it the <em>average</em> of your demonstrations, not the <em>best</em> of them. It also gives the model no notion of "this response was better than that one." It only sees one target per prompt.</p>
+
+  <p>What we actually want is to push the model toward generations that humans prefer. That is a comparison task. Comparison data is cheap to collect: show two answers and click the better one. Imitation data is expensive: write the full perfect answer yourself.</p>
+
+  <p>So the question becomes: <strong>how do we use comparison signal to update the weights of a pretrained transformer?</strong> The answer is reinforcement learning. PPO is the specific algorithm that almost every RLHF pipeline uses, including the original InstructGPT and ChatGPT trainings.</p>
+
+  <div class="fig">
+    <div class="fig-title">Figure 1 · Where PPO lives in the LLM lifecycle</div>
+    <svg viewBox="0 0 800 220" role="img" aria-label="The four stages of training a language model: pretraining, SFT, reward modeling, and PPO. Stages highlight in sequence.">
+      <style>
+        .lf-box { fill: #181c23; stroke: #2a3040; stroke-width: 1.2; }
+        .lf-text { font-family: 'Plus Jakarta Sans'; fill: #e8eaed; font-weight: 700; font-size: 13px; text-anchor: middle; }
+        .lf-sub  { font-family: 'JetBrains Mono'; fill: #9aa0a6; font-size: 9.5px; text-anchor: middle; letter-spacing: 0.08em; text-transform: uppercase; }
+        .lf-tag  { font-family: 'JetBrains Mono'; fill: #5f6368; font-size: 10px; text-anchor: middle; }
+        .lf-arrow { stroke: #4285f4; stroke-width: 1.5; fill: none; }
+        @keyframes lf-glow {
+          0%, 90%, 100% { stroke: #2a3040; stroke-width: 1.2; filter: none; }
+          10%, 25% { stroke: #4285f4; stroke-width: 1.8; filter: drop-shadow(0 0 8px rgba(66,133,244,0.7)); }
+        }
+        @keyframes lf-arrow-pulse {
+          0%   { offset-distance: 0%;   opacity: 0; }
+          15%  { opacity: 1; }
+          85%  { opacity: 1; }
+          100% { offset-distance: 100%; opacity: 0; }
+        }
+        .lf-b1 { animation: lf-glow 8s ease-in-out infinite; animation-delay: 0.0s; }
+        .lf-b2 { animation: lf-glow 8s ease-in-out infinite; animation-delay: 2.0s; }
+        .lf-b3 { animation: lf-glow 8s ease-in-out infinite; animation-delay: 4.0s; }
+        .lf-b4 { animation: lf-glow 8s ease-in-out infinite; animation-delay: 6.0s; }
+        .lf-bead1 { offset-path: path('M 175 95 H 215'); animation: lf-arrow-pulse 2s linear infinite; animation-delay: 1.6s; }
+        .lf-bead2 { offset-path: path('M 365 95 H 405'); animation: lf-arrow-pulse 2s linear infinite; animation-delay: 3.6s; }
+        .lf-bead3 { offset-path: path('M 555 95 H 595'); animation: lf-arrow-pulse 2s linear infinite; animation-delay: 5.6s; }
+        @media (prefers-reduced-motion: reduce) {
+          .lf-b1,.lf-b2,.lf-b3,.lf-b4,.lf-bead1,.lf-bead2,.lf-bead3 { animation: none; }
+        }
+      </style>
+      <rect fill="#0a0c10" width="800" height="220"/>
+      <g class="lf-b1"><rect class="lf-box" x="20"  y="60" width="160" height="80" rx="9"/></g>
+      <g class="lf-b2"><rect class="lf-box" x="210" y="60" width="160" height="80" rx="9"/></g>
+      <g class="lf-b3"><rect class="lf-box" x="400" y="60" width="160" height="80" rx="9"/></g>
+      <g class="lf-b4"><rect class="lf-box" x="590" y="60" width="180" height="80" rx="9"/></g>
+      <text class="lf-sub"  x="100" y="80">stage 01</text>
+      <text class="lf-text" x="100" y="103">Pretraining</text>
+      <text class="lf-tag"  x="100" y="124">trillions of tokens</text>
+      <text class="lf-sub"  x="290" y="80">stage 02</text>
+      <text class="lf-text" x="290" y="103">SFT</text>
+      <text class="lf-tag"  x="290" y="124">demonstration pairs</text>
+      <text class="lf-sub"  x="480" y="80">stage 03</text>
+      <text class="lf-text" x="480" y="103">Reward Model</text>
+      <text class="lf-tag"  x="480" y="124">preference data</text>
+      <text class="lf-sub"  x="680" y="80">stage 04</text>
+      <text class="lf-text" x="680" y="103">PPO</text>
+      <text class="lf-tag"  x="680" y="124">this post</text>
+      <line class="lf-arrow" x1="180" y1="100" x2="210" y2="100"/>
+      <line class="lf-arrow" x1="370" y1="100" x2="400" y2="100"/>
+      <line class="lf-arrow" x1="560" y1="100" x2="590" y2="100"/>
+      <circle class="lf-bead1" r="4" fill="#8ab4f8"/>
+      <circle class="lf-bead2" r="4" fill="#8ab4f8"/>
+      <circle class="lf-bead3" r="4" fill="#8ab4f8"/>
+      <text class="lf-sub" x="400" y="180" fill="#8ab4f8">Each stage takes the output of the previous one. PPO is the last step.</text>
+      <text class="lf-tag" x="400" y="200">model weights flow left to right</text>
+    </svg>
+    <div class="fig-cap">Four stages of training a modern LLM. PPO sits at the very end, after pretraining (next-token prediction on the web), SFT (imitation learning on demonstrations), and reward model training (learning a quality score from preferences). Each box pulses in sequence; in real training the arrows are months of compute and a lot of human annotation.</div>
+  </div>
+</section>
+
+<!-- S1: SETUP -->
+<section class="sec" id="s1">
+  <div class="sec-hdr"><div class="sec-num">01</div><h2>The setup: what you walk in with</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    Before PPO begins you need three things: an SFT-tuned model, a frozen copy of it called the reference, and a reward model. PPO does not need labelled answers. It just needs prompts.
+  </div>
+  <p>By the time you start PPO, you should already have:</p>
+  <ol>
+    <li><strong>An SFT model.</strong> Your pretrained LLM, fine tuned on a dataset of high-quality demonstrations. This is the starting point for the policy that PPO will update. Call it <span class="ic">π<sub>SFT</sub></span>.</li>
+    <li><strong>A reward model.</strong> A separate model that takes a (prompt, response) pair and returns a scalar score. We will see exactly how this is trained in the next section. Call it <span class="ic">R(x, y)</span>.</li>
+    <li><strong>A pile of prompts.</strong> Just prompts. No answers needed. This is the dataset PPO will train on. The model will generate its own responses on the fly.</li>
+  </ol>
+  <p>That last point is worth pausing on. <strong>PPO does not train on a (prompt, target answer) dataset.</strong> It only needs prompts. The model produces candidate answers itself during training, scores them with the reward model, and updates its weights based on those scores. That is the fundamental shift from supervised learning.</p>
+
+  <div class="co teal">
+    <div class="co-title">Our running example</div>
+    <p>We will use one prompt the entire way through this post. The user asks the model:</p>
+    <p><span class="ic">What are some healthy breakfast options for someone with diabetes?</span></p>
+    <p>And the model produces this response (one of several it could sample):</p>
+    <p><em>"Good breakfast options for someone with diabetes include steel-cut oatmeal topped with berries and nuts, plain Greek yogurt with chia seeds, or a vegetable omelette with whole-grain toast. These choices release glucose slowly and pair carbs with protein and fibre."</em></p>
+    <p>A reward model scores this response <strong>R = 0.91</strong>. We will trace what PPO does with that signal, all the way down to the parameter update.</p>
+  </div>
+</section>
+
+<!-- S2: REWARD -->
+<section class="sec" id="s2">
+  <div class="sec-hdr"><div class="sec-num">02</div><h2>Where does the reward come from?</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    The reward model is a transformer with a scalar head, trained on pairs of responses where a human said which one is better. It learns to predict that preference. PPO then uses its outputs as the reward signal.
+  </div>
+
+  <p>The reward signal is the heart of the whole pipeline. Without it, PPO has nothing to optimize. So how do you build a function that takes any (prompt, response) and tells you how good the response is?</p>
+
+  <h3>Step 1: collect preferences</h3>
+  <p>Take your SFT model. For each prompt in your dataset, sample <em>k</em> different responses by setting the temperature high enough that you get variation. A typical setup is k = 4 to 8 responses per prompt. Now you have a bag of (prompt, response<sub>1</sub>, response<sub>2</sub>, ..., response<sub>k</sub>) tuples.</p>
+
+  <p>Show each pair of responses to a human (or sometimes to a stronger LLM acting as a judge) and ask: which one is better? The human clicks. You record the preference. The dataset looks like:</p>
+
+  <div class="cw">
+    <div class="ch">
+      <div class="cl"><span class="cdot" style="background:#ea4335"></span><span class="cdot" style="background:#fbbc04"></span><span class="cdot" style="background:#34a853"></span> preference_data.jsonl</div>
+      <button class="cpb" onclick="copyCode(this)">copy</button>
+    </div>
+<pre><code class="language-json">{
+  "prompt": "What are some healthy breakfast options for someone with diabetes?",
+  "chosen": "Good options include steel-cut oatmeal with berries, plain Greek yogurt with chia seeds, or a vegetable omelette with whole-grain toast...",
+  "rejected": "Just eat whatever you want, breakfast doesn't really matter."
+}
+{
+  "prompt": "Explain why the sky is blue.",
+  "chosen": "Sunlight is made of many colors. As it passes through the atmosphere, the shorter blue wavelengths scatter more than the others, so the sky looks blue from the ground.",
+  "rejected": "Because of the ocean reflection."
+}</code></pre>
+  </div>
+
+  <h3>Step 2: train the reward model</h3>
+  <p>Take a fresh copy of your SFT model. Replace its language modeling head with a single scalar head (one linear layer, output dim 1). Now it takes a (prompt, response) pair and returns one number.</p>
+
+  <p>Train it with the Bradley-Terry loss. Given a chosen and a rejected response for the same prompt, the loss wants the chosen one to score higher than the rejected one:</p>
+
+  <div class="mb">
+    <div class="math-d">\mathcal{L}_{RM} = -\mathbb{E}_{(x, y_c, y_r) \sim \mathcal{D}}\!\left[\,\log \sigma\!\left( R_\phi(x, y_c) - R_\phi(x, y_r) \right) \right]</div>
+    <div class="mb-label">Sigmoid of the score gap. Penalizes the reward model when the chosen response scores lower than the rejected one.</div>
+  </div>
+
+  <p>After a few epochs, the reward model has internalized human taste, at least the slice of taste captured by your annotations. It can now score any new response on any prompt.</p>
+
+  <div class="fig">
+    <div class="fig-title">Figure 2 · Reward model training pipeline</div>
+    <svg viewBox="0 0 800 360" role="img" aria-label="Reward model training: a prompt is sampled multiple times by the SFT model, humans pick which response is better, and a reward model learns to predict the preference.">
+      <style>
+        .rm-bg    { fill: #0a0c10; }
+        .rm-box   { fill: #181c23; stroke: #2a3040; stroke-width: 1.3; }
+        .rm-prompt{ fill: #1a3a7a; stroke: #4285f4; stroke-width: 1.4; }
+        .rm-good  { fill: rgba(52,168,83,.10); stroke: #34a853; stroke-width: 1.4; }
+        .rm-bad   { fill: rgba(234,67,53,.10); stroke: #ea4335; stroke-width: 1.4; }
+        .rm-rm    { fill: #1e232d; stroke: #9b72e8; stroke-width: 1.6; filter: drop-shadow(0 0 8px rgba(155,114,232,.45)); }
+        .rm-text  { font-family: 'Plus Jakarta Sans'; fill: #e8eaed; font-weight: 700; font-size: 12px; text-anchor: middle; }
+        .rm-body  { font-family: 'JetBrains Mono'; fill: #9aa0a6; font-size: 9.5px; text-anchor: start; }
+        .rm-tag   { font-family: 'JetBrains Mono'; fill: #5f6368; font-size: 9.5px; text-anchor: middle; letter-spacing: 0.10em; text-transform: uppercase; }
+        .rm-arrow { stroke: #5f6368; stroke-width: 1.2; fill: none; }
+        .rm-thumb { font-family: 'Plus Jakarta Sans'; font-size: 20px; text-anchor: middle; }
+        @keyframes rm-sample {
+          0%, 100% { transform: scale(1); }
+          25%      { transform: scale(1.06); filter: drop-shadow(0 0 8px rgba(66,133,244,.55)); }
+        }
+        @keyframes rm-pref {
+          0%, 35%  { opacity: 0; }
+          50%, 80% { opacity: 1; }
+          100%     { opacity: 0; }
+        }
+        @keyframes rm-train {
+          0%, 60%  { opacity: 0.4; transform: scale(1); }
+          80%      { opacity: 1; transform: scale(1.06); }
+          100%     { opacity: 0.4; transform: scale(1); }
+        }
+        .rm-prompt-g { animation: rm-sample 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+        .rm-pref-g   { animation: rm-pref 5s ease-in-out infinite; }
+        .rm-rm-g     { animation: rm-train 5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+        @media (prefers-reduced-motion: reduce) {
+          .rm-prompt-g, .rm-pref-g, .rm-rm-g { animation: none; }
+          .rm-pref-g { opacity: 1; }
+        }
+      </style>
+      <rect class="rm-bg" width="800" height="360"/>
+      <g class="rm-prompt-g">
+        <rect class="rm-prompt" x="30" y="140" width="170" height="80" rx="10"/>
+        <text class="rm-text" x="115" y="170">PROMPT</text>
+        <text class="rm-tag"  x="115" y="190">healthy breakfast?</text>
+        <text class="rm-tag"  x="115" y="208">+ SFT model</text>
+      </g>
+      <line class="rm-arrow" x1="200" y1="170" x2="260" y2="115"/>
+      <line class="rm-arrow" x1="200" y1="180" x2="260" y2="200"/>
+      <line class="rm-arrow" x1="200" y1="190" x2="260" y2="280"/>
+      <g>
+        <rect class="rm-box" x="260" y="80" width="220" height="70" rx="8"/>
+        <text class="rm-text" x="370" y="103">response A</text>
+        <text class="rm-body" x="272" y="120">"Oatmeal + berries, Greek yogurt..."</text>
+        <text class="rm-tag"  x="370" y="138">temp = 0.9</text>
+      </g>
+      <g>
+        <rect class="rm-box" x="260" y="165" width="220" height="70" rx="8"/>
+        <text class="rm-text" x="370" y="188">response B</text>
+        <text class="rm-body" x="272" y="205">"Eggs and whole grain toast..."</text>
+        <text class="rm-tag"  x="370" y="223">temp = 0.9</text>
+      </g>
+      <g>
+        <rect class="rm-box" x="260" y="245" width="220" height="70" rx="8"/>
+        <text class="rm-text" x="370" y="268">response C</text>
+        <text class="rm-body" x="272" y="285">"Just eat whatever you want."</text>
+        <text class="rm-tag"  x="370" y="303">temp = 0.9</text>
+      </g>
+      <g class="rm-pref-g">
+        <text class="rm-thumb" x="510" y="110">👍</text>
+        <text class="rm-thumb" x="510" y="200">😐</text>
+        <text class="rm-thumb" x="510" y="280">👎</text>
+        <text class="rm-tag"   x="510" y="335">human rank</text>
+      </g>
+      <line class="rm-arrow" x1="540" y1="115" x2="610" y2="160"/>
+      <line class="rm-arrow" x1="540" y1="200" x2="610" y2="180"/>
+      <line class="rm-arrow" x1="540" y1="280" x2="610" y2="210"/>
+      <g class="rm-rm-g">
+        <rect class="rm-rm" x="610" y="150" width="160" height="80" rx="10"/>
+        <text class="rm-text" x="690" y="180">REWARD MODEL</text>
+        <text class="rm-tag"  x="690" y="200">R(x, y) → ℝ</text>
+        <text class="rm-tag"  x="690" y="218">trains on pairs</text>
+      </g>
+      <text class="rm-tag" x="115" y="40" fill="#8ab4f8">step 1</text>
+      <text class="rm-text" x="115" y="60">sample many responses</text>
+      <text class="rm-tag" x="370" y="40" fill="#8ab4f8">step 2</text>
+      <text class="rm-text" x="370" y="60">collect human ranks</text>
+      <text class="rm-tag" x="690" y="40" fill="#8ab4f8">step 3</text>
+      <text class="rm-text" x="690" y="60">train RM to match</text>
+    </svg>
+    <div class="fig-cap">Reward model training. The SFT model samples several responses per prompt at high temperature. Humans (or a strong LLM judge) rank them. The reward model is then trained to predict these rankings, so its scores agree with human preference. After PPO begins, only this trained reward model is consulted, not humans.</div>
+  </div>
+
+  <h3>How is this any better than just training on demonstrations?</h3>
+  <p>Demonstrations tell you what a good answer <em>looks like</em>. Preferences tell you what makes one answer <em>better than another</em>. The second signal is finer-grained and much cheaper to collect: ranking two answers takes a few seconds; writing a perfect answer takes minutes. The reward model is the trick that turns thousands of cheap rank labels into a continuous score function you can apply to any new response.</p>
+</section>
+
+<!-- S3: RL FRAMING -->
+<section class="sec" id="s3">
+  <div class="sec-hdr"><div class="sec-num">03</div><h2>Translating LLMs into RL language</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    An LLM generating tokens is the same shape as an agent taking actions in an environment. Token = action. Prompt + so-far = state. Full response = trajectory. Reward = score at the end. Once you see this mapping, the rest is just notation.
+  </div>
+
+  <p>RL papers use a vocabulary that does not appear anywhere in a transformer paper. Here is the cheat sheet:</p>
+  <div class="tw">
+    <table class="main">
+      <thead><tr><th>RL term</th><th>What it actually is for an LLM</th></tr></thead>
+      <tbody>
+        <tr><td>policy π<sub>θ</sub></td><td>Your transformer. Outputs a probability distribution over the vocabulary at every position.</td></tr>
+        <tr><td>action a<sub>t</sub></td><td>The token chosen at position t. Sampled from π<sub>θ</sub>(· | s<sub>t</sub>).</td></tr>
+        <tr><td>state s<sub>t</sub></td><td>The prompt x plus every token generated so far: (a<sub>1</sub>, ..., a<sub>t-1</sub>).</td></tr>
+        <tr><td>trajectory τ</td><td>One complete (prompt, response) pair. The whole episode.</td></tr>
+        <tr><td>horizon T</td><td>How many tokens the model generated before stopping. Variable per episode.</td></tr>
+        <tr><td>reward r<sub>t</sub></td><td>Almost always zero for t &lt; T. The reward model only fires at the end of the response.</td></tr>
+        <tr><td>return G<sub>t</sub></td><td>Sum of future rewards from step t. For LLMs, basically R(x, y) for every t.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Two things are worth dwelling on.</p>
+
+  <p><strong>The action space is enormous.</strong> Most RL papers picture games with maybe a dozen possible actions. For an LLM the action space is the whole vocabulary, 30,000 to 200,000 tokens depending on tokenizer. That changes the math of exploration: random sampling becomes incredibly weak because nearly every random choice is gibberish.</p>
+
+  <p><strong>The reward is sparse.</strong> You generate hundreds of tokens. The reward model fires exactly once, at the end. So one scalar reward has to be back-propagated as a learning signal across the entire sequence. PPO's job is to figure out which tokens deserve credit (or blame) for that final score. This is called <em>credit assignment</em>, and it is the central technical difficulty.</p>
+
+  <div class="fig">
+    <div class="fig-title">Figure 3 · One PPO rollout, token by token</div>
+    <svg viewBox="0 0 800 280" role="img" aria-label="A prompt enters the policy. Tokens stream out one at a time. The full response is scored at the end.">
+      <style>
+        .rl-bg { fill: #0a0c10; }
+        .rl-box { fill: #181c23; stroke: #2a3040; stroke-width: 1.3; }
+        .rl-pol { fill: #1a3a7a; stroke: #4285f4; stroke-width: 1.6; }
+        .rl-rm  { fill: #1e232d; stroke: #9b72e8; stroke-width: 1.6; }
+        .rl-text  { font-family: 'Plus Jakarta Sans'; fill: #e8eaed; font-weight: 700; font-size: 12px; text-anchor: middle; }
+        .rl-tag   { font-family: 'JetBrains Mono'; fill: #9aa0a6; font-size: 9px; text-anchor: middle; letter-spacing: 0.06em; }
+        .rl-tok-text { font-family: 'JetBrains Mono'; fill: #8ab4f8; font-size: 10.5px; text-anchor: middle; }
+        .rl-arrow { stroke: #5f6368; stroke-width: 1.2; fill: none; }
+        @keyframes rl-tok-appear {
+          0%, 8%   { opacity: 0; transform: translateX(-12px) scale(0.7); }
+          15%, 88% { opacity: 1; transform: none; }
+          100%     { opacity: 0; }
+        }
+        @keyframes rl-final {
+          0%, 80%  { opacity: 0; transform: scale(0.7); }
+          90%, 100%{ opacity: 1; transform: scale(1); }
+        }
+        .tok1 { animation: rl-tok-appear 5s linear infinite; animation-delay: 0.5s; transform-origin: center; transform-box: fill-box; }
+        .tok2 { animation: rl-tok-appear 5s linear infinite; animation-delay: 1.0s; transform-origin: center; transform-box: fill-box; }
+        .tok3 { animation: rl-tok-appear 5s linear infinite; animation-delay: 1.5s; transform-origin: center; transform-box: fill-box; }
+        .tok4 { animation: rl-tok-appear 5s linear infinite; animation-delay: 2.0s; transform-origin: center; transform-box: fill-box; }
+        .tok5 { animation: rl-tok-appear 5s linear infinite; animation-delay: 2.5s; transform-origin: center; transform-box: fill-box; }
+        .tok6 { animation: rl-tok-appear 5s linear infinite; animation-delay: 3.0s; transform-origin: center; transform-box: fill-box; }
+        .reward-g { animation: rl-final 5s linear infinite; transform-origin: center; transform-box: fill-box; }
+        @media (prefers-reduced-motion: reduce) {
+          .tok1,.tok2,.tok3,.tok4,.tok5,.tok6,.reward-g { animation: none; opacity: 1; transform: none; }
+        }
+      </style>
+      <rect class="rl-bg" width="800" height="280"/>
+      <rect class="rl-box" x="20" y="100" width="120" height="80" rx="9"/>
+      <text class="rl-text" x="80" y="135">PROMPT</text>
+      <text class="rl-tag" x="80" y="155">"breakfast for diabetes?"</text>
+      <line class="rl-arrow" x1="140" y1="140" x2="180" y2="140"/>
+      <rect class="rl-pol" x="180" y="100" width="120" height="80" rx="9"/>
+      <text class="rl-text" x="240" y="135">π_θ</text>
+      <text class="rl-tag"  x="240" y="155">transformer</text>
+      <text class="rl-tag"  x="240" y="170">samples token</text>
+      <line class="rl-arrow" x1="300" y1="140" x2="320" y2="140"/>
+      <g transform="translate(330, 120)">
+        <rect class="rl-box tok1" x="0"   y="0" width="56" height="38" rx="6"/>
+        <text class="rl-tok-text tok1" x="28" y="24">Good</text>
+        <rect class="rl-box tok2" x="60"  y="0" width="56" height="38" rx="6"/>
+        <text class="rl-tok-text tok2" x="88" y="24">options</text>
+        <rect class="rl-box tok3" x="120" y="0" width="56" height="38" rx="6"/>
+        <text class="rl-tok-text tok3" x="148" y="24">include</text>
+        <rect class="rl-box tok4" x="180" y="0" width="56" height="38" rx="6"/>
+        <text class="rl-tok-text tok4" x="208" y="24">oatmeal</text>
+        <rect class="rl-box tok5" x="240" y="0" width="56" height="38" rx="6"/>
+        <text class="rl-tok-text tok5" x="268" y="24">with</text>
+        <rect class="rl-box tok6" x="300" y="0" width="56" height="38" rx="6"/>
+        <text class="rl-tok-text tok6" x="328" y="24">berries.</text>
+      </g>
+      <text class="rl-tag" x="510" y="105" fill="#8ab4f8">response y = (a_1, ..., a_T)</text>
+      <line class="rl-arrow" x1="690" y1="140" x2="710" y2="140"/>
+      <g class="reward-g">
+        <rect class="rl-rm" x="710" y="100" width="80" height="80" rx="9"/>
+        <text class="rl-text" x="750" y="130">R(x, y)</text>
+        <text class="rl-tag" x="750" y="150">0.91</text>
+        <text class="rl-tag" x="750" y="166">reward model</text>
+      </g>
+      <text class="rl-tag" x="400" y="220" fill="#5f6368">reward arrives once, at the very end · every token in the middle is "free"</text>
+      <text class="rl-tag" x="400" y="240" fill="#5f6368">PPO's job: figure out which tokens deserve credit for that final score</text>
+    </svg>
+    <div class="fig-cap">One PPO rollout. The prompt enters the policy. Tokens stream out one by one, each conditional on everything that came before. Once the response is finished, it goes to the reward model, which returns a single scalar score. That score is the only learning signal PPO will see for this trajectory.</div>
+  </div>
+</section>
+
+<!-- S4: WHY NOT SFT -->
+<section class="sec" id="s4">
+  <div class="sec-hdr"><div class="sec-num">04</div><h2>Why not just SFT on high-reward outputs?</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    Filtering for high-reward samples and running SFT on them (rejection sampling) is a real method and it does work. But it cannot decrease the probability of bad outputs. PPO can.
+  </div>
+
+  <p>A natural reaction at this point: <em>"Why not just sample a thousand responses, keep only the ones that score high, and supervised-fine-tune on those?"</em> This is called <strong>rejection sampling fine tuning</strong> or <strong>best-of-N SFT</strong>. It works. It is also simpler than PPO. So why do people bother with PPO?</p>
+
+  <p>Two reasons:</p>
+  <ol>
+    <li><strong>SFT cannot push probability away from bad outputs.</strong> When you fine tune on token sequences, the cross-entropy loss only ever increases the probability of the tokens that appear in your training data. It never explicitly punishes the tokens that should not appear. PPO's clipped objective, in contrast, has positive-advantage and negative-advantage cases: it increases good-token probability <em>and</em> decreases bad-token probability in the same step.</li>
+    <li><strong>SFT throws away most of your data.</strong> If you sample 8 responses and keep only the top 1, you discarded 7/8 of the compute spent generating. PPO uses all 8 responses, weighted by how good or bad they were. This is a much denser learning signal per dollar of inference.</li>
+  </ol>
+
+  <p>That said, hybrids are common in practice. Many production pipelines do rejection sampling SFT first to get a strong starting point, then run PPO from there. The combination is more reliable than either method alone.</p>
+</section>
+
+<!-- S5: POLICY GRADIENT -->
+<section class="sec" id="s5">
+  <div class="sec-hdr"><div class="sec-num">05</div><h2>Policy gradient: the foundation</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    To maximize expected reward, take the gradient of log probability of each action and weight it by the reward of the whole trajectory. This is REINFORCE. It is unbiased and badly behaved.
+  </div>
+
+  <p>The goal is to maximize the expected reward our policy gets across the prompt distribution:</p>
+  <div class="mb">
+    <div class="math-d">J(\theta) = \mathbb{E}_{x \sim \mathcal{D},\ y \sim \pi_\theta(\cdot \mid x)}\left[ R(x, y) \right]</div>
+    <div class="mb-label">Expected reward, average over prompts × sampled responses.</div>
+  </div>
+
+  <p>We cannot just take ∇J(θ) directly because the expectation is over samples from π<sub>θ</sub> itself, and the sampling depends on θ. The <strong>policy gradient theorem</strong> handles this by moving the gradient inside the expectation:</p>
+
+  <div class="mb">
+    <div class="math-d">\nabla_\theta J(\theta) = \mathbb{E}_{x, y \sim \pi_\theta}\!\left[\,R(x, y) \cdot \sum_{t=1}^{T} \nabla_\theta \log \pi_\theta(a_t \mid s_t)\right]</div>
+    <div class="mb-label">REINFORCE. Reward times the sum of log-probability gradients along the trajectory.</div>
+  </div>
+
+  <p>The intuition is exactly what it looks like: <em>multiply the reward by the gradient of log-probability of the action you took, and that is the direction to push your parameters in.</em> If R is positive, the gradient step makes those actions more likely. If R is negative, less likely.</p>
+
+  <p>For the running example, the trajectory τ is the seven-ish tokens of the answer about oatmeal. R(τ) = 0.91. The gradient step nudges the model toward producing those tokens (in that context) more often. Simple in principle.</p>
+
+  <div class="co red">
+    <div class="co-title">Why REINFORCE breaks in practice</div>
+    <p>Two reasons. <strong>Variance:</strong> a single trajectory's reward can swing wildly between batches, so the gradient estimate is noisy. You need huge batches or many epochs to average it out. <strong>Sample inefficiency:</strong> as soon as you take one gradient step, your old samples are technically off-policy and you should throw them out. Generating a fresh batch every step is wildly expensive.</p>
+  </div>
+
+  <p>The next two sections fix variance (with baselines and advantages) and sample inefficiency (with importance sampling and clipping). Those two fixes together are PPO.</p>
+</section>
+
+<!-- S6: ADVANTAGE -->
+<section class="sec" id="s6">
+  <div class="sec-hdr"><div class="sec-num">06</div><h2>Baselines and advantages</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    Subtract a baseline from the reward before weighting the log probability. The same gradient in expectation, much lower variance. The best baseline is a value function, which gives you the advantage.
+  </div>
+
+  <p>Here is the trick. The policy gradient is unchanged in expectation if you subtract any quantity that does not depend on the action:</p>
+  <div class="mb">
+    <div class="math-d">\nabla_\theta J(\theta) = \mathbb{E}\!\left[\sum_{t=1}^T \left(R(\tau) - b(s_t)\right) \cdot \nabla_\theta \log \pi_\theta(a_t \mid s_t)\right]</div>
+    <div class="mb-label">Same expectation as REINFORCE, but the variance drops dramatically with a good choice of b(s).</div>
+  </div>
+
+  <p>Why is the expectation unchanged? Because the expectation of (∇ log π · b(s)) is zero whenever b(s) doesn't depend on the action — a standard property called the <em>score function identity</em>. So subtracting any state-only term is a free variance reduction.</p>
+
+  <p>The best baseline is the one that makes (R − b) as small as possible while still being state-only. The optimal choice (it can be shown) is the <strong>value function</strong>: the expected return from state s under the current policy. We train a small network to estimate it.</p>
+
+  <div class="mb">
+    <div class="math-d">V_\psi(s) \approx \mathbb{E}_{\pi_\theta}\!\left[ R(\tau) \mid s_t = s \right]</div>
+    <div class="mb-label">Value function. Predicts how much reward we expect from this state, on average.</div>
+  </div>
+
+  <p>And then the <strong>advantage</strong> is the gap:</p>
+  <div class="mb">
+    <div class="math-d">A_t = R(\tau) - V_\psi(s_t)</div>
+    <div class="mb-label">Did this trajectory exceed our expected return from state s_t? If yes, A &gt; 0 and we should boost the action that led here.</div>
+  </div>
+
+  <p>Two networks now. The <strong>actor</strong> (your LLM with its usual LM head) generates tokens. The <strong>critic</strong> (your LLM with a scalar head bolted on) estimates V. In practice both share the same transformer body for memory reasons, and only the heads differ.</p>
+
+  <p>The critic is trained with plain regression against actual returns:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}_V(\psi) = \mathbb{E}_t\!\left[ \left( V_\psi(s_t) - R_t \right)^2 \right]</div>
+    <div class="mb-label">Critic regression target. We want V to predict the actual return as accurately as possible.</div>
+  </div>
+</section>
+
+<!-- S7: IMPORTANCE SAMPLING -->
+<section class="sec" id="s7">
+  <div class="sec-hdr"><div class="sec-num">07</div><h2>Off-policy and importance sampling</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    Generating fresh rollouts after every gradient step is too expensive. We want to update the policy several times on each rollout. To do that safely, we weight each sample by the ratio of new policy to old policy probabilities. That ratio can blow up; PPO's job is to keep it tame.
+  </div>
+
+  <p>If you stick to REINFORCE-with-baseline, you must regenerate the entire batch of trajectories after every single gradient step. That is incredibly slow when generating one trajectory costs hundreds of forward passes through a 7B-parameter model.</p>
+
+  <p>The workaround is <strong>importance sampling</strong>. You collect rollouts with a frozen snapshot of the policy, call it π<sub>old</sub>. You then run several gradient updates on the current policy π<sub>θ</sub>, using the same rollouts. To compensate for the mismatch (the data was sampled from π<sub>old</sub>, but you are training π<sub>θ</sub>), you weight each token by the ratio:</p>
+
+  <div class="mb">
+    <div class="math-d">\rho_t(\theta) = \frac{\pi_\theta(a_t \mid s_t)}{\pi_{old}(a_t \mid s_t)}</div>
+    <div class="mb-label">Probability ratio. If π_θ and π_old give the same probability to a_t, ρ = 1. If π_θ became much more confident in a_t, ρ &gt; 1. Less confident, ρ &lt; 1.</div>
+  </div>
+
+  <p>The surrogate objective becomes:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}^{IS}(\theta) = \mathbb{E}_t\!\left[ \rho_t(\theta) \cdot \hat A_t \right]</div>
+    <div class="mb-label">Importance-sampled surrogate. Equivalent to vanilla policy gradient when ρ = 1 everywhere.</div>
+  </div>
+
+  <p>This is unbiased as long as ρ stays small. The problem is that ρ can blow up. If the new policy starts assigning much higher probability to some token than the old one did, ρ could become 5, 10, 100. The estimator's variance explodes. Worse, a few outlier ratios can dominate the gradient.</p>
+
+  <p>This is the exact problem PPO solves.</p>
+</section>
+
+<!-- S8: PPO CLIP -->
+<section class="sec" id="s8">
+  <div class="sec-hdr"><div class="sec-num">08</div><h2>The clipped surrogate, finally</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    Take the importance-weighted objective. Hard-clip the ratio so it cannot leave [1 − ε, 1 + ε]. Take the minimum of clipped and unclipped versions. That is it. That is PPO.
+  </div>
+
+  <p>The clipped objective:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}^{CLIP}(\theta) = \mathbb{E}_t\!\left[\,\min\!\big(\rho_t(\theta) \cdot \hat A_t,\;\; \text{clip}\big(\rho_t(\theta),\, 1 - \epsilon,\, 1 + \epsilon\big) \cdot \hat A_t \big)\,\right]</div>
+    <div class="mb-label">The center of PPO. Bounded above and below; no incentive to push ρ outside [1 − ε, 1 + ε].</div>
+  </div>
+
+  <p>That min looks strange at first. Why is it there? Walk through the four cases:</p>
+  <div class="split2">
+    <div class="co green">
+      <div class="co-title">A &gt; 0 (good action) and ρ &lt; 1 + ε</div>
+      <p>The new policy hasn't pushed too hard yet. The unclipped term is in effect: gradient pushes ρ up further, making the action more likely.</p>
+    </div>
+    <div class="co green">
+      <div class="co-title">A &gt; 0 and ρ ≥ 1 + ε</div>
+      <p>The new policy has already increased this action's probability by more than ε. The clip caps the objective. Pushing ρ higher gives zero extra reward, so the gradient stops.</p>
+    </div>
+    <div class="co red">
+      <div class="co-title">A &lt; 0 (bad action) and ρ &gt; 1 − ε</div>
+      <p>The new policy hasn't pushed this action down enough yet. The unclipped term lets the gradient continue pushing ρ down.</p>
+    </div>
+    <div class="co red">
+      <div class="co-title">A &lt; 0 and ρ ≤ 1 − ε</div>
+      <p>The new policy already decreased this action's probability by more than ε. The clip caps it. The gradient stops driving it lower.</p>
+    </div>
+  </div>
+
+  <p>The min ensures the bound is one-sided in the direction we don't want to go. We are still happy to take gradient steps that pull the ratio <em>back</em> toward 1 (corrective steps), but we won't take ones that push it further away.</p>
+
+  <div class="fig">
+    <div class="fig-title">Figure 4 · The clipped surrogate, visualized</div>
+    <svg viewBox="0 0 800 360" role="img" aria-label="The clipped PPO surrogate plotted as a function of the probability ratio. For positive advantage the surrogate is bounded above at 1+ε. For negative advantage it is bounded below at 1−ε.">
+      <style>
+        .pc-bg { fill: #0a0c10; }
+        .pc-grid { stroke: rgba(138,180,248,0.08); stroke-width: 1; }
+        .pc-axis { stroke: rgba(138,180,248,0.35); stroke-width: 1.3; }
+        .pc-tag  { font-family: 'JetBrains Mono'; fill: #9aa0a6; font-size: 10.5px; }
+        .pc-lbl  { font-family: 'Plus Jakarta Sans'; fill: #e8eaed; font-size: 12px; font-weight: 700; }
+        .pc-line-unclip { stroke: #ea4335; stroke-width: 2; fill: none; stroke-dasharray: 5 4; }
+        .pc-line-clip { stroke: #34a853; stroke-width: 2.4; fill: none; filter: drop-shadow(0 0 6px rgba(52,168,83,0.4)); }
+        .pc-band { fill: rgba(52,168,83,0.06); }
+        .pc-dot { fill: #fbbc04; filter: drop-shadow(0 0 6px rgba(251,188,4,0.7)); }
+        @keyframes pc-slide {
+          0%   { offset-distance: 0%; }
+          100% { offset-distance: 100%; }
+        }
+        .pc-bead {
+          offset-path: path('M 110 60 L 250 130 L 370 180 L 490 180 L 610 180 L 690 180');
+          offset-rotate: 0deg;
+          animation: pc-slide 6s ease-in-out infinite alternate;
+        }
+        @media (prefers-reduced-motion: reduce) { .pc-bead { animation: none; } }
+      </style>
+      <rect class="pc-bg" width="800" height="360"/>
+
+      <text class="pc-lbl" x="40" y="32">Positive advantage  (A &gt; 0)</text>
+      <text class="pc-tag" x="40" y="50">surrogate = min(ρA, clip(ρ, 1−ε, 1+ε)·A)</text>
+
+      <g>
+        <line class="pc-axis" x1="80"  y1="280" x2="730" y2="280"/>
+        <line class="pc-axis" x1="80"  y1="60"  x2="80"  y2="280"/>
+        <line class="pc-grid" x1="250" y1="60"  x2="250" y2="280"/>
+        <line class="pc-grid" x1="370" y1="60"  x2="370" y2="280"/>
+        <line class="pc-grid" x1="490" y1="60"  x2="490" y2="280"/>
+        <line class="pc-grid" x1="610" y1="60"  x2="610" y2="280"/>
+
+        <rect class="pc-band" x="370" y="60" width="120" height="220"/>
+
+        <text class="pc-tag" x="370" y="300" text-anchor="middle">1 − ε</text>
+        <text class="pc-tag" x="430" y="300" text-anchor="middle">1</text>
+        <text class="pc-tag" x="490" y="300" text-anchor="middle">1 + ε</text>
+        <text class="pc-tag" x="80"  y="328" text-anchor="middle">ρ →</text>
+
+        <line class="pc-line-unclip" x1="110" y1="60"  x2="730" y2="240"/>
+
+        <line class="pc-line-clip" x1="110" y1="60"  x2="250" y2="130"/>
+        <line class="pc-line-clip" x1="250" y1="130" x2="370" y2="180"/>
+        <line class="pc-line-clip" x1="370" y1="180" x2="490" y2="180"/>
+        <line class="pc-line-clip" x1="490" y1="180" x2="610" y2="180"/>
+        <line class="pc-line-clip" x1="610" y1="180" x2="730" y2="180"/>
+
+        <circle class="pc-dot pc-bead" r="6"/>
+
+        <text class="pc-tag" x="115" y="80"  fill="#34a853">min(unclipped, clipped) wins on the left</text>
+        <text class="pc-tag" x="495" y="170" fill="#34a853">clip flattens the slope</text>
+        <text class="pc-tag" x="495" y="200" fill="#5f6368">no gradient incentive past 1+ε</text>
+      </g>
+    </svg>
+    <div class="fig-cap">PPO's clipped surrogate for the A &gt; 0 case. The dashed red line is the unclipped objective ρA. The solid green line is the clip(ρ, 1−ε, 1+ε)·A. The actual PPO loss is the minimum of the two, which forms the kinked shape shown. Once ρ exits the green band, the slope is zero — the policy has no incentive to keep changing in that direction, even if the gradient says it should. The reverse picture (mirror image) holds when A &lt; 0.</div>
+  </div>
+</section>
+
+<!-- S9: KL -->
+<section class="sec" id="s9">
+  <div class="sec-hdr"><div class="sec-num">09</div><h2>The KL penalty: anchoring to the SFT model</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    Even with the clip, PPO can drift the policy far from anything sensible by exploiting the reward model. We add a KL penalty against a frozen reference (the SFT model) so the trained policy cannot wander too far.
+  </div>
+
+  <p>The reward model is not perfect. It was trained on a finite set of preferences. If PPO is allowed to optimize hard enough, it will find weird outputs that the reward model accidentally rates highly — outputs no human would actually prefer. This is called <strong>reward hacking</strong>, and it is the single most common failure mode in RLHF.</p>
+
+  <p>The fix is to penalize the policy whenever it strays from the original SFT model. We add a per-token KL term:</p>
+  <div class="mb">
+    <div class="math-d">r_t^{\text{shaped}} = r_t - \beta \cdot \mathrm{KL}\!\big[\pi_\theta(\cdot \mid s_t)\ \|\ \pi_{ref}(\cdot \mid s_t)\big]</div>
+    <div class="mb-label">Subtract a KL penalty against the frozen reference at every token. β controls how tight the leash is.</div>
+  </div>
+
+  <p>The full PPO objective is then:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}(\theta, \psi) = \mathcal{L}^{CLIP}(\theta) - c_v \cdot \mathcal{L}_V(\psi) + c_e \cdot \mathcal{H}[\pi_\theta] - \beta \cdot \mathrm{KL}\big[\pi_\theta\,\|\,\pi_{ref}\big]</div>
+    <div class="mb-label">Clip surrogate + value regression + small entropy bonus − KL leash. Maximized over θ, ψ.</div>
+  </div>
+
+  <p>Four terms, three loss coefficients to tune in practice:</p>
+  <ul>
+    <li><strong>c<sub>v</sub></strong>: weight on the critic loss. Usually 0.5 to 1.0.</li>
+    <li><strong>c<sub>e</sub></strong>: tiny entropy bonus that discourages collapse. Usually 0.001 to 0.01.</li>
+    <li><strong>β</strong>: how hard you pull back toward the SFT model. The most consequential hyperparameter. Too small and the model reward-hacks. Too large and it never learns anything new. Typical range: 0.01 to 0.2.</li>
+  </ul>
+
+  <div class="quote">
+    <span class="qlabel">Intuition</span>
+    The reference policy is the "best version of you" that you trust. PPO is your attempt to do better, but you don't want to disagree with yourself by more than a few percent on any token. The KL term is the inner voice saying "are you sure you're being reasonable here?"
+  </div>
+</section>
+
+<!-- S10: GAE -->
+<section class="sec" id="s10">
+  <div class="sec-hdr"><div class="sec-num">10</div><h2>GAE: smoother advantages</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    The simplest advantage estimate is high-variance. The simplest TD-error is high-bias. GAE interpolates between them with one parameter (λ) and turns out to be the only credit-assignment trick you need.
+  </div>
+
+  <p>Advantage estimation has a knob: how many future steps do we look at when computing A<sub>t</sub>?</p>
+  <ul>
+    <li>Look at just one step: A<sub>t</sub> ≈ r<sub>t</sub> + γ V(s<sub>t+1</sub>) − V(s<sub>t</sub>). Low variance, biased by V's mistakes.</li>
+    <li>Look all the way to the end: A<sub>t</sub> = R(τ) − V(s<sub>t</sub>). Unbiased, but high variance because R(τ) is one noisy number.</li>
+  </ul>
+
+  <p>GAE is the exponentially-weighted average of all the in-between options. Define the one-step TD error:</p>
+  <div class="mb">
+    <div class="math-d">\delta_t = r_t + \gamma V_\psi(s_{t+1}) - V_\psi(s_t)</div>
+    <div class="mb-label">TD error: how much better the realized reward + next-state value was than the predicted value at s_t.</div>
+  </div>
+
+  <p>Then GAE is:</p>
+  <div class="mb">
+    <div class="math-d">\hat A_t^{GAE(\gamma, \lambda)} = \sum_{\ell = 0}^{T - t} (\gamma\,\lambda)^\ell\, \delta_{t + \ell}</div>
+    <div class="mb-label">GAE: exponentially weighted sum of future TD errors. λ = 0 → one-step TD. λ = 1 → Monte Carlo.</div>
+  </div>
+
+  <p>For LLMs the typical values are γ = 1.0 (we don't discount future tokens within one response) and λ = 0.95 (heavily weight near-term TD errors, but not exclusively). The recursive form makes it cheap to compute backward in one pass:</p>
+
+  <div class="cw">
+    <div class="ch">
+      <div class="cl"><span class="cdot" style="background:#ea4335"></span><span class="cdot" style="background:#fbbc04"></span><span class="cdot" style="background:#34a853"></span> gae.py</div>
+      <button class="cpb" onclick="copyCode(this)">copy</button>
+    </div>
+<pre><code class="language-python">def compute_gae(rewards, values, gamma=1.0, lam=0.95):
+    """
+    rewards: tensor of shape [B, T]   — per-token rewards (mostly zero plus KL penalties)
+    values:  tensor of shape [B, T+1] — V(s_t) for every state, including terminal
+    returns: advantages [B, T], returns [B, T]
+    """
+    T = rewards.shape[1]
+    advantages = torch.zeros_like(rewards)
+    last_gae = 0.0
+    for t in reversed(range(T)):
+        delta    = rewards[:, t] + gamma * values[:, t + 1] - values[:, t]
+        last_gae = delta + gamma * lam * last_gae
+        advantages[:, t] = last_gae
+    returns = advantages + values[:, :T]
+    return advantages, returns</code></pre>
+  </div>
+
+  <p>One additional step in practice: <strong>normalize the advantages</strong> per batch (subtract mean, divide by standard deviation) before plugging them into the clip objective. This decouples the learning rate from the absolute scale of rewards, which is a free stability win.</p>
+
+  <div class="fig">
+    <div class="fig-title">Figure 5 · GAE backward pass on the running example</div>
+    <svg viewBox="0 0 800 320" role="img" aria-label="GAE recursive computation: starting from the last token, accumulate TD errors backward, weighted by (gamma lambda) to produce advantages at every step.">
+      <style>
+        .ga-bg { fill: #0a0c10; }
+        .ga-cell { fill: #181c23; stroke: #2a3040; stroke-width: 1.3; }
+        .ga-active { fill: rgba(251,188,4,0.16); stroke: #fbbc04; stroke-width: 1.8; }
+        .ga-tag { font-family: 'JetBrains Mono'; fill: #9aa0a6; font-size: 9.5px; text-anchor: middle; }
+        .ga-num { font-family: 'JetBrains Mono'; fill: #e8eaed; font-size: 11.5px; text-anchor: middle; }
+        .ga-axislabel { font-family: 'Plus Jakarta Sans'; fill: #8ab4f8; font-size: 11px; font-weight: 700; }
+        .ga-arrow { stroke: #5f6368; stroke-width: 1; fill: none; }
+        .ga-arrow-head { fill: #5f6368; }
+        @keyframes ga-pulse {
+          0%, 100% { fill: #181c23; stroke: #2a3040; stroke-width: 1.3; }
+          30%, 50% { fill: rgba(251,188,4,0.18); stroke: #fbbc04; stroke-width: 1.8; }
+        }
+        .ga-c1 { animation: ga-pulse 8s ease infinite; animation-delay: 0.0s; }
+        .ga-c2 { animation: ga-pulse 8s ease infinite; animation-delay: 1.0s; }
+        .ga-c3 { animation: ga-pulse 8s ease infinite; animation-delay: 2.0s; }
+        .ga-c4 { animation: ga-pulse 8s ease infinite; animation-delay: 3.0s; }
+        .ga-c5 { animation: ga-pulse 8s ease infinite; animation-delay: 4.0s; }
+        .ga-c6 { animation: ga-pulse 8s ease infinite; animation-delay: 5.0s; }
+        .ga-c7 { animation: ga-pulse 8s ease infinite; animation-delay: 6.0s; }
+        @media (prefers-reduced-motion: reduce) {
+          .ga-c1, .ga-c2, .ga-c3, .ga-c4, .ga-c5, .ga-c6, .ga-c7 { animation: none; }
+        }
+      </style>
+      <rect class="ga-bg" width="800" height="320"/>
+      <text class="ga-axislabel" x="40" y="40">t = 1</text>
+      <text class="ga-axislabel" x="140" y="40">t = 2</text>
+      <text class="ga-axislabel" x="240" y="40">t = 3</text>
+      <text class="ga-axislabel" x="340" y="40">t = 4</text>
+      <text class="ga-axislabel" x="440" y="40">t = 5</text>
+      <text class="ga-axislabel" x="540" y="40">t = 6</text>
+      <text class="ga-axislabel" x="640" y="40">t = 7</text>
+
+      <text class="ga-tag" x="20" y="80"  text-anchor="end" fill="#5f6368">tokens</text>
+      <g class="ga-c1"><rect class="ga-cell" x="20"  y="60" width="80" height="32" rx="5"/><text class="ga-num" x="60" y="81">Good</text></g>
+      <g class="ga-c2"><rect class="ga-cell" x="120" y="60" width="80" height="32" rx="5"/><text class="ga-num" x="160" y="81">options</text></g>
+      <g class="ga-c3"><rect class="ga-cell" x="220" y="60" width="80" height="32" rx="5"/><text class="ga-num" x="260" y="81">include</text></g>
+      <g class="ga-c4"><rect class="ga-cell" x="320" y="60" width="80" height="32" rx="5"/><text class="ga-num" x="360" y="81">oatmeal</text></g>
+      <g class="ga-c5"><rect class="ga-cell" x="420" y="60" width="80" height="32" rx="5"/><text class="ga-num" x="460" y="81">with</text></g>
+      <g class="ga-c6"><rect class="ga-cell" x="520" y="60" width="80" height="32" rx="5"/><text class="ga-num" x="560" y="81">berries</text></g>
+      <g class="ga-c7"><rect class="ga-cell" x="620" y="60" width="80" height="32" rx="5"/><text class="ga-num" x="660" y="81">.</text></g>
+
+      <text class="ga-tag" x="20" y="125" text-anchor="end" fill="#5f6368">δ_t</text>
+      <text class="ga-num" x="60"  y="125" fill="#34a853">+0.04</text>
+      <text class="ga-num" x="160" y="125" fill="#34a853">+0.03</text>
+      <text class="ga-num" x="260" y="125" fill="#34a853">+0.06</text>
+      <text class="ga-num" x="360" y="125" fill="#34a853">+0.08</text>
+      <text class="ga-num" x="460" y="125" fill="#34a853">+0.02</text>
+      <text class="ga-num" x="560" y="125" fill="#34a853">+0.05</text>
+      <text class="ga-num" x="660" y="125" fill="#34a853">+0.91</text>
+
+      <text class="ga-tag" x="20" y="175" text-anchor="end" fill="#5f6368">A_t</text>
+      <text class="ga-num" x="60"  y="175" fill="#fbbc04">0.81</text>
+      <text class="ga-num" x="160" y="175" fill="#fbbc04">0.78</text>
+      <text class="ga-num" x="260" y="175" fill="#fbbc04">0.75</text>
+      <text class="ga-num" x="360" y="175" fill="#fbbc04">0.69</text>
+      <text class="ga-num" x="460" y="175" fill="#fbbc04">0.61</text>
+      <text class="ga-num" x="560" y="175" fill="#fbbc04">0.59</text>
+      <text class="ga-num" x="660" y="175" fill="#fbbc04">0.55</text>
+
+      <path class="ga-arrow" d="M 670 175 L 600 175 L 580 175"/>
+      <path class="ga-arrow" d="M 570 175 L 500 175 L 480 175"/>
+      <path class="ga-arrow" d="M 470 175 L 400 175 L 380 175"/>
+      <path class="ga-arrow" d="M 370 175 L 300 175 L 280 175"/>
+      <path class="ga-arrow" d="M 270 175 L 200 175 L 180 175"/>
+      <path class="ga-arrow" d="M 170 175 L 100 175 L 80 175"/>
+      <polygon class="ga-arrow-head" points="73,170 73,180 65,175"/>
+
+      <text class="ga-tag" x="400" y="235" text-anchor="middle" fill="#8ab4f8">A_t = δ_t + γλ · A_{t+1}    (recursion runs right to left)</text>
+      <text class="ga-tag" x="400" y="258" text-anchor="middle" fill="#5f6368">γ = 1.0, λ = 0.95</text>
+      <text class="ga-tag" x="400" y="285" text-anchor="middle" fill="#5f6368">earlier tokens inherit a portion of the late reward, scaled by (γλ)^k</text>
+    </svg>
+    <div class="fig-cap">GAE on the running example. The reward fires almost entirely at the last token (δ_7 = 0.91). The recursion sweeps right to left, smearing that signal back across earlier tokens with an exponentially decaying weight. Every token now has its own advantage, even though the reward only arrived at the end.</div>
+  </div>
+</section>
+
+<!-- S11: TRAINING LOOP -->
+<section class="sec" id="s11">
+  <div class="sec-hdr"><div class="sec-num">11</div><h2>The full training loop, end to end</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    Sample rollouts with π_old → score them → compute advantages with GAE → run K inner epochs of clipped updates → sync π_old. Repeat for N outer steps. That is PPO in its entirety.
+  </div>
+
+  <p>This is the loop that almost every RLHF training script implements. A few hundred lines of bookkeeping around the math we just walked through. Read it once carefully, and you have the full picture.</p>
+
+  <div class="cw">
+    <div class="ch">
+      <div class="cl"><span class="cdot" style="background:#ea4335"></span><span class="cdot" style="background:#fbbc04"></span><span class="cdot" style="background:#34a853"></span> ppo_loop.py</div>
+      <button class="cpb" onclick="copyCode(this)">copy</button>
+    </div>
+<pre><code class="language-python"># ─── Models ────────────────────────────────────────────────────────────
+policy     = load_sft()                            # π_θ — being trained
+ref        = load_sft().requires_grad_(False)      # π_ref — frozen leash
+value_head = ValueHead(policy)                     # V_ψ — scalar head on policy body
+reward_m   = load_reward_model().eval()            # frozen reward model
+old        = copy.deepcopy(policy).eval()          # π_old — frozen during rollout
+
+optimiser = AdamW(policy.parameters(), lr=1e-6)
+
+# ─── Outer loop ────────────────────────────────────────────────────────
+for step in range(num_steps):
+
+    # ─ Phase 1: rollout ─────────────────────────────────────────────
+    prompts   = sample_prompts(batch_size)
+    with torch.no_grad():
+        responses    = old.generate(prompts, max_new_tokens=512, temperature=1.0)
+        old_logprobs = old.log_probs(responses)          # [B, T]
+        ref_logprobs = ref.log_probs(responses)          # [B, T]
+        values       = value_head(responses)             # [B, T+1]
+        R            = reward_m(prompts, responses)      # [B] task reward (one number per response)
+
+        kl_token     = old_logprobs - ref_logprobs       # [B, T]   per-token KL estimate
+        per_tok_r    = -beta * kl_token                  # KL shaping at every step
+        per_tok_r[:, -1] += R                            # task reward fires only at end
+
+    # ─ Phase 2: advantages via GAE ──────────────────────────────────
+    advantages, returns = compute_gae(per_tok_r, values, gamma=1.0, lam=0.95)
+    advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+
+    # ─ Phase 3: K inner epochs of clipped updates ───────────────────
+    for epoch in range(K_epochs):                       # K = 1 to 4 typically
+        for batch in shuffle_minibatches(...):
+            new_logprobs = policy.log_probs(batch.responses)
+            ratio        = (new_logprobs - batch.old_logprobs).exp()
+
+            unclipped = ratio * batch.advantages
+            clipped   = ratio.clamp(1 - eps, 1 + eps) * batch.advantages
+            loss_pg   = -torch.min(unclipped, clipped).mean()
+
+            new_values = value_head(batch.responses)
+            loss_v     = F.mse_loss(new_values, batch.returns)
+            loss_ent   = -policy.entropy(batch.responses).mean()
+
+            loss = loss_pg + c_v * loss_v + c_e * loss_ent
+            optimiser.zero_grad()
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(policy.parameters(), 1.0)
+            optimiser.step()
+
+    # ─ Phase 4: sync π_old to current π_θ ──────────────────────────
+    old.load_state_dict(policy.state_dict())</code></pre>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">Figure 6 · The PPO loop, visually</div>
+    <svg viewBox="0 0 800 360" role="img" aria-label="The PPO outer loop: rollout, score, compute advantage, update K times, sync old policy. Repeat.">
+      <style>
+        .lp-bg { fill: #0a0c10; }
+        .lp-stage { fill: #181c23; stroke: #2a3040; stroke-width: 1.4; }
+        .lp-stage-active { fill: rgba(138,180,248,0.10); stroke: #4285f4; stroke-width: 1.8; filter: drop-shadow(0 0 10px rgba(66,133,244,0.4)); }
+        .lp-text { font-family: 'Plus Jakarta Sans'; fill: #e8eaed; font-weight: 700; font-size: 13px; text-anchor: middle; }
+        .lp-tag  { font-family: 'JetBrains Mono'; fill: #9aa0a6; font-size: 9.5px; text-anchor: middle; letter-spacing: 0.06em; }
+        .lp-arrow { stroke: #4285f4; stroke-width: 1.4; fill: none; opacity: 0.7; }
+        .lp-arrow-head { fill: #4285f4; opacity: 0.8; }
+        @keyframes lp-glow {
+          0%, 80%, 100% { fill: #181c23; stroke: #2a3040; stroke-width: 1.4; }
+          20%, 50%      { fill: rgba(138,180,248,0.16); stroke: #4285f4; stroke-width: 1.9; filter: drop-shadow(0 0 12px rgba(66,133,244,0.5)); }
+        }
+        @keyframes lp-bead {
+          0%   { offset-distance: 0%;   opacity: 0; }
+          5%   { opacity: 1; }
+          95%  { opacity: 1; }
+          100% { offset-distance: 100%; opacity: 0; }
+        }
+        .lp-s1 { animation: lp-glow 8s ease-in-out infinite; animation-delay: 0.0s; transform-origin: center; transform-box: fill-box; }
+        .lp-s2 { animation: lp-glow 8s ease-in-out infinite; animation-delay: 1.6s; transform-origin: center; transform-box: fill-box; }
+        .lp-s3 { animation: lp-glow 8s ease-in-out infinite; animation-delay: 3.2s; transform-origin: center; transform-box: fill-box; }
+        .lp-s4 { animation: lp-glow 8s ease-in-out infinite; animation-delay: 4.8s; transform-origin: center; transform-box: fill-box; }
+        .lp-s5 { animation: lp-glow 8s ease-in-out infinite; animation-delay: 6.4s; transform-origin: center; transform-box: fill-box; }
+        .lp-bead-g {
+          offset-path: path('M 130 90 H 250 V 90 H 380 V 90 H 510 V 90 H 640 V 90 V 240 H 510 V 240 H 380 V 240 H 250 V 240 H 130 V 90');
+          offset-rotate: 0deg;
+          animation: lp-bead 8s linear infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .lp-s1, .lp-s2, .lp-s3, .lp-s4, .lp-s5, .lp-bead-g { animation: none; }
+        }
+      </style>
+      <rect class="lp-bg" width="800" height="360"/>
+
+      <g class="lp-s1"><rect class="lp-stage" x="40"  y="60" width="180" height="80" rx="10"/></g>
+      <text class="lp-tag"  x="130" y="80">phase 1</text>
+      <text class="lp-text" x="130" y="103">Rollout</text>
+      <text class="lp-tag"  x="130" y="122">π_old generates</text>
+
+      <g class="lp-s2"><rect class="lp-stage" x="270" y="60" width="180" height="80" rx="10"/></g>
+      <text class="lp-tag"  x="360" y="80">phase 2</text>
+      <text class="lp-text" x="360" y="103">Score</text>
+      <text class="lp-tag"  x="360" y="122">reward model + KL</text>
+
+      <g class="lp-s3"><rect class="lp-stage" x="500" y="60" width="180" height="80" rx="10"/></g>
+      <text class="lp-tag"  x="590" y="80">phase 3</text>
+      <text class="lp-text" x="590" y="103">GAE</text>
+      <text class="lp-tag"  x="590" y="122">per-token advantage</text>
+
+      <g class="lp-s4"><rect class="lp-stage" x="270" y="220" width="180" height="80" rx="10"/></g>
+      <text class="lp-tag"  x="360" y="240">phase 4</text>
+      <text class="lp-text" x="360" y="263">K · clipped updates</text>
+      <text class="lp-tag"  x="360" y="282">policy + value</text>
+
+      <g class="lp-s5"><rect class="lp-stage" x="500" y="220" width="180" height="80" rx="10"/></g>
+      <text class="lp-tag"  x="590" y="240">phase 5</text>
+      <text class="lp-text" x="590" y="263">Sync π_old</text>
+      <text class="lp-tag"  x="590" y="282">copy weights</text>
+
+      <line class="lp-arrow" x1="220" y1="100" x2="270" y2="100"/>
+      <polygon class="lp-arrow-head" points="265,95 265,105 275,100"/>
+      <line class="lp-arrow" x1="450" y1="100" x2="500" y2="100"/>
+      <polygon class="lp-arrow-head" points="495,95 495,105 505,100"/>
+      <line class="lp-arrow" x1="590" y1="140" x2="500" y2="220" stroke-dasharray="4 4"/>
+      <line class="lp-arrow" x1="450" y1="260" x2="500" y2="260"/>
+      <polygon class="lp-arrow-head" points="495,255 495,265 505,260"/>
+      <line class="lp-arrow" x1="360" y1="220" x2="360" y2="140" stroke-dasharray="4 4"/>
+      <line class="lp-arrow" x1="590" y1="220" x2="130" y2="140" stroke-dasharray="4 4"/>
+
+      <circle class="lp-bead-g" r="5" fill="#fbbc04"/>
+      <text class="lp-tag" x="400" y="338" fill="#5f6368">one outer step = one trip around this loop · typically a few thousand outer steps per run</text>
+    </svg>
+    <div class="fig-cap">The full PPO outer loop. The yellow bead traces one outer step: rollout, score, advantage, update, sync. Phase 4 actually runs K times inside one outer step (the inner epochs), making PPO sample-efficient compared to vanilla REINFORCE. Everything else, the gradient norms, the KL controller, the value-loss clipping, lives inside that phase 4 block.</div>
+  </div>
+
+  <h3>What sizes do these things actually have?</h3>
+  <p>A typical RLHF run on a 7B model looks roughly like this:</p>
+  <ul>
+    <li><strong>Batch size</strong>: 64 to 256 prompts per outer step.</li>
+    <li><strong>Max response length</strong>: 512 or 1024 tokens.</li>
+    <li><strong>Inner epochs K</strong>: 1 to 4.</li>
+    <li><strong>Clip ε</strong>: 0.1 or 0.2.</li>
+    <li><strong>KL coefficient β</strong>: 0.01 to 0.1, often adapted on the fly.</li>
+    <li><strong>Learning rate</strong>: 1e-6 to 5e-6. Much lower than during SFT.</li>
+    <li><strong>Number of outer steps</strong>: a few thousand, usually less than 100k.</li>
+  </ul>
+
+  <p>The dominant cost is generation in phase 1, not the gradient updates. People work hard on vLLM-style fast inference engines just for the rollout step.</p>
+</section>
+
+<!-- S12: PITFALLS -->
+<section class="sec" id="s12">
+  <div class="sec-hdr"><div class="sec-num">12</div><h2>Practical pitfalls and how to spot them</h2></div>
+  <div class="tldr">
+    <span class="tldr-label">tl;dr</span>
+    PPO is famous for being finicky. Most failures show up in just two diagnostics: KL against the reference, and the fraction of clipped tokens per minibatch.
+  </div>
+
+  <p>Things that will go wrong, eventually, on every PPO run:</p>
+  <div class="split2">
+    <div class="co red">
+      <div class="co-title">Reward keeps climbing, samples get worse</div>
+      <p>Classic reward hacking. The model has discovered a quirk in the reward model that humans would not endorse. Increase β, retrain the reward model on the new failure cases, or both.</p>
+    </div>
+    <div class="co red">
+      <div class="co-title">KL spikes and the model collapses</div>
+      <p>β is too small or your learning rate is too high. Narrow ε (try 0.1 instead of 0.2), drop the learning rate by an order of magnitude, or use an adaptive β controller that tightens when KL is high.</p>
+    </div>
+    <div class="co red">
+      <div class="co-title">Entropy crashes toward zero</div>
+      <p>The policy collapsed onto one response. Raise c_e, widen ε so the clip stops biting on every token, or temperature-sample during rollout.</p>
+    </div>
+    <div class="co red">
+      <div class="co-title">Critic loss diverges</div>
+      <p>Value targets are scale-unstable. Standardize advantages, clip the value loss the same way you clip the policy loss, and double-check that your KL shaping isn't producing huge negative per-token rewards.</p>
+    </div>
+    <div class="co red">
+      <div class="co-title">Training is stable, reward never moves</div>
+      <p>Clip is too tight; almost every token already sits at the boundary. Widen ε, or warm up with a few hundred steps of vanilla policy gradient before turning the clip on.</p>
+    </div>
+    <div class="co red">
+      <div class="co-title">Wallclock is awful</div>
+      <p>Phase 1 (generation) dominates. Use a fast inference engine for the rollouts, cache the reference and old logprobs once per rollout, and consider whether DPO would do the job with one forward pass per sample.</p>
+    </div>
+  </div>
+
+  <div class="co blue">
+    <div class="co-title">Diagnostics to log on every step</div>
+    <p><strong>mean reward</strong>, <strong>KL(π_θ ‖ π_ref)</strong>, <strong>policy entropy</strong>, <strong>fraction of clipped tokens</strong>, <strong>mean |advantage|</strong>, <strong>value loss</strong>, <strong>gradient norm</strong>, <strong>longest response in batch</strong>. If any of these surprise you, pause and look at twenty random samples before continuing.</p>
+  </div>
+
+  <h3>One last sanity check: read the samples</h3>
+  <p>Every metric can look fine while the actual outputs degrade. Set up an evaluation loop that runs the current policy on a held-out set of prompts every few hundred steps and writes the responses to disk. Read them with your own eyes. PPO has a special talent for finding loopholes the reward model never noticed.</p>
+</section>
+
+<!-- REFS -->
+<section class="sec refs" id="refs">
+  <div class="sec-hdr"><div class="sec-num">REF</div><h2>References and further reading</h2></div>
+  <ol>
+    <li>Schulman, J. et al. (2017). <em>Proximal Policy Optimization Algorithms.</em> <a href="https://arxiv.org/abs/1707.06347">arXiv:1707.06347</a> · the original PPO paper</li>
+    <li>Schulman, J. et al. (2016). <em>High-Dimensional Continuous Control Using Generalized Advantage Estimation.</em> <a href="https://arxiv.org/abs/1506.02438">arXiv:1506.02438</a> · the GAE paper</li>
+    <li>Ouyang, L. et al. (2022). <em>Training language models to follow instructions with human feedback.</em> <a href="https://arxiv.org/abs/2203.02155">arXiv:2203.02155</a> · InstructGPT, the first big RLHF result</li>
+    <li>Stiennon, N. et al. (2020). <em>Learning to summarize with human feedback.</em> <a href="https://arxiv.org/abs/2009.01325">arXiv:2009.01325</a> · the OpenAI summarisation paper that kickstarted modern RLHF</li>
+    <li>Bai, Y. et al. (2022). <em>Training a Helpful and Harmless Assistant with RLHF.</em> <a href="https://arxiv.org/abs/2204.05862">arXiv:2204.05862</a> · the Anthropic HH paper</li>
+    <li>Engstrom, L. et al. (2020). <em>Implementation Matters in Deep Policy Gradients.</em> <a href="https://arxiv.org/abs/2005.12729">arXiv:2005.12729</a> · what actually drives PPO's empirical performance</li>
+    <li>Huang, S. et al. (2024). <em>The N Implementation Details of RLHF with PPO.</em> <a href="https://huggingface.co/blog/the_n_implementation_details_of_rlhf_with_ppo">HuggingFace blog post</a> · the practical bible if you are going to implement this</li>
+    <li>Ahmadian, A. et al. (2024). <em>Back to Basics: Revisiting REINFORCE-Style Optimization for Learning from Human Feedback.</em> <a href="https://arxiv.org/abs/2402.14740">arXiv:2402.14740</a> · the case against PPO's complexity for LLMs</li>
+  </ol>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.math-d').forEach(function (el) {
+    try {
+      katex.render(el.textContent.trim(), el, {
+        displayMode: true,
+        throwOnError: false,
+        strict: 'ignore'
+      });
+    } catch (e) { console.warn('KaTeX error:', e); }
+  });
+  if (window.hljs) hljs.highlightAll();
+});
+
+window.addEventListener('scroll', function () {
+  var p = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('prog').style.width = Math.min(p, 100) + '%';
+  document.querySelectorAll('.sec').forEach(function (s) {
+    var r = s.getBoundingClientRect();
+    if (r.top < 140 && r.bottom > 0) {
+      document.querySelectorAll('.nav-links a').forEach(function (a) {
+        a.classList.toggle('act', a.getAttribute('href') === '#' + s.id);
+      });
+    }
+  });
+}, { passive: true });
+
+var obs = new IntersectionObserver(function (entries) {
+  entries.forEach(function (e) { if (e.isIntersecting) e.target.classList.add('vis'); });
+}, { threshold: 0.06 });
+document.querySelectorAll('.sec').forEach(function (s) { obs.observe(s); });
+
+function copyCode(btn) {
+  var pre = btn.closest('.cw').querySelector('pre');
+  if (!pre) return;
+  navigator.clipboard.writeText(pre.innerText).then(function () {
+    var prev = btn.textContent;
+    btn.textContent = 'copied';
+    setTimeout(function () { btn.textContent = prev; }, 1400);
+  });
+}
+window.copyCode = copyCode;
+</script>
+
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

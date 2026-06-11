@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attention — From Self-Attention to FlashAttention-3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;--green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;--yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;--teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#c0d8f2;--text3:#9ab8d4;
+  --mono:'JetBrains Mono',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--orange));z-index:999;transition:width .05s}
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);z-index:900;padding:.55rem 1.5rem}
+.nav-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.2rem}
+.nav-brand{font-size:.85rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.7rem;white-space:nowrap;padding:.25rem .5rem;border-radius:6px;font-weight:500;transition:all .12s}
+.nav-links a:hover{color:var(--teal2);background:rgba(0,212,255,.08)}
+.hero{text-align:center;padding:4rem 1.5rem 2.5rem;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.08;background:linear-gradient(135deg,#8ab4f8,#c58af9,#ffab40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:640px;margin:0 auto}
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+section{padding:2.8rem 0 .5rem;border-top:1px solid var(--bdr);margin-top:2.2rem}
+section:first-of-type{border-top:none;margin-top:0}
+.sec-hdr{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.sec-num{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;letter-spacing:.05em}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.12rem;font-weight:700;margin:1.8rem 0 .6rem}
+p{color:var(--text);margin-bottom:.85rem}
+p.note{color:var(--text2);font-size:.92rem}
+.fig{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:1.3rem;margin:1.6rem 0}
+.fig-title{text-align:center;font-size:.74rem;font-weight:700;color:var(--text2);margin-bottom:1rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas.anim{display:block;width:100%;height:auto;border-radius:8px}
+.ctrl{display:flex;align-items:center;justify-content:center;gap:.5rem;margin-top:.7rem}
+.cbtn{background:var(--s2);border:1px solid var(--bdr2);border-radius:7px;padding:.32rem .9rem;color:var(--text2);font-size:.78rem;cursor:pointer;transition:all .12s;font-family:var(--sans)}
+.cbtn:hover{background:var(--s3);color:var(--text)}
+.cbtn.play{background:rgba(0,212,255,.1);border-color:rgba(0,212,255,.35);color:var(--teal2)}
+.sind{display:inline-flex;align-items:center;padding:.3rem .85rem;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.25);border-radius:7px;font-size:.75rem;color:var(--teal2);font-family:var(--mono);font-weight:600;min-width:58px;justify-content:center}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.8rem;font-style:italic;line-height:1.6}
+.mb{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto}
+.mb .katex-display{margin:.15rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.4rem;font-family:var(--mono)}
+.co{border-radius:10px;padding:.95rem 1.2rem;margin:1.3rem 0;border-left:3px solid;font-size:.9rem}
+.co-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+.co p{margin:0;font-size:.87rem;line-height:1.65}
+.co.t{background:rgba(36,193,224,.05);border-color:var(--teal)}.co.t .co-title{color:var(--teal2)}
+.co.y{background:rgba(251,188,4,.05);border-color:var(--yellow)}.co.y .co-title{color:var(--yellow2)}
+.co.o{background:rgba(255,109,0,.05);border-color:var(--orange)}.co.o .co-title{color:var(--orange2)}
+.co.g{background:rgba(52,168,83,.05);border-color:var(--green)}.co.g .co-title{color:var(--green2)}
+.co.r{background:rgba(234,67,53,.05);border-color:var(--red)}.co.r .co-title{color:var(--red2)}
+.co.p{background:rgba(161,66,244,.05);border-color:var(--purple)}.co.p .co-title{color:var(--purple2)}
+table.cmp{width:100%;border-collapse:collapse;font-size:.82rem;margin:1.3rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+table.cmp th{background:var(--s3);color:var(--text2);padding:.6rem .9rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+table.cmp td{padding:.55rem .9rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.ic{background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--blue2)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+@media(max-width:640px){.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-in">
+  <div class="nav-brand">Attention → Flash</div>
+  <div class="nav-links">
+    <a href="#s1">Self</a><a href="#s2">Cross</a><a href="#s3">Multi-Head</a>
+    <a href="#s4">Patterns</a><a href="#s5">Linear</a>
+    <a href="#s6">GPU 101</a><a href="#s7">The IO Problem</a><a href="#s8">Online Softmax</a>
+    <a href="#s9">Flash-1</a><a href="#s10">Flash-2</a><a href="#s11">Flash-3</a>
+  </div>
+</div></nav>
+
+<div class="hero">
+  <h1>Attention, then FlashAttention</h1>
+  <p>The mechanism, its variants, and then the deep dive: why attention is slow on real GPUs and how FlashAttention 1 → 2 → 3 fixes it — built up from zero GPU knowledge.</p>
+</div>
+
+<main>
+
+<!-- ════════ S1: SELF-ATTENTION ════════ -->
+<section id="s1">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">01</span><h2>Self-Attention</h2></div>
+  <p>Every token produces three vectors — a <strong>query Q</strong> (what am I looking for?), a <strong>key K</strong> (what do I contain?), and a <strong>value V</strong> (what do I give back?). Each token's query is scored against every token's key; the scores become weights after softmax; the output is the weighted mix of all values.</p>
+  <div class="mb">
+    <div class="math-d">\text{Attention}(Q,K,V) = \text{softmax}\!\left(\frac{QK^\top}{\sqrt{d_k}}\right)V</div>
+    <div class="mb-label">The formula you know. The animation below shows what each step does to the actual matrices.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">Figure 1 — Self-Attention: Watch the Matrices Build</div>
+    <canvas id="c-sa" class="anim" width="880" height="430"></canvas>
+    <div class="ctrl">
+      <button class="cbtn" onclick="aStep('sa',-1)">◀ Prev</button>
+      <button class="cbtn play" id="sa-pb" onclick="aToggle('sa')">▶ Play</button>
+      <span class="sind" id="sa-si">1/4</span>
+      <button class="cbtn" onclick="aStep('sa',1)">Next ▶</button>
+    </div>
+    <div class="fig-cap">The full pipeline as matrices: the input X (one row per token) flows through three learned projections to produce the Q, K, V matrices, Q×Kᵀ builds the 6×6 score grid, softmax turns each row into weights, and scores×V produces the output — same shape as the input.</div>
+  </div>
+</section>
+
+<!-- ════════ S2: CROSS-ATTENTION ════════ -->
+<section id="s2">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.15);color:var(--green2)">02</span><h2>Cross-Attention</h2></div>
+  <p>Same machinery, different sources: <strong>Q comes from one sequence, K and V from another</strong>. In a translation model, each French word being generated queries the English sentence the encoder produced — every new word asks “which source words matter to me right now?”</p>
+  <div class="fig">
+    <div class="fig-title">Figure 2 — Cross-Attention: Q From the Decoder, K·V From the Encoder</div>
+    <canvas id="c-ca" class="anim" width="880" height="400"></canvas>
+    <div class="ctrl">
+      <button class="cbtn" onclick="aStep('ca',-1)">◀ Prev</button>
+      <button class="cbtn play" id="ca-pb" onclick="aToggle('ca')">▶ Play</button>
+      <span class="sind" id="ca-si">1/3</span>
+      <button class="cbtn" onclick="aStep('ca',1)">Next ▶</button>
+    </div>
+    <div class="fig-cap">The attention matrix is rectangular: 4 French tokens × 6 English tokens. Each generated word (row) distributes its attention across the source words (columns). No K,V are produced by the decoder side at all.</div>
+  </div>
+</section>
+
+<!-- ════════ S3: MULTI-HEAD ════════ -->
+<section id="s3">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">03</span><h2>Multi-Head Attention</h2></div>
+  <p>One attention matrix can only encode one "relationship pattern" between tokens. Multi-head runs <strong>h independent attentions in parallel</strong>, each on a D/h-dim slice of the embedding. One head can track syntax, another coreference (“it” → “cat”), another long-range structure — then everything is concatenated and mixed by an output projection.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 3 — Multi-Head: 4 Parallel Attention Patterns</div>
+    <canvas id="c-mh" class="anim" width="880" height="420"></canvas>
+    <div class="ctrl">
+      <button class="cbtn" onclick="aStep('mh',-1)">◀ Prev</button>
+      <button class="cbtn play" id="mh-pb" onclick="aToggle('mh')">▶ Play</button>
+      <span class="sind" id="mh-si">1/3</span>
+      <button class="cbtn" onclick="aStep('mh',1)">Next ▶</button>
+    </div>
+    <div class="fig-cap">D=8 splits into 4 heads of d=2 each. Each head computes its own 6×6 attention grid — notice the patterns differ (local, global, diagonal, sparse). The heads' outputs concatenate back to D=8 and pass through W<sub>O</sub>.</div>
+  </div>
+</section>
+
+<!-- ════════ S4: PATTERNS ════════ -->
+<section id="s4">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(251,188,4,.12);color:var(--yellow2)">04</span><h2>Attention Patterns & Masks</h2></div>
+  <p>The N×N matrix is where the quadratic cost lives — so a whole family of methods just <strong>doesn't compute parts of it</strong>. Causal masking zeroes the future. Sliding-window keeps a band. Sparse patterns keep a band plus a few global tokens. Each is visible as a shape in the matrix.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 4 — The Same Matrix, Four Masks</div>
+    <canvas id="c-pat" class="anim" width="880" height="380"></canvas>
+    <div class="ctrl">
+      <button class="cbtn" onclick="aStep('pat',-1)">◀ Prev</button>
+      <button class="cbtn play" id="pat-pb" onclick="aToggle('pat')">▶ Play</button>
+      <span class="sind" id="pat-si">1/4</span>
+      <button class="cbtn" onclick="aStep('pat',1)">Next ▶</button>
+    </div>
+    <div class="fig-cap">Full bidirectional (BERT) → causal (GPT — lower triangle only) → sliding window (Mistral — band of width w, cost O(N·w)) → sparse global+local (Longformer — band plus a few columns/rows that every token can see).</div>
+  </div>
+</section>
+
+<!-- ════════ S5: LINEAR ════════ -->
+<section id="s5">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">05</span><h2>Linear Attention</h2></div>
+  <p>A different escape from O(N²): change the <em>order of multiplication</em>. Standard attention computes (QKᵀ)V — the N×N matrix first. If you replace softmax with a kernel feature map φ, you can legally regroup to <strong>φ(Q)·(φ(K)ᵀV)</strong> — and the inner product φ(K)ᵀV is only d×d, no matter how long the sequence.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 5 — Reorder the Multiplication, Kill the N×N</div>
+    <canvas id="c-lin" class="anim" width="880" height="380"></canvas>
+    <div class="ctrl">
+      <button class="cbtn" onclick="aStep('lin',-1)">◀ Prev</button>
+      <button class="cbtn play" id="lin-pb" onclick="aToggle('lin')">▶ Play</button>
+      <span class="sind" id="lin-si">1/3</span>
+      <button class="cbtn" onclick="aStep('lin',1)">Next ▶</button>
+    </div>
+    <div class="fig-cap">Left path: (QKᵀ) first creates the N×N monster, then ×V. Right path: (KᵀV) first creates a tiny d×d matrix, then Q× it — total cost O(N·d²), linear in sequence length. The price: softmax is gone, replaced by a kernel — quality usually drops, which is why frontier LLMs still use exact attention (made fast by Flash).</div>
+  </div>
+  <div class="co t"><div class="co-title">Other linear-time families</div>
+    <p><strong>Performer</strong> — random feature approximation of the softmax kernel. <strong>RWKV / Mamba</strong> — recurrent state-space forms, O(N) by carrying a fixed-size state. <strong>MQA / GQA</strong> — not linear, but shrink K,V heads to cut KV-cache memory (LLaMA-2 70B uses GQA with 8 KV heads).</p>
+  </div>
+</section>
+
+<!-- ════════ S6: GPU 101 ════════ -->
+<section id="s6">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">06</span><h2>GPU Memory 101 — Everything FlashAttention Needs</h2></div>
+  <p>You don't need full GPU architecture — just <strong>one fact</strong>: a GPU has two kinds of memory, and they differ by ~10× in speed and ~4000× in size. Every tensor lives in the big slow one; all math happens next to the small fast one.</p>
+
+  <div class="fig">
+    <div class="fig-title">The Two Rooms — Size vs Speed</div>
+    <canvas id="c-g1" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">The warehouse (HBM) is where your 80 GB of tensors live — but it's far away. The fast room (SRAM) sits right next to the compute units — but holds only ~20 MB. Box <em>area</em> shows capacity; pipe <em>width</em> shows speed. To compute on anything, its bytes must travel through the thin pipe.</div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">The Memory Wall — Compute Starves</div>
+    <canvas id="c-g2" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">A100 arithmetic: 312 TFLOPS ÷ 2 TB/s means the chip can do <strong>156 math operations in the time one byte arrives</strong>. Top: an op that does 156+ FLOPs per byte (matmul) keeps compute fully busy. Bottom: softmax/elementwise ops do ~1 FLOP per byte — compute does its tiny job then idles, waiting. Attention is full of these — it is <strong>memory-bound</strong>.</div>
+  </div>
+</section>
+
+<!-- ════════ S7: IO PROBLEM ════════ -->
+<section id="s7">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(234,67,53,.12);color:var(--red2)">07</span><h2>Why Standard Attention Is Slow — Count the Trips</h2></div>
+  <p>Standard attention as the GPU executes it: every intermediate matrix is written to the warehouse and read back. Follow the numbered trips — and watch the line widths.</p>
+
+  <div class="fig">
+    <div class="fig-title">Six Round Trips — Line Width = Bytes Moved</div>
+    <canvas id="c-io1" class="anim" width="880" height="430"></canvas>
+    <div class="fig-cap">N=4096, d=128. Q, K, V are thin (0.5M values each) — but S and P are 4096×4096 = <strong>16.8M values each</strong>, and each one crosses the slow pipe twice (written ↓ then read ↑). The fat red/orange pipes are the problem: they carry temporaries nobody keeps.</div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">The Traffic Bill — To Scale</div>
+    <canvas id="c-io2" class="anim" width="880" height="260"></canvas>
+    <div class="fig-cap">Every bar's length is proportional to actual bytes moved per head per layer. The two N² matrices account for ~97% of all traffic — and they're pure scratch work. Erase those two fat bars and attention runs up to ~10× faster. That is exactly FlashAttention's plan.</div>
+  </div>
+
+  <div class="co r"><div class="co-title">The key realization</div>
+    <p>The N×N matrices S and P are <strong>temporaries</strong> — nobody needs them after the output O is computed. We only materialize them because softmax seems to need a full row before it can normalize anything. If softmax could work on <em>pieces</em> of a row, we could compute attention tile-by-tile inside SRAM and never write S or P to HBM at all.</p>
+  </div>
+</section>
+
+<!-- ════════ S8: ONLINE SOFTMAX ════════ -->
+<section id="s8">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">08</span><h2>Online Softmax — The Trick That Unlocks Everything</h2></div>
+  <p>One obstacle stands between us and tiling: softmax. It needs the row's <strong>max</strong> (for numerical stability) and the row's <strong>sum</strong> — both seem to require the entire row before anything can start.</p>
+
+  <div class="fig">
+    <div class="fig-title">The Obstacle — Softmax Wants Everything First</div>
+    <canvas id="c-osm1" class="anim" width="880" height="300"></canvas>
+    <div class="fig-cap">Top: the classic pipeline — max over <em>all</em> cells, exponentiate, sum over <em>all</em> cells, divide. Both red stages block until the full row exists. Bottom: but in tiled attention the row arrives in pieces — the classic recipe can't even begin.</div>
+  </div>
+
+  <p>The escape: process the row left to right carrying just two running scalars — max-so-far <span class="ic">m</span> and rescaled sum-so-far <span class="ic">ℓ</span>. When a bigger max appears, one multiplication <em>retroactively fixes</em> everything accumulated so far:</p>
+  <div class="mb">
+    <div class="math-d">m_{new} = \max(m, x_i)\qquad \ell_{new} = \ell \cdot e^{\,m - m_{new}} + e^{\,x_i - m_{new}}</div>
+    <div class="mb-label">The correction factor e^(m−m_new) rescales all of history with one multiply.</div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">The Walk — [3, 1, 2, 5], One Value at a Time</div>
+    <canvas id="c-osm2" class="anim" width="880" height="430"></canvas>
+    <div class="fig-cap">Four steps, left to right. Watch the m and ℓ chips. Steps 1–3: max stays 3, the sum grows normally. Step 4: x=5 beats the max — the ↻ rescale multiplies the old sum 1.503 by e^(3−5)=0.135 <em>before</em> adding the new term. Bottom strip: the streaming result equals the all-at-once result exactly. <strong>No full row was ever needed</strong> — so attention rows can be processed in tiles.</div>
+  </div>
+
+  <div class="co g"><div class="co-title">Why this changes everything</div>
+    <p>If softmax can stream, then attention can stream: process K,V in blocks, keep a running (m, ℓ, partial-output) per query row, correct as you go. The N×N matrix never needs to exist. This single algebraic identity is the foundation of FlashAttention.</p>
+  </div>
+</section>
+
+<!-- ════════ S9: FLASH-1 — THE JOURNEY ════════ -->
+<section id="s9">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">09</span><h2>FlashAttention-1 — The Journey</h2></div>
+  <p>Everything is in place: we know the GPU has a tiny fast room (SRAM) and a huge slow warehouse (HBM), we know the N×N matrix is the villain, and we know online softmax lets us process rows in pieces. Now follow the journey — six pictures, one idea each.</p>
+
+  <div class="fig">
+    <div class="fig-title">Stop 1 — The Cast: Q, K, V… and the Ghost We Refuse to Build</div>
+    <canvas id="c-fj1" class="anim" width="880" height="300"></canvas>
+    <div class="fig-cap">Three tall thin matrices (N rows, d columns — N is huge, d is small). Standard attention would multiply Q×Kᵀ into the N×N square on the right. FlashAttention's entire mission: get from Q,K,V to O <strong>without that square ever existing</strong>.</div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">Stop 2 — Cut Everything Into Blocks That Fit the Fast Room</div>
+    <canvas id="c-fj2" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">Q, K, V each sliced into 4 row-blocks. The block size is chosen by one rule: one Q-block + one K-block + one V-block + a small working tile must fit together inside SRAM (~the small green room on the right).</div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">Stop 3 — One Tile, Entirely Inside the Fast Room</div>
+    <canvas id="c-fj3" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">Q₀ meets K₀ inside SRAM: a small B×B score tile is born, exponentiated, multiplied with V₀ — producing a <em>partial</em> output band O₀ plus two tiny running stats (m = max-so-far, ℓ = sum-so-far). Everything in this picture lives in SRAM. HBM only supplied the three input blocks.</div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">Stop 4 — K and V March Past, Q₀ Stays Seated</div>
+    <canvas id="c-fj4" class="anim" width="880" height="400"></canvas>
+    <div class="fig-cap">Four scenes, left to right. Q₀ never moves. Each new K,V block produces a tile, the tile is folded into O₀ (with the online-softmax rescale ↻ when a new max appears), and the tile is thrown away. O₀ fills up: 25% → 50% → 75% → done. At no point did more than one tile exist.</div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">Stop 5 — The Full Map: Every Q-Block Walks Its Own Row</div>
+    <canvas id="c-fj5" class="anim" width="880" height="380"></canvas>
+    <div class="fig-cap">Zooming out: the ghost N×N grid is covered row-band by row-band. Each Q-block is an independent worker walking left→right through its row of tiles, assembling its band of O. The numbers show walk order. Every tile: born in SRAM, folded, gone.</div>
+  </div>
+
+  <div class="fig">
+    <div class="fig-title">Stop 6 — The Bill: What Actually Touched Slow Memory</div>
+    <canvas id="c-fj6" class="anim" width="880" height="280"></canvas>
+    <div class="fig-cap">Left: everything HBM ever saw — Q, K, V in, O out, plus a sliver of per-row stats (the O(N)). Right: the two N×N matrices that were never written anywhere. The traffic bars tell the story: ~10× fewer bytes moved, which on a memory-bound op means ~10× less waiting.</div>
+  </div>
+
+  <h3>What exactly became O(N)?</h3>
+  <p class="note">Careful distinction — three different costs:</p>
+  <table class="cmp">
+    <thead><tr><th>Cost</th><th>Standard</th><th>FlashAttention</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Extra memory</strong></td><td><span class="tag" style="background:rgba(234,67,53,.15);color:var(--red2)">O(N²)</span></td><td><span class="tag" style="background:rgba(52,168,83,.15);color:var(--green2)">O(N)</span></td><td>S, P never materialized — only per-row m, ℓ statistics stored</td></tr>
+      <tr><td><strong>HBM traffic</strong></td><td><span class="tag" style="background:rgba(234,67,53,.15);color:var(--red2)">O(N² + Nd)</span></td><td><span class="tag" style="background:rgba(52,168,83,.15);color:var(--green2)">O(N²d²/M)</span></td><td>M = SRAM size; with M ≈ 100KB this is ~10× fewer bytes moved</td></tr>
+      <tr><td><strong>Compute FLOPs</strong></td><td><span class="tag" style="background:rgba(251,188,4,.15);color:var(--yellow2)">O(N²d)</span></td><td><span class="tag" style="background:rgba(251,188,4,.15);color:var(--yellow2)">O(N²d)</span></td><td>Unchanged! Same math — exact attention. It's faster because the memory wall is gone, not because there's less math.</td></tr>
+    </tbody>
+  </table>
+  <div class="co y"><div class="co-title">The backward pass trick: recomputation</div>
+    <p>Backprop normally needs S and P — but they were never stored! FlashAttention <strong>recomputes the tiles</strong> during the backward pass from Q, K, V (still in SRAM, still fast). Counter-intuitively, doing <em>more</em> FLOPs is faster than storing/reloading N² values, because FLOPs are cheap and bytes are expensive.</p>
+  </div>
+</section>
+
+<!-- ════════ S10: FLASH-2 ════════ -->
+<section id="s10">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">10</span><h2>FlashAttention-2 — Same Math, Better Workers</h2></div>
+  <p>FA-1 was IO-optimal but used the GPU's workers poorly (~35% busy). FA-2 changes <em>who owns what</em>:</p>
+  <div class="fig">
+    <div class="fig-title">FA-1 vs FA-2 — Who Walks, Who Sits</div>
+    <canvas id="c-fa2s" class="anim" width="880" height="430"></canvas>
+    <div class="fig-cap">Left (FA-1): the outer loop walks K-columns — every worker keeps revisiting the same output rows, so they must coordinate (red collisions). Right (FA-2): each Q-row-band is one independent worker streaming K,V past itself — no sharing, no conflicts. Below: occupancy. FA-2's workers scale with sequence length, so one long sequence alone fills every SM. Plus: the slow ÷ℓ division moves out of the loop, done once at the end. Net ~2× faster.</div>
+  </div>
+</section>
+
+<!-- ════════ S11: FLASH-3 ════════ -->
+<section id="s11">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">11</span><h2>FlashAttention-3 — Stop Taking Turns</h2></div>
+  <p>On an H100, FA-2 still alternates: load a tile, compute a tile, load, compute. Hopper hardware can do both <em>simultaneously</em> — FA-3 is the kernel rewrite that exploits it.</p>
+  <div class="fig">
+    <div class="fig-title">FA-2 vs FA-3 — Turn-Taking vs Full Overlap</div>
+    <canvas id="c-fa3s" class="anim" width="880" height="460"></canvas>
+    <div class="fig-cap">Top: FA-2's timeline — memory and compute alternate, each lane idle half the time. Middle: FA-3 — producer warps drive the TMA engine to prefetch tile i+1 while tensor cores compute tile i; and two warpgroups ping-pong so one's softmax overlaps the other's matmul. Bottom: the payoff on H100 — 370 → 740 TFLOPS (BF16), ~1.2 PFLOPS with FP8.</div>
+  </div>
+  <h3>The Full Picture</h3>
+  <table class="cmp">
+    <thead><tr><th></th><th>Standard</th><th>FA-1 (2022)</th><th>FA-2 (2023)</th><th>FA-3 (2024)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Core idea</strong></td><td>materialize N×N</td><td>tiling + online softmax</td><td>parallelism rewrite</td><td>async hardware overlap</td></tr>
+      <tr><td><strong>Extra memory</strong></td><td>O(N²)</td><td>O(N)</td><td>O(N)</td><td>O(N)</td></tr>
+      <tr><td><strong>Exact?</strong></td><td>✓</td><td>✓ exact</td><td>✓ exact</td><td>✓ exact (FP8 ≈)</td></tr>
+      <tr><td><strong>A100 util</strong></td><td>~10–20%</td><td>~30–40%</td><td>~50–70%</td><td>—</td></tr>
+      <tr><td><strong>H100 util</strong></td><td>—</td><td>—</td><td>~35%</td><td>~75% (740 TFLOPS)</td></tr>
+      <tr><td><strong>Key enabler</strong></td><td>—</td><td>SRAM tiling</td><td>loop swap, seq-parallel</td><td>TMA, WGMMA, ping-pong, FP8</td></tr>
+    </tbody>
+  </table>
+  <div class="co p"><div class="co-title">Using it in practice</div>
+    <p>FlashAttention is free lunch: <span class="ic">torch.nn.functional.scaled_dot_product_attention</span> or <span class="ic">flash-attn</span> picks the right kernel automatically. The win compounds with context length — at N in the thousands and beyond, Flash gives 2–4× end-to-end training speedups and lets you fit much longer sequences in the same VRAM.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+  initAnims();
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+
+/* ═══════════ FRAMEWORK ═══════════ */
+const A={};  // anim states
+const PHASES={sa:4,ca:3,mh:3,pat:4,lin:3};
+Object.keys(PHASES).forEach(id=>{A[id]={phase:0,T:0,paused:true,running:false}});
+
+function aLoop(id){
+  const s=A[id];
+  if(!s.paused){ s.T+=0.006; if(s.T>=1.5){ s.T=0; s.phase=(s.phase+1)%PHASES[id]; } }
+  DRAW[id](s.phase,Math.min(s.T,1));
+  updCtl(id);
+  requestAnimationFrame(()=>aLoop(id));
+}
+function aToggle(id){ A[id].paused=!A[id].paused; updCtl(id); }
+function aStep(id,dir){ const s=A[id]; s.paused=true; s.phase=((s.phase+dir)+PHASES[id])%PHASES[id]; s.T=0.999; updCtl(id); }
+function updCtl(id){
+  const pb=document.getElementById(id+'-pb'), si=document.getElementById(id+'-si');
+  if(pb)pb.textContent=A[id].paused?'▶ Play':'⏸ Pause';
+  if(si)si.textContent=(A[id].phase+1)+'/'+PHASES[id];
+}
+function initAnims(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id.replace('c-','');
+      if(A[id]&&!A[id].running){ A[id].running=true; aLoop(id); }
+      obs.unobserve(e.target);
+    }
+  }),{threshold:0.05});
+  Object.keys(PHASES).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+}
+
+/* ═══════════ SHARED HELPERS ═══════════ */
+function eo(t){return t<1?1-Math.pow(1-t,3):1;}
+function gctx(id){const cv=document.getElementById('c-'+id);return cv?cv.getContext('2d'):null;}
+function lbl(ctx,s,x,y,col,sz,w,al){ctx.font=`${w||500} ${sz||10}px "Plus Jakarta Sans",sans-serif`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function mlbl(ctx,s,x,y,col,sz,al){ctx.font=`500 ${sz||9}px "JetBrains Mono",monospace`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function pill(ctx,x,y,w,h,r,fill,stroke,lw){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+function nbar(ctx,W,badge,text,col,col2){
+  pill(ctx,14,10,W-28,46,8,'rgba(0,212,255,.06)','rgba(0,212,255,.25)',1);
+  pill(ctx,26,18,Math.max(badge.length*7.5+16,64),17,4,col+'28',col,1);
+  mlbl(ctx,badge,26+Math.max(badge.length*7.5+16,64)/2,26.5,col2,8.5);
+  ctx.font='400 10.5px "Plus Jakarta Sans",sans-serif';
+  ctx.fillStyle='#c8e0f2';ctx.textAlign='left';ctx.textBaseline='middle';
+  // wrap into max 2 lines
+  const maxW=W-140-Math.max(badge.length*7.5+16,64);
+  const words=text.split(' ');let line='',lines=[];
+  for(const w of words){const t2=line?line+' '+w:w;
+    if(ctx.measureText(t2).width>maxW&&line){lines.push(line);line=w;}else line=t2;}
+  if(line)lines.push(line);
+  lines.slice(0,2).forEach((ln,i)=>ctx.fillText(ln,38+Math.max(badge.length*7.5+16,64),lines.length>1?(20+i*14):27));
+}
+// stable pseudo-random attention value
+function av(i,j,seed){return Math.pow(Math.sin(i*7.31+j*3.77+(seed||0)*5.1)*0.5+0.5,1.5);}
+// heat color: v in 0..1
+function heat(v,hue){ // hue: 'b' blue, 'g' green, 'p' purple, 'o' orange
+  const maps={
+    b:[[52,82,134],[88,148,250],[168,202,255]],
+    g:[[40,90,64],[72,186,106],[156,224,176]],
+    p:[[78,52,124],[176,94,250],[214,168,255]],
+    o:[[110,66,28],[255,128,32],[255,190,110]],
+    t:[[34,90,110],[58,206,235],[150,230,246]],
+    y:[[112,92,30],[252,198,40],[255,226,130]]
+  };
+  const m=maps[hue||'b'];
+  let c;
+  if(v<0.5){const t2=v*2;c=m[0].map((a,i)=>a+(m[1][i]-a)*t2);}
+  else{const t2=(v-0.5)*2;c=m[1].map((a,i)=>a+(m[2][i]-a)*t2);}
+  return `rgb(${c[0]|0},${c[1]|0},${c[2]|0})`;
+}
+// softmax a row of av values
+function smRow(i,n,seed){
+  const xs=[];for(let j=0;j<n;j++)xs.push(av(i,j,seed)*4);
+  const mx=Math.max(...xs);const es=xs.map(x=>Math.exp(x-mx));
+  const s=es.reduce((a,b)=>a+b,0);return es.map(e=>e/s);
+}
+// draw attention matrix grid; mode: 'raw'|'soft'; revealFrac 0..1 reveals cells in row-major order
+function attnGrid(ctx,x,y,rows,cols,cw,ch,hue,mode,reveal,seed,maskFn){
+  const total=rows*cols;const nShow=Math.ceil(reveal*total);
+  for(let i=0;i<rows;i++){
+    const sm=mode==='soft'?smRow(i,cols,seed):null;
+    for(let j=0;j<cols;j++){
+      const idx=i*cols+j;
+      const cx2=x+j*cw, cy2=y+i*ch;
+      const masked=maskFn&&!maskFn(i,j);
+      if(idx<nShow&&!masked){
+        const v=mode==='soft'?sm[j]*Math.min(cols/2.2,3):av(i,j,seed);
+        ctx.fillStyle=heat(Math.min(v,1),hue);
+        ctx.fillRect(cx2+1,cy2+1,cw-2,ch-2);
+      } else {
+        ctx.fillStyle=masked?'rgba(34,44,62,.95)':'rgba(52,70,100,.85)';
+        ctx.fillRect(cx2+1,cy2+1,cw-2,ch-2);
+        if(masked){ctx.strokeStyle='rgba(120,145,175,.5)';ctx.lineWidth=.5;
+          ctx.beginPath();ctx.moveTo(cx2+3,cy2+3);ctx.lineTo(cx2+cw-3,cy2+ch-3);ctx.stroke();}
+      }
+      ctx.strokeStyle='rgba(130,160,200,.5)';ctx.lineWidth=.5;
+      ctx.strokeRect(cx2+1,cy2+1,cw-2,ch-2);
+    }
+  }
+}
+function tokStrip(ctx,x,y,toks,col,size,vertical){
+  const s=size||30;
+  toks.forEach((t2,i)=>{
+    const tx=vertical?x:x+i*(s+4), ty=vertical?y+i*(s+4):y;
+    pill(ctx,tx,ty,s,s,5,col+'30',col,1);
+    mlbl(ctx,t2,tx+s/2,ty+s/2,'#fff',Math.min(s/3.2,9));
+  });
+}
+
+/* ═══════════ DRAW FUNCTIONS ═══════════ */
+const DRAW={};
+const TOKS=['The','cat','sat','on','the','mat'];
+
+/* ── 1. SELF-ATTENTION ── */
+// small matrix of colored cells: rows=tokens, cols=dims
+function cellMat(ctx,x,y,rows,cols,cs,hue,seed,reveal,rowLabels){
+  const total=rows*cols, nShow=Math.ceil((reveal===undefined?1:reveal)*total);
+  for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){
+    const cx2=x+j*cs, cy2=y+i*cs;
+    if(i*cols+j<nShow){
+      ctx.fillStyle=heat(av(i,j,seed)*0.55+0.3,hue);
+      ctx.fillRect(cx2+1,cy2+1,cs-2,cs-2);
+    } else {
+      ctx.fillStyle='rgba(52,70,100,.85)';
+      ctx.fillRect(cx2+1,cy2+1,cs-2,cs-2);
+    }
+    ctx.strokeStyle='rgba(22,30,44,.9)';ctx.lineWidth=.8;
+    ctx.strokeRect(cx2+1,cy2+1,cs-2,cs-2);
+  }
+  if(rowLabels)rowLabels.forEach((t2,i)=>mlbl(ctx,t2,x-6,y+i*cs+cs/2,'#aac6e2',7.5,'right'));
+}
+function projBox(ctx,x,y,s,nm,col,col2,glow){
+  if(glow){ctx.shadowColor=col;ctx.shadowBlur=14;}
+  const g=ctx.createLinearGradient(x,y,x+s,y+s);
+  g.addColorStop(0,col+'cc');g.addColorStop(1,col+'66');
+  pill(ctx,x,y,s,s,9,g,col,1.5);
+  ctx.shadowBlur=0;
+  lbl(ctx,nm,x+s/2,y+s/2,'#fff',15,800);
+}
+
+DRAW.sa=function(ph,T){
+  const ctx=gctx('sa');if(!ctx)return;const W=880,H=430;ctx.clearRect(0,0,W,H);
+  const tr=eo(Math.min(T*1.5,1));
+  const narr=[
+    'The input: a 6-token sentence as a matrix X — one ROW per token, one COLUMN per embedding dim (d=4 here).',
+    'X is multiplied by three learned weight matrices. Same input, three different projections: Q (purple), K (green), V (orange) — each still one row per token.',
+    'Q × Kᵀ: every Q row dotted with every K row → the 6×6 score grid. Then softmax per row: each row becomes weights summing to 1.',
+    'Scores × V: each token\u2019s output row = its attention weights blended over all V rows. Output has the same shape as the input.'
+  ];
+  nbar(ctx,W,['INPUT MATRIX X','PROJECT → Q, K, V','SCORES + SOFTMAX','OUTPUT = SCORES × V'][ph],narr[ph],'#4285f4','#8ab4f8');
+
+  const cs=16; // cell size
+  // ── input X (always visible, dims when later phases) ──
+  const xX=64,xY=190;
+  ctx.globalAlpha=ph<=1?1:.35;
+  mlbl(ctx,'X  [6 tok × 4 dim]',xX+2*cs,xY-14,'#8ab4f8',8.5);
+  cellMat(ctx,xX,xY,6,4,cs,'b',5,ph===0?tr:1,TOKS);
+  ctx.globalAlpha=1;
+
+  // ── projections ──
+  const pjX=210, mats=[
+    {nm:'Q',col:'#a142f4',col2:'#c58af9',hue:'p',y:84},
+    {nm:'K',col:'#34a853',col2:'#81c995',hue:'g',y:194},
+    {nm:'V',col:'#ff6d00',col2:'#ffab40',hue:'o',y:304}
+  ];
+  if(ph>=1){
+    const a=ph===1?tr:1;
+    ctx.globalAlpha=ph>=2?.5:a;
+    mats.forEach(m=>{
+      // arrow X -> box
+      arrow(ctx,xX+4*cs+6,xY+3*cs,pjX-4,m.y+24,'#9fbcd8',1.1);
+      projBox(ctx,pjX,m.y,48,m.nm,m.col,m.col2,ph===1);
+      // arrow box -> matrix
+      arrow(ctx,pjX+52,m.y+24,pjX+76,m.y+24,m.col+'90',1.1);
+      // resulting matrix 6×4
+      cellMat(ctx,pjX+82,m.y-12,6,4,12,m.hue,m.nm==='Q'?1:m.nm==='K'?2:3,a);
+      mlbl(ctx,m.nm+'  [6×4]',pjX+82+2*12,m.y-22,m.col2,7.5);
+    });
+    ctx.globalAlpha=1;
+    // re-highlight Q,K in phase 2, V in phase 3
+    if(ph===2){
+      ctx.globalAlpha=1;
+      [mats[0],mats[1]].forEach(m=>{
+        pill(ctx,pjX+80,m.y-14,4*12+4,6*12+4,4,null,m.col,1.5);
+      });
+    }
+    if(ph===3){
+      pill(ctx,pjX+80,mats[2].y-14,4*12+4,6*12+4,4,null,mats[2].col,1.5);
+    }
+  }
+
+  // ── attention score grid ──
+  const gx=460,gy=120,cw=30;
+  if(ph>=2){
+    const reveal=ph===2?tr:1;
+    attnGrid(ctx,gx,gy,6,6,cw,cw,'b','soft',reveal,0,null);
+    TOKS.forEach((t2,i)=>{
+      mlbl(ctx,t2,gx-7,gy+i*cw+cw/2,'#aac6e2',7,'right');
+      ctx.save();ctx.translate(gx+i*cw+cw/2,gy-8);ctx.rotate(-Math.PI/4.5);
+      mlbl(ctx,t2,0,0,'#aac6e2',7,'left');ctx.restore();
+    });
+    mlbl(ctx,'attention scores [6×6]',gx+3*cw,gy+6*cw+16,'#8ab4f8',8.5);
+    if(ph===2)mlbl(ctx,'each row sums to 1 after softmax',gx+3*cw,gy+6*cw+31,'#9fbcd8',7.5);
+    // arrows Q,K -> grid
+    if(ph===2){
+      arrow(ctx,pjX+82+4*12+4,mats[0].y+18,gx-10,gy+40,'#a142f480',1.1);
+      arrow(ctx,pjX+82+4*12+4,mats[1].y+18,gx-10,gy+90,'#34a85380',1.1);
+      mlbl(ctx,'Q·Kᵀ',gx-32,gy+62,'#b4cfe6',8);
+    }
+  }
+  // ── output ──
+  if(ph===3){
+    const a=tr;ctx.globalAlpha=a;
+    // arrow scores -> output, V -> output
+    arrow(ctx,gx+6*cw+6,gy+3*cw,gx+6*cw+50,gy+3*cw,'#8ab4f8',1.3);
+    arrow(ctx,pjX+82+4*12+4,mats[2].y+18,gx+6*cw+56,gy+5.4*cw,'#ff6d0080',1.1);
+    mlbl(ctx,'× V',gx+6*cw+28,gy+3*cw-12,'#ffab40',8.5);
+    cellMat(ctx,gx+6*cw+62,gy+30,6,4,16,'t',8,a,null);
+    mlbl(ctx,'output  [6 tok × 4 dim]',gx+6*cw+62+2*16,gy+14,'#78d9ec',8.5);
+    mlbl(ctx,'same shape as X ✓',gx+6*cw+62+2*16,gy+30+6*16+12,'#9fdcef',7.5);
+    ctx.globalAlpha=1;
+  }
+  mlbl(ctx,'cost: N² = 36 score cells · trivial at N=6, brutal at N=64k',W/2,H-12,'#9fbcd8',8.5);
+};
+
+/* ── 2. CROSS-ATTENTION ── */
+DRAW.ca=function(ph,T){
+  const ctx=gctx('ca');if(!ctx)return;const W=880,H=400;ctx.clearRect(0,0,W,H);
+  const tr=eo(Math.min(T*1.5,1));
+  const narr=[
+    'Two sequences. Decoder: 4 French words being generated. Encoder: the 6 English source words, already encoded.',
+    'Q comes ONLY from the decoder rows. K and V come ONLY from the encoder rows. The score grid is rectangular: 4×6.',
+    'Each French word mixes the English V rows by its attention row — \u201cchat\u201d puts nearly all its weight on \u201ccat\u201d.'
+  ];
+  nbar(ctx,W,['TWO SEQUENCES','Q×K ACROSS','OUTPUT'][ph],narr[ph],'#34a853','#81c995');
+
+  const dec=['Le','chat','s\u2019est','assis'];
+  const enc=['The','cat','sat','on','the','mat'];
+  // decoder matrix (left, rows)
+  const dX=92,dY=156,cs=18;
+  mlbl(ctx,'decoder (French)',dX+2*cs,dY-26,'#81c995',8.5);
+  if(ph>=1)mlbl(ctx,'→ Q only',dX+2*cs,dY-13,'#a4dcbc',7.5);
+  cellMat(ctx,dX,dY,4,4,cs,'g',11,1,dec);
+  // encoder matrix (top-right area, rows)
+  const eX=330,eY=64;
+  mlbl(ctx,'encoder (English)',eX+3*cs+50,eY-14,'#8ab4f8',8.5);
+  if(ph>=1)mlbl(ctx,'→ K, V only',eX+3*cs+150,eY-14,'#a6c0e8',7.5);
+  // draw encoder as horizontal token cells with labels above grid columns
+  const gx=330,gy=156,cw=42,ch=46;
+  enc.forEach((t2,j)=>{
+    pill(ctx,gx+j*cw+3,eY,cw-6,26,4,'rgba(66,133,244,.18)','#4285f4',1);
+    mlbl(ctx,t2,gx+j*cw+cw/2,eY+13,'#8ab4f8',8);
+  });
+
+  // rect attention grid 4×6
+  if(ph>=1){
+    const reveal=ph===1?tr:1;
+    attnGrid(ctx,gx,gy,4,6,cw,ch,'g',ph>=2?'soft':'raw',reveal,3,null);
+    dec.forEach((t2,i)=>mlbl(ctx,t2,gx-8,gy+i*ch+ch/2,'#a4dcbc',7.5,'right'));
+  } else {
+    ctx.globalAlpha=.18;attnGrid(ctx,gx,gy,4,6,cw,ch,'g','raw',0,3,null);ctx.globalAlpha=1;
+  }
+  mlbl(ctx,'4 × 6 — not square!',gx+3*cw,gy+4*ch+15,'#81c995',8.5);
+
+  if(ph===2){
+    ctx.globalAlpha=tr;
+    const row=1;
+    pill(ctx,gx-2,gy+row*ch,6*cw+4,ch,3,null,'#fdd663',1.6);
+    arrow(ctx,gx+6*cw+8,gy+row*ch+ch/2,gx+6*cw+46,gy+row*ch+ch/2,'#fdd663',1.4);
+    pill(ctx,gx+6*cw+52,gy+row*ch-4,170,52,7,'rgba(251,188,4,.1)','#fbbc04',1.3);
+    mlbl(ctx,'\u201cchat\u201d output =',gx+6*cw+137,gy+row*ch+12,'#fdd663',8.5);
+    mlbl(ctx,'mostly V(\u201ccat\u201d) + a little rest',gx+6*cw+137,gy+row*ch+30,'#eedda0',7.5);
+    ctx.globalAlpha=1;
+  }
+};
+
+/* ── 3. MULTI-HEAD ── */
+DRAW.mh=function(ph,T){
+  const ctx=gctx('mh');if(!ctx)return;const W=880,H=420;ctx.clearRect(0,0,W,H);
+  const tr=eo(Math.min(T*1.5,1));
+  const narr=[
+    'The D=8 embedding splits into h=4 slices of d=2. Each slice gets its own Wq, Wk, Wv — its own little attention.',
+    'Four attentions run in PARALLEL, each producing its own 6×6 pattern. Different heads learn different relationships.',
+    'Concatenate the four d=2 outputs back to D=8, then mix with the output projection W_O. One matrix couldn\u2019t hold 4 patterns — four small ones can.'
+  ];
+  nbar(ctx,W,['SPLIT D INTO HEADS','4 PARALLEL ATTNS','CONCAT + W_O'][ph],narr[ph],'#a142f4','#c58af9');
+
+  const hueArr=['b','g','o','p'];
+  const colArr=['#4285f4','#34a853','#ff6d00','#a142f4'];
+  const colArr2=['#8ab4f8','#81c995','#ffab40','#c58af9'];
+  // embedding bar split
+  const ebX=120,ebY=86,ebW=640,ebH=26;
+  for(let h2=0;h2<4;h2++){
+    const sep=ph>=0?(ph===0?tr:1)*10:0;
+    pill(ctx,ebX+h2*(ebW/4)+h2*sep- (ph>=0?15*(ph===0?tr:1):0),ebY,ebW/4-4,ebH,5,colArr[h2]+'30',colArr[h2],1.2);
+    mlbl(ctx,'head '+h2+' (d=2)',ebX+h2*(ebW/4)+(ebW/8)+h2*sep-(ph>=0?15*(ph===0?tr:1):0),ebY+ebH/2,colArr2[h2],8);
+  }
+  mlbl(ctx,'D = 8 embedding',ebX-14,ebY+ebH/2,'#aac6e2',8.5,'right');
+
+  // 4 mini attention grids
+  if(ph>=1){
+    const reveal=ph===1?tr:1;
+    const masks=[
+      (i,j)=>Math.abs(i-j)<=1,           // local
+      null,                               // global/full
+      (i,j)=>i===j||j===0,                // diagonal+first
+      (i,j)=>(i+j)%2===0                  // sparse-ish
+    ];
+    for(let h2=0;h2<4;h2++){
+      const gx=86+h2*200,gy=160,cw=24,ch=24;
+      attnGrid(ctx,gx,gy,6,6,cw,ch,hueArr[h2],'soft',reveal,h2*2+1,masks[h2]);
+      mlbl(ctx,'head '+h2,gx+3*cw,gy+6*ch+13,colArr2[h2],8);
+      const names=['local','global','diag+anchor','strided'];
+      mlbl(ctx,names[h2],gx+3*cw,gy+6*ch+26,'#9fbcd8',7.5);
+      arrow(ctx,ebX+h2*(ebW/4)+(ebW/8),ebY+ebH+4,gx+3*cw,gy-8,colArr[h2]+'70',1);
+    }
+  }
+  // concat + Wo
+  if(ph===2){
+    ctx.globalAlpha=tr;
+    const cy2=358;
+    for(let h2=0;h2<4;h2++){
+      arrow(ctx,86+h2*200+72,318,330+h2*42+20,cy2-6,colArr[h2]+'80',1.1);
+      pill(ctx,330+h2*42,cy2,38,20,4,colArr[h2]+'40',colArr[h2],1);
+    }
+    mlbl(ctx,'concat → D=8',300,cy2+10,'#c58af9',8.5,'right');
+    arrow(ctx,506,cy2+10,556,cy2+10,'#c58af9',1.4);
+    pill(ctx,560,cy2-2,90,26,6,'rgba(161,66,244,.15)','#a142f4',1.3);
+    mlbl(ctx,'× W_O',605,cy2+11,'#c58af9',9);
+    ctx.globalAlpha=1;
+  }
+};
+
+/* ── 4. PATTERNS ── */
+DRAW.pat=function(ph,T){
+  const ctx=gctx('pat');if(!ctx)return;const W=880,H=380;ctx.clearRect(0,0,W,H);
+  const tr=eo(Math.min(T*1.5,1));
+  const N=10;
+  const defs=[
+    {nm:'FULL (BERT)',sub:'every token ↔ every token · O(N²)',mask:null,hue:'b',col:'#8ab4f8'},
+    {nm:'CAUSAL (GPT)',sub:'only the past · still O(N²/2)',mask:(i,j)=>j<=i,hue:'g',col:'#81c995'},
+    {nm:'SLIDING WINDOW (Mistral)',sub:'band of width w=3 · O(N·w)',mask:(i,j)=>j<=i&&i-j<3,hue:'y',col:'#fdd663'},
+    {nm:'SPARSE GLOBAL+LOCAL (Longformer)',sub:'band + global token 0 · O(N·w + N)',mask:(i,j)=>(j<=i&&i-j<3)||j===0||i===0,hue:'p',col:'#c58af9'}
+  ];
+  const d=defs[ph];
+  nbar(ctx,W,d.nm,d.sub+' — the masked-out cells (✗) are simply never computed. The shape of the surviving cells IS the method.',d.col,d.col);
+  const cw=26,ch=26,gx=W/2-N*cw/2,gy=88;
+  attnGrid(ctx,gx,gy,N,N,cw,ch,d.hue,'soft',tr,7,d.mask);
+  // counts
+  let kept=0;for(let i=0;i<N;i++)for(let j=0;j<N;j++)if(!d.mask||d.mask(i,j))kept++;
+  mlbl(ctx,kept+' / '+(N*N)+' cells computed',W/2,gy+N*ch+18,d.col,9);
+};
+
+/* ── 5. LINEAR ── */
+DRAW.lin=function(ph,T){
+  const ctx=gctx('lin');if(!ctx)return;const W=880,H=380;ctx.clearRect(0,0,W,H);
+  const tr=eo(Math.min(T*1.5,1));
+  const narr=[
+    'Standard order: (QKᵀ) first. With N=4096, d=128 the intermediate is N×N = 16.8M cells.',
+    'Kernel trick: replace softmax(QKᵀ) with φ(Q)φ(K)ᵀ. Now matrix multiplication is associative — regroup as φ(Q)·(φ(K)ᵀV).',
+    '(φ(K)ᵀV) is only d×d = 16K cells — 1000× smaller, independent of N. Total cost O(N·d²): linear in sequence length.'
+  ];
+  nbar(ctx,W,['(QKᵀ)V — O(N²)','REGROUP','Q(KᵀV) — O(N·d²)'][ph],narr[ph],'#24c1e0','#78d9ec');
+
+  function mat(x,y,w,h,col,name,dims,glow){
+    if(glow){ctx.shadowColor=col;ctx.shadowBlur=14;}
+    pill(ctx,x,y,w,h,6,col+'25',col,1.4);
+    ctx.shadowBlur=0;
+    mlbl(ctx,name,x+w/2,y+h/2-7,col,10);
+    mlbl(ctx,dims,x+w/2,y+h/2+9,col+'aa',8);
+  }
+  const cy2=200;
+  if(ph===0){
+    mat(70,cy2-50,80,100,'#8ab4f8','Q','N×d');
+    mlbl(ctx,'×',172,cy2,'#aac6e2',13);
+    mat(190,cy2-40,100,80,'#81c995','Kᵀ','d×N');
+    mlbl(ctx,'=',308,cy2,'#aac6e2',13);
+    mat(326,cy2-75,150,150,'#f28b82','QKᵀ','N×N — 16.8M cells',true);
+    mlbl(ctx,'×',494,cy2,'#aac6e2',13);
+    mat(512,cy2-50,80,100,'#fdd663','V','N×d');
+    mlbl(ctx,'=',610,cy2,'#aac6e2',13);
+    mat(628,cy2-50,80,100,'#c58af9','O','N×d');
+    mlbl(ctx,'⚠ the N×N monster',401,cy2+95,'#f28b82',9);
+  }
+  if(ph===1){
+    ctx.globalAlpha=.45;
+    mat(70,cy2-50,80,100,'#8ab4f8','φ(Q)','N×d');
+    mat(190,cy2-40,100,80,'#81c995','φ(K)ᵀ','d×N');
+    mat(326,cy2-50,80,100,'#fdd663','V','N×d');
+    ctx.globalAlpha=1;
+    // parens animation
+    ctx.strokeStyle='#78d9ec';ctx.lineWidth=2.5;
+    const px=190-8+tr*0; // bracket shifts conceptually
+    // draw bracket around K,V instead of Q,K
+    pill(ctx,182-6,cy2-52,236+16,114,10,null,'#24c1e0',2);
+    mlbl(ctx,'compute THIS first',300,cy2+78,'#78d9ec',9.5);
+    arrow(ctx,300,cy2+68,300,cy2+62,'#24c1e0',1.5);
+    mlbl(ctx,'matrix multiplication is associative: (AB)C = A(BC)',W/2,cy2+120,'#9fbcd8',9);
+  }
+  if(ph===2){
+    mat(70,cy2-50,80,100,'#8ab4f8','φ(Q)','N×d');
+    mlbl(ctx,'×',172,cy2,'#aac6e2',13);
+    mat(190,cy2-32,64,64,'#34a853','KᵀV','d×d — 16K cells',true);
+    mlbl(ctx,'=',274,cy2,'#aac6e2',13);
+    mat(292,cy2-50,80,100,'#c58af9','O','N×d');
+    pill(ctx,460,cy2-58,330,116,9,'rgba(52,168,83,.07)','rgba(52,168,83,.4)',1.2);
+    mlbl(ctx,'cost: O(N·d²) — LINEAR in N',625,cy2-32,'#81c995',10);
+    mlbl(ctx,'memory: O(d²) intermediate',625,cy2-10,'#81c995',9);
+    mlbl(ctx,'price: no exact softmax →',625,cy2+14,'#f28b82',9);
+    mlbl(ctx,'quality gap vs exact attention',625,cy2+32,'#f28b82',9);
+  }
+};
+
+/* ═══════════ STATIC FIGURES (drawn once) ═══════════ */
+const STATIC={};
+(function(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id.replace('c-','');
+      if(STATIC[id]){STATIC[id]();obs.unobserve(e.target);}
+    }
+  }),{threshold:0.05});
+  window.addEventListener('DOMContentLoaded',()=>{
+    Object.keys(STATIC).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+  });
+})();
+
+/* shared shapes for the journey */
+const QCOL='#b05efa',QCOL2='#d6a8ff',KCOL='#48ba6a',KCOL2='#a8e6c0',
+      VCOL='#ff8a2a',VCOL2='#ffc890',SCOL='#5894fa',SCOL2='#a8caff',
+      OCOL='#3acee0',OCOL2='#a6ecf6',GHOST='rgba(140,165,200,.35)';
+
+// tall thin matrix: N rows × d cols of cells
+function tallMat(ctx,x,y,w,h,rows,cols,hue,seed,label,dims,bandN,bandCols){
+  const cw=w/cols,ch=h/rows;
+  for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){
+    let base=hue;
+    ctx.fillStyle=heat(av(i,j,seed)*0.5+0.35,base);
+    ctx.fillRect(x+j*cw+0.5,y+i*ch+0.5,cw-1,ch-1);
+  }
+  // band separators
+  if(bandN){
+    for(let b=1;b<bandN;b++){
+      const by=y+h*b/bandN;
+      ctx.strokeStyle='#0a0d12';ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(x-3,by);ctx.lineTo(x+w+3,by);ctx.stroke();
+    }
+    for(let b=0;b<bandN;b++){
+      const by=y+h*b/bandN;
+      pill(ctx,x-2,by+1,w+4,h/bandN-2,3,null,(bandCols&&bandCols[b])||'#fff',1.4);
+    }
+  } else {
+    pill(ctx,x-1,y-1,w+2,h+2,4,null,heat(0.85,hue),1.4);
+  }
+  if(label)lbl(ctx,label,x+w/2,y-22,heat(0.9,hue),13,800);
+  if(dims)mlbl(ctx,dims,x+w/2,y-8,'#aac6e2',8);
+}
+
+/* ── Stop 1: the cast ── */
+STATIC.fj1=function(){
+  const ctx=gctx('fj1');if(!ctx)return;const W=880,H=300;ctx.clearRect(0,0,W,H);
+  tallMat(ctx,90,56,54,200,16,6,'p',1,'Q','N × d');
+  tallMat(ctx,210,56,54,200,16,6,'g',2,'K','N × d');
+  tallMat(ctx,330,56,54,200,16,6,'o',3,'V','N × d');
+  mlbl(ctx,'N huge (64k+) · d small (128)',237,278,'#aac6e2',9);
+  // the ghost square
+  arrow(ctx,420,150,500,150,GHOST,1.6);
+  mlbl(ctx,'Q × Kᵀ ?',460,134,'#c8e0f2',9);
+  ctx.setLineDash([7,5]);
+  pill(ctx,510,55,200,200,8,'rgba(234,67,53,.05)','#f28b82',1.8);
+  ctx.setLineDash([]);
+  lbl(ctx,'N × N',610,140,'#f28b82',16,800);
+  lbl(ctx,'✗',610,170,'#f28b82',24,800);
+  mlbl(ctx,'must never exist',610,272,'#f0b3ac',9);
+  arrow(ctx,720,150,790,150,GHOST,1.6);
+  tallMat(ctx,800,56,54,200,16,6,'t',8,'O','N × d');
+};
+
+/* ── Stop 2: cut into blocks ── */
+STATIC.fj2=function(){
+  const ctx=gctx('fj2');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  const bandCols=['#d6a8ff','#b05efa','#9040d0','#7028b0'];
+  const kb=['#a8e6c0','#48ba6a','#34995a','#22784a'];
+  const vb=['#ffc890','#ff8a2a','#e07018','#b85810'];
+  tallMat(ctx,110,66,58,210,16,6,'p',1,'Q','4 blocks',4,bandCols);
+  tallMat(ctx,250,66,58,210,16,6,'g',2,'K','4 blocks',4,kb);
+  tallMat(ctx,390,66,58,210,16,6,'o',3,'V','4 blocks',4,vb);
+  // block labels
+  for(let b=0;b<4;b++){
+    mlbl(ctx,'Q'+b,92,66+210*b/4+26,bandCols[b],9,'right');
+    mlbl(ctx,'K'+b,232,66+210*b/4+26,kb[b],9,'right');
+    mlbl(ctx,'V'+b,372,66+210*b/4+26,vb[b],9,'right');
+  }
+  // scissor marks
+  for(let b=1;b<4;b++){
+    lbl(ctx,'✂',86,66+210*b/4,'#78d9ec',12);
+  }
+  // SRAM room with one of each fitting
+  pill(ctx,540,70,290,200,12,'rgba(52,168,83,.07)','#48ba6a',2);
+  lbl(ctx,'SRAM — the fast room',685,92,'#a8e6c0',11,700);
+  // one block of each inside
+  pill(ctx,570,116,58,48,5,'rgba(176,94,250,.4)','#d6a8ff',1.4); mlbl(ctx,'Q₀',599,140,'#fff',10);
+  pill(ctx,640,116,58,48,5,'rgba(72,186,106,.4)','#a8e6c0',1.4); mlbl(ctx,'K₀',669,140,'#fff',10);
+  pill(ctx,710,116,58,48,5,'rgba(255,138,42,.4)','#ffc890',1.4); mlbl(ctx,'V₀',739,140,'#fff',10);
+  pill(ctx,610,180,150,46,5,'rgba(88,148,250,.3)','#a8caff',1.4); mlbl(ctx,'tile (B×B)',685,203,'#fff',9.5);
+  mlbl(ctx,'block size rule: these four fit together ✓',685,250,'#9fdcbe',8.5);
+  arrow(ctx,470,140,535,140,'#a8e6c2',1.6);
+};
+
+/* ── Stop 3: one tile in SRAM ── */
+STATIC.fj3=function(){
+  const ctx=gctx('fj3');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  // SRAM frame around the pipeline
+  pill(ctx,150,38,700,242,14,'rgba(52,168,83,.05)','#48ba6a',2);
+  lbl(ctx,'SRAM',184,56,'#a8e6c0',11,800,'left');
+  // Q0 band
+  pill(ctx,175,110,90,52,6,'rgba(176,94,250,.45)','#d6a8ff',1.6); lbl(ctx,'Q₀',220,136,'#fff',13,800);
+  // K0 band (transposed - vertical)
+  pill(ctx,175,182,90,52,6,'rgba(72,186,106,.45)','#a8e6c0',1.6); lbl(ctx,'K₀ᵀ',220,208,'#fff',13,800);
+  // multiply → tile
+  arrow(ctx,272,172,320,172,'#c8e0f2',1.6); mlbl(ctx,'×',296,158,'#c8e0f2',12);
+  // score tile (4x4 mini grid)
+  const tx=330,ty=132;
+  for(let i=0;i<4;i++)for(let j=0;j<4;j++){
+    ctx.fillStyle=heat(av(i,j,4)*0.6+0.3,'b');
+    ctx.fillRect(tx+j*20,ty+i*20,18,18);
+  }
+  pill(ctx,tx-2,ty-2,82,82,4,null,'#a8caff',1.6);
+  mlbl(ctx,'tile S',tx+39,ty-12,'#a8caff',9);
+  // exp
+  arrow(ctx,420,172,462,172,'#c8e0f2',1.6); mlbl(ctx,'exp',441,158,'#fdd663',9.5);
+  const ex=470;
+  for(let i=0;i<4;i++)for(let j=0;j<4;j++){
+    ctx.fillStyle=heat(av(i,j,4)*0.4+0.55,'y');
+    ctx.fillRect(ex+j*20,ty+i*20,18,18);
+  }
+  pill(ctx,ex-2,ty-2,82,82,4,null,'#ffe282',1.6);
+  // × V0
+  arrow(ctx,560,172,602,172,'#c8e0f2',1.6); mlbl(ctx,'×',581,158,'#c8e0f2',12);
+  pill(ctx,608,146,64,52,6,'rgba(255,138,42,.45)','#ffc890',1.6); lbl(ctx,'V₀',640,172,'#fff',12,800);
+  // → partial O + stats
+  arrow(ctx,680,172,716,172,'#c8e0f2',1.6);
+  ctx.globalAlpha=.45;
+  pill(ctx,722,140,92,52,6,'rgba(58,206,224,.5)','#a6ecf6',1.6);
+  ctx.globalAlpha=1;
+  lbl(ctx,'O₀',768,160,'#a6ecf6',12,800); mlbl(ctx,'partial · 25%',768,180,'#9fdcef',7.5);
+  // stats chips
+  pill(ctx,722,210,42,26,5,'rgba(252,198,40,.3)','#ffe282',1.2); mlbl(ctx,'m₀',743,223,'#ffe282',9);
+  pill(ctx,772,210,42,26,5,'rgba(252,198,40,.3)','#ffe282',1.2); mlbl(ctx,'ℓ₀',793,223,'#ffe282',9);
+  mlbl(ctx,'running stats',768,250,'#eedda0',7.5);
+  // HBM bar
+  pill(ctx,150,300,700,40,8,'rgba(234,67,53,.06)','#f28b82',1.2);
+  lbl(ctx,'HBM',186,320,'#f0b3ac',10,700,'left');
+  arrow(ctx,300,298,300,284,'#d6a8ff',1.3); mlbl(ctx,'Q₀ in',300,330,'#d6a8ff',8.5);
+  arrow(ctx,380,298,380,284,'#a8e6c0',1.3); mlbl(ctx,'K₀ in',380,330,'#a8e6c0',8.5);
+  arrow(ctx,460,298,460,284,'#ffc890',1.3); mlbl(ctx,'V₀ in',460,330,'#ffc890',8.5);
+  mlbl(ctx,'nothing else crosses · tile never leaves',650,322,'#f0b3ac',9);
+};
+
+/* ── Stop 4: K,V march past ── */
+STATIC.fj4=function(){
+  const ctx=gctx('fj4');if(!ctx)return;const W=880,H=400;ctx.clearRect(0,0,W,H);
+  const kb=['#a8e6c0','#48ba6a','#34995a','#9ed8ba'];
+  const vb=['#ffc890','#ff8a2a','#e07018','#ffc890'];
+  for(let s=0;s<4;s++){
+    const x0=30+s*215;
+    // scene frame
+    pill(ctx,x0,36,195,300,10,'rgba(52,168,83,.04)','rgba(72,186,106,.5)',1.2);
+    mlbl(ctx,'step '+(s+1),x0+97,52,'#a8e6c0',9);
+    // Q0 fixed
+    pill(ctx,x0+18,72,70,40,5,'rgba(176,94,250,.45)','#d6a8ff',1.5); lbl(ctx,'Q₀',x0+53,92,'#fff',11,800);
+    mlbl(ctx,'stays',x0+53,120,'#d6a8ff',7);
+    // incoming K,V
+    pill(ctx,x0+106,64,70,28,4,'rgba(72,186,106,.45)',kb[s],1.4); mlbl(ctx,'K'+s,x0+141,78,'#fff',9);
+    pill(ctx,x0+106,96,70,28,4,'rgba(255,138,42,.45)',vb[s],1.4); mlbl(ctx,'V'+s,x0+141,110,'#fff',9);
+    if(s<3)arrow(ctx,x0+212,88,x0+182,88,'#9fbcd8',1.2);
+    // tile
+    const tx=x0+58,ty=148;
+    for(let i=0;i<3;i++)for(let j=0;j<3;j++){
+      ctx.fillStyle=heat(av(i+s,j,s+2)*0.6+0.3,'b');
+      ctx.fillRect(tx+j*17,ty+i*17,15,15);
+    }
+    pill(ctx,tx-2,ty-2,55,55,3,null,'#a8caff',1.3);
+    arrow(ctx,x0+97,132,x0+90,146,'#a8caff',1.1);
+    // fold arrow + rescale
+    arrow(ctx,x0+90,208,x0+90,232,'#3acee0',1.4);
+    if(s>0){
+      mlbl(ctx,'↻ ×e^(m−m′)',x0+140,220,'#ffe282',7.5);
+    }
+    mlbl(ctx,'fold',x0+70,220,'#a6ecf6',8);
+    // O0 progress
+    const prog=(s+1)/4;
+    pill(ctx,x0+38,240,110,40,5,'rgba(20,40,52,.7)','#3acee0',1.4);
+    ctx.fillStyle='rgba(58,206,224,.55)';
+    ctx.fillRect(x0+40,242,106*prog,36);
+    lbl(ctx,'O₀ '+(prog*100)+'%',x0+93,260,'#fff',9.5,700);
+    // discard
+    mlbl(ctx,'tile ✗ discarded',x0+97,300,'#f0b3ac',7.5);
+    mlbl(ctx,s===3?'done — write O₀ to HBM':'next K,V →',x0+97,318,s===3?'#a8e6c0':'#9fbcd8',7.5);
+  }
+  mlbl(ctx,'only ever ONE tile alive · Q₀ loaded once · K,V each loaded once per Q-block',W/2,372,'#aac6e2',9.5);
+};
+
+/* ── Stop 5: full map ── */
+STATIC.fj5=function(){
+  const ctx=gctx('fj5');if(!ctx)return;const W=880,H=380;ctx.clearRect(0,0,W,H);
+  const bandCols=['#d6a8ff','#b05efa','#8e4cd4','#7a3ec0'];
+  const gx=250,gy=60,bs=66;
+  mlbl(ctx,'the ghost N×N — covered band by band, tile by tile',gx+2*bs,gy-18,'#c8e0f2',9.5);
+  for(let i=0;i<4;i++){
+    // worker chip
+    pill(ctx,gx-92,gy+i*bs+12,72,40,6,'rgba(176,94,250,.25)',bandCols[i],1.5);
+    mlbl(ctx,'worker '+i,gx-56,gy+i*bs+26,bandCols[i],8);
+    mlbl(ctx,'Q'+i,gx-56,gy+i*bs+41,'#fff',9);
+    arrow(ctx,gx-16,gy+i*bs+32,gx-4,gy+i*bs+32,bandCols[i],1.3);
+    for(let j=0;j<4;j++){
+      const x=gx+j*bs,y=gy+i*bs;
+      pill(ctx,x+2,y+2,bs-6,bs-6,5,bandCols[i]+'30',bandCols[i]+'90',1);
+      lbl(ctx,''+(j+1),x+bs/2-1,y+bs/2-4,bandCols[i],14,800);
+      mlbl(ctx,'in SRAM, then gone',x+bs/2-1,y+bs/2+15,'#aac6e2',6);
+    }
+    // arrow walking right
+    arrow(ctx,gx+4*bs+4,gy+i*bs+32,gx+4*bs+26,gy+i*bs+32,bandCols[i],1.2);
+  }
+  // O assembled
+  const ox=gx+4*bs+50;
+  mlbl(ctx,'O assembles',ox+34,gy-8,'#a6ecf6',9);
+  for(let i=0;i<4;i++){
+    pill(ctx,ox,gy+i*bs+8,68,bs-18,5,'rgba(58,206,224,.4)','#a6ecf6',1.4);
+    mlbl(ctx,'O'+i,ox+34,gy+i*bs+8+(bs-18)/2,'#fff',10);
+  }
+  pill(ctx,ox-6,gy+2,80,4*bs-2,7,null,'#3acee0',1.6);
+  mlbl(ctx,'workers run in parallel · numbers = walk order within each band',W/2,H-18,'#aac6e2',9.5);
+};
+
+/* ── Stop 6: the bill ── */
+STATIC.fj6=function(){
+  const ctx=gctx('fj6');if(!ctx)return;const W=880,H=280;ctx.clearRect(0,0,W,H);
+  // left: HBM saw
+  pill(ctx,40,36,380,160,10,'rgba(52,168,83,.06)','#48ba6a',1.6);
+  lbl(ctx,'HBM saw',230,56,'#a8e6c0',11,700);
+  const items=[['Q','#d6a8ff'],['K','#a8e6c0'],['V','#ffc890'],['O','#a6ecf6']];
+  items.forEach((it,i)=>{
+    pill(ctx,70+i*78,80,60,52,6,it[1]+'40',it[1],1.4);
+    lbl(ctx,it[0],100+i*78,106,'#fff',13,800);
+  });
+  pill(ctx,70,146,294,18,4,'rgba(252,198,40,.3)','#ffe282',1.2);
+  mlbl(ctx,'m, ℓ stats — N values  ← the O(N)',217,155,'#ffe282',8.5);
+  // right: never existed
+  ctx.setLineDash([7,5]);
+  pill(ctx,470,36,180,160,10,'rgba(234,67,53,.04)','#f28b82',1.6);
+  ctx.setLineDash([]);
+  lbl(ctx,'never existed',560,56,'#f0b3ac',11,700);
+  lbl(ctx,'S',525,116,'#f28b82',18,800); lbl(ctx,'P',595,116,'#f28b82',18,800);
+  lbl(ctx,'✗',525,150,'#f28b82',16,800); lbl(ctx,'✗',595,150,'#f28b82',16,800);
+  mlbl(ctx,'N×N each',560,178,'#f0b3ac',8);
+  // traffic bars
+  lbl(ctx,'HBM traffic',760,52,'#c8e0f2',10,700);
+  mlbl(ctx,'standard',714,84,'#f0b3ac',8.5,'right');
+  ctx.fillStyle='#f28b82';ctx.fillRect(722,76,140,16);
+  mlbl(ctx,'flash',714,116,'#a8e6c0',8.5,'right');
+  ctx.fillStyle='#48ba6a';ctx.fillRect(722,108,15,16);
+  mlbl(ctx,'~10×',748,116,'#a8e6c0',9,'left');
+  mlbl(ctx,'fewer bytes → on a memory-bound op, ~that much faster',W/2,238,'#aac6e2',9.5);
+};
+
+/* ── FA-2 static ── */
+STATIC.fa2s=function(){
+  const ctx=gctx('fa2s');if(!ctx)return;const W=880,H=430;ctx.clearRect(0,0,W,H);
+  function grid(x0,y0,nm,col,rowMode){
+    lbl(ctx,nm,x0+98,y0-18,col,11,700);
+    for(let i=0;i<4;i++)for(let j=0;j<4;j++){
+      pill(ctx,x0+j*50,y0+i*50,44,44,4,'rgba(52,70,100,.5)','rgba(125,155,195,.6)',.8);
+    }
+    if(rowMode){
+      // FA2: each row one color, arrows right
+      const rc=['#d6a8ff','#b05efa','#9040d0','#c58af9'];
+      for(let i=0;i<4;i++){
+        pill(ctx,x0-2,y0+i*50-2,198,48,5,rc[i]+'18',rc[i],1.6);
+        arrow(ctx,x0+200,y0+i*50+22,x0+226,y0+i*50+22,rc[i],1.4);
+        mlbl(ctx,'w'+i,x0+238,y0+i*50+22,rc[i],9,'left');
+      }
+      lbl(ctx,'✓ independent',x0+98,y0+218,'#a8e6c0',10,700);
+    } else {
+      // FA1: column sweep with collision marks on shared rows
+      for(let j=0;j<4;j++){
+        pill(ctx,x0+j*50-2,y0-2,48,198,5,'rgba(242,139,130,.1)','#f28b82',1.2);
+        arrow(ctx,x0+j*50+22,y0+200,x0+j*50+22,y0+222,'#f28b82',1.2);
+      }
+      // collisions on row overlaps
+      for(let i=0;i<4;i++) lbl(ctx,'⚠',x0+205,y0+i*50+22,'#f28b82',11);
+      mlbl(ctx,'all columns write the same O rows',x0+98,y0+218,'#f0b3ac',8.5);
+      lbl(ctx,'✗ must coordinate',x0+98,y0+236,'#f28b82',10,700);
+    }
+  }
+  grid(80,70,'FA-1 — workers walk K-columns','#f28b82',false);
+  grid(520,70,'FA-2 — workers own Q-rows','#c58af9',true);
+  // occupancy strips
+  const oy=350;
+  mlbl(ctx,'SM occupancy (long seq, batch=1):',150,oy-14,'#c8e0f2',9,'left');
+  mlbl(ctx,'FA-1',140,oy+9,'#f0b3ac',8.5,'right');
+  for(let i=0;i<24;i++){const on=i<7;pill(ctx,150+i*28,oy,22,18,3,on?'rgba(242,139,130,.5)':'rgba(52,70,100,.5)',on?'#f28b82':'rgba(125,155,195,.4)',on?1.2:.6);}
+  mlbl(ctx,'FA-2',140,oy+41,'#a8e6c0',8.5,'right');
+  for(let i=0;i<24;i++){pill(ctx,150+i*28,oy+32,22,18,3,'rgba(72,186,106,.5)','#48ba6a',1.2);}
+};
+
+/* ── FA-3 static ── */
+STATIC.fa3s=function(){
+  const ctx=gctx('fa3s');if(!ctx)return;const W=880,H=460;ctx.clearRect(0,0,W,H);
+  function laneRow(y,nm,col){
+    mlbl(ctx,nm,148,y+12,col,8.5,'right');
+    pill(ctx,158,y,640,24,4,'rgba(48,66,96,.6)','rgba(125,155,195,.5)',.7);
+  }
+  function blk(y,x0,w,nm,col){
+    pill(ctx,158+x0,y+2,w,20,3,col+'55',col,1.1);
+    if(w>44)mlbl(ctx,nm,158+x0+w/2,y+12,'#fff',7.5);
+  }
+  // FA-2: turn taking
+  lbl(ctx,'FA-2 — turns',W/2,40,'#f0b3ac',11,700);
+  laneRow(56,'memory','#a8caff'); laneRow(90,'compute','#9fdcef');
+  for(let i=0;i<4;i++){ blk(56,i*160,72,'load','#5894fa'); blk(90,i*160+74,80,'compute','#3acee0'); }
+  mlbl(ctx,'each lane idle ~half the time',W/2,132,'#f0b3ac',8.5);
+
+  // FA-3 overlap
+  lbl(ctx,'FA-3 — overlap (TMA prefetch)',W/2,172,'#ffbe6e',11,700);
+  laneRow(188,'TMA (producer)','#a8caff'); laneRow(222,'tensor cores','#9fdcef');
+  for(let i=0;i<5;i++){ blk(188,i*128,118,'prefetch '+(i+1),'#5894fa'); if(i>0)blk(222,i*128-62,118,'compute '+i,'#3acee0'); }
+  mlbl(ctx,'memory hides behind compute — both lanes full',W/2,264,'#a8e6c0',8.5);
+
+  // pingpong
+  lbl(ctx,'+ ping-pong (2 warpgroups)',W/2,300,'#ffbe6e',11,700);
+  laneRow(316,'warpgroup A','#d6a8ff'); laneRow(350,'warpgroup B','#9fdcef');
+  for(let i=0;i<4;i++){
+    blk(316,i*160,84,'GEMM','#b05efa'); blk(316,i*160+86,62,'softmax','#fcc628');
+    blk(350,i*160+86,84,'GEMM','#3acee0'); if(i<3)blk(350,i*160+172,62,'softmax','#fcc628');
+  }
+  mlbl(ctx,'tensor cores never wait for exponentials',W/2,392,'#ffe282',8.5);
+  // payoff
+  const bars=[['FA-2 BF16',370,'#c58af9'],['FA-3 BF16',740,'#ffbe6e'],['FA-3 FP8',1200,'#a8e6c0']];
+  let bx=200;
+  bars.forEach((b,i)=>{
+    const x=bx+i*230;
+    mlbl(ctx,b[0],x,416,b[2],8.5);
+    pill(ctx,x-70,424,140,16,3,'rgba(48,66,96,.6)','rgba(125,155,195,.4)',.6);
+    ctx.fillStyle=b[2];ctx.fillRect(x-68,426,136*(b[1]/1300),12);
+    mlbl(ctx,b[1]+' TFLOPS',x,452,b[2],8);
+  });
+};
+
+/* ── GPU: the two rooms ── */
+STATIC.g1=function(){
+  const ctx=gctx('g1');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  // HBM warehouse — big box left
+  pill(ctx,50,60,330,250,14,'rgba(234,67,53,.08)','#f28b82',2);
+  lbl(ctx,'HBM',215,92,'#f28b82',16,800);
+  mlbl(ctx,'80 GB · the warehouse',215,114,'#f0b3ac',9);
+  // tensor blocks inside
+  const tens=[['weights','#a8caff',70,140,120,50],['activations','#d6a8ff',200,140,120,50],
+              ['Q K V','#ffc890',70,200,120,50],['KV cache','#a8e6c0',200,200,120,50],
+              ['optimizer','#9fdcef',70,260,250,36]];
+  tens.forEach(t2=>{pill(ctx,t2[2],t2[3],t2[4],t2[5],6,t2[1]+'30',t2[1],1.2);
+    mlbl(ctx,t2[0],t2[2]+t2[4]/2,t2[3]+t2[5]/2,t2[1],8.5);});
+  // pipe — thin
+  const pipeY=185;
+  ctx.fillStyle='rgba(242,139,130,.4)';
+  ctx.fillRect(380,pipeY-7,150,14);
+  mlbl(ctx,'~2 TB/s',455,pipeY-18,'#f0b3ac',8.5);
+  mlbl(ctx,'far · slow · thin',455,pipeY+22,'#f0b3ac',8);
+  arrow(ctx,500,pipeY,528,pipeY,'#f28b82',1.4);
+  // SRAM small room
+  pill(ctx,535,140,110,90,10,'rgba(52,168,83,.1)','#48ba6a',2);
+  lbl(ctx,'SRAM',590,168,'#a8e6c0',13,800);
+  mlbl(ctx,'20 MB',590,188,'#9fd4b3',9);
+  mlbl(ctx,'(4000× smaller)',590,206,'#9fd4b3',7.5);
+  // fat pipe to compute
+  ctx.fillStyle='rgba(72,186,106,.45)';
+  ctx.fillRect(645,pipeY-22,60,44);
+  mlbl(ctx,'~19 TB/s',675,pipeY-32,'#a8e6c0',8.5);
+  arrow(ctx,690,pipeY,712,pipeY,'#48ba6a',1.6);
+  // compute
+  pill(ctx,718,128,120,114,10,'rgba(36,193,224,.1)','#3acee0',2);
+  lbl(ctx,'COMPUTE',778,158,'#9fdcef',12,800);
+  mlbl(ctx,'312 TFLOPS',778,180,'#9fdcef',9);
+  // tensor core dots
+  for(let i=0;i<3;i++)for(let j=0;j<4;j++)
+    pill(ctx,738+j*22,196+i*14,16,9,2,'rgba(58,206,224,.5)','#3acee0',.8);
+  mlbl(ctx,'box area = capacity · pipe width = speed',W/2,338,'#aac6e2',9.5);
+};
+
+/* ── GPU: memory wall ── */
+STATIC.g2=function(){
+  const ctx=gctx('g2');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  // ratio visual: 1 byte vs 156 ops
+  pill(ctx,60,46,56,40,6,'rgba(242,139,130,.35)','#f28b82',1.5);
+  lbl(ctx,'1 byte',88,66,'#fff',9,700);
+  mlbl(ctx,'arrives',88,98,'#f0b3ac',8);
+  lbl(ctx,'=',150,66,'#c8e0f2',14,700);
+  mlbl(ctx,'time for',150,86,'#aac6e2',7.5);
+  // 156 op dots
+  for(let i=0;i<6;i++)for(let j=0;j<26;j++){
+    ctx.fillStyle='rgba(58,206,224,.8)';
+    ctx.beginPath();ctx.arc(186+j*9,46+i*9,2.8,0,7);ctx.fill();
+  }
+  lbl(ctx,'156 ops',460,66,'#9fdcef',12,800,'left');
+  mlbl(ctx,'(A100: 312 TFLOPS ÷ 2 TB/s)',540,90,'#9fdcef',8.5,'left');
+
+  // two timelines
+  function tl(y,nm,segs,col){
+    mlbl(ctx,nm,196,y+12,col,8.5,'right');
+    pill(ctx,206,y,600,24,4,'rgba(48,66,96,.6)','rgba(125,155,195,.5)',.7);
+    segs.forEach(s=>{
+      ctx.fillStyle=s[2];ctx.fillRect(206+s[0],y+2,s[1],20);
+    });
+  }
+  // matmul: fully busy
+  tl(150,'matmul (156+ FLOPs/byte)',[[0,600,'rgba(58,206,224,.6)']],'#9fdcef');
+  mlbl(ctx,'compute 100% busy ✓',506,190,'#a8e6c0',8.5);
+  // softmax: tiny busy slivers, mostly idle
+  const segs=[];
+  for(let i=0;i<8;i++){segs.push([i*75,6,'rgba(58,206,224,.8)']);segs.push([i*75+6,69,'rgba(242,139,130,.25)']);}
+  tl(216,'softmax (~1 FLOP/byte)',segs,'#f0b3ac');
+  mlbl(ctx,'compute idle ~99% — WAITING for bytes ✗',506,256,'#f28b82',8.5);
+  mlbl(ctx,'cyan = computing · red = starved',W/2,296,'#aac6e2',9);
+};
+
+/* ── IO: round trips ── */
+STATIC.io1=function(){
+  const ctx=gctx('io1');if(!ctx)return;const W=880,H=430;ctx.clearRect(0,0,W,H);
+  // SRAM room top
+  pill(ctx,290,40,300,80,10,'rgba(52,168,83,.08)','#48ba6a',1.8);
+  lbl(ctx,'SRAM + compute',440,68,'#a8e6c0',11,700);
+  mlbl(ctx,'work happens here',440,92,'#9fd4b3',8);
+  // HBM bar bottom
+  pill(ctx,40,330,800,70,10,'rgba(234,67,53,.07)','#f28b82',1.8);
+  lbl(ctx,'HBM',80,348,'#f0b3ac',11,700,'left');
+  // matrices in HBM — sized by data
+  function hbmBox(x,w,nm,col,sub){
+    pill(ctx,x,348,w,40,5,col+'35',col,1.4);
+    lbl(ctx,nm,x+w/2,364,'#fff',10,800);
+    mlbl(ctx,sub,x+w/2,380,col,7);
+    return x+w/2;
+  }
+  const qx=hbmBox(130,40,'Q','#a8caff','0.5M');
+  const kx=hbmBox(180,40,'K','#a8e6c0','0.5M');
+  const vx=hbmBox(230,40,'V','#ffc890','0.5M');
+  const sx=hbmBox(320,150,'S','#f28b82','16.8M !');
+  const px=hbmBox(500,150,'P','#ffab40','16.8M !');
+  const ox=hbmBox(680,40,'O','#9fdcef','0.5M');
+  // trips: width prop to bytes. thin=2, fat=11
+  function trip(x,up,wd,col,num,dx){
+    const y1=326,y2=124;
+    const xa=x+(dx||0);
+    ctx.strokeStyle=col+'80';ctx.lineWidth=wd;
+    ctx.beginPath();ctx.moveTo(xa,up?y1:y2);ctx.lineTo(xa,up?y2:y1);ctx.stroke();
+    // arrowhead
+    const ay=up?y2:y1, dir=up?-1:1;
+    ctx.fillStyle=col;
+    ctx.beginPath();ctx.moveTo(xa,ay+dir*2);ctx.lineTo(xa-7,ay-dir*9);ctx.lineTo(xa+7,ay-dir*9);ctx.closePath();ctx.fill();
+    // number circle
+    pill(ctx,xa-11,210,22,22,11,'#11161e',col,1.6);
+    mlbl(ctx,num,xa,221,col,9.5);
+  }
+  trip(qx,true,2,'#a8caff','1',-6); trip(kx,true,2,'#a8e6c0','1',0);
+  trip(sx,false,11,'#f28b82','2',-30);
+  trip(sx,true,11,'#f28b82','3',30);
+  trip(px,false,11,'#ffab40','4',-30);
+  trip(px,true,11,'#ffab40','5',30);
+  trip(vx,true,2,'#ffc890','5',6);
+  trip(ox,false,2,'#9fdcef','6',0);
+  // legend
+  mlbl(ctx,'① read Q,K → compute S   ② write S   ③ read S → softmax   ④ write P   ⑤ read P,V → compute O   ⑥ write O',W/2,418,'#aac6e2',8.5);
+  mlbl(ctx,'fat pipes = the N² temporaries crossing twice',W/2,24,'#f0b3ac',9.5);
+};
+
+/* ── IO: the bill ── */
+STATIC.io2=function(){
+  const ctx=gctx('io2');if(!ctx)return;const W=880,H=260;ctx.clearRect(0,0,W,H);
+  // bars to scale: 3MB, 67MB, 67MB, 1MB → scale 67MB=560px
+  const rows=[
+    ['Q, K, V reads','3 MB',25,'#a8caff'],
+    ['S  write + read','67 MB',560,'#f28b82'],
+    ['P  write + read','67 MB',560,'#ffab40'],
+    ['O  write','1 MB',9,'#9fdcef']
+  ];
+  lbl(ctx,'bytes through the slow pipe (per head, per layer — to scale)',W/2,30,'#c8e0f2',10.5,700);
+  rows.forEach((r,i)=>{
+    const y=56+i*40;
+    mlbl(ctx,r[0],178,y+11,r[3],9,'right');
+    pill(ctx,190,y,604,22,4,'rgba(48,66,96,.45)','rgba(125,155,195,.35)',.6);
+    ctx.fillStyle=r[3];ctx.fillRect(192,y+2,Math.max(r[2],6),18);
+    mlbl(ctx,r[1],200+Math.max(r[2],6),y+11,r[3],9,'left');
+  });
+  // 97% bracket
+  ctx.strokeStyle='#f28b82';ctx.lineWidth=1.6;
+  ctx.beginPath();ctx.moveTo(806,96);ctx.lineTo(818,96);ctx.lineTo(818,174);ctx.lineTo(806,174);ctx.stroke();
+  lbl(ctx,'97%',840,128,'#f28b82',13,800);
+  mlbl(ctx,'of traffic',840,148,'#f0b3ac',8);
+  mlbl(ctx,'pure temporaries — erase these two bars and attention is ~10× faster',W/2,238,'#aac6e2',9.5);
+};
+
+/* ── Online softmax: the obstacle ── */
+STATIC.osm1=function(){
+  const ctx=gctx('osm1');if(!ctx)return;const W=880,H=300;ctx.clearRect(0,0,W,H);
+  const vals=[3,1,2,5];
+  // top: classic pipeline
+  mlbl(ctx,'classic softmax',60,42,'#c8e0f2',9.5,'left');
+  // row cells
+  vals.forEach((v,i)=>{
+    pill(ctx,60+i*52,58,46,40,5,'rgba(88,148,250,.3)','#a8caff',1.4);
+    lbl(ctx,v,83+i*52,78,'#fff',13,800);
+  });
+  pill(ctx,56,54,4*52+2,48,7,null,'#a8caff',1);
+  // stage boxes
+  function stage(x,nm,sub,col,blocked){
+    pill(ctx,x,52,96,52,7,blocked?'rgba(234,67,53,.12)':'rgba(52,168,83,.12)',blocked?'#f28b82':'#48ba6a',1.5);
+    lbl(ctx,nm,x+48,70,blocked?'#f28b82':'#a8e6c0',10,800);
+    mlbl(ctx,sub,x+48,90,blocked?'#f0b3ac':'#9fd4b3',7.5);
+  }
+  arrow(ctx,278,78,306,78,'#aac6e2',1.4);
+  stage(312,'max','needs ALL',  '#f28b82',true);
+  arrow(ctx,414,78,440,78,'#aac6e2',1.4);
+  stage(446,'exp(x−m)','per cell','#48ba6a',false);
+  arrow(ctx,548,78,574,78,'#aac6e2',1.4);
+  stage(580,'sum','needs ALL','#f28b82',true);
+  arrow(ctx,682,78,708,78,'#aac6e2',1.4);
+  stage(714,'÷','weights','#48ba6a',false);
+  // bracket: blocked stages
+  mlbl(ctx,'two stages block until the whole row exists',525,128,'#f0b3ac',9);
+
+  // bottom: tiled arrival
+  mlbl(ctx,'but tiles arrive in pieces…',60,182,'#c8e0f2',9.5,'left');
+  // chunk 1 present, chunk 2 dashed/missing
+  vals.slice(0,2).forEach((v,i)=>{
+    pill(ctx,60+i*52,198,46,40,5,'rgba(88,148,250,.3)','#a8caff',1.4);
+    lbl(ctx,v,83+i*52,218,'#fff',13,800);
+  });
+  ctx.setLineDash([5,4]);
+  vals.slice(2).forEach((v,i)=>{
+    pill(ctx,60+(i+2)*52,198,46,40,5,'rgba(52,70,100,.4)','rgba(150,175,205,.6)',1.2);
+    mlbl(ctx,'?',83+(i+2)*52,218,'rgba(170,198,226,.8)',12);
+  });
+  ctx.setLineDash([]);
+  mlbl(ctx,'tile 1 here',112,256,'#a8caff',8);
+  mlbl(ctx,'tile 2 not yet',216,256,'rgba(170,198,226,.8)',8);
+  // crossed pipeline
+  pill(ctx,312,198,200,40,7,'rgba(234,67,53,.08)','#f28b82',1.5);
+  lbl(ctx,'classic recipe',412,212,'#f28b82',10,700);
+  mlbl(ctx,'cannot start',412,228,'#f0b3ac',8);
+  lbl(ctx,'✗',540,218,'#f28b82',20,800);
+  mlbl(ctx,'max of what? sum of what?',650,218,'#f0b3ac',9,'left');
+};
+
+/* ── Online softmax: the walk ── */
+STATIC.osm2=function(){
+  const ctx=gctx('osm2');if(!ctx)return;const W=880,H=430;ctx.clearRect(0,0,W,H);
+  const vals=[3,1,2,5];
+  const steps=[
+    {m:'3',l:'1.000',note:'init: e⁰',resc:false,mNew:false},
+    {m:'3',l:'1.135',note:'+ e^(1−3)',resc:false,mNew:false},
+    {m:'3',l:'1.503',note:'+ e^(2−3)',resc:false,mNew:false},
+    {m:'5',l:'1.203',note:'×0.135 then +1',resc:true,mNew:true}
+  ];
+  for(let s=0;s<4;s++){
+    const x0=30+s*215, st=steps[s];
+    pill(ctx,x0,34,195,300,10,'rgba(52,168,83,.04)','rgba(72,186,106,.5)',1.2);
+    mlbl(ctx,'step '+(s+1),x0+97,50,'#a8e6c0',9);
+    // value cells row — incoming highlighted, seen dimmed, future dashed
+    vals.forEach((v,i)=>{
+      const cx=x0+24+i*40;
+      if(i<s){ // seen
+        pill(ctx,cx,66,34,30,4,'rgba(88,148,250,.18)','rgba(168,202,255,.5)',1);
+        lbl(ctx,v,cx+17,81,'rgba(168,202,255,.7)',10,700);
+      } else if(i===s){ // incoming
+        ctx.shadowColor='#48ba6a';ctx.shadowBlur=10;
+        pill(ctx,cx,66,34,30,4,'rgba(72,186,106,.4)','#a8e6c0',1.8);
+        ctx.shadowBlur=0;
+        lbl(ctx,v,cx+17,81,'#fff',12,800);
+      } else { // future
+        ctx.setLineDash([4,3]);
+        pill(ctx,cx,66,34,30,4,'rgba(52,70,100,.35)','rgba(150,175,205,.5)',1);
+        ctx.setLineDash([]);
+        mlbl(ctx,'?',cx+17,81,'rgba(170,198,226,.7)',10);
+      }
+    });
+    arrow(ctx,x0+24+s*40+17,102,x0+24+s*40+17,118,'#a8e6c0',1.2);
+    // m chip
+    const mGlow=st.mNew;
+    if(mGlow){ctx.shadowColor='#fcc628';ctx.shadowBlur=12;}
+    pill(ctx,x0+22,126,70,52,7,'rgba(252,198,40,.14)',mGlow?'#ffe282':'rgba(252,198,40,.5)',mGlow?2:1.2);
+    ctx.shadowBlur=0;
+    mlbl(ctx,'m',x0+57,140,'#eedda0',8);
+    lbl(ctx,st.m,x0+57,160,'#ffe282',16,800);
+    if(mGlow)mlbl(ctx,'new max!',x0+57,189,'#ffe282',7.5);
+    // l chip
+    pill(ctx,x0+104,126,70,52,7,'rgba(58,206,224,.12)','rgba(58,206,224,.5)',1.2);
+    mlbl(ctx,'ℓ',x0+139,140,'#9fdcef',8);
+    lbl(ctx,st.l,x0+139,160,'#a6ecf6',14,800);
+    // note / rescale
+    if(st.resc){
+      ctx.shadowColor='#fcc628';ctx.shadowBlur=8;
+      pill(ctx,x0+22,210,152,46,7,'rgba(252,198,40,.12)','#ffe282',1.6);
+      ctx.shadowBlur=0;
+      lbl(ctx,'↻ ×e^(3−5)',x0+97,226,'#ffe282',10,800);
+      mlbl(ctx,'1.503·0.135 + 1',x0+97,245,'#eedda0',8);
+    } else {
+      pill(ctx,x0+22,210,152,46,7,'rgba(48,66,96,.4)','rgba(125,155,195,.4)',.8);
+      mlbl(ctx,st.note,x0+97,233,'#aac6e2',8.5);
+    }
+    mlbl(ctx,s===3?'done':'next →',x0+97,290,s===3?'#a8e6c0':'#9fbcd8',8.5);
+    if(s<3)arrow(ctx,x0+200,180,x0+212,180,'#9fbcd8',1.2);
+  }
+  // bottom match strip
+  pill(ctx,120,358,640,52,9,'rgba(52,168,83,.1)','#48ba6a',1.8);
+  lbl(ctx,'streaming ℓ = 1.203',300,378,'#a8e6c0',12,800);
+  lbl(ctx,'=',440,378,'#c8e0f2',14,800);
+  lbl(ctx,'all-at-once ℓ = 1.203   ✓',590,378,'#a8e6c0',12,800);
+  mlbl(ctx,'exact — rows can stream ⇒ attention can tile',440,398,'#9fd4b3',8.5);
+};
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

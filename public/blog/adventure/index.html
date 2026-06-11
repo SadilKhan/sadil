@@ -39,9 +39,9 @@
 
 
     
-        <meta property="og:image" content="//localhost:1314/blog/adventure/sidebar-featured.JPG" >
+        <meta property="og:image" content="//localhost:1314/blog/adventure/featured.gif" >
         <meta property="twitter:card" content="summary_large_image">
-        <meta name="twitter:image" content="//localhost:1314/blog/adventure/sidebar-featured.JPG" >
+        <meta name="twitter:image" content="//localhost:1314/blog/adventure/featured.gif" >
     
     
   
@@ -49,7 +49,7 @@
   <meta itemprop="description" content="Details about my Adventures — campervans, hikes, and off-the-beaten-path travel.">
   <meta itemprop="datePublished" content="2025-08-24T00:00:00+00:00">
   <meta itemprop="dateModified" content="2025-08-24T00:00:00+00:00">
-  <meta itemprop="image" content="//localhost:1314/blog/adventure/sidebar-featured.JPG">
+  <meta itemprop="image" content="//localhost:1314/blog/adventure/featured.gif">
   <meta itemprop="keywords" content="Travelling,Adventure,Vacation,Adventure">
   
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-WSFM8WQJW6"></script>
@@ -73,7 +73,7 @@
     <link rel="alternate" type="application/rss+xml" href="//localhost:1314/blog/adventure/index.xml" title="Home" />
   
   
-  <link rel="stylesheet" href="/style.main.min.d4467938a8c18aebdbe989a4c1c29a6549cbffcd4ee748693288b21941d5ec5d.css" integrity="sha256-1EZ5OKjBiuvb6YmkwcKaZUnL/81O50hpMoiyGUHV7F0=" media="screen">
+  <link rel="stylesheet" href="/style.main.min.3ee55ceb7976273d766b69d202a4440e91410424254694418b2835b1a3aa4ba7.css" integrity="sha256-PuVc63l2Jz12a2nSAqREDpFBBCQlRpRBiyg1saOqS6c=" media="screen">
   
   
   <script src="/panelset.min.ed1ac24b6e16f4e2481e3d1d098ae66f5bc77438aef619e6e266d8ac5b00dc72.js" type="text/javascript"></script>
@@ -1537,7 +1537,7 @@ body.dark-mode .sk-drawer,
     display: grid;
     grid-template-columns: 1.15fr 1fr;
     gap: 3.6rem;
-    align-items: center;
+    align-items: start;
     padding: 0 0 3.5rem;
     border-bottom: 1px solid var(--bs-rule);
     margin-bottom: 0;
@@ -1553,7 +1553,6 @@ body.dark-mode .sk-drawer,
 
   .bs-lead__media {
     position: relative;
-    aspect-ratio: 4 / 5;
     overflow: hidden;
     border-radius: 4px;
     background: var(--bs-cream);
@@ -1565,12 +1564,12 @@ body.dark-mode .sk-drawer,
 
   .bs-lead__media img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
+    display: block;
     transition: transform 1100ms var(--bs-ease);
   }
 
-  .bs-lead__media:hover img { transform: scale(1.04); }
+  .bs-lead__media:hover img { transform: scale(1.02); }
 
   .bs-lead__badge {
     position: absolute;
@@ -1784,7 +1783,7 @@ body.dark-mode .sk-drawer,
   }
 
   .bs-row__thumb {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
     border-radius: 3px;
     overflow: hidden;
     background: var(--bs-cream);
@@ -1855,6 +1854,84 @@ body.dark-mode .sk-drawer,
   .bs-footnote__cta:hover { gap: 12px; color: var(--bs-accent-deep); text-decoration: none; }
 
    
+  .bs-search {
+    width: min(1200px, 100% - 4rem);
+    margin: 0 auto;
+    padding: 2.6rem 0 0;
+  }
+  .bs-search__wrap {
+    position: relative;
+    max-width: 560px;
+  }
+  .bs-search__icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--bs-ink-muted);
+    pointer-events: none;
+  }
+  .bs-search__input {
+    width: 100%;
+    height: 44px;
+    padding: 0 90px 0 42px;
+    border: 1px solid var(--bs-rule);
+    border-radius: 999px;
+    background: var(--bs-card);
+    color: var(--bs-ink);
+    font-family: var(--bs-sans);
+    font-size: 0.94rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    outline: none;
+    transition: border-color 220ms var(--bs-ease), box-shadow 220ms var(--bs-ease);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .bs-search__input::placeholder { color: var(--bs-ink-muted); }
+  .bs-search__input:focus {
+    border-color: var(--bs-accent);
+    box-shadow: 0 0 0 4px rgba(184, 66, 30, 0.10);
+  }
+  .bs-search__input::-webkit-search-cancel-button { -webkit-appearance: none; }
+  .bs-search__count {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--bs-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--bs-ink-muted);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .bs-no-results {
+    width: min(1200px, 100% - 4rem);
+    margin: 1.6rem auto 0;
+    padding: 2.2rem 0;
+    text-align: center;
+    font-family: var(--bs-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--bs-ink-muted);
+    display: none;
+  }
+  .bs-no-results.is-active { display: block; }
+  @media (max-width: 980px) {
+    .bs-search { width: min(100% - 2.5rem, 920px); }
+    .bs-no-results { width: min(100% - 2.5rem, 920px); }
+  }
+  @media (max-width: 620px) {
+    .bs-search { width: calc(100% - 1.8rem); padding-top: 2rem; }
+    .bs-no-results { width: calc(100% - 1.8rem); }
+  }
+
+   
   .bs-reveal {
     opacity: 0;
     transform: translateY(16px);
@@ -1920,6 +1997,68 @@ body.dark-mode .sk-drawer,
     .bs-hero__scroll svg { animation: none; }
     .bs-reveal { opacity: 1; transform: none; transition: none; }
   }
+
+   
+  .bs-sort-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.55rem 0 1.1rem;
+    gap: 0.8rem;
+  }
+  .bs-sort-by {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .bs-sort-label {
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--bs-ink-muted);
+    margin-right: 8px;
+    white-space: nowrap;
+  }
+  .bs-sort-btn {
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--bs-ink-muted);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    transition: color 180ms var(--bs-ease), border-color 180ms var(--bs-ease), background 180ms var(--bs-ease);
+    line-height: 1;
+  }
+  .bs-sort-btn:hover { color: var(--bs-ink); border-color: var(--bs-rule-strong); }
+  .bs-sort-btn.is-active {
+    color: var(--bs-accent);
+    border-color: var(--bs-accent);
+    background: rgba(184, 66, 30, 0.07);
+  }
+  .bs-sort-dir {
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--bs-ink-muted);
+    background: none;
+    border: 1px solid var(--bs-rule-strong);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    cursor: pointer;
+    transition: color 180ms var(--bs-ease), border-color 180ms var(--bs-ease);
+    white-space: nowrap;
+    line-height: 1;
+  }
+  .bs-sort-dir:hover { color: var(--bs-ink); border-color: var(--bs-ink-muted); }
 </style>
 
 <div class="bs-stage">
@@ -1934,7 +2073,7 @@ body.dark-mode .sk-drawer,
   <header class="bs-hero">
     <div class="bs-hero__bg">
       
-        <img src="/blog/adventure/sidebar-featured.JPG" alt="" aria-hidden="true" loading="eager"/>
+        <img src="/blog/adventure/featured.gif" alt="" aria-hidden="true" loading="eager"/>
       
     </div>
     <div class="bs-hero__veil"></div>
@@ -1996,7 +2135,36 @@ body.dark-mode .sk-drawer,
 
   
   
+  
     
+    
+    
+    
+    
+    
+
+    
+    <section class="bs-search">
+      <div class="bs-search__wrap">
+        <svg class="bs-search__icon" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <input
+          type="search"
+          id="bs-search-input"
+          class="bs-search__input"
+          placeholder="Search this series"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Search posts in this series"/>
+        <span class="bs-search__count" id="bs-search-count" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <div class="bs-no-results" id="bs-no-results" role="status" aria-live="polite">
+      Nothing matched. Try a shorter query.
+    </div>
 
     <section class="bs-section">
       <div class="bs-section__head bs-reveal">
@@ -2004,7 +2172,8 @@ body.dark-mode .sk-drawer,
         <span class="bs-section__rule"></span>
       </div>
 
-      <article class="bs-lead bs-reveal">
+      
+      <article class="bs-lead bs-reveal" data-searchable="iceland trip  in august 2025, we took a week-long campervan trip around iceland — from *golden circle hot springs* to *south coast waterfalls*, *glacier lagoons*, *eastfjords fishing villages*, and the *wildlife of the north and snæfellsnes*. travelling adventure vacation">
         <a href="/blog/adventure/iceland/" class="bs-lead__media-link" aria-label="Iceland Trip">
           <div class="bs-lead__media">
             
@@ -2107,6 +2276,105 @@ body.dark-mode .sk-drawer,
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -7% 0px' });
   document.querySelectorAll('.bs-reveal').forEach(function (el) { io.observe(el); });
+})();
+
+(function () {
+  var input  = document.getElementById('bs-search-input');
+  var count  = document.getElementById('bs-search-count');
+  var empty  = document.getElementById('bs-no-results');
+  if (!input) return;
+
+  var items = Array.prototype.slice.call(document.querySelectorAll('[data-searchable]'));
+  if (!items.length) return;
+
+  
+  
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.bs-section'));
+
+  function applyFilter(raw) {
+    var q = (raw || '').trim().toLowerCase();
+    var shown = 0;
+    items.forEach(function (el) {
+      var hit = !q || (el.dataset.searchable || '').indexOf(q) !== -1;
+      el.style.display = hit ? '' : 'none';
+      if (hit) shown += 1;
+    });
+
+    
+    sections.forEach(function (sec) {
+      var visible = sec.querySelectorAll('[data-searchable]');
+      var anyHit = false;
+      visible.forEach(function (el) { if (el.style.display !== 'none') anyHit = true; });
+      
+      if (visible.length > 0) sec.style.display = anyHit ? '' : 'none';
+    });
+
+    if (count) {
+      count.textContent = q
+        ? (shown + ' / ' + items.length)
+        : '';
+    }
+    if (empty) empty.classList.toggle('is-active', q && shown === 0);
+  }
+
+  
+  var t = null;
+  input.addEventListener('input', function () {
+    if (t) window.clearTimeout(t);
+    t = window.setTimeout(function () { applyFilter(input.value); }, 60);
+  });
+
+  
+  input.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') { input.value = ''; applyFilter(''); }
+  });
+})();
+
+(function () {
+  var list = document.querySelector('.bs-list');
+  if (!list) return;
+  var state = { field: 'date', dir: 'desc' };
+
+  function cmpVal(el) {
+    if (state.field === 'date')  return el.dataset.date  || '';
+    if (state.field === 'title') return el.dataset.title || '';
+    if (state.field === 'read')  return +(el.dataset.read || 0);
+    return '';
+  }
+
+  function doSort() {
+    var rows = Array.prototype.slice.call(list.querySelectorAll('.bs-row'));
+    rows.sort(function (a, b) {
+      var av = cmpVal(a), bv = cmpVal(b);
+      var cmp = (state.field === 'read') ? av - bv : (av < bv ? -1 : av > bv ? 1 : 0);
+      return state.dir === 'asc' ? cmp : -cmp;
+    });
+    rows.forEach(function (r, i) {
+      var n = r.querySelector('.bs-row__num');
+      if (n) n.textContent = String(i + 1).padStart(2, '0');
+      list.appendChild(r);
+    });
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.bs-sort-btn'), function (btn) {
+    btn.addEventListener('click', function () {
+      Array.prototype.forEach.call(document.querySelectorAll('.bs-sort-btn'), function (b) { b.classList.remove('is-active'); });
+      btn.classList.add('is-active');
+      state.field = btn.dataset.sort;
+      doSort();
+    });
+  });
+
+  var dirBtn = document.getElementById('bs-sort-dir');
+  if (dirBtn) {
+    dirBtn.addEventListener('click', function () {
+      state.dir = state.dir === 'asc' ? 'desc' : 'asc';
+      dirBtn.textContent = state.dir === 'asc' ? '↑ Asc' : '↓ Desc';
+      doSort();
+    });
+  }
+
+  doSort();
 })();
 </script>
 

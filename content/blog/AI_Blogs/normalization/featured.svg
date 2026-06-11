@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Normalization Methods">
+  <defs>
+    <linearGradient id="normBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#07090d"/>
+      <stop offset="55%" stop-color="#0f1520"/>
+      <stop offset="100%" stop-color="#1a0a2e"/>
+    </linearGradient>
+    <radialGradient id="normGlow" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#24c1e0" stop-opacity=".15"/>
+      <stop offset="100%" stop-color="#24c1e0" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="faceTop" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2a40"/>
+      <stop offset="100%" stop-color="#0f1a2c"/>
+    </linearGradient>
+    <linearGradient id="faceFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1828"/>
+      <stop offset="100%" stop-color="#070f1c"/>
+    </linearGradient>
+    <linearGradient id="faceRight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a1422"/>
+      <stop offset="100%" stop-color="#060e18"/>
+    </linearGradient>
+    <filter id="glow4" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style><![CDATA[
+      .lbl { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 9px; letter-spacing: .1em; text-anchor: middle; }
+      .title { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; fill: #e0e8f4; text-anchor: middle; }
+      .sub   { font-family: 'JetBrains Mono', ui-monospace, monospace; fill: #4a7090; font-size: 10px; text-anchor: middle; letter-spacing: .08em; }
+      .pill  { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 8.5px; font-weight: 700; letter-spacing: .06em; text-anchor: middle; }
+
+      /* axis highlight pulses */
+      .ax-b { animation: axPulse 3s ease-in-out infinite; }
+      .ax-s { animation: axPulse 3s ease-in-out .7s infinite; }
+      .ax-d { animation: axPulse 3s ease-in-out 1.4s infinite; }
+      @keyframes axPulse {
+        0%, 100% { opacity: .55; }
+        50%       { opacity: 1; }
+      }
+
+      /* method pill flash */
+      .m1 { animation: mPulse 4s ease-in-out infinite; }
+      .m2 { animation: mPulse 4s ease-in-out .5s infinite; }
+      .m3 { animation: mPulse 4s ease-in-out 1s infinite; }
+      .m4 { animation: mPulse 4s ease-in-out 1.5s infinite; }
+      .m5 { animation: mPulse 4s ease-in-out 2s infinite; }
+      @keyframes mPulse {
+        0%, 80%, 100% { opacity: .7; }
+        40%            { opacity: 1; }
+      }
+    ]]></style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#normBg)"/>
+  <rect width="800" height="450" fill="url(#normGlow)"/>
+
+  <!-- Subtle grid -->
+  <g opacity=".18">
+    <path d="M0 90 H800 M0 180 H800 M0 270 H800 M0 360 H800" stroke="#1e3050" stroke-width=".6" stroke-dasharray="2 8"/>
+    <path d="M100 0 V450 M200 0 V450 M300 0 V450 M400 0 V450 M500 0 V450 M600 0 V450 M700 0 V450" stroke="#1e3050" stroke-width=".6" stroke-dasharray="2 8"/>
+  </g>
+
+  <!-- ═══ Isometric tensor cube ═══
+       Origin (front-bottom-left) = (200, 310)
+       S-axis → right   unit: (64, 0)
+       D-axis → up      unit: (0, -28)
+       B-axis → depth   unit: (32, -16)
+       S=6, D=8, B=4
+  -->
+  <!-- Three faces -->
+  <!-- Front face S×D (6 cols × 8 rows) -->
+  <polygon points="200,310 584,310 584,86 200,86" fill="url(#faceFront)" stroke="#1e3050" stroke-width=".8"/>
+  <!-- Top face S×B (6 cols × 4 rows) -->
+  <polygon points="200,86 584,86 712,22 328,22" fill="url(#faceTop)" stroke="#1e3050" stroke-width=".8"/>
+  <!-- Right face D×B (8 rows × 4 cols) -->
+  <polygon points="584,310 584,86 712,22 712,246" fill="url(#faceRight)" stroke="#1e3050" stroke-width=".8"/>
+
+  <!-- Front face grid lines (S × D) -->
+  <g stroke="#1e3a58" stroke-width=".55" opacity=".7">
+    <line x1="264" y1="310" x2="264" y2="86"/>
+    <line x1="328" y1="310" x2="328" y2="86"/>
+    <line x1="392" y1="310" x2="392" y2="86"/>
+    <line x1="456" y1="310" x2="456" y2="86"/>
+    <line x1="520" y1="310" x2="520" y2="86"/>
+    <line x1="200" y1="282" x2="584" y2="282"/>
+    <line x1="200" y1="254" x2="584" y2="254"/>
+    <line x1="200" y1="226" x2="584" y2="226"/>
+    <line x1="200" y1="198" x2="584" y2="198"/>
+    <line x1="200" y1="170" x2="584" y2="170"/>
+    <line x1="200" y1="142" x2="584" y2="142"/>
+    <line x1="200" y1="114" x2="584" y2="114"/>
+  </g>
+  <!-- Top face grid lines -->
+  <g stroke="#1e3a58" stroke-width=".5" opacity=".6">
+    <line x1="264" y1="86" x2="392" y2="22"/>
+    <line x1="328" y1="86" x2="456" y2="22"/>
+    <line x1="392" y1="86" x2="520" y2="22"/>
+    <line x1="456" y1="86" x2="584" y2="22"/>
+    <line x1="520" y1="86" x2="648" y2="22"/>
+    <line x1="200" y1="64" x2="584" y2="64"/><!-- approx third line -->
+    <line x1="264" y1="43" x2="648" y2="43"/>
+  </g>
+  <!-- Right face grid lines -->
+  <g stroke="#1e3a58" stroke-width=".5" opacity=".5">
+    <line x1="584" y1="282" x2="712" y2="218"/>
+    <line x1="584" y1="254" x2="712" y2="190"/>
+    <line x1="584" y1="226" x2="712" y2="162"/>
+    <line x1="584" y1="198" x2="712" y2="134"/>
+    <line x1="584" y1="170" x2="712" y2="106"/>
+    <line x1="584" y1="142" x2="712" y2="78"/>
+    <line x1="584" y1="114" x2="712" y2="50"/>
+    <line x1="616" y1="310" x2="616" y2="86"/> <!-- impossible since right of 584, adjust -->
+    <line x1="648" y1="246" x2="648" y2="22"/>
+    <line x1="680" y1="246" x2="680" y2="22"/>
+  </g>
+
+  <!-- ═══ Axis arrows ═══ -->
+  <!-- S-axis (right, bottom) -->
+  <g class="ax-s" filter="url(#glow4)">
+    <line x1="200" y1="330" x2="590" y2="330" stroke="#34a853" stroke-width="2.2"/>
+    <polygon points="594,330 582,325 582,335" fill="#34a853"/>
+    <text class="lbl" x="397" y="348" fill="#34a853">S = sequence</text>
+  </g>
+  <!-- D-axis (up, left) -->
+  <g class="ax-d" filter="url(#glow4)">
+    <line x1="178" y1="310" x2="178" y2="76" stroke="#24c1e0" stroke-width="2.2"/>
+    <polygon points="178,72 173,84 183,84" fill="#24c1e0"/>
+    <text class="lbl" x="178" y="360" fill="#24c1e0">D = embedding</text>
+  </g>
+  <!-- B-axis (depth) -->
+  <g class="ax-b" filter="url(#glow4)">
+    <line x1="200" y1="310" x2="332" y2="246" stroke="#a142f4" stroke-width="2.2"/>
+    <polygon points="335,244 320,243 326,255" fill="#a142f4"/>
+    <text class="lbl" x="310" y="352" fill="#a142f4">B = batch</text>
+  </g>
+
+  <!-- Dimension labels on faces -->
+  <text class="lbl" x="392" y="205" fill="#2a4a70">S × D  (front)</text>
+  <text class="lbl" x="455" y="58"  fill="#22364e" opacity=".8">S × B  (top)</text>
+  <text class="lbl" x="650" y="175" fill="#1e324c" opacity=".8">B × D</text>
+
+  <!-- ═══ Method pills (right side) ═══ -->
+  <!-- BatchNorm pill -->
+  <g class="m1">
+    <rect x="536" y="348" width="82" height="20" rx="5" fill="rgba(66,133,244,.18)" stroke="rgba(66,133,244,.5)" stroke-width="1"/>
+    <text class="pill" x="577" y="362" fill="#8ab4f8">BatchNorm</text>
+  </g>
+  <!-- LayerNorm -->
+  <g class="m2">
+    <rect x="536" y="374" width="82" height="20" rx="5" fill="rgba(251,188,4,.14)" stroke="rgba(251,188,4,.45)" stroke-width="1"/>
+    <text class="pill" x="577" y="388" fill="#fdd663">LayerNorm</text>
+  </g>
+  <!-- RMSNorm -->
+  <g class="m3">
+    <rect x="624" y="348" width="72" height="20" rx="5" fill="rgba(36,193,224,.14)" stroke="rgba(36,193,224,.45)" stroke-width="1"/>
+    <text class="pill" x="660" y="362" fill="#78d9ec">RMSNorm</text>
+  </g>
+  <!-- GroupNorm -->
+  <g class="m4">
+    <rect x="624" y="374" width="72" height="20" rx="5" fill="rgba(52,168,83,.14)" stroke="rgba(52,168,83,.45)" stroke-width="1"/>
+    <text class="pill" x="660" y="388" fill="#81c995">GroupNorm</text>
+  </g>
+  <!-- InstanceNorm -->
+  <g class="m5">
+    <rect x="536" y="400" width="160" height="20" rx="5" fill="rgba(234,67,53,.12)" stroke="rgba(234,67,53,.4)" stroke-width="1"/>
+    <text class="pill" x="616" y="414" fill="#f28b82">InstanceNorm</text>
+  </g>
+
+  <!-- Title -->
+  <text class="title" x="400" y="440" font-size="20">Normalization in Deep Learning</text>
+  <text class="sub" x="138" y="26" font-size="9">// tensor [B, S, D] — which dims you squeeze defines the method</text>
+</svg>

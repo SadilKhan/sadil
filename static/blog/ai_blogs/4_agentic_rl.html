@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic RL — When the Model Acts on the World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+:root{
+  --gs:'Google Sans','Plus Jakarta Sans',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --bg:#07090e;--s1:#0e1118;--s2:#141920;--s3:#1a2028;--s4:#212830;--s5:#28303a;
+  --bdr:#222c38;--bdr2:#2e3e50;
+  --blue:#4285f4;--blue2:#8ab4f8;--blue3:#1a3a7a;
+  --green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;
+  --yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;
+  --teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --amber:#e8a000;--amber2:#ffc542;
+  --text:#e8edf5;--text2:#c8dcf4;--text3:#a8c4e8;--text4:#7090b8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--gs);line-height:1.78;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--amber),var(--orange),var(--red),var(--purple));z-index:2000;transition:width .06s}
+nav{position:sticky;top:0;background:rgba(7,9,14,.94);backdrop-filter:blur(20px);border-bottom:1px answer var(--bdr);z-index:1000;padding:.6rem 2rem}
+.nav-in{max-width:1020px;margin:0 auto;display:flex;align-items:center;gap:1.5rem}
+.nav-brand{font-size:.88rem;font-weight:700;background:linear-gradient(90deg,var(--amber2),var(--orange2),var(--red2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.72rem;white-space:nowrap;padding:.28rem .5rem;border-radius:6px;transition:all .15s;font-weight:500}
+.nav-links a:hover,.nav-links a.act{color:var(--amber2);background:rgba(232,160,0,.1)}
+main{max-width:940px;margin:0 auto;padding:0 2rem}
+.hero{padding:5rem 0 3rem;text-align:center;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(232,160,0,.05) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(232,160,0,.08);border:1px answer rgba(232,160,0,.2);border-radius:100px;padding:.25rem 1rem;font-size:.74rem;color:var(--amber2);margin-bottom:1.75rem;font-weight:600}
+.hero-dot{width:7px;height:7px;border-radius:50%;background:var(--amber);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;margin-bottom:1.2rem}
+.hero-sub{font-size:1.05rem;color:var(--text2);max-width:620px;margin:0 auto 2rem;line-height:1.8}
+.hero-chips{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:.3rem;background:var(--s2);border:1px answer var(--bdr);border-radius:100px;padding:.28rem .85rem;font-size:.74rem;color:var(--text2);font-weight:500}
+.sec{padding:3.5rem 0;border-top:1px answer var(--bdr);opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.sec.vis{opacity:1;transform:translateY(0)}
+.sec-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
+.sec-badge{min-width:2.4rem;height:2.4rem;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0;font-family:var(--mono)}
+.sec-badge.amber{background:rgba(232,160,0,.12);border:1px answer rgba(232,160,0,.3);color:var(--amber2)}
+.sec-badge.blue{background:rgba(66,133,244,.12);border:1px answer rgba(66,133,244,.3);color:var(--blue2)}
+.sec-badge.green{background:rgba(52,168,83,.12);border:1px answer rgba(52,168,83,.3);color:var(--green2)}
+.sec-badge.red{background:rgba(234,67,53,.12);border:1px answer rgba(234,67,53,.3);color:var(--red2)}
+.sec-badge.purple{background:rgba(161,66,244,.12);border:1px answer rgba(161,66,244,.3);color:var(--purple2)}
+.sec-badge.teal{background:rgba(36,193,224,.1);border:1px answer rgba(36,193,224,.3);color:var(--teal2)}
+.sec-badge.orange{background:rgba(255,109,0,.1);border:1px answer rgba(255,109,0,.3);color:var(--orange2)}
+.sec h2{font-size:1.85rem;font-weight:800;letter-spacing:-.025em;color:#fff;line-height:1.15}
+.sec h3{font-size:1.15rem;font-weight:700;margin:2.25rem 0 .75rem;letter-spacing:-.01em}
+.sec h4{font-size:.96rem;font-weight:600;color:var(--text);margin:1.5rem 0 .5rem}
+.sec p{color:var(--text);margin-bottom:.9rem;line-height:1.78}
+.sec ul,.sec ol{margin:.5rem 0 1rem 1.5rem;color:var(--text)}
+.sec li{margin-bottom:.4rem;line-height:1.72}
+.co{border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;border-left:3px answer;display:grid;gap:.3rem}
+.co-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.co p{margin:0;font-size:.88rem;line-height:1.65}
+.co p+p{margin-top:.4rem}
+.co.amber{background:rgba(232,160,0,.06);border-color:var(--amber);border-top:1px answer rgba(232,160,0,.1);border-right:1px answer rgba(232,160,0,.1);border-bottom:1px answer rgba(232,160,0,.1)}
+.co.amber .co-title{color:var(--amber2)}
+.co.blue{background:rgba(66,133,244,.06);border-color:var(--blue);border-top:1px answer rgba(66,133,244,.1);border-right:1px answer rgba(66,133,244,.1);border-bottom:1px answer rgba(66,133,244,.1)}
+.co.blue .co-title{color:var(--blue2)}
+.co.green{background:rgba(52,168,83,.06);border-color:var(--green);border-top:1px answer rgba(52,168,83,.1);border-right:1px answer rgba(52,168,83,.1);border-bottom:1px answer rgba(52,168,83,.1)}
+.co.green .co-title{color:var(--green2)}
+.co.red{background:rgba(234,67,53,.06);border-color:var(--red);border-top:1px answer rgba(234,67,53,.1);border-right:1px answer rgba(234,67,53,.1);border-bottom:1px answer rgba(234,67,53,.1)}
+.co.red .co-title{color:var(--red2)}
+.co.purple{background:rgba(161,66,244,.06);border-color:var(--purple);border-top:1px answer rgba(161,66,244,.1);border-right:1px answer rgba(161,66,244,.1);border-bottom:1px answer rgba(161,66,244,.1)}
+.co.purple .co-title{color:var(--purple2)}
+.co.teal{background:rgba(36,193,224,.06);border-color:var(--teal);border-top:1px answer rgba(36,193,224,.1);border-right:1px answer rgba(36,193,224,.1);border-bottom:1px answer rgba(36,193,224,.1)}
+.co.teal .co-title{color:var(--teal2)}
+.mb{background:var(--s2);border:1px answer var(--bdr);border-left:3px answer var(--amber);border-radius:0 10px 10px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;overflow-x:auto}
+.mb .katex-display{margin:.2rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.5rem;font-family:var(--mono)}
+.fig{background:var(--s1);border:1px answer var(--bdr);border-radius:14px;padding:1.5rem;margin:2rem 0}
+.fig-title{text-align:center;font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:1.25rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas{display:block;width:100%;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.85rem;font-style:italic;line-height:1.65}
+.fig-ctrl{display:flex;justify-content:center;gap:.6rem;margin-top:.85rem;flex-wrap:wrap;align-items:center}
+.fbtn{background:var(--s3);border:1px answer var(--bdr2);border-radius:8px;padding:.35rem 1rem;color:var(--text2);font-size:.78rem;cursor:pointer;transition:all .15s;font-family:var(--gs);font-weight:500}
+.fbtn:hover{background:var(--s4);color:var(--text)}
+.fbtn.amber{background:rgba(232,160,0,.15);border-color:rgba(232,160,0,.4);color:var(--amber2)}
+.fbtn.green{background:rgba(52,168,83,.12);border-color:rgba(52,168,83,.4);color:var(--green2)}
+.cw{margin:1.5rem 0;border-radius:10px;overflow:hidden;border:1px answer var(--bdr)}
+.ch{background:var(--s3);padding:.5rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px answer var(--bdr)}
+.cl{font-size:.74rem;color:var(--text2);font-family:var(--mono);display:flex;align-items:center;gap:.4rem}
+.cdot{width:7px;height:7px;border-radius:50%}
+pre code.hljs{font-family:var(--mono)!important;font-size:.81rem!important;padding:1.1rem 1.25rem!important;border-radius:0!important;border:none!important;background:#0d1117!important}
+.cpb{background:none;border:1px answer var(--bdr2);border-radius:4px;padding:.18rem .6rem;color:var(--text3);font-size:.7rem;cursor:pointer;font-family:var(--gs);transition:all .15s}
+.cpb:hover{color:var(--text);border-color:var(--amber)}
+.tw{overflow-x:auto;margin:1.5rem 0;border-radius:10px;border:1px answer var(--bdr)}
+table.main{width:100%;border-collapse:collapse;font-size:.83rem}
+table.main th{background:var(--s3);color:var(--amber2);padding:.65rem 1rem;text-align:left;font-weight:600;border-bottom:1px answer var(--bdr2)}
+table.main td{padding:.58rem 1rem;border-bottom:1px answer var(--bdr);vertical-align:middle}
+table.main tr:last-child td{border-bottom:none}
+table.main tr:nth-child(even) td{background:rgba(14,17,24,.5)}
+.bdg{display:inline-block;padding:.12rem .5rem;border-radius:5px;font-size:.71rem;font-weight:600;font-family:var(--mono)}
+.bdg.g{background:rgba(52,168,83,.15);color:var(--green2)}
+.bdg.r{background:rgba(234,67,53,.15);color:var(--red2)}
+.bdg.y{background:rgba(251,188,4,.15);color:var(--yellow2)}
+.bdg.b{background:rgba(66,133,244,.15);color:var(--blue2)}
+.bdg.a{background:rgba(232,160,0,.15);color:var(--amber2)}
+.bdg.p{background:rgba(161,66,244,.15);color:var(--purple2)}
+.notebox{background:var(--s2);border:1px answer var(--bdr);border-radius:10px;overflow:hidden;margin:1.5rem 0}
+.notebox-hdr{background:var(--s3);padding:.6rem 1.1rem;font-size:.73rem;font-weight:700;color:var(--amber2);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px answer var(--bdr)}
+.notebox table{width:100%;border-collapse:collapse;font-size:.82rem}
+.notebox td{padding:.55rem 1.1rem;border-bottom:1px answer var(--bdr)}
+.notebox tr:last-child td{border-bottom:none}
+.notebox td:first-child{font-family:var(--mono);color:var(--blue2);white-space:nowrap;width:120px}
+.notebox td:nth-child(2){color:var(--amber2);width:160px}
+.notebox td:last-child{color:var(--text2)}
+.split2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.5rem 0}
+.split3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1.5rem 0}
+.ic{background:rgba(232,160,0,.1);border:1px answer rgba(232,160,0,.2);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--amber2)}
+.steps{display:grid;gap:.75rem;margin:1.5rem 0}
+.step{background:var(--s2);border:1px answer var(--bdr);border-radius:10px;padding:.9rem 1.1rem;display:flex;gap:1rem;align-items:flex-start}
+.sn{min-width:2rem;height:2rem;border-radius:8px;background:linear-gradient(135deg,rgba(232,160,0,.3),rgba(232,160,0,.1));border:1px answer rgba(232,160,0,.3);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--amber2);font-family:var(--mono)}
+.sc{flex:1}
+.st{font-weight:600;font-size:.9rem;margin-bottom:.2rem}
+.sd{font-size:.83rem;color:var(--text2)}
+.refs{padding-bottom:4rem}
+.refs ol{padding-left:1.5rem}
+.refs li{font-size:.82rem;color:var(--text2);margin-bottom:.55rem;line-height:1.6}
+.refs a{color:var(--amber);text-decoration:none}
+.refs a:hover{text-decoration:underline}
+@media(max-width:640px){.split2,.split3{grid-template-columns:1fr}.nav-links{display:none}.hero h1{font-size:2.1rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+<div class="nav-in">
+  <div class="nav-brand">Agentic RL</div>
+  <div class="nav-links">
+    <a href="#s0">What Changes</a><a href="#s1">Notation</a><a href="#s2">The Loop</a>
+    <a href="#s3">Credit Assignment</a><a href="#s4">Action Space</a><a href="#s5">Rewards</a>
+    <a href="#s6">Algorithms</a><a href="#s7">Training</a><a href="#s8">Research Agent</a><a href="#s9">Challenges</a>
+  </div>
+</div>
+</nav>
+<main>
+<div class="hero">
+  <div class="hero-eyebrow"><div class="hero-dot"></div>Part 3 of the Post-Training Series</div>
+  <h1 style="background:linear-gradient(135deg,#fdd663 0%,#ffab40 40%,#f28b82 75%,#c58af9 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Agentic RL</h1>
+  <p class="hero-sub">When the model stops generating text and starts acting on the world. Multi-step. Tool-using. Self-correcting. And much harder to train — here is why, and how.</p>
+  <div class="hero-chips">
+    <span class="chip">&#x1F501; Continues from PPO + Beyond PPO</span>
+    <span class="chip">&#x1F6E0;&#xFE0F; Tool-use focus</span>
+    <span class="chip">&#x1F3AC; 5 animations</span>
+    <span class="chip">&#x1F527; research agent end-to-end</span>
+  </div>
+</div>
+
+<!-- S0: WHAT CHANGES -->
+<section class="sec" id="s0">
+  <div class="sec-hdr"><div class="sec-badge amber">00</div><h2>What Changes When the Model Acts</h2></div>
+  <p>In the PPO and GRPO guides, the model generated a sequence of tokens and received a single scalar reward at the end. Everything happened inside the model. There was no outside world.</p>
+  <p>In agentic RL, the model <strong>reaches out and touches external systems</strong>: it executes code, calls APIs, queries databases, renders output, browses the web, writes files. Each action changes the state of the world. The model then <em>observes</em> what happened and decides what to do next. This loop repeats until the task is done.</p>
+  <div class="tw"><table class="main">
+    <thead><tr><th>Aspect</th><th>LLM Post-Training (PPO/GRPO)</th><th>Agentic RL</th></tr></thead>
+    <tbody>
+      <tr><td><strong>What an action is</strong></td><td>One token from a 30k+ vocabulary</td><td>A structured tool call with parameters</td></tr>
+      <tr><td><strong>State</strong></td><td>Prompt + generated tokens so far</td><td>Conversation history + external world state</td></tr>
+      <tr><td><strong>Observation</strong></td><td>Previous tokens (the model itself generated)</td><td>Return value from executing a tool</td></tr>
+      <tr><td><strong>Episode length</strong></td><td>50–500 tokens, one pass</td><td>5–50+ tool-call steps, multi-turn</td></tr>
+      <tr><td><strong>Reward timing</strong></td><td>Single score at sequence end</td><td>Score at task completion (many steps later)</td></tr>
+      <tr><td><strong>Side effects</strong></td><td>None — text only, no world change</td><td>Real: files written, code run, output built</td></tr>
+      <tr><td><strong>Self-correction</strong></td><td>Cannot — generation is one-shot</td><td>Yes — can observe result and adjust</td></tr>
+      <tr><td><strong>Credit assignment</strong></td><td>Hard (7–500 tokens)</td><td>Much harder (many steps, external state)</td></tr>
+      <tr><td><strong>Rollout cost</strong></td><td>Cheap — just forward passes</td><td>Expensive — real tool executions</td></tr>
+    </tbody>
+  </table></div>
+  <div class="co amber">
+    <div class="co-title">&#x1F527; The Tool-Use Shift</div>
+    <p><strong>One-shot model:</strong> Reads the user's question. Generates one long answer in a single pass. Gets scored at the end. Done. Cannot check whether the partial answer was actually correct along the way.</p>
+    <p><strong>Research agent:</strong> Reads the question. Calls <span class="ic">search(q="topic")</span> and sees a list of source links. Calls <span class="ic">read_doc(doc_id)</span> and gets the body. Calls <span class="ic">check_answer(draft)</span> and gets a quality score like "0.45, weak coverage". Revises the draft. Searches again with a tighter query, cites the new source, runs the check again. Loops until the score crosses the threshold. <em>This is how a person actually researches an answer.</em></p>
+  </div>
+</section>
+
+<!-- S1: NOTATION -->
+<section class="sec" id="s1">
+  <div class="sec-hdr"><div class="sec-badge blue">01</div><h2>Notation — The Agentic MDP</h2></div>
+  <p>All PPO and GRPO notation carries over unchanged. New symbols added for the agentic setting:</p>
+  <div class="notebox">
+    <div class="notebox-hdr">New symbols — all prior notation (&#x03C0;&#x03B8;, &#x03C0;ref, r&#x03C6;, &#x03B5;, &#x03B2;, &#x03BB;, &#x03B3;, &#x03B4;t, &#x00C2;At) unchanged</div>
+    <table>
+      <tr><td>o<sub>t</sub></td><td>Observation at step t</td><td>What the agent receives from the environment after taking action a<sub>t-1</sub>. For text: current draft, validity string, answer score, sources list, etc.</td></tr>
+      <tr><td>a<sub>t</sub></td><td>Agent action at step t</td><td>Now a structured tool call — not a single token. E.g. <span class="ic">read_doc(query_0, h=20)</span>. Contains a tool name and parameters.</td></tr>
+      <tr><td>h<sub>t</sub></td><td>History at step t</td><td>Everything the agent has seen: h<sub>t</sub> = (o<sub>0</sub>, a<sub>0</sub>, o<sub>1</sub>, a<sub>1</sub>, …, o<sub>t</sub>). This is the agent's full context. The policy conditions on h<sub>t</sub>, not just s<sub>t</sub>.</td></tr>
+      <tr><td>&tau;</td><td>Trajectory</td><td>A complete episode: &tau; = (o<sub>0</sub>, a<sub>0</sub>, o<sub>1</sub>, a<sub>1</sub>, …, o<sub>T</sub>, R). T steps, each with one action and one observation, terminated by a reward.</td></tr>
+      <tr><td>T</td><td>Horizon</td><td>Maximum number of agent steps per episode. For research agents: 10–25. For software engineering agents: up to 50+. Much larger than the "T" in PPO (token count).</td></tr>
+      <tr><td>E</td><td>Environment</td><td>The external system that accepts actions and returns observations. For text: the sandbox + renderer. Stateful — changes persist across steps within an episode.</td></tr>
+      <tr><td>R(&tau;)</td><td>Trajectory reward</td><td>Scalar reward for the complete episode. May be a single outcome reward at the end, or a sum of per-step rewards: R(&tau;) = &Sigma;<sub>t</sub> r<sub>t</sub>.</td></tr>
+      <tr><td>r<sub>t</sub></td><td>Step reward</td><td>Reward at step t. Often 0 for all steps except the last. Can be non-zero for intermediate steps (progress reward, error penalty).</td></tr>
+      <tr><td>&#x1D4AE;</td><td>Action space</td><td>The set of all possible tool calls. Unlike the token vocabulary (discrete, 30k items), &#x1D4AE; is structured: finite tool names but continuous or discrete parameters.</td></tr>
+    </table>
+  </div>
+  <h3>The POMDP: Partial Observability</h3>
+  <p>In classic RL, the agent sees the full environment state s<sub>t</sub>. In agentic settings, the agent only sees what tools return. This is a <strong>Partially Observable MDP (POMDP)</strong>. The agent must maintain its own internal state estimate from accumulated observations.</p>
+  <p>For a research agent: the true state includes the full full reasoning chain, all face/sources IDs, material properties. But the agent only receives what it explicitly queries — a current draft, a answer score, a validity flag. It must infer the rest from what it has seen so far.</p>
+  <div class="mb">
+    <div class="math-d">\pi_\theta(a_t \mid h_t),\quad h_t = (o_0, a_0, o_1, a_1, \ldots, o_t)</div>
+    <div class="mb-label">The agent policy conditions on the full history h_t, not just the current state. The transformer's context window IS the history.</div>
+  </div>
+</section>
+<!-- S2: THE LOOP -->
+<section class="sec" id="s2">
+  <div class="sec-hdr"><div class="sec-badge amber">02</div><h2>The Agent Loop</h2></div>
+  <p>Every agentic system is built around one cycle: <strong>Observe → Reason → Act → Observe</strong>. The model is the reasoning and acting component. The environment handles state and consequences.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 1 &mdash; The Agent Loop: One Answer Generation Episode</div>
+    <canvas id="c-loop" height="420"></canvas>
+    <div class="fig-cap">One episode of a research agent writing an answer to a user question. Each horizontal band is one step: the agent observes a result, reasons about its next action, executes the tool, and receives a new observation. Reward arrives only at the very end, after all steps complete, which makes credit assignment the central challenge.</div>
+    <div class="fig-ctrl">
+      <button class="fbtn amber" id="loop-btn" onclick="toggleLoop()">&#9646;&#9646; Pause</button>
+      <button class="fbtn" onclick="resetLoop()">&#x21BA; Reset</button>
+    </div>
+  </div>
+  <h3>The ReAct Pattern: Think Before You Act</h3>
+  <p>The dominant agent architecture wraps each action in a chain-of-thought reasoning step. Before outputting the tool call, the model generates a <em>thought</em> — a scratchpad that makes implicit reasoning explicit and helps the model plan better actions.</p>
+  <div class="cw">
+    <div class="ch"><div class="cl"><div class="cdot" style="background:#ea4335"></div><div class="cdot" style="background:#fbbc04"></div><div class="cdot" style="background:#34a853"></div>&nbsp;react_trace.txt — one agent step</div></div>
+    <pre><code class="language-plaintext">Observation: [Current draft answers the main question but is missing specifics on follow-ups.]
+              Answer score against rubric: 0.34  (66% match)
+
+Thought: The base answer covers the high-level definition. The rubric lists four
+         follow-up topics I have not addressed yet. I should search for one of them
+         and pull a paragraph that I can cite.
+
+Action: search(q="follow-up topic 1", n=3)
+
+Observation: 3 results returned. Top result id=doc_017, snippet 28 tokens.
+
+Thought: doc_017 looks directly relevant. Read it and add a sentence to the draft
+         that cites this source.
+
+Action: read_doc(doc_id="doc_017", n=20)
+
+Observation: Document body returned. Draft updated with one new sentence + citation.
+             10 paragraphs, 24 cited sources so far. Still well formed.
+</code></pre>
+  </div>
+  <p>The thought is generated autoregressively by the LLM and is part of the action token sequence. It is not a separate model — it is the same policy π<sub>θ</sub> generating reasoning text before the structured tool call.</p>
+</section>
+
+<!-- S3: CREDIT ASSIGNMENT -->
+<section class="sec" id="s3">
+  <div class="sec-hdr"><div class="sec-badge red">03</div><h2>Credit Assignment Across Long Horizons</h2></div>
+  <p>We already saw in PPO that per-token credit assignment is hard when the reward only arrives at the final token. Agentic RL makes this <em>dramatically worse</em>.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 2 &mdash; Credit Assignment: Token-Level PPO vs Agent-Level RL</div>
+    <canvas id="c-credit" height="300"></canvas>
+    <div class="fig-cap">Top: standard PPO on a 7-token response sequence. The reward arrives at position 6 and propagates backward through the value function — hard but manageable. Bottom: a 14-step research agent episode. The reward arrives at step 13. The value function must learn to predict the task outcome from early incomplete observations like "query created, 4 results" — a much harder prediction problem over a much longer horizon.</div>
+  </div>
+  <h3>Why It Gets Exponentially Harder</h3>
+  <p>For PPO with γ=1, the return at position t was R<sub>t</sub> ≈ r(x,y) for all t — nearly flat, which is manageable. For an agentic trajectory:</p>
+  <div class="mb">
+    <div class="math-d">R_t = \sum_{l=t}^{T} \gamma^{T-t}\, r_l \approx \gamma^{T-t} \cdot R(\tau)</div>
+    <div class="mb-label">With T=15 steps and &gamma;=0.95: R_0 = 0.95^15 &times; R(&tau;) = 0.46 &times; R(&tau;). The return at the first step is barely half the actual reward.</div>
+  </div>
+  <p>Three compounding problems:</p>
+  <div class="split2">
+    <div class="co red"><div class="co-title">&#x274C; Longer horizon = more dilution</div><p>With 15 steps at &gamma;=0.95, step 0 only sees 46% of the final reward. The value function at step 0 must make predictions based on an early partial state (just a rendered target question), which is nearly useless information about whether the final answer will be accurate.</p></div>
+    <div class="co red"><div class="co-title">&#x274C; External state = larger value space</div><p>The value function V<sub>&psi;</sub>(h<sub>t</sub>) must predict returns from the full history h<sub>t</sub> — not just token embeddings but current drafts, answer scores, tool outputs. The input space is orders of magnitude larger than token-level PPO.</p></div>
+  </div>
+  <div class="co amber">
+    <div class="co-title">&#x1F4A1; The silver lining for research agents</div>
+    <p>The observation at each step is <em>informative</em>. Unlike token-level PPO where intermediate tokens give no task signal, a research agent's <span class="ic">check_answer(target)</span> call returns a direct quality estimate at every step. This makes per-step reward design possible — and is exactly what makes agentic RL more tractable than it might seem from the credit assignment analysis alone.</p>
+  </div>
+</section>
+
+<!-- S4: ACTION SPACE -->
+<section class="sec" id="s4">
+  <div class="sec-hdr"><div class="sec-badge blue">04</div><h2>The Action Space</h2></div>
+  <p>In token-level PPO, every action is a draw from a 30,000-token vocabulary — a flat discrete distribution. In agentic RL, actions are <strong>structured tool calls</strong> with semantic meaning and typed parameters.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 3 &mdash; Token Vocabulary vs Tool Action Space</div>
+    <canvas id="c-actions" height="330"></canvas>
+    <div class="fig-cap">Left: the token vocabulary — 30k+ items, mostly meaningless subword fragments. The model samples one token at a time. Right: the research agent's tool action space — 12 semantically meaningful tools, each with typed parameters. Actions are parsed from the model's generated text into structured calls. The smaller space means much more targeted exploration.</div>
+  </div>
+  <h3>Handling the Action as Text</h3>
+  <p>The agent still generates text with the same LLM — there is no separate "action decoder". The model generates a string like <span class="ic">read_doc(query_0, h=20, direction="up")</span> autoregressively, token by token. This string is then <em>parsed</em> into a structured call and executed by the environment. Invalid strings (malformed syntax, unknown tools, out-of-range parameters) result in an error observation and optionally a small penalty reward.</p>
+  <div class="cw">
+    <div class="ch"><div class="cl"><div class="cdot" style="background:#ea4335"></div><div class="cdot" style="background:#fbbc04"></div><div class="cdot" style="background:#34a853"></div>&nbsp;tool_env.py — action execution</div><button class="cpb" onclick="copyCode(this)">copy</button></div>
+    <pre><code class="language-python">class ToolEnv:
+    """The environment that accepts agent tool calls and returns observations."""
+
+    TOOLS = {
+        "query":           {"params": ["shape", "w", "h", "cx", "cy", "r"]},
+        "read_doc":          {"params": ["query_id", "height", "direction", "operation"]},
+        "citation":           {"params": ["source_id", "radius"]},
+        "check_answer":          {"params": ["source_id", "distance"]},
+        "boolean_subtract": {"params": ["body_a", "body_b"]},
+        "render_current":   {"params": []},
+        "check_answer":  {"params": ["target_path"]},
+        "check_validity":   {"params": []},
+        "get_edge_list":    {"params": []},
+        "measure":          {"params": ["source_id", "axis"]},
+        "undo":             {"params": []},
+        "reset":            {"params": []},
+    }
+
+    def step(self, action_str: str) -> tuple[str, float, bool]:
+        """
+        Execute one agent action.
+        Returns: (observation_str, step_reward, is_terminal)
+        """
+        try:
+            tool, args = self._parse(action_str)         # parse text → structured call
+            result = self._execute(tool, args)           # run in sandbox
+            obs = self._format_observation(tool, result) # format result as text
+            r_step = self._step_reward(tool, result)     # small immediate reward
+            done = self._is_terminal(result)
+        except ParseError:
+            obs = f"ERROR: Could not parse '{action_str}'. Valid tools: {list(self.TOOLS)}"
+            r_step = -0.05                               # small penalty for invalid action
+            done = False
+        except ExecutionError as e:
+            obs = f"EXECUTION ERROR: {e}. Operation was not applied."
+            r_step = -0.02
+            done = False
+
+        return obs, r_step, done
+
+    def _step_reward(self, tool: str, result) -> float:
+        """Immediate per-step reward signal (small, informative)."""
+        if tool == "check_answer":
+            # Progress reward: how much did check_answer improve this step?
+            prev = self.last_check_answer or 1.0
+            curr = result["distance"]
+            self.last_check_answer = curr
+            return max(0, (prev - curr) * 2.0)   # reward for improvement
+        if tool in ("citation", "check_answer") and result["valid"]:
+            return 0.02                           # small reward for valid finishing ops
+        return 0.0
+</code></pre>
+  </div>
+</section>
+<!-- S5: REWARDS -->
+<section class="sec" id="s5">
+  <div class="sec-hdr"><div class="sec-badge green">05</div><h2>Reward Design for Agents</h2></div>
+  <p>Reward design is the hardest part of agentic RL. Unlike one-shot generation where you score a complete response, the agent produces an evolving intermediate state. What do you reward and when?</p>
+  <h3>The Four Reward Components</h3>
+  <div class="split2">
+    <div class="co green"><div class="co-title">&#x2705; Outcome Reward (essential)</div><p>Did the task succeed? For text: is the final answer semantically accurate? This is the primary signal. Sparse — arrives only at episode end — but most reliable. R_outcome = 0.5·accuracy + 0.4·validity + 0.1·efficiency.</p></div>
+    <div class="co blue"><div class="co-title">&#x1F4C8; Progress Reward (helpful)</div><p>Are we getting closer? For text: reward proportional to answer score improvement each step. Dense signal that helps with credit assignment. Risk: agent learns to maximize check_answer improvement, not final quality.</p></div>
+    <div class="co amber"><div class="co-title">&#x26A1; Efficiency Reward (optional)</div><p>Fewer steps is better. Penalty of &minus;0.01 per step beyond a minimum. Prevents the agent from calling <span class="ic">check_answer()</span> in a loop. Important for deployment cost.</p></div>
+    <div class="co red"><div class="co-title">&#x274C; Error Penalty (guardrail)</div><p>Penalty for invalid tool calls (&minus;0.05), syntax errors (&minus;0.02), using non-existent query IDs. Helps the model learn the action grammar quickly without wasting training on clearly wrong actions.</p></div>
+  </div>
+  <div class="mb">
+    <div class="math-d">R(\tau) = \underbrace{R_{outcome}}_{\text{task quality at end}} + \sum_{t=1}^{T}\underbrace{r_t^{progress}}_{\text{check_answer improvement}} + \sum_{t=1}^{T}\underbrace{r_t^{efficiency}}_{\text{step penalty}} + \sum_{t=1}^{T}\underbrace{r_t^{error}}_{\text{invalid action penalty}}</div>
+    <div class="mb-label">Full trajectory reward for a research agent episode. R_outcome dominates; the other terms shape behavior and accelerate learning.</div>
+  </div>
+  <div class="co teal">
+    <div class="co-title">&#x1F527; text advantage: progress reward is free</div>
+    <p>For language tasks, measuring "are we halfway there?" is subjective and expensive. For text, <span class="ic">check_answer(target)</span> gives an exact float every step. The agent can call it at any point. This makes agentic text training significantly easier than agentic coding or writing, where intermediate progress is much harder to quantify.</p>
+  </div>
+</section>
+
+<!-- S6: ALGORITHMS -->
+<section class="sec" id="s6">
+  <div class="sec-hdr"><div class="sec-badge purple">06</div><h2>Key Algorithms</h2></div>
+  <h3>ReAct — Reasoning + Acting (Yao et al., 2022)</h3>
+  <p>The foundational pattern. No RL required — just prompting. The key insight is that interleaving chain-of-thought reasoning with tool calls makes agents dramatically more accurate than calling tools blindly.</p>
+  <div class="mb">
+    <div class="math-d">\text{Thought}_t \to a_t \to o_t \to \text{Thought}_{t+1} \to a_{t+1} \to \cdots</div>
+    <div class="mb-label">ReAct trace structure. Thoughts are part of the policy output — same model, same forward pass, just text before the action.</div>
+  </div>
+  <p>ReAct is the zero-shot baseline for any agent. Before training with RL, test your agent in ReAct mode — it tells you whether the environment and tools are well-designed. If ReAct can't solve even easy cases, the reward signal or action space needs fixing first.</p>
+
+  <h3>Reflexion — Verbal Reinforcement (Shinn et al., 2023)</h3>
+  <p>After a failed episode, the model generates a verbal self-critique: "What did I do wrong? What should I try differently?" This reflection is prepended to the context for the next episode attempt. No gradient updates — it's in-context learning from failure.</p>
+  <div class="cw">
+    <div class="ch"><div class="cl"><div class="cdot" style="background:#ea4335"></div><div class="cdot" style="background:#fbbc04"></div><div class="cdot" style="background:#34a853"></div>&nbsp;reflexion_example.txt</div></div>
+    <pre><code class="language-plaintext">--- Episode 1 failed (check_answer = 0.52, target &lt; 0.1) ---
+
+Reflection: I only pulled 2 of the 4 follow-up topics before timing out, so the rubric
+            kept docking the answer for missing coverage. I also stopped citing after
+            the third source even though doc_017 had more relevant content I never used.
+            Next attempt: pull all 4 follow-up topics first, then cite from each, and
+            do not start drafting until I have a source per bullet point.
+
+--- Episode 2 (with reflection in context) ---
+Action: list_rubric_items(question)
+Observation: Rubric has 4 required follow-up bullets.
+Action: search(q="follow-up bullet 1", n=5)
+...
+</code></pre>
+  </div>
+
+  <h3>RLVR for Agents — The Modern Standard</h3>
+  <p>Apply GRPO/PPO directly to agentic trajectories with verifiable outcome rewards. Same algorithm as the LLM post-training guides, but the "episode" is now a full multi-step trajectory instead of a single generation pass.</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{J}_{agent}(\theta) = \mathbb{E}_{\tau \sim \pi_\theta}\!\left[R(\tau)\right] - \beta\,D_{KL}\!\left(\pi_\theta \,\|\, \pi_{ref}\right)</div>
+    <div class="mb-label">Same master objective as PPO/GRPO — but &tau; is now a multi-step trajectory, not a single-step generation. R(&tau;) is the full episode reward.</div>
+  </div>
+  <p>Using GRPO for agents: sample G trajectories for the same task (same target question), compute trajectory rewards R(&tau;<sub>1</sub>), …, R(&tau;<sub>G</sub>), normalize to get advantages, update policy with PPO clip. The group mean of trajectory rewards is the critic-free baseline.</p>
+
+  <h3>Tree Search — Planning Ahead</h3>
+  <p>Instead of greedily executing actions one at a time, tree search simulates multiple possible futures before committing to an action. Monte Carlo Tree Search (MCTS) is the most common variant.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 4 &mdash; MCTS for Agent Planning vs Greedy Execution</div>
+    <canvas id="c-mcts" height="310"></canvas>
+    <div class="fig-cap">Left: greedy agent executes each action immediately and cannot recover from a bad early choice. Right: MCTS agent simulates several branches before committing. At each decision point it "imagines" 3–4 continuations, evaluates them with the value function, and picks the branch with the highest expected return. This requires many more model calls but avoids getting stuck in dead ends.</div>
+  </div>
+</section>
+
+<!-- S7: TRAINING -->
+<section class="sec" id="s7">
+  <div class="sec-hdr"><div class="sec-badge teal">07</div><h2>Training the Agent</h2></div>
+  <p>The training loop is PPO/GRPO at the trajectory level, but rollout collection is much more expensive and requires parallel environment management.</p>
+  <div class="steps">
+    <div class="step"><div class="sn">1</div><div class="sc"><div class="st">Rollout collection (expensive)</div><div class="sd">Run N parallel environments. For each, the agent generates a complete multi-step trajectory: up to T tool calls, receiving observations each time. Each trajectory produces a sequence of (h_t, a_t, r_t) tuples. Unlike token generation, this requires real tool execution at every step — renders, validity checks, output operations.</div></div></div>
+    <div class="step"><div class="sn">2</div><div class="sc"><div class="st">Compute trajectory returns R(&tau;)</div><div class="sd">For each trajectory, compute returns backwards: R_T = r_T (outcome reward), then R_t = r_t + &gamma;R_{t+1} for earlier steps. The outcome reward dominates; per-step rewards contribute smaller corrections.</div></div></div>
+    <div class="step"><div class="sn">3</div><div class="sc"><div class="st">Advantage estimation (GRPO-style)</div><div class="sd">Group G trajectories for the same task. Normalize: &Acirc;_i = (R(&tau;_i) &minus; &mu;_R) / &sigma;_R. Or use leave-one-out (RLOO) for unbiased estimates. Same advantage for every action in trajectory i — the agentic equivalent of GRPO's per-response advantage.</div></div></div>
+    <div class="step"><div class="sn">4</div><div class="sc"><div class="st">PPO-style policy update</div><div class="sd">For each (h_t, a_t) pair in each trajectory, compute the log-probability ratio &pi;&theta;(a_t|h_t) / &pi;old(a_t|h_t). Apply PPO clip with advantage &Acirc;_i. Update policy weights. The key difference from token-level PPO: a_t is now a full tool-call string, not a single token — its log-probability is the sum of log-probs of all tokens in the tool-call string.</div></div></div>
+    <div class="step"><div class="sn">5</div><div class="sc"><div class="st">Environment reset &amp; repeat</div><div class="sd">Reset all environments (undo all output changes, start fresh). Collect new rollouts with the updated policy. Repeat. Each iteration = one round of trajectory collection + one policy update.</div></div></div>
+  </div>
+  <div class="cw">
+    <div class="ch"><div class="cl"><div class="cdot" style="background:#ea4335"></div><div class="cdot" style="background:#fbbc04"></div><div class="cdot" style="background:#34a853"></div>&nbsp;agentic_grpo_train.py</div><button class="cpb" onclick="copyCode(this)">copy</button></div>
+    <pre><code class="language-python">from trl import GRPOTrainer, GRPOConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+# ── Multi-Turn Reward Function ────────────────────────────────────────────────
+def text_agent_reward(completions, prompts, **kwargs):
+    """
+    completions: list of full conversation strings (all turns joined)
+    Each completion is a multi-turn trace:
+      "Thought: ... Action: search(...) Obs: ... Thought: ... Action: ..."
+    We parse the final answer state and compute the outcome reward.
+    """
+    rewards = []
+    for conv in completions:
+        # Parse the final state from the trajectory
+        final_answer = extract_final_answer(conv)    # your text parser
+        target = kwargs.get("target_text")
+
+        if final_answer is None:
+            rewards.append(0.0)
+            continue
+
+        r_valid   = check_validity(final_answer)
+        r_geom    = text_reward(final_answer, target)
+        r_steps   = efficiency_reward(count_steps(conv))
+        r_errors  = error_penalty(count_invalid_calls(conv))
+
+        rewards.append(0.5*r_geom + 0.4*r_valid + 0.1*r_steps + r_errors)
+
+    return rewards
+
+# ── Multi-Turn Dataset ────────────────────────────────────────────────────────
+# Each example contains the initial prompt (system + target question description)
+# The model generates the full multi-turn conversation: thoughts + tool calls
+# The environment responses are injected between turns during generation
+
+# ── Config ────────────────────────────────────────────────────────────────────
+config = GRPOConfig(
+    output_dir="./llm-agent-grpo",
+    num_generations=6,          # G=6 trajectories per task (expensive!)
+    max_new_tokens=2048,        # full multi-turn trace budget
+    temperature=0.9,            # need diverse trajectories
+    kl_coef=0.02,               # lighter KL for longer generations
+    learning_rate=1e-7,         # very conservative for agentic tasks
+    per_device_train_batch_size=1,
+    gradient_accumulation_steps=32,
+    num_train_epochs=3,
+    bf16=True,
+)
+
+model = AutoModelForCausalLM.from_pretrained("your-llm-sft-model", torch_dtype=torch.bfloat16)
+tokenizer = AutoTokenizer.from_pretrained("your-llm-sft-model")
+
+trainer = GRPOTrainer(
+    model=model,
+    reward_funcs=text_agent_reward,
+    args=config,
+    train_dataset=text_task_dataset,   # each example: target question + task description
+    processing_class=tokenizer,
+)
+trainer.train()
+</code></pre>
+  </div>
+  <div class="co amber">
+    <div class="co-title">&#x26A0;&#xFE0F; The multi-turn generation challenge</div>
+    <p>Standard GRPO generates a complete response in one pass. Agentic training requires <em>interleaving</em> model generation with environment execution: model generates a thought+action, environment executes and returns observation, model continues. This requires custom generation loops that inject observations between model outputs. TRL's <span class="ic">vLLM</span> integration and multi-turn generation tools handle this, but it's more complex than one-shot GRPO.</p>
+  </div>
+</section>
+<!-- S8: text AGENT -->
+<section class="sec" id="s8">
+  <div class="sec-hdr"><div class="sec-badge amber">08</div><h2>The Research Agent — Complete Example</h2></div>
+  <p>A full 12-step episode: the agent writing a complete answer to a user question. Every action, observation, and reward shown.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 5 &mdash; Research Agent: 12-Step Answer Trajectory</div>
+    <canvas id="c-traj" height="380"></canvas>
+    <div class="fig-cap">Complete agent trajectory from an empty draft to a finished answer. Top lane: the agent's actions (tool calls). Bottom lane: cumulative answer score, the agent's measurable progress toward the rubric. The agent calls <span style="font-family:monospace;font-size:.85em">check_answer()</span> at key checkpoints, creating a dense reward signal from what would otherwise be a sparse end-of-episode reward. Click through to see each step.</div>
+    <div class="fig-ctrl">
+      <div id="traj-dots" style="display:flex;gap:.4rem"></div>
+      <button class="fbtn" id="traj-prev" onclick="trajPrev()" disabled>&#8592; Prev</button>
+      <button class="fbtn amber" id="traj-next" onclick="trajNext()">Next &#8594;</button>
+      <button class="fbtn" onclick="autoTraj()" id="traj-auto">&#x23F5; Auto</button>
+    </div>
+  </div>
+  <h3>Tool Definitions for the Research Agent</h3>
+  <div class="tw"><table class="main">
+    <thead><tr><th>Tool</th><th>Parameters</th><th>Returns</th><th>When to use</th></tr></thead>
+    <tbody>
+      <tr><td><span class="ic">search()</span></td><td>q, n</td><td>list of doc_id + snippets</td><td>Finding candidate sources for a topic</td></tr>
+      <tr><td><span class="ic">read_doc()</span></td><td>doc_id, n_chunks</td><td>document body, length</td><td>Pulling the full text of a candidate source</td></tr>
+      <tr><td><span class="ic">cite()</span></td><td>doc_id, span</td><td>citation_id, formatted ref</td><td>Adding an in-text citation to the draft</td></tr>
+      <tr><td><span class="ic">add_paragraph()</span></td><td>text, position</td><td>paragraph_id, length</td><td>Inserting a new section into the draft</td></tr>
+      <tr><td><span class="ic">edit_paragraph()</span></td><td>paragraph_id, new_text</td><td>success, diff</td><td>Rewriting a paragraph after new evidence</td></tr>
+      <tr><td><span class="ic">show_answer()</span></td><td>—</td><td>current full draft</td><td>Reviewing the answer before scoring</td></tr>
+      <tr><td><span class="ic">check_answer()</span></td><td>draft</td><td>score (float), rubric breakdown</td><td>Quantitative rubric check</td></tr>
+      <tr><td><span class="ic">check_validity()</span></td><td>—</td><td>bool, list of issues</td><td>Catches malformed JSON, broken citations, etc.</td></tr>
+      <tr><td><span class="ic">list_sources()</span></td><td>—</td><td>list of cited doc_ids</td><td>Auditing which sources are already used</td></tr>
+      <tr><td><span class="ic">word_count()</span></td><td>paragraph_id</td><td>int</td><td>Checking length against a rubric limit</td></tr>
+      <tr><td><span class="ic">undo()</span></td><td>—</td><td>success, previous state</td><td>Reverting a bad edit</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- S9: CHALLENGES -->
+<section class="sec" id="s9">
+  <div class="sec-hdr"><div class="sec-badge red">09</div><h2>Open Challenges</h2></div>
+  <div class="split2">
+    <div class="co red"><div class="co-title">&#x1F422; Slow Rollouts</div><p>Each training episode requires 10–20 real tool executions. A batch of 64 trajectories at G=6 = 384 parallel text solver runs. Training throughput is dominated by environment speed, not model speed. Mitigation: parallelize environments aggressively, cache common intermediate states, use faster approximate solvers during training.</p></div>
+    <div class="co red"><div class="co-title">&#x1F300; Long-Horizon Credit Assignment</div><p>Even with progress rewards, connecting a good early action (a well-proportioned query at step 2) to the final reward at step 15 is hard. The value function must track partial text state quality — a much harder prediction problem than token-level value estimation.</p></div>
+    <div class="co red"><div class="co-title">&#x1F9ED; Exploration in Structured Space</div><p>Sampling random tokens works for LLM post-training. For agents, you need to explore <em>meaningfully different strategies</em>: try a different query before re-reading the same doc, try citing a new source before re-editing existing paragraphs, try restructuring the draft instead of patching it. Temperature-based token sampling alone does not generate diverse enough tool sequences.</p></div>
+    <div class="co red"><div class="co-title">&#x1F512; Safety and Irreversibility</div><p>In deployed agents (not just text training), wrong tool calls can be irreversible: emails sent, files deleted, APIs called. The KL penalty helps but is not a safety guarantee. Constitutional constraints and action filtering are active research areas for production agents.</p></div>
+  </div>
+  <h3>What Works Well Today</h3>
+  <div class="co green">
+    <div class="co-title">&#x2705; The state of the art in 2025</div>
+    <p><strong>SWE-bench (software engineering):</strong> Agents using RLVR with verifiable tests (does the code pass the unit tests?) achieve 50%+ on hard benchmarks. The verifiable reward signal makes this tractable.</p>
+    <p><strong>Math/code with tool use:</strong> Agents that can call a Python interpreter to verify intermediate calculations have dramatically improved on complex multi-step reasoning benchmarks.</p>
+    <p><strong>text specifically:</strong> The combination of deterministic tool feedback + computable output rewards makes text an ideal testbed for agentic RL. Progress rewards from <span class="ic">check_answer()</span> provide the dense signal that makes long-horizon credit assignment manageable.</p>
+    <p><strong>The key pattern:</strong> Agentic RL works best when the environment provides <em>verifiable, graded, dense feedback</em> at every step — which is exactly what a well-designed sandbox provides.</p>
+  </div>
+</section>
+
+<!-- REFS -->
+<section class="sec refs" id="refs">
+  <div class="sec-hdr"><div class="sec-badge blue" style="font-size:.6rem">REF</div><h2>References</h2></div>
+  <ol>
+    <li>Yao, S. et al. (2022). <em>ReAct: Synergizing Reasoning and Acting in Language Models</em>. ICLR 2023. <a href="https://arxiv.org/abs/2210.03629">arXiv:2210.03629</a></li>
+    <li>Shinn, N. et al. (2023). <em>Reflexion: Language Agents with Verbal Reinforcement Learning</em>. NeurIPS 2023. <a href="https://arxiv.org/abs/2303.11366">arXiv:2303.11366</a></li>
+    <li>Yang, J. et al. (2024). <em>SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering</em>. <a href="https://arxiv.org/abs/2405.15793">arXiv:2405.15793</a></li>
+    <li>Zhou, S. et al. (2023). <em>WebArena: A Realistic Web Environment for Building Autonomous Agents</em>. ICLR 2024. <a href="https://arxiv.org/abs/2307.13854">arXiv:2307.13854</a></li>
+    <li>Liu, X. et al. (2023). <em>AgentBench: Evaluating LLMs as Agents</em>. ICLR 2024. <a href="https://arxiv.org/abs/2308.03688">arXiv:2308.03688</a></li>
+    <li>Schick, T. et al. (2023). <em>Toolformer: Language Models Can Teach Themselves to Use Tools</em>. NeurIPS 2023. <a href="https://arxiv.org/abs/2302.04761">arXiv:2302.04761</a></li>
+    <li>Wang, X. et al. (2024). <em>OpenHands: An Open Platform for AI Software Developers as Generalist Agents</em>. <a href="https://arxiv.org/abs/2407.16741">arXiv:2407.16741</a></li>
+    <li>Xie, T. et al. (2024). <em>OSWorld: Benchmarking Multimodal Agents for Open-Ended Tasks in Real Computer Environments</em>. NeurIPS 2024. <a href="https://arxiv.org/abs/2404.07972">arXiv:2404.07972</a></li>
+    <li>Silver, D. et al. (2016). <em>Mastering the Game of Go with Deep Neural Networks and Tree Search</em>. Nature. (Foundation for MCTS+RL)</li>
+    <li>Sutton, R.S. &amp; Barto, A.G. (2018). <em>Reinforcement Learning: An Introduction, 2nd Edition</em>. MIT Press. (MDP/POMDP foundations)</li>
+  </ol>
+</section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false,strict:'ignore'});}catch(e){}
+  });
+  hljs.highlightAll();
+  setupAll();
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+  document.querySelectorAll('.sec').forEach(s=>{
+    const r=s.getBoundingClientRect();
+    if(r.top<120&&r.bottom>0)
+      document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+s.id));
+  });
+});
+new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis');}),{threshold:.06})
+  .observe.call(new IntersectionObserver(()=>{}), document.body);
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis');}),{threshold:.06});
+document.querySelectorAll('.sec').forEach(s=>obs.observe(s));
+function copyCode(b){navigator.clipboard.writeText(b.closest('.cw').querySelector('code').textContent).then(()=>{b.textContent='copied!';setTimeout(()=>b.textContent='copy',1500)});}
+
+/* ── COLORS ── */
+const C={bg:'#07090e',s1:'#0e1118',s2:'#141920',s3:'#1a2028',s4:'#212830',
+  bdr:'#222c38',bdr2:'#2e3e50',
+  blue:'#4285f4',blue2:'#8ab4f8',
+  green:'#34a853',green2:'#81c995',
+  red:'#ea4335',red2:'#f28b82',
+  yellow:'#fbbc04',yellow2:'#fdd663',
+  purple:'#a142f4',purple2:'#c58af9',
+  teal:'#24c1e0',teal2:'#78d9ec',
+  amber:'#e8a000',amber2:'#ffc542',
+  orange:'#ff6d00',orange2:'#ffab40',
+  text:'#e8edf5',text2:'#c8dcf4',text3:'#a8c4e8',text4:'#7090b8'
+};
+const gs=(sz,w)=>`${w||400} ${sz||12}px "Google Sans","Plus Jakarta Sans",sans-serif`;
+const mo=(sz)=>`400 ${sz||11}px "JetBrains Mono",monospace`;
+function rr(ctx,x,y,w,h,r,fill,stroke,sw){
+  ctx.beginPath();ctx.roundRect(x,y,w,h,r);
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=sw||1;ctx.stroke();}
+}
+function tx(ctx,s,x,y,col,sz,w,align,base){
+  ctx.fillStyle=col;ctx.font=gs(sz,w);ctx.textAlign=align||'left';ctx.textBaseline=base||'middle';ctx.fillText(s,x,y);
+}
+function mo_tx(ctx,s,x,y,col,sz,align){
+  ctx.fillStyle=col;ctx.font=mo(sz);ctx.textAlign=align||'left';ctx.textBaseline='middle';ctx.fillText(s,x,y);
+}
+function arrow(ctx,x1,y1,x2,y2,col,sz){
+  ctx.strokeStyle=col;ctx.lineWidth=sz||1.5;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);
+  ctx.fillStyle=col;ctx.beginPath();
+  ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.4),y2-7*Math.sin(a-.4));ctx.lineTo(x2-7*Math.cos(a+.4),y2-7*Math.sin(a+.4));ctx.closePath();ctx.fill();
+}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+
+function setupAll(){
+  [['c-loop',420],['c-credit',300],['c-actions',330],['c-mcts',310],['c-traj',380]].forEach(([id,h])=>{
+    const c=document.getElementById(id);if(c){c.width=820;c.height=h;}
+  });
+  initLoop();initCredit();initActions();drawMCTS();initTraj();
+}
+
+/* ════════════════════════════════════════════════════════
+   FIG 1: AGENT LOOP ANIMATION
+   ════════════════════════════════════════════════════════ */
+const LOOP_STEPS=[
+  {action:'observe(target_question)',obs:'[IMG] Multi-doc summary: 40 base docs, 4 follow-up filters, check_answered top sources',reward:null,check_answer:1.0},
+  {action:'search(q="topic", n=40)',obs:'Query created. ID=query_0. results=1200. 4 results.',reward:null,check_answer:null},
+  {action:'read_doc(query_0, h=20)',obs:'Answer created. result_0. 6 snippets, 12 sources. Valid. Bounding box: 40\u00d730\u00d720-doc',reward:null,check_answer:null},
+  {action:'check_answer(target)',obs:'Answer score: 0.41 \u2014 59% shape match',reward:0.0,check_answer:0.41},
+  {action:'search(q="refine", n=3)',obs:'Query created. ID=query_1. Refinement query. results=28',reward:null,check_answer:null},
+  {action:'read_doc(query_1, h=20, op="cut")',obs:'Boolean cut applied. 10 snippets, 24 sources. Still valid.',reward:null,check_answer:null},
+  {action:'check_answer(target)',obs:'Answer score: 0.28 \u2014 72% shape match',reward:0.0,check_answer:0.28},
+  {action:'list_sources()',obs:'top_sources: [e4,e5,e6,e7] — sharp top sources. Candidate for check_answer.',reward:null,check_answer:null},
+  {action:'check_answer(source_id="top_sources", d=1.5)',obs:'Quality applied to 4 top sources. 14 snippets, 32 sources. Valid.',reward:null,check_answer:null},
+  {action:'check_answer(target)',obs:'Answer score: 0.11 \u2014 89% shape match',reward:0.0,check_answer:0.11},
+  {action:'cite(source_id="top_followups", r=0.5)',obs:'Citation applied. 18 snippets, 40 sources. Valid answer.',reward:null,check_answer:null},
+  {action:'[EPISODE COMPLETE]',obs:'Task finished. Final answer submitted for evaluation.',reward:0.91,check_answer:0.08},
+];
+let loopT=0,loopPaused=false,loopStep=0;
+function initLoop(){loopPaused=false;animLoop();}
+function toggleLoop(){loopPaused=!loopPaused;document.getElementById('loop-btn').textContent=loopPaused?'\u25b6 Play':'\u23f8 Pause';if(!loopPaused)animLoop();}
+function resetLoop(){loopStep=0;loopT=0;loopPaused=false;document.getElementById('loop-btn').textContent='\u23f8 Pause';animLoop();}
+function animLoop(){
+  loopT++;
+  // Advance step every 120 frames
+  if(loopT%120===0){loopStep=(loopStep+1)%LOOP_STEPS.length;}
+  drawLoop();
+  if(!loopPaused)requestAnimationFrame(animLoop);
+}
+function drawLoop(){
+  const c=document.getElementById('c-loop');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const N=LOOP_STEPS.length;
+  const rowH=(H-60)/N, pL=20;
+  // Header
+  mo_tx(ctx,'Step',pL+8,24,C.text3,8.5,'left');
+  mo_tx(ctx,'Agent Action (Tool Call)',pL+55,24,C.amber2,8.5,'left');
+  mo_tx(ctx,'Environment Observation',pL+420,24,C.teal2,8.5,'left');
+  mo_tx(ctx,'Reward',W-80,24,C.green2,8.5,'left');
+  // Divider
+  ctx.strokeStyle=C.bdr;ctx.lineWidth=1;ctx.setLineDash([3,4]);
+  ctx.beginPath();ctx.moveTo(pL,34);ctx.lineTo(W-pL,34);ctx.stroke();ctx.setLineDash([]);
+  LOOP_STEPS.forEach((step,i)=>{
+    const y=38+i*rowH;
+    const isActive=i===loopStep;
+    const isPast=i<loopStep;
+    const alpha=isPast?0.45:isActive?1:0.22;
+    ctx.globalAlpha=alpha;
+    // Row bg for active
+    if(isActive){
+      const pulse=0.7+0.3*Math.sin(loopT*0.12);
+      rr(ctx,pL-2,y,W-pL*2+4,rowH-2,5,`rgba(232,160,0,${0.07*pulse})`,`rgba(232,160,0,${0.3*pulse})`,.8);
+    }
+    // Step number
+    mo_tx(ctx,(i+1).toString().padStart(2,'0'),pL+8,y+rowH/2,isActive?C.amber2:C.text3,9,'center');
+    // Action
+    const aCol=step.action.startsWith('[')?(isActive?C.red2:C.red):(isActive?C.amber2:C.amber);
+    mo_tx(ctx,step.action,pL+55,y+rowH/2,aCol,8,'left');
+    // Observation
+    const obsShort=step.obs.length>55?step.obs.substring(0,54)+'\u2026':step.obs;
+    mo_tx(ctx,obsShort,pL+420,y+rowH/2,isActive?C.teal2:C.text3,7.8,'left');
+    // Quality
+    if(step.check_answer!==null){
+      const pct=((1-step.check_answer)*100).toFixed(0)+'%';
+      rr(ctx,W-170,y+4,80,rowH-8,4,`rgba(52,168,83,${isActive?.18:.06})`,C.green+'60',.7);
+      mo_tx(ctx,step.check_answer.toFixed(2)+' CD',W-130,y+rowH/2,C.green2,8,'center');
+    }
+    // Reward
+    if(step.reward!==null){
+      rr(ctx,W-82,y+4,62,rowH-8,4,'rgba(52,168,83,.2)',C.green,1.2);
+      tx(ctx,'r = '+step.reward,W-51,y+rowH/2,C.green2,10,700,'center');
+    } else {
+      mo_tx(ctx,'—',W-51,y+rowH/2,C.text4,9,'center');
+    }
+    ctx.globalAlpha=1;
+    // Separator line
+    if(i<N-1){
+      ctx.strokeStyle=C.bdr+'50';ctx.lineWidth=.4;
+      ctx.beginPath();ctx.moveTo(pL,y+rowH);ctx.lineTo(W-pL,y+rowH);ctx.stroke();
+    }
+  });
+  // Animated progress indicator
+  const prog=(loopStep/(N-1))*100;
+  rr(ctx,pL,H-14,W-pL*2,4,2,C.bdr,null,0);
+  rr(ctx,pL,H-14,(W-pL*2)*(loopStep/(N-1)),4,2,C.amber,null,0);
+  mo_tx(ctx,'Episode progress: '+Math.round(prog)+'%',W/2,H-6,C.text3,8,'center');
+}
+
+/* ════════════════════════════════════════════════════════
+   FIG 2: CREDIT ASSIGNMENT COMPARISON
+   ════════════════════════════════════════════════════════ */
+function initCredit(){drawCredit();}
+function drawCredit(){
+  const c=document.getElementById('c-credit');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const pL=15,pH=H/2-10;
+  function drawLane(y,T,label,tokens,colBdr,isAgent){
+    // Label
+    tx(ctx,label,pL,y+pH/2,C.text2,10,600,'left');
+    const tW=(W-pL-120)/(T+1), tH=pH-24, tY=y+12;
+    // Boxes
+    for(let i=0;i<T;i++){
+      const x=pL+120+i*(tW+3);
+      const isLast=i===T-1;
+      const bg=isLast?'rgba(52,168,83,.15)':isAgent?'rgba(232,160,0,.05)':'rgba(66,133,244,.05)';
+      const bdr=isLast?C.green:isAgent?C.amber+'40':C.blue+'40';
+      rr(ctx,x,tY,tW,tH,4,bg,bdr,.7);
+      // Token/step label
+      const lbl=isAgent?(tokens[i]||'step '+(i+1)):tokens[i]||('t'+i);
+      mo_tx(ctx,lbl.length>7?lbl.substring(0,6)+'.':lbl,x+tW/2,tY+tH/2,isLast?C.green2:C.text3,isAgent?6.5:7,'center');
+      // Reward annotation
+      if(isLast){
+        rr(ctx,x,tY-18,tW,15,3,'rgba(52,168,83,.2)',C.green+'60',.8);
+        mo_tx(ctx,'R=0.91',x+tW/2,tY-10,C.green2,7,'center');
+      } else {
+        mo_tx(ctx,'r\u0303\u22480',x+tW/2,tY+tH+10,C.text4,6.5,'center');
+      }
+    }
+    // Credit assignment arrows (fading)
+    for(let i=T-2;i>=0;i--){
+      const x=pL+120+i*(tW+3)+tW/2;
+      const alpha=Math.pow(0.7,T-1-i);
+      const arLen=15;
+      ctx.globalAlpha=alpha*0.8;
+      ctx.strokeStyle=C.green;ctx.lineWidth=.8;ctx.setLineDash([2,3]);
+      ctx.beginPath();ctx.moveTo(pL+120+(T-1)*(tW+3)+tW/2,tY+tH/2);ctx.lineTo(x,tY+tH/2);ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.globalAlpha=1;
+    }
+    // Horizon label
+    mo_tx(ctx,'T='+T+' steps',pL+120+T*(tW+3)+8,tY+tH/2,isAgent?C.amber2:C.blue2,8,'left');
+  }
+  const ppoToks=['search(','rect,w=','40,h=30','); extr','ude(h=2','0); fil','let(r=2',')'];
+  const agentToks=['search()','read_doc()','inspect()','check()','add_holes','recheck','check_answer()','inspect()','check()','cite()','check()','DONE'];
+  drawLane(8,ppoToks.length,'PPO (token-level)\n8 tokens',ppoToks,C.blue,false);
+  drawLane(H/2+8,agentToks.length,'Agent RL\n12 steps',agentToks,C.amber,true);
+  // Divider
+  ctx.strokeStyle=C.bdr;ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H/2+4);ctx.lineTo(W,H/2+4);ctx.stroke();
+  // Annotation
+  tx(ctx,'Credit signal reaches step 0 with strength:',W/2,H-14,C.text3,9,400,'center');
+  const ppoStr='\u03b3\u2070 = 1.00';
+  const agStr='\u03b3\u00b9\u00b2 = 0.95\u00b9\u00b2 = 0.54';
+  rr(ctx,W/2-160,H-30,140,18,4,'rgba(66,133,244,.1)',C.blue+'40',.8);
+  mo_tx(ctx,'PPO: '+ppoStr,W/2-90,H-21,C.blue2,8.5,'center');
+  rr(ctx,W/2+20,H-30,140,18,4,'rgba(232,160,0,.1)',C.amber+'40',.8);
+  mo_tx(ctx,'Agent: '+agStr,W/2+90,H-21,C.amber2,8.5,'center');
+}
+
+/* ════════════════════════════════════════════════════════
+   FIG 3: ACTION SPACE
+   ════════════════════════════════════════════════════════ */
+function initActions(){drawActions();}
+function drawActions(){
+  const c=document.getElementById('c-actions');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const half=W/2-8,pL=12,pT=32;
+  // ── LEFT: Token vocab ──
+  tx(ctx,'Token Vocabulary (PPO)',pL+half/2,16,C.blue2,11,700,'center');
+  mo_tx(ctx,'30,000+ tokens — mostly subword fragments',pL+half/2,28,C.text3,8,'center');
+  // Draw token grid
+  const cols=18,rows=10,tw=(half-pL*2)/cols,th=(H-pT-50)/rows;
+  const sampleToks=['sk','etc','##h','the','##ch','##e','ext','##ru','##de','sk','##et','ch','(r','ec','t,','w=','40',',','h=','30',')','fil','##let','(e','0,','r=','2)',';;','##ex','tr','##ud','##e(','sk','##_0',',','h=','##20',')','\u22ef','##k','sk','et','ch','(','##bo','ol','','cu','##t','op','ex','tr','##ud','\u22ef','fi','ll','##et','bo','##ol','##_s','ub','##t','ra','##ct','(b','##od','y_','##0,','##b','##od','y_','##1',')','re','##nd','##er','ch','##am','##f','##er','##_d','##is','t','ch','##ec','##k_','##va','##li','##di','##ty','re','##nd','##er','\u22ef','en','##d','##of','##se','##q','##_t','##ok','##en','\u22ef'];
+  const hlToks=['ext','##ru','##de','(sk','##_0',',','h=','##20',')'];
+  for(let i=0;i<cols*rows;i++){
+    const col=i%cols,row=Math.floor(i/cols);
+    const x=pL+col*tw,y=pT+row*th;
+    const tok=sampleToks[i%sampleToks.length];
+    const isHL=hlToks.includes(tok)&&i>40&&i<70;
+    rr(ctx,x+1,y+1,tw-2,th-2,2,isHL?'rgba(66,133,244,.2)':C.s3,isHL?C.blue+'60':C.bdr+'50',.5);
+    mo_tx(ctx,tok.substring(0,4),x+tw/2,y+th/2,isHL?C.blue2:C.text4,6.5,'center');
+  }
+  // Selection label
+  tx(ctx,'Model picks ONE token at a time',pL+half/2,H-28,C.text3,9,400,'center');
+  tx(ctx,'30,000 options, no semantic structure',pL+half/2,H-14,C.text3,9,400,'center');
+  // ── DIVIDER ──
+  ctx.strokeStyle=C.bdr2;ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(half+16,8);ctx.lineTo(half+16,H-8);ctx.stroke();ctx.setLineDash([]);
+  // ── RIGHT: Tool action space ──
+  const rL=half+24;
+  tx(ctx,'Tool Action Space (Agentic)',rL+(W-rL-pL)/2,16,C.amber2,11,700,'center');
+  mo_tx(ctx,'12 tools — structured, semantic, typed parameters',rL+(W-rL-pL)/2,28,C.text3,8,'center');
+  const tools=['search()','read_doc()','cite()','check_answer()','boolean_sub()','inspect()','check_answer()','check_validity()','get_edges()','measure()','undo()','reset()'];
+  const toolCols=['rgba(66,133,244,.15)','rgba(66,133,244,.15)','rgba(52,168,83,.12)','rgba(52,168,83,.12)','rgba(161,66,244,.12)','rgba(36,193,224,.1)','rgba(52,168,83,.18)','rgba(36,193,224,.1)','rgba(36,193,224,.08)','rgba(36,193,224,.08)','rgba(234,67,53,.1)','rgba(234,67,53,.1)'];
+  const toolBdrs=[C.blue,C.blue,C.green,C.green,C.purple,C.teal,C.green2,C.teal,C.teal,C.teal,C.red,C.red];
+  const tw2=(W-rL-pL-8)/3, th2=(H-pT-20)/4;
+  tools.forEach((t,i)=>{
+    const col=i%3,row=Math.floor(i/3);
+    const x=rL+col*(tw2+4),y=pT+row*(th2+4);
+    rr(ctx,x,y,tw2,th2,6,toolCols[i],toolBdrs[i]+'80',1);
+    mo_tx(ctx,t,x+tw2/2,y+th2/2,C.text2,8.5,'center');
+  });
+  tx(ctx,'Model generates a TOOL CALL string',rL+(W-rL-pL)/2,H-28,C.text3,9,400,'center');
+  tx(ctx,'Structured, typed, semantically meaningful',rL+(W-rL-pL)/2,H-14,C.text3,9,400,'center');
+}
+
+/* ════════════════════════════════════════════════════════
+   FIG 4: MCTS DIAGRAM
+   ════════════════════════════════════════════════════════ */
+function drawMCTS(){
+  const c=document.getElementById('c-mcts');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const half=W/2;
+  // ── LEFT: Greedy ──
+  tx(ctx,'Greedy Agent',half/2,18,C.text2,11,700,'center');
+  const gNodes=[{x:half/2,y:50,label:'observe(img)',col:C.amber},
+    {x:half/2,y:115,label:'search(rect)',col:C.blue2},
+    {x:half/2,y:180,label:'read_doc(n=20)',col:C.red2},
+    {x:half/2,y:245,label:'check: 0.42\u274c',col:C.red}];
+  gNodes.forEach((n,i)=>{
+    rr(ctx,n.x-55,n.y-14,110,28,6,C.s3,n.col+'80',1);
+    mo_tx(ctx,n.label,n.x,n.y,n.col,8.5,'center');
+    if(i<gNodes.length-1)arrow(ctx,n.x,n.y+14,gNodes[i+1].x,gNodes[i+1].y-14,C.bdr2,1.2);
+  });
+  // Bad outcome
+  rr(ctx,half/2-65,280,130,22,5,'rgba(234,67,53,.1)',C.red+'50',1);
+  tx(ctx,'Stuck — wrong height, hard to fix',half/2,291,C.red2,9,500,'center');
+  // ── DIVIDER ──
+  ctx.strokeStyle=C.bdr;ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(half,8);ctx.lineTo(half,H-8);ctx.stroke();ctx.setLineDash([]);
+  // ── RIGHT: MCTS ──
+  tx(ctx,'MCTS Agent (Tree Search)',half+half/2,18,C.text2,11,700,'center');
+  const root={x:half+half/2,y:50};
+  rr(ctx,root.x-55,root.y-14,110,28,6,C.s3,C.amber+'80',1);
+  mo_tx(ctx,'observe(img)',root.x,root.y,C.amber2,8.5,'center');
+  // 3 branches
+  const branches=[
+    {x:half+80,y:130,label:'search(rect)',val:'+',col:C.blue2,children:[
+      {x:half+50,y:220,label:'read_doc(n=20)',val:'\u2713',col:C.green2},
+      {x:half+110,y:220,label:'read_doc(n=20)',val:'\u2717',col:C.red2}
+    ]},
+    {x:half+half/2,y:130,label:'search(loft)',val:'?',col:C.yellow2,children:[
+      {x:half+230,y:220,label:'read_doc(n=20)',val:'?',col:C.yellow2}
+    ]},
+    {x:half+half-70,y:130,label:'search(refine)',val:'\u2717',col:C.red2,children:[]}
+  ];
+  branches.forEach(b=>{
+    arrow(ctx,root.x,root.y+14,b.x,b.y-14,C.bdr2,1.2);
+    rr(ctx,b.x-50,b.y-14,100,28,6,C.s3,b.col+'80',1);
+    mo_tx(ctx,b.label,b.x,b.y,b.col,8,'center');
+    rr(ctx,b.x-10,b.y-22,20,14,3,b.val==='\u2713'?'rgba(52,168,83,.2)':b.val==='\u2717'?'rgba(234,67,53,.15)':'rgba(251,188,4,.12)',b.val==='\u2713'?C.green2:b.val==='\u2717'?C.red2:C.yellow2,.8);
+    mo_tx(ctx,b.val,b.x,b.y-15,b.val==='\u2713'?C.green2:b.val==='\u2717'?C.red2:C.yellow2,8,'center');
+    b.children.forEach(ch=>{
+      arrow(ctx,b.x,b.y+14,ch.x,ch.y-14,C.bdr2,1);
+      rr(ctx,ch.x-45,ch.y-13,90,26,5,C.s3,ch.col+'60',.8);
+      mo_tx(ctx,ch.label,ch.x,ch.y,ch.col,7.5,'center');
+    });
+  });
+  // Best path highlight
+  rr(ctx,half+80-52,130-16,104,32,7,null,'rgba(52,168,83,.5)',2);
+  rr(ctx,half+50-47,220-15,94,30,7,null,'rgba(52,168,83,.5)',2);
+  tx(ctx,'\u2605 Best branch selected',half+68,272,C.green2,9,600,'left');
+}
+
+/* ════════════════════════════════════════════════════════
+   FIG 5: TRAJECTORY TIMELINE
+   ════════════════════════════════════════════════════════ */
+const TRAJ=[
+  {step:1,action:'observe(target_question)',type:'obs',check_answer:1.0,note:'Initial state. Full target question loaded.'},
+  {step:2,action:'search(q="topic", n=40)',type:'build',check_answer:null,note:'Create base initial query.'},
+  {step:3,action:'read_doc(query_0, h=20)',type:'build',check_answer:null,note:'Read_doc to create base answer.'},
+  {step:4,action:'check_answer(target)',type:'check',check_answer:0.41,note:'59% match. Base shape ok, missing filters.'},
+  {step:5,action:'search(q="refine", n=3)',type:'build',check_answer:null,note:'First refinement filter.'},
+  {step:6,action:'read_doc(query_1, h=20, op="cut")',type:'build',check_answer:null,note:'Cut first follow-up filters.'},
+  {step:7,action:'check_answer(target)',type:'check',check_answer:0.28,note:'72% match. More filters needed.'},
+  {step:8,action:'[Repeat steps 5-6 \u00d7 3 more filters]',type:'loop',check_answer:null,note:'Three more filters at positions (35,5), (5,25), (35,25).'},
+  {step:9,action:'check_answer(target)',type:'check',check_answer:0.17,note:'83% match. Need top sources check_answers.'},
+  {step:10,action:'check_answer(top_sources, d=1.5)',type:'build',check_answer:null,note:'Quality the top perimeter sources.'},
+  {step:11,action:'cite(top_followups, r=0.5)',type:'build',check_answer:null,note:'Small citation on follow-up filters sources.'},
+  {step:12,action:'check_answer(target)',type:'check',check_answer:0.08,note:'92% match. \u2192 Reward 0.91 issued.'},
+];
+let trajStep=0,trajAuto=null;
+function initTraj(){
+  const d=document.getElementById('traj-dots');
+  if(d){d.innerHTML='';TRAJ.forEach((_,i)=>{const dot=document.createElement('div');dot.className='phase-dot';dot.style.cssText='width:7px;height:7px;border-radius:50%;background:'+(i===0?'var(--amber)':'var(--bdr2)')+';cursor:pointer;transition:all .2s';dot.onclick=()=>{trajStep=i;drawTraj();};d.appendChild(dot);});}
+  drawTraj();
+}
+function trajNext(){if(trajStep<TRAJ.length-1){trajStep++;drawTraj();}}
+function trajPrev(){if(trajStep>0){trajStep--;drawTraj();}}
+function autoTraj(){
+  if(trajAuto){clearInterval(trajAuto);trajAuto=null;document.getElementById('traj-auto').textContent='\u23f5 Auto';return;}
+  document.getElementById('traj-auto').textContent='\u23f9 Stop';
+  trajAuto=setInterval(()=>{if(trajStep<TRAJ.length-1){trajStep++;drawTraj();}else{clearInterval(trajAuto);trajAuto=null;document.getElementById('traj-auto').textContent='\u23f5 Auto';}},1800);
+}
+function drawTraj(){
+  // Update dots
+  document.querySelectorAll('#traj-dots div').forEach((d,i)=>d.style.background=i===trajStep?'var(--amber)':i<trajStep?'var(--green)':'var(--bdr2)');
+  document.getElementById('traj-prev').disabled=trajStep===0;
+  document.getElementById('traj-next').disabled=trajStep===TRAJ.length-1;
+  const c=document.getElementById('c-traj');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const cur=TRAJ[trajStep];
+  const N=TRAJ.length;
+  // ── TOP: Timeline strip ──
+  const tlH=44,tlY=8,tlL=30,tlW=W-60;
+  const stepW=tlW/N;
+  // Track
+  rr(ctx,tlL,tlY+tlH/2-3,tlW,6,3,C.s3,null,0);
+  // Steps
+  TRAJ.forEach((st,i)=>{
+    const x=tlL+i*stepW+stepW/2;
+    const isPast=i<trajStep,isActive=i===trajStep;
+    const col=st.type==='check'?C.green:st.type==='loop'?C.purple:st.type==='obs'?C.teal:C.blue;
+    const bg=isPast?col+'40':isActive?col:C.s3;
+    const bdr=isPast?col+'80':isActive?col:C.bdr2;
+    ctx.beginPath();ctx.arc(x,tlY+tlH/2,(isActive?9:6),0,Math.PI*2);
+    ctx.fillStyle=bg;ctx.fill();ctx.strokeStyle=bdr;ctx.lineWidth=isActive?2:1;ctx.stroke();
+    if(isActive){
+      ctx.beginPath();ctx.arc(x,tlY+tlH/2,13,0,Math.PI*2);
+      ctx.strokeStyle=col+'60';ctx.lineWidth=2;ctx.stroke();
+    }
+    mo_tx(ctx,st.step.toString(),x,tlH+2,isActive?col:C.text3,7.5,'center');
+  });
+  // ── MIDDLE: Current step detail ──
+  const detY=56,detH=160;
+  const typeColors={check:C.green,build:C.blue,obs:C.teal,loop:C.purple};
+  const typeBg={check:'rgba(52,168,83,.08)',build:'rgba(66,133,244,.08)',obs:'rgba(36,193,224,.08)',loop:'rgba(161,66,244,.08)'};
+  const col=typeColors[cur.type];
+  rr(ctx,12,detY,W-24,detH,10,typeBg[cur.type],col+'60',1);
+  // Step badge
+  rr(ctx,22,detY+10,60,20,5,'rgba(0,0,0,.3)',col+'80',.8);
+  mo_tx(ctx,'Step '+cur.step+' / '+N,52,detY+20,col,8,'center');
+  // Action
+  tx(ctx,'Action:',22,detY+46,C.text3,10,500,'left');
+  mo_tx(ctx,cur.action,90,detY+46,C.amber2,10,'left');
+  // Note
+  tx(ctx,'Result:',22,detY+70,C.text3,10,500,'left');
+  tx(ctx,cur.note,90,detY+70,C.text,10,400,'left');
+  // Quality if available
+  if(cur.check_answer!==null){
+    const pct=((1-cur.check_answer)*100).toFixed(0);
+    rr(ctx,22,detY+90,180,50,8,'rgba(52,168,83,.12)',C.green+'60',1);
+    tx(ctx,'Quality Distance',112,detY+105,C.text3,9,500,'center');
+    tx(ctx,cur.check_answer.toFixed(2),112,detY+125,C.green2,22,700,'center');
+    tx(ctx,pct+'% shape match',112,detY+143,C.green2,9,500,'center');
+    if(cur.check_answer===0.08){
+      rr(ctx,212,detY+90,130,50,8,'rgba(52,168,83,.2)',C.green,1.5);
+      tx(ctx,'REWARD ISSUED',277,detY+110,C.green2,10,700,'center');
+      tx(ctx,'R(\u03c4) = 0.91',277,detY+130,C.green2,16,800,'center');
+    }
+  }
+  // ── BOTTOM: Quality progress chart ──
+  const chartY=226,chartH=H-chartY-16,chartL=50,chartW=W-70;
+  mo_tx(ctx,'answer score over episode',chartL+chartW/2,chartY-6,C.text3,8,'center');
+  ctx.strokeStyle=C.bdr;ctx.lineWidth=.5;
+  ctx.beginPath();ctx.moveTo(chartL,chartY);ctx.lineTo(chartL,chartY+chartH);ctx.lineTo(chartL+chartW,chartY+chartH);ctx.stroke();
+  // Y axis
+  [0,0.25,0.5,0.75,1].forEach(v=>{
+    const y=chartY+chartH*(1-v);
+    ctx.strokeStyle=C.bdr+'50';ctx.lineWidth=.4;ctx.setLineDash([2,3]);
+    ctx.beginPath();ctx.moveTo(chartL,y);ctx.lineTo(chartL+chartW,y);ctx.stroke();ctx.setLineDash([]);
+    mo_tx(ctx,v.toFixed(2),chartL-4,y,C.text3,7,'right');
+  });
+  // Plot check_answer line
+  const checkPoints=TRAJ.filter(s=>s.check_answer!==null).map((s,i)=>({
+    x:chartL+(s.step-1)/(N-1)*chartW,
+    y:chartY+chartH*(1-s.check_answer/1.0),
+    v:s.check_answer,step:s.step
+  }));
+  // Draw full curve (faded)
+  if(checkPoints.length>1){
+    ctx.beginPath();ctx.setLineDash([4,4]);ctx.lineWidth=1;ctx.strokeStyle=C.text4;
+    checkPoints.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+    ctx.stroke();ctx.setLineDash([]);
+  }
+  // Draw up to current step
+  const visPoints=checkPoints.filter(p=>p.step<=cur.step+1);
+  if(visPoints.length>1){
+    const g=ctx.createLinearGradient(chartL,0,chartL+chartW,0);
+    g.addColorStop(0,C.amber);g.addColorStop(1,C.green);
+    ctx.beginPath();ctx.lineWidth=2;ctx.strokeStyle=g;
+    visPoints.forEach((p,i)=>i===0?ctx.moveTo(p.x,p.y):ctx.lineTo(p.x,p.y));
+    ctx.stroke();
+  }
+  // Dots
+  checkPoints.forEach(p=>{
+    const isVis=p.step<=cur.step+1,isNow=p.step===cur.step;
+    if(isVis){
+      ctx.fillStyle=isNow?C.amber:C.green+'80';
+      ctx.beginPath();ctx.arc(p.x,p.y,isNow?6:4,0,Math.PI*2);ctx.fill();
+      if(isNow){
+        mo_tx(ctx,p.v.toFixed(2),p.x,p.y-14,C.amber2,8,'center');
+      }
+    }
+  });
+  mo_tx(ctx,'start',chartL,chartY+chartH+10,C.text3,7.5,'center');
+  mo_tx(ctx,'end',chartL+chartW,chartY+chartH+10,C.text3,7.5,'center');
+}
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

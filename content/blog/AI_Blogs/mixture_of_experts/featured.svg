@@ -1,0 +1,143 @@
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mixture of Experts — router selects top-k experts">
+  <style>
+    .bg { fill: #0a0c10; }
+    .input  { fill: #1a3a7a; stroke: #8ab4f8; stroke-width: 1.6; }
+    .router { fill: #181c23; stroke: #fbbc04; stroke-width: 1.6; filter: drop-shadow(0 0 8px rgba(251, 188, 4, 0.45)); }
+    .expert { fill: #1e232d; stroke: rgba(138, 180, 248, 0.35); stroke-width: 1.4; }
+    .expert-on { fill: rgba(52, 168, 83, 0.18); stroke: #34a853; filter: drop-shadow(0 0 8px rgba(52, 168, 83, 0.45)); }
+    .expert-off { opacity: 0.45; }
+    .output { fill: #1a3a7a; stroke: #8ab4f8; stroke-width: 1.6; }
+    .conn { stroke: rgba(138, 180, 248, 0.22); stroke-width: 1; fill: none; }
+    .conn-on { stroke: #34a853; stroke-width: 1.6; opacity: 0.85; filter: drop-shadow(0 0 4px rgba(52, 168, 83, 0.45)); }
+    .label  { font: 800 11.5px 'Plus Jakarta Sans', sans-serif; fill: #e8eaed; text-anchor: middle; letter-spacing: 0.04em; }
+    .label-router { font: 800 12px 'Plus Jakarta Sans', sans-serif; fill: #fbbc04; text-anchor: middle; letter-spacing: 0.08em; text-transform: uppercase; }
+    .label-input  { font: 800 11px 'Plus Jakarta Sans', sans-serif; fill: #ffffff; text-anchor: middle; letter-spacing: 0.06em; text-transform: uppercase; }
+    .weight { font: 600 8.5px 'JetBrains Mono', monospace; fill: #34a853; text-anchor: middle; }
+    .title { font: 800 13px 'Plus Jakarta Sans', sans-serif; fill: #e8eaed; letter-spacing: 0.04em; }
+    .sub  { font: 600 10px 'JetBrains Mono', monospace; fill: rgba(138, 180, 248, 0.60); letter-spacing: 0.10em; text-transform: uppercase; }
+
+    @keyframes moe-route-cycle {
+      0%, 100% { fill: #1e232d; stroke: rgba(138, 180, 248, 0.35); opacity: 0.45; }
+      30%, 50% { fill: rgba(52, 168, 83, 0.20); stroke: #34a853; opacity: 1; filter: drop-shadow(0 0 8px rgba(52, 168, 83, 0.55)); }
+    }
+    @keyframes moe-conn-cycle {
+      0%, 100% { opacity: 0.12; }
+      30%, 50% { opacity: 1; }
+    }
+    @keyframes moe-token {
+      0%   { offset-distance: 0%;   opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { offset-distance: 100%; opacity: 0; }
+    }
+    @keyframes router-glow {
+      0%, 100% { transform: scale(1); }
+      50%      { transform: scale(1.04); }
+    }
+
+    /* Two of the 8 experts are "active" at each cycle, rotating which two */
+    .e1 { animation: moe-route-cycle 5s ease-in-out infinite; animation-delay: 0.0s; }
+    .c1 { animation: moe-conn-cycle  5s ease-in-out infinite; animation-delay: 0.0s; }
+    .e2 { animation: moe-route-cycle 5s ease-in-out infinite; animation-delay: 0.3s; }
+    .c2 { animation: moe-conn-cycle  5s ease-in-out infinite; animation-delay: 0.3s; }
+    .e3 { animation: moe-route-cycle 5s ease-in-out infinite; animation-delay: 1.2s; }
+    .c3 { animation: moe-conn-cycle  5s ease-in-out infinite; animation-delay: 1.2s; }
+    .e4 { animation: moe-route-cycle 5s ease-in-out infinite; animation-delay: 1.5s; }
+    .c4 { animation: moe-conn-cycle  5s ease-in-out infinite; animation-delay: 1.5s; }
+    .e5 { animation: moe-route-cycle 5s ease-in-out infinite; animation-delay: 2.5s; }
+    .c5 { animation: moe-conn-cycle  5s ease-in-out infinite; animation-delay: 2.5s; }
+    .e6 { animation: moe-route-cycle 5s ease-in-out infinite; animation-delay: 2.8s; }
+    .c6 { animation: moe-conn-cycle  5s ease-in-out infinite; animation-delay: 2.8s; }
+    .e7 { animation: moe-route-cycle 5s ease-in-out infinite; animation-delay: 3.8s; }
+    .c7 { animation: moe-conn-cycle  5s ease-in-out infinite; animation-delay: 3.8s; }
+    .e8 { animation: moe-route-cycle 5s ease-in-out infinite; animation-delay: 4.1s; }
+    .c8 { animation: moe-conn-cycle  5s ease-in-out infinite; animation-delay: 4.1s; }
+
+    .router-g { animation: router-glow 2.6s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+
+    .token-bead { animation: moe-token 1.8s linear infinite; }
+    .tb-in  { offset-path: path('M 100 200 H 200'); }
+    .tb-out { offset-path: path('M 460 200 H 560'); animation-delay: 1.0s; }
+    @media (prefers-reduced-motion: reduce) {
+      .e1, .e2, .e3, .e4, .e5, .e6, .e7, .e8,
+      .c1, .c2, .c3, .c4, .c5, .c6, .c7, .c8,
+      .router-g, .token-bead { animation: none; }
+    }
+  </style>
+
+  <rect class="bg" width="600" height="400"/>
+
+  <!-- header -->
+  <text class="sub"   x="40" y="38">MoE · sparse top-k routing</text>
+  <text class="title" x="40" y="58">Token → router → 2 of 8 experts → combined output</text>
+
+  <!-- Input token -->
+  <rect class="input" x="60" y="178" width="80" height="44" rx="11"/>
+  <text class="label-input" x="100" y="205">Token</text>
+
+  <!-- Input → Router -->
+  <line class="conn" x1="140" y1="200" x2="200" y2="200" stroke="#8ab4f8" opacity="0.7"/>
+
+  <!-- Router (gate) -->
+  <g class="router-g">
+    <rect class="router" x="200" y="160" width="100" height="80" rx="12"/>
+    <text class="label-router" x="250" y="195">Router</text>
+    <text class="label-router" x="250" y="215" style="font-size: 9px; opacity: 0.75;">top-k = 2</text>
+  </g>
+
+  <!-- Connections router → 8 experts -->
+  <line class="conn c1" x1="300" y1="180" x2="380" y2="110"/>
+  <line class="conn c2" x1="300" y1="186" x2="380" y2="146"/>
+  <line class="conn c3" x1="300" y1="194" x2="380" y2="180"/>
+  <line class="conn c4" x1="300" y1="200" x2="380" y2="200"/>
+  <line class="conn c5" x1="300" y1="206" x2="380" y2="220"/>
+  <line class="conn c6" x1="300" y1="214" x2="380" y2="254"/>
+  <line class="conn c7" x1="300" y1="220" x2="380" y2="290"/>
+  <line class="conn c8" x1="300" y1="226" x2="380" y2="324"/>
+
+  <!-- 8 expert blocks -->
+  <g class="e1">
+    <rect class="expert" x="378" y="92" width="80" height="36" rx="8"/>
+    <text class="label" x="418" y="115">Expert 1</text>
+  </g>
+  <g class="e2">
+    <rect class="expert" x="378" y="128" width="80" height="36" rx="8"/>
+    <text class="label" x="418" y="151">Expert 2</text>
+  </g>
+  <g class="e3">
+    <rect class="expert" x="378" y="164" width="80" height="36" rx="8"/>
+    <text class="label" x="418" y="187">Expert 3</text>
+  </g>
+  <g class="e4">
+    <rect class="expert" x="378" y="200" width="80" height="36" rx="8"/>
+    <text class="label" x="418" y="223">Expert 4</text>
+  </g>
+  <g class="e5">
+    <rect class="expert" x="378" y="236" width="80" height="36" rx="8"/>
+    <text class="label" x="418" y="259">Expert 5</text>
+  </g>
+  <g class="e6">
+    <rect class="expert" x="378" y="272" width="80" height="36" rx="8"/>
+    <text class="label" x="418" y="295">Expert 6</text>
+  </g>
+  <g class="e7">
+    <rect class="expert" x="378" y="308" width="80" height="36" rx="8"/>
+    <text class="label" x="418" y="331">Expert 7</text>
+  </g>
+  <g class="e8">
+    <rect class="expert" x="378" y="344" width="80" height="36" rx="8"/>
+    <text class="label" x="418" y="367">Expert 8</text>
+  </g>
+
+  <!-- Convergence to output -->
+  <path class="conn" d="M 458 110 Q 500 200, 540 200" stroke="#8ab4f8" opacity="0.45"/>
+  <path class="conn" d="M 458 362 Q 500 200, 540 200" stroke="#8ab4f8" opacity="0.45"/>
+  <path class="conn" d="M 458 200 H 540" stroke="#8ab4f8" opacity="0.65"/>
+
+  <rect class="output" x="540" y="178" width="56" height="44" rx="10"/>
+  <text class="label-input" x="568" y="205">Out</text>
+
+  <!-- Tokens (beads) -->
+  <circle class="token-bead tb-in" r="4" fill="#8ab4f8"/>
+  <circle class="token-bead tb-out" r="4" fill="#34a853"/>
+</svg>

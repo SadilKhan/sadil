@@ -550,3 +550,14 @@ particles-js {
 .count-particles {
   border-radius: 0 0 3px 3px;
 }
+
+/* ── Blog post thumbnails: 16:9 instead of 1:1 so SVGs aren't cropped ── */
+.blog-content article .aspect-ratio--1x1 {
+  padding-bottom: 56.25%; /* 16:9 — matches the 800×450 featured SVG viewBox */
+}
+/* Series/section list thumbnails (summary-section layout) also stay uncropped */
+.blog-content article figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+}

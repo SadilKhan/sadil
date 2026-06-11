@@ -25,10 +25,15 @@
     {{ range .Sections }}
     <a href="{{ .RelPermalink }}" class="series-card no-underline db">
       
-      {{/* Thumbnail — looks for featured* image in section bundle */}}
+      {{/* Thumbnail — prefer files whose name starts with "featured" (skips sidebar-featured.*) */}}
       {{ $img := "" }}
       {{ range .Resources.ByType "image" }}
-        {{ if findRE "featured" .Name }}{{ $img = . }}{{ end }}
+        {{ if findRE "^featured" .Name }}{{ $img = . }}{{ end }}
+      {{ end }}
+      {{ if not $img }}
+        {{ range .Resources.ByType "image" }}
+          {{ if findRE "featured" .Name }}{{ $img = . }}{{ end }}
+        {{ end }}
       {{ end }}
       {{ if not $img }}
         {{ range .Resources.ByType "image" }}

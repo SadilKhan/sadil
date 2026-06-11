@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Positional Encoding: From Sinusoids to YaRN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;--green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;--yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;--teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#c0d8f2;--text3:#9ab8d4;
+  --mono:'JetBrains Mono',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--orange));z-index:999;transition:width .05s}
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);z-index:900;padding:.55rem 1.5rem}
+.nav-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.2rem}
+.nav-brand{font-size:.85rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.7rem;white-space:nowrap;padding:.25rem .5rem;border-radius:6px;font-weight:500;transition:all .12s}
+.nav-links a:hover{color:var(--teal2);background:rgba(0,212,255,.08)}
+.hero{text-align:center;padding:4rem 1.5rem 2.5rem;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.08;background:linear-gradient(135deg,#8ab4f8,#c58af9,#ffab40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:660px;margin:0 auto}
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+section{padding:2.8rem 0 .5rem;border-top:1px solid var(--bdr);margin-top:2.2rem}
+section:first-of-type{border-top:none;margin-top:0}
+.sec-hdr{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.sec-num{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;letter-spacing:.05em}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.12rem;font-weight:700;margin:1.8rem 0 .6rem}
+p{color:var(--text);margin-bottom:.85rem}
+p.note{color:var(--text2);font-size:.92rem}
+.fig{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:1.3rem;margin:1.6rem 0}
+.fig-title{text-align:center;font-size:.74rem;font-weight:700;color:var(--text2);margin-bottom:1rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas.anim{display:block;width:100%;height:auto;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.8rem;font-style:italic;line-height:1.6}
+.mb{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto}
+.mb .katex-display{margin:.15rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.4rem;font-family:var(--mono)}
+.co{border-radius:10px;padding:.95rem 1.2rem;margin:1.3rem 0;border-left:3px solid;font-size:.9rem}
+.co-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+.co p{margin:0;font-size:.87rem;line-height:1.65}
+.co.t{background:rgba(36,193,224,.05);border-color:var(--teal)}.co.t .co-title{color:var(--teal2)}
+.co.y{background:rgba(251,188,4,.05);border-color:var(--yellow)}.co.y .co-title{color:var(--yellow2)}
+.co.o{background:rgba(255,109,0,.05);border-color:var(--orange)}.co.o .co-title{color:var(--orange2)}
+.co.g{background:rgba(52,168,83,.05);border-color:var(--green)}.co.g .co-title{color:var(--green2)}
+.co.r{background:rgba(234,67,53,.05);border-color:var(--red)}.co.r .co-title{color:var(--red2)}
+.co.p{background:rgba(161,66,244,.05);border-color:var(--purple)}.co.p .co-title{color:var(--purple2)}
+table.cmp{width:100%;border-collapse:collapse;font-size:.82rem;margin:1.3rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+table.cmp th{background:var(--s3);color:var(--text2);padding:.6rem .9rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+table.cmp td{padding:.55rem .9rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.ic{background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--blue2)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+details.qa{background:var(--s2);border:1px solid rgba(252,198,40,.3);border-radius:12px;margin:1.6rem 0;overflow:hidden}
+details.qa summary{cursor:pointer;padding:.95rem 1.2rem;list-style:none;display:flex;align-items:center;gap:.8rem;user-select:none;transition:background .15s}
+details.qa summary:hover{background:rgba(252,198,40,.05)}
+details.qa summary::-webkit-details-marker{display:none}
+.qa-badge{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.07em;padding:.25rem .6rem;border-radius:6px;background:rgba(252,198,40,.15);color:var(--yellow2);white-space:nowrap}
+.qa-q{font-weight:600;font-size:.93rem;color:var(--text);flex:1}
+.qa-chev{color:var(--yellow2);font-size:.8rem;transition:transform .2s}
+details.qa[open] .qa-chev{transform:rotate(90deg)}
+.qa-body{padding:.4rem 1.3rem 1.2rem;border-top:1px solid var(--bdr)}
+.qa-body p{font-size:.91rem}
+@media(max-width:640px){.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-in">
+  <div class="nav-brand">Positional Encoding</div>
+  <div class="nav-links">
+    <a href="#s1">Start</a><a href="#s2">The Problem</a><a href="#s3">Sinusoidal</a>
+    <a href="#s4">Learned</a><a href="#s5">Relative</a><a href="#s6">RoPE</a>
+    <a href="#s7">ALiBi</a><a href="#s8">Long Context</a><a href="#s9">Today</a>
+  </div>
+</div></nav>
+
+<div class="hero">
+  <h1>Where Am I? Positional Encoding</h1>
+  <p>You have a text prompt and you've tokenized it. At that exact moment, the transformer has no idea which word came first. The full journey of fixing that: 2017 sinusoids → learned tables → relative → RoPE → ALiBi → the long-context tricks powering today's 128k+ models.</p>
+</div>
+
+<main>
+
+<!-- ════════ S1: START ════════ -->
+<section id="s1">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">01</span><h2>The Starting Point: Tokens, No Order</h2></div>
+  <p>Your prompt becomes token IDs, each ID looks up a row in the embedding table, and you get the matrix X, one row per token. Crucially: that row is <strong>the same vector wherever the word appears</strong>. "the" at position 1 and "the" at position 5 are identical rows.</p>
+  <div class="fig">
+    <div class="fig-title">From Prompt to Matrix: Position Is Nowhere</div>
+    <canvas id="c-p1" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">"The cat sat on the mat" → token IDs → embedding rows. Note the two highlighted rows: both "the" tokens map to the <em>identical</em> vector. Nothing anywhere in X says which row is first, third, or last. X is just a bag of vectors stacked in storage order.</div>
+  </div>
+</section>
+
+<!-- ════════ S2: THE PROBLEM ════════ -->
+<section id="s2">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(234,67,53,.12);color:var(--red2)">02</span><h2>Why That's Fatal: Attention Is Order Blind</h2></div>
+  <p>Attention compares every token with every other token via dot products, a <strong>set</strong> operation. Shuffle the input rows and the attention scores are the same numbers, just shuffled. The model literally cannot distinguish two sentences made of the same words.</p>
+  <div class="fig">
+    <div class="fig-title">Same Bag of Words → Same Attention</div>
+    <canvas id="c-p2" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">"dog bites man" vs "man bites dog": different meanings, same three vectors. The attention machinery receives identical inputs (up to shuffling) and produces identical outputs (up to the same shuffling). Without position information, word order, the backbone of meaning, is invisible.</div>
+  </div>
+  <div class="co r"><div class="co-title">The fix, in one sentence</div>
+    <p>Inject "where am I?" into the computation: either by <strong>adding position vectors to X</strong> (absolute), or by <strong>modifying the attention scores by distance</strong> (relative), or by <strong>rotating Q and K by position-dependent angles</strong> (RoPE). The whole history of positional encoding is variations on these three moves.</p>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">A causal mask already lets token t see exactly the words before it. Isn't that order? Why can't we just generate autoregressively without any positional encoding?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>A natural objection, and it is <em>half right</em>. That is exactly why it is worth pulling apart. The causal mask does two very different things, and only one of them is about order.</p>
+
+      <p><strong>✓ What the mask DOES give you.</strong> It breaks the symmetry <em>between rows</em>. Token 0 attends over 1 token, token 3 attends over 4 tokens. Rows are no longer interchangeable, because each row's softmax averages over a different <em>number</em> of values. That is a real positional signal, a weak counting signal: "how many came before me." Researchers have shown deep causal models can squeeze surprising mileage out of just this, as the footnote below explains.</p>
+
+      <p><strong>✗ What the mask does NOT give you.</strong> Take "dog bites man" and look at position 3. Its query q(man) is scored against k<sub>1</sub>, k<sub>2</sub>, k<sub>3</sub>, producing the weights [α<sub>1</sub>, α<sub>2</sub>, α<sub>3</sub>]. That is an ordered list, so it is tempting to think order lives in there. It does not. Each score depends only on the <em>content</em> of its key token: <strong>k(dog) is the same vector whether dog sits at slot 1 or slot 2</strong>. The subscript is storage bookkeeping, not position. Swap the first two words and the same three numbers appear in swapped slots, each weight still attached to its own value vector. The output is the commutative sum Σ α<sub>j</sub> v<sub>j</sub>, so it comes out bit for bit identical. The sum is where the collapse becomes visible, but there was never a position term inside q·k to lose.</p>
+      <p>To make it concrete, keep the last word fixed and permute only the prefix:</p>
+      <p style="text-align:center"><span class="ic">dog bites man → ?</span> &nbsp;&nbsp;vs&nbsp;&nbsp; <span class="ic">bites dog man → ?</span></p>
+      <p>The query is q(man) in both. The visible (k, v) pairs are the same multiset. A single attention layer therefore produces the <strong>identical next word distribution</strong> for both prefixes. The mask told the model "you have 3 words behind you". It never said in what order they came.</p>
+      <p><strong>A refinement for deep models.</strong> With two or more layers the invariance is no longer exact. The layer 1 hidden state of "bites" depends on what <em>bites itself</em> could see, and that differs between the two orderings, so layer 2 receives slightly different inputs. Deep causal stacks do leak some order information this way. That leak is precisely the NoPE phenomenon in the footnote below: real, but indirect and weak, which is why explicit positional encoding still wins in practice.</p>
+
+      <p><strong>So: can you generate autoregressively?</strong> Mechanically, yes. Sampling runs fine and nothing crashes. But every step is conditioned on an order blind summary of the context, so "the dog that chased the cat" and "the cat that chased the dog" steer the continuation identically. For language that is fatal, because word order <em>is</em> meaning.</p>
+
+      <p><strong>The honest footnote (NoPE).</strong> The objection isn't wrong as research. <em>Haviv et al. 2022</em> showed causal transformers with no positional encoding still learn usable position information, because the counting signal propagates through layers: the variance and magnitude of attention outputs depend on how many tokens were averaged. <em>Kazemnejad et al. 2023</em> showed "NoPE" can even beat explicit encodings on some length generalization benchmarks. But the signal is indirect, weak at telling <em>nearby</em> orderings apart (exactly what syntax needs), and only exists in causal models. Bidirectional encoders get nothing. So in practice every production LLM still injects position explicitly. The mask alone is a counting trick, not an ordering.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S3: SINUSOIDAL ════════ -->
+<section id="s3">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">03</span><h2>2017, Sinusoidal: A Wave Fingerprint Per Position</h2></div>
+  <p>The original Transformer's answer: build a deterministic vector for each position out of sines and cosines at geometrically spaced frequencies, and simply <strong>add it to the token embedding</strong>. Early dimensions oscillate fast (they distinguish neighbors), late dimensions oscillate slowly (they encode coarse location).</p>
+  <div class="mb">
+    <div class="math-d">PE_{(pos,\,2i)} = \sin\!\frac{pos}{10000^{2i/d}}\qquad PE_{(pos,\,2i+1)} = \cos\!\frac{pos}{10000^{2i/d}}</div>
+    <div class="mb-label">i indexes the dimension pair; 10000 is the "base". Each pair is a clock ticking at its own speed.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Whole Encoding at Once: Position × Dimension</div>
+    <canvas id="c-p3" class="anim" width="880" height="400"></canvas>
+    <div class="fig-cap">Every row is one position's vector: a unique barcode. Left columns flip rapidly row-to-row (fine detail); right columns change slowly (coarse location). Below: three of those dimension-pairs drawn as waves: a fast clock, a medium clock, a slow clock. Any position is uniquely identified by reading all clocks at once, like a binary counter in continuous form.</div>
+  </div>
+  <div class="co t"><div class="co-title">Why sinusoids and not just pos = 1, 2, 3…?</div>
+    <p>A raw integer grows unboundedly and a single scalar is hard for dot products to use. Sinusoids are bounded in [−1,1], every position's vector has similar norm, and, the elegant part, the encoding of <em>pos+k</em> is a fixed linear transform (a rotation) of the encoding of <em>pos</em>, so relative offsets are easy for the network to express. That rotation idea returns with a vengeance in RoPE.</p>
+  </div>
+</section>
+
+<!-- ════════ S4: LEARNED ════════ -->
+<section id="s4">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(251,188,4,.12);color:var(--yellow2)">04</span><h2>2018, Learned Absolute: Just Train a Table</h2></div>
+  <p>BERT and GPT-2 dropped the formula: make a second embedding table, indexed by position instead of token ID, and let gradient descent figure out what each position should mean. Row 0 = "I am first", row 1 = "I am second", … added to X exactly like sinusoids.</p>
+  <div class="fig">
+    <div class="fig-title">A Second Lookup Table, and Its Cliff</div>
+    <canvas id="c-p4" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">Two tables now: token embeddings (indexed by ID) + position embeddings (indexed by 0,1,2,…), summed row-wise. The cliff: the table has exactly max_len rows (512 for BERT, 1024 for GPT-2). Position 1025 simply has no row, so the model cannot run on longer inputs at all, and positions rarely seen in training are poorly learned.</div>
+  </div>
+</section>
+
+<!-- ════════ S5: RELATIVE ════════ -->
+<section id="s5">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">05</span><h2>2018 to 2019, Relative: Distance, Not Address</h2></div>
+  <p>A shift in philosophy (Shaw et al., Transformer-XL, T5): what matters for language isn't a token's absolute address. It's <strong>how far apart two tokens are</strong>. "Adjective right before noun" is the same pattern at position 5 or position 5000. So instead of touching X, inject position into the <em>attention scores</em>: a learned bias b(i−j) added to every Q·K logit.</p>
+  <div class="mb">
+    <div class="math-d">\text{score}_{ij} = \frac{q_i \cdot k_j}{\sqrt{d}} + b_{\,bucket(i-j)}</div>
+    <div class="mb-label">T5's version: a small learned scalar per distance bucket, shared across the sequence. Same distance → same bias, anywhere.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Bias Lives on Diagonals</div>
+    <canvas id="c-p5" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">Left: the bias matrix b(i−j). Every diagonal is one constant, because every cell on a diagonal has the same distance. Near the main diagonal (distance 0, ±1, ±2) the biases are individually learned; far distances share log-spaced buckets. Right: the bias is simply added to the QKᵀ scores before softmax. Translation invariant by construction, and it generalizes to unseen lengths far better than absolute tables.</div>
+  </div>
+</section>
+
+<!-- ════════ S6: ROPE ════════ -->
+<section id="s6">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">06</span><h2>2021, RoPE: Rotate, Don't Add</h2></div>
+  <p>RoPE (Rotary Position Embedding) is what nearly every modern LLM uses: LLaMA, Mistral, Qwen, DeepSeek, Gemma. Let's build it like a lesson, on our fixed prompt:</p>
+  <p style="text-align:center"><span class="ic">The(0)&nbsp; cat(1)&nbsp; sat(2)&nbsp; on(3)&nbsp; the(4)&nbsp; mat(5)</span></p>
+
+  <h3>First, the why: what is everyone before RoPE getting wrong?</h3>
+  <p>Before learning the mechanism, earn the motivation. By 2021 we had two families on the table, and both have a structural flaw.</p>
+
+  <p><strong>Flaw 1. Adding position corrupts content.</strong> Sinusoidal and learned encodings both do <span class="ic">x + p</span>: they push the position vector into the same space as the meaning vector. Look at what that does to our prompt. The word "the" appears at position 0 and position 4. After addition, <span class="ic">x_the + p₀</span> and <span class="ic">x_the + p₄</span> are two <em>different vectors</em>: different directions and even different lengths. The same word is no longer the same input. And inside attention the damage multiplies out. When "sat" scores against "cat", the dot product expands into four terms:</p>
+  <div class="mb">
+    <div class="math-d">(x_{sat}+p_2)\cdot(x_{cat}+p_1) = \underbrace{x_{sat}\cdot x_{cat}}_{\text{the match we wanted}} + \underbrace{x_{sat}\cdot p_1 + p_2\cdot x_{cat} + p_2\cdot p_1}_{\text{position noise mixed into the score}}</div>
+    <div class="mb-label">Only one of the four terms is content matching content. The model must learn to live with the other three.</div>
+  </div>
+
+  <p><strong>Flaw 2. Absolute encodings answer the wrong question.</strong> Language patterns are relative. "Adjective right before noun" is the same pattern at position 5 or position 5000. But with absolute encodings, "cat" at position 1 and "cat" at position 100 are different inputs, so the model must relearn every pattern at every address it might occur. The learned table adds a hard wall on top (§4): past max_len there is simply no row.</p>
+
+  <p><strong>Flaw 3. The relative fix (§5) is bolted on, not built in.</strong> T5's bias gets the philosophy right, but the implementation is a scalar patch: the same bias for "the…cat" as for "ate…pizza" at equal distance, content blind. It needs learned bucket tables per head per layer. And it injects an extra lookup into the middle of the attention kernel, which is exactly the hot loop FlashAttention works so hard to keep pure.</p>
+
+  <p>So here is the wish list a better method must satisfy: <strong>relative by construction</strong> (the score should depend on the gap, automatically), <strong>zero parameters</strong>, <strong>content left intact</strong> (no smearing position into meaning), and <strong>living inside q·k itself</strong> so standard attention, KV caching, and fused kernels work unchanged.</p>
+
+  <div class="fig">
+    <div class="fig-title">Adding Moves the Vector. Rotating Only Turns It.</div>
+    <canvas id="c-p6m" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Left: additive encodings. The same word "the" at positions 0 and 4 lands at two different points with two different lengths. Content and position are fused into one smeared vector. Right: the rotation idea. The vector keeps its exact length at every position; only its angle changes. Content lives in the magnitude and relative geometry, position lives purely in the angle. Nothing is corrupted.</div>
+  </div>
+
+  <p>And §3 already whispered the answer. Remember the elegant property of sinusoids: the encoding of pos+k is a <em>rotation</em> of the encoding of pos. RoPE takes that hint literally. Stop adding the wave fingerprint to the content. Instead, <strong>rotate q and k themselves</strong> by a position dependent angle, and let the dot product, which naturally measures angles, do the rest. Now the lesson.</p>
+
+  <h3>Step 1: Pick one token and split its vector into pairs</h3>
+  <p>We follow <strong>"sat", position m = 2</strong>. To keep numbers small, our toy model has d = 4, so its query vector has 4 numbers, which RoPE treats as <strong>2 pairs</strong>. Each pair is a point on a 2D plane. Each pair owns a rotation speed:</p>
+  <div class="mb">
+    <div class="math-d">\theta_i = 10000^{-2i/d}\;\Rightarrow\; \theta_0 = 1.0\ \text{(fast pair)},\qquad \theta_1 = 0.01\ \text{(slow pair)}</div>
+    <div class="mb-label">d=4 toy model. A real model with d=128 has 64 pairs, speeds fanning from 1.0 down to 0.0001.</div>
+  </div>
+  <p>The rule is one sentence: <strong>rotate each pair by (position × that pair's speed)</strong>. "sat" is at position 2, so pair 0 rotates by 2 × 1.0 = 2.0 rad (≈115°) and pair 1 rotates by 2 × 0.01 = 0.02 rad (≈1°).</p>
+
+  <p>Where do these numbers actually come from? Three tiny computations. First the speeds, straight from the formula with d = 4:</p>
+  <div class="mb">
+    <div class="math-d">\theta_0 = 10000^{-2\cdot 0/4} = 10000^{0} = 1.0,\qquad \theta_1 = 10000^{-2\cdot 1/4} = 10000^{-1/2} = \tfrac{1}{\sqrt{10000}} = 0.01</div>
+    <div class="mb-label">i = 0 gives exponent 0, so 1.0. i = 1 gives exponent minus one half, so one over the square root of 10000.</div>
+  </div>
+  <p>Second the angles, which are simply position times speed. "sat" sits at m = 2:</p>
+  <div class="mb">
+    <div class="math-d">\text{pair 0: } 2 \times 1.0 = 2.0 \text{ rad} = 2.0 \times \tfrac{180^\circ}{\pi} \approx 114.6^\circ,\qquad \text{pair 1: } 2 \times 0.01 = 0.02 \text{ rad} \approx 1.1^\circ</div>
+    <div class="mb-label">The 115° in the text is just the radian value converted to degrees.</div>
+  </div>
+  <p>Third the new coordinates, by multiplying each pair with its 2×2 rotation matrix. For pair A, plug in cos(2.0) = −0.416 and sin(2.0) = 0.909:</p>
+  <div class="mb">
+    <div class="math-d">\begin{pmatrix} \cos 2.0 & -\sin 2.0 \\ \sin 2.0 & \cos 2.0 \end{pmatrix} \begin{pmatrix} 0.80 \\ 0.60 \end{pmatrix} = \begin{pmatrix} 0.80(-0.416) - 0.60(0.909) \\ 0.80(0.909) + 0.60(-0.416) \end{pmatrix} = \begin{pmatrix} -0.88 \\ \phantom{-}0.48 \end{pmatrix}</div>
+    <div class="mb-label">Pair B, same recipe with cos(0.02) = 0.9998 and sin(0.02) = 0.020: (0.50, 0.90) becomes (0.48, 0.91). Barely moved, as expected.</div>
+  </div>
+  <p>Here is all of that drawn:</p>
+
+  <div class="fig">
+    <div class="fig-title">Follow "sat" (m=2): Split → Rotate Each Pair → Reassemble</div>
+    <canvas id="c-p6a" class="anim" width="880" height="430"></canvas>
+    <div class="fig-cap">q("sat") = [0.80, 0.60, 0.50, 0.90]. Pair A (0.80, 0.60) spins 115° to (−0.88, 0.48), completely reoriented. Pair B (0.50, 0.90) spins just 1° to (0.48, 0.91), almost untouched. Ghost arrow = before, solid = after. Note both arrows keep their length: rotation never changes magnitudes, only directions. The rotated pairs are put back side by side: that's the q′ attention actually uses.</div>
+  </div>
+
+  <h3>Step 2: Every position reads differently on every dial</h3>
+  <p>Do this for all six tokens of the prompt. On the fast dial, each step of position adds a big angle: "The"(0), "cat"(1), "sat"(2)… land at clearly different directions. On the slow dial they huddle together. It only distinguishes coarse regions of a long document. A token's position is the <em>combination</em> of all dial readings, exactly like the sinusoidal clocks of §3, but rotating Q and K instead of adding to X.</p>
+  <div class="fig">
+    <div class="fig-title">The Whole Prompt on Two Dials</div>
+    <canvas id="c-p6b" class="anim" width="880" height="370"></canvas>
+    <div class="fig-cap">The same unit vector, rotated for each token of "The cat sat on the mat". Fast dial (θ=1.0): six clearly separated directions. This dial tells neighbors apart. Slow dial (θ=0.01): the six arrows nearly coincide. Over a 100k token document, this dial would sweep the circle once, encoding coarse location. Real models have 64 dials spanning all speeds in between.</div>
+  </div>
+
+  <h3>Step 3, the payoff: attention only sees the gap</h3>
+  <p>Now the reason rotation beats addition. Attention computes q·k. Put the teacher example to work: let <strong>"sat" (position 2) attend to "cat" (position 1)</strong>. q was rotated by 2θ, k by 1θ. The dot product of two rotated vectors depends only on the <em>angle between them</em>, and that is (2−1)θ = 1θ. The absolute positions cancel:</p>
+  <div class="mb">
+    <div class="math-d">\langle R_{2}\,q,\; R_{1}\,k \rangle = \langle q,\; R_{-1}\,k \rangle = f(q,\,k,\;\underbrace{2-1}_{\text{gap}})</div>
+    <div class="mb-label">With unit pairs q=k=(1,0): score = cos(1·θ) = 0.540. Try ANY positions one apart, you get 0.540 again.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">"sat→cat" Here Equals "mat→the" There: Only the Gap Survives</div>
+    <canvas id="c-p6c" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Left: "sat"(2) attends to "cat"(1). The wedge between their arrows is 1θ, score cos(1θ)=0.540. Right: "mat"(5) attends to "the"(4). Both arrows point somewhere totally different, but the wedge is again exactly 1θ. Score 0.540, identical. The pattern "look one token back" costs the model the same effort at position 2, position 5, or position 50,000. Relative behavior, no bias table, zero parameters.</div>
+  </div>
+
+  <div class="co p"><div class="co-title">Why RoPE won</div>
+    <p>Zero parameters. Relative by construction. Applied only to Q and K (V stays clean). Works with KV-caching and FlashAttention. Score influence decays naturally with distance. And it has a tunable knob, the base 10000, which turned out to be the key to long context (§8). One real weakness: run far past the trained length and the fast dials enter angles the model never saw, which is also §8's problem to fix.</p>
+  </div>
+</section>
+
+<!-- ════════ S7: ALIBI ════════ -->
+<section id="s7">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">07</span><h2>2022, ALiBi: No Embedding At All</h2></div>
+  <p>ALiBi (Press et al., "Train Short, Test Long") is the minimalist rebellion: delete positional embeddings entirely. Just subtract a penalty proportional to distance from every attention score. The further away a token is, the harder it is to attend to. Each head gets a different slope, so some heads stay local and others see far.</p>
+  <div class="mb">
+    <div class="math-d">\text{score}_{ij} = \frac{q_i \cdot k_j}{\sqrt{d}} \;-\; m_h \cdot (i-j),\qquad m_h = \tfrac{1}{2^{h}}\ \text{(geometric per head)}</div>
+    <div class="mb-label">A fixed linear ramp. Nothing is learned, nothing is added to embeddings.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">A Distance Ramp, Steeper or Gentler Per Head</div>
+    <canvas id="c-p7" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Three heads' penalty matrices (causal). Head with slope ½: scores fade fast, a short range head. Slope ⅛: gentle fade, a long range head. Because the ramp is defined for <em>any</em> distance, a model trained on 1k tokens keeps working at 16k+. That is ALiBi's signature trick. The cost: no notion of "exactly 4 apart", only "nearer vs farther", which loses some precision on tasks needing exact offsets.</div>
+  </div>
+</section>
+
+<!-- ════════ S8: LONG CONTEXT ════════ -->
+<section id="s8">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">08</span><h2>2023+, Stretching RoPE to 128k and Beyond</h2></div>
+  <p>The modern problem: you trained with RoPE at 4k context. Users want 128k. Run longer sequences naively and the fast dials spin into angle territory the model has <em>never seen</em>, and attention falls apart. Three generations of fixes, all answering: <strong>how do we reuse the trained angle range?</strong></p>
+  <div class="fig">
+    <div class="fig-title">Extrapolate vs Interpolate vs Per-Frequency</div>
+    <canvas id="c-p8" class="anim" width="880" height="420"></canvas>
+    <div class="fig-cap">Row 1, naive extrapolation: positions past 4k produce unseen angles (red zone) → broken. Row 2, Position Interpolation (PI, 2023): squeeze all positions by L/L′ so 128k positions reuse the trained angle range; works after a little fine tuning, but cramming squeezes neighbors together and fine detail blurs. Row 3, NTK / YaRN (2023): scale <em>per frequency</em>. Slow dials (coarse) get stretched a lot, fast dials (fine detail) barely touched. Best of both: long reach, sharp neighbors.</div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\text{PI:}\quad m' = m\cdot\frac{L_{train}}{L_{target}}\qquad\quad \text{NTK/YaRN:}\quad \theta_i' = \theta_i \cdot s(\theta_i)\ \ \text{(stretch slow, keep fast)}</div>
+    <div class="mb-label">PI rescales positions uniformly; NTK-by-parts/YaRN rescales each frequency differently (+ a softmax temperature tweak in YaRN).</div>
+  </div>
+  <div class="co t"><div class="co-title">The current toolbox</div>
+    <p><strong>PI</strong> (Meta 2023): uniform squeeze, needs brief fine tuning. <strong>NTK-aware</strong> (2023): raise the base θ instead of squeezing; zero shot friendly. <strong>YaRN</strong> (2023): NTK by parts plus attention temperature; used by Qwen2 and DeepSeek for 128k. <strong>LongRoPE</strong> (Microsoft 2024): searches a non uniform per dimension rescale, demonstrated 2M token context. And the blunt but effective option: <strong>just train with a huge base</strong>. LLaMA-3 ships RoPE with θ = 500,000 so the dials are slow enough out of the box.</p>
+  </div>
+</section>
+
+<!-- ════════ S9: TODAY ════════ -->
+<section id="s9">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">09</span><h2>The Full Picture</h2></div>
+  <table class="cmp">
+    <thead><tr><th>Method</th><th>Year</th><th>Where it acts</th><th>Params</th><th>Length generalization</th><th>Used by</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--blue2)">Sinusoidal</strong></td><td>2017</td><td>added to X</td><td>none</td><td>poor in practice</td><td>original Transformer</td></tr>
+      <tr><td><strong style="color:var(--yellow2)">Learned absolute</strong></td><td>2018</td><td>added to X</td><td>max_len × d</td><td>hard cliff at max_len</td><td>BERT, GPT-2/3</td></tr>
+      <tr><td><strong style="color:var(--green2)">Relative bias (T5)</strong></td><td>2019</td><td>added to scores</td><td>buckets × heads</td><td>good</td><td>T5, (concept → many)</td></tr>
+      <tr><td><strong style="color:var(--purple2)">RoPE</strong></td><td>2021</td><td>rotates Q, K</td><td>none</td><td>good near trained len</td><td>LLaMA, Mistral, Qwen, DeepSeek, Gemma</td></tr>
+      <tr><td><strong style="color:var(--orange2)">ALiBi</strong></td><td>2022</td><td>ramp on scores</td><td>none</td><td>excellent</td><td>BLOOM, MPT</td></tr>
+      <tr><td><strong style="color:var(--teal2)">PI / NTK / YaRN / LongRoPE</strong></td><td>2023 to 2024</td><td>rescales RoPE</td><td>none</td><td>extends RoPE to 128k and beyond</td><td>Qwen2, DeepSeek, LLaMA-3-long, Phi</td></tr>
+    </tbody>
+  </table>
+  <div class="co g"><div class="co-title">If you remember three things</div>
+    <p>1) Attention is a set operation, so position must be injected or order doesn't exist. 2) The field converged on <strong>relative</strong> information, and RoPE delivers it elegantly by rotating Q,K so absolute position cancels in the dot product. 3) Long context is mostly <strong>frequency surgery on RoPE</strong>: squeeze positions or retune the dials so new lengths reuse trained angles.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+
+/* ── helpers ── */
+function gctx(id){const cv=document.getElementById('c-'+id);return cv?cv.getContext('2d'):null;}
+function lbl(ctx,s,x,y,col,sz,w,al){ctx.font=`${w||500} ${sz||10}px "Plus Jakarta Sans",sans-serif`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function mlbl(ctx,s,x,y,col,sz,al){ctx.font=`500 ${sz||9}px "JetBrains Mono",monospace`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function pill(ctx,x,y,w,h,r,fill,stroke,lw){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+function av(i,j,seed){return Math.pow(Math.sin(i*7.31+j*3.77+(seed||0)*5.1)*0.5+0.5,1.5);}
+// diverging colormap: v in [-1,1] → blue ↔ slate ↔ orange
+function dvg(v){
+  v=Math.max(-1,Math.min(1,v));
+  if(v<0){const t=-v;return `rgb(${56+t*40|0},${78+t*78|0},${110+t*140|0})`;}
+  const t=v;return `rgb(${56+t*199|0},${78+t*82|0},${110-t*68|0})`;
+}
+// token-hue cell matrix
+function cellMat(ctx,x,y,rows,cols,cs,hueSeed,rowLabels){
+  for(let i=0;i<rows;i++)for(let j=0;j<cols;j++){
+    const h=(typeof hueSeed==='function')?hueSeed(i):hueSeed+i;
+    const v=av(h,j,2)*0.5+0.35;
+    ctx.fillStyle=`hsl(${(h*47)%360},62%,${42+v*22}%)`;
+    ctx.fillRect(x+j*cs+1,y+i*cs+1,cs-2,cs-2);
+  }
+  pill(ctx,x-1,y-1,cols*cs+2,rows*cs+2,4,null,'rgba(150,180,220,.6)',1.2);
+  if(rowLabels)rowLabels.forEach((t,i)=>mlbl(ctx,t,x-8,y+i*cs+cs/2,'#aac6e2',8.5,'right'));
+}
+const STATIC={};
+(function(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id.replace('c-','');
+      if(STATIC[id]){STATIC[id]();obs.unobserve(e.target);}
+    }
+  }),{threshold:0.05});
+  window.addEventListener('DOMContentLoaded',()=>{
+    Object.keys(STATIC).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+  });
+})();
+
+const TOKS=['The','cat','sat','on','the','mat'];
+const IDS=[464,2415,3332,319,262,2603];
+
+/* ── P1: tokens → IDs → embeddings ── */
+STATIC.p1=function(){
+  const ctx=gctx('p1');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  // prompt
+  mlbl(ctx,'prompt',70,40,'#aac6e2',9,'right');
+  TOKS.forEach((t,i)=>{
+    pill(ctx,90+i*86,24,78,32,6,'rgba(88,148,250,.2)','#a8caff',1.2);
+    lbl(ctx,t,129+i*86,40,'#e0e8f4',11,600);
+  });
+  // ids
+  mlbl(ctx,'token IDs',70,106,'#aac6e2',9,'right');
+  TOKS.forEach((t,i)=>{
+    arrow(ctx,129+i*86,60,129+i*86,84,'#7e9cbb',1.1);
+    const isThe=(i===0||i===4);
+    pill(ctx,94+i*86,90,70,30,6,isThe?'rgba(252,198,40,.18)':'rgba(52,70,100,.5)',isThe?'#ffe282':'rgba(150,180,220,.55)',isThe?1.6:1);
+    mlbl(ctx,IDS[i],129+i*86,105,isThe?'#ffe282':'#c8e0f2',9.5);
+  });
+  mlbl(ctx,'same word → same ID  (≈ case-folded here for clarity)',724,72,'#eedda0',8,'center');
+  // embedding lookup
+  arrow(ctx,440,124,440,150,'#7e9cbb',1.2);
+  mlbl(ctx,'embedding table lookup',440,140,'#aac6e2',8.5,'left');
+  // X matrix
+  const mx=300,my=160,cs=24;
+  mlbl(ctx,'X',mx-40,my+3*cs,'#a8caff',13,'right');
+  for(let i=0;i<6;i++){
+    const isThe=(i===0||i===4);
+    for(let j=0;j<8;j++){
+      // identical rows for the two "the": use same generator row
+      const gi=isThe?0:i;
+      const v=av(gi,j,3)*0.55+0.3;
+      ctx.fillStyle=isThe?`rgb(${120+v*120|0},${100+v*90|0},${30+v*40|0})`:`rgb(${50+v*60|0},${80+v*100|0},${140+v*110|0})`;
+      ctx.fillRect(mx+j*cs+1,my+i*cs+1,cs-2,cs-2);
+    }
+    mlbl(ctx,TOKS[i],mx-8,my+i*cs+cs/2,(i===0||i===4)?'#ffe282':'#aac6e2',8.5,'right');
+  }
+  pill(ctx,mx-1,my-1,8*cs+2,6*cs+2,4,null,'rgba(150,180,220,.6)',1.2);
+  // highlight identical rows
+  pill(ctx,mx-2,my-2,8*cs+4,cs+2,3,null,'#ffe282',1.8);
+  pill(ctx,mx-2,my+4*cs-2,8*cs+4,cs+2,3,null,'#ffe282',1.8);
+  mlbl(ctx,'identical rows!',mx+8*cs+16,my+cs/2,'#ffe282',9,'left');
+  mlbl(ctx,'no row says \u201cI am 1st\u201d or \u201cI am 5th\u201d',mx+8*cs+16,my+4*cs+cs/2,'#f0b3ac',9,'left');
+};
+
+/* ── P2: order blindness ── */
+STATIC.p2=function(){
+  const ctx=gctx('p2');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  const A=['dog','bites','man'], B=['man','bites','dog'];
+  const colOf={dog:'#a8caff',bites:'#a8e6c0',man:'#d6a8ff'};
+  function sent(x0,words,nm){
+    lbl(ctx,nm,x0+120,40,'#c8e0f2',10,700);
+    words.forEach((w,i)=>{
+      pill(ctx,x0+i*84,58,76,34,6,colOf[w]+'30',colOf[w],1.4);
+      lbl(ctx,w,x0+38+i*84,75,'#e0e8f4',11,600);
+    });
+    // vectors below — same color = same vector
+    words.forEach((w,i)=>{
+      arrow(ctx,x0+38+i*84,96,x0+38+i*84,118,'#7e9cbb',1);
+      pill(ctx,x0+10+i*84,124,56,18,4,colOf[w]+'55',colOf[w],1.2);
+      mlbl(ctx,'v('+w+')',x0+38+i*84,133,'#fff',7.5);
+    });
+  }
+  sent(80,A,'\u201cdog bites man\u201d');
+  sent(540,B,'\u201cman bites dog\u201d');
+  // equality
+  lbl(ctx,'≠ meaning',440,75,'#f28b82',11,800);
+  lbl(ctx,'= same 3 vectors',440,133,'#ffe282',10,800);
+  // attention sees a set
+  pill(ctx,230,180,420,70,10,'rgba(52,70,100,.35)','rgba(150,180,220,.5)',1.3);
+  lbl(ctx,'attention receives:  { v(dog), v(bites), v(man) }',440,205,'#c8e0f2',11,600);
+  mlbl(ctx,'a SET — dot products are the same numbers either way',440,228,'#aac6e2',8.5);
+  arrow(ctx,260,150,300,178,'#7e9cbb',1.2);
+  arrow(ctx,620,150,580,178,'#7e9cbb',1.2);
+  lbl(ctx,'⇒ identical attention output for both sentences ✗',440,290,'#f28b82',11,700);
+};
+
+/* ── P3: sinusoidal heatmap + waves ── */
+STATIC.p3=function(){
+  const ctx=gctx('p3');if(!ctx)return;const W=880,H=400;ctx.clearRect(0,0,W,H);
+  const P=36,D=48,cs=9.5;
+  const hx=120,hy=34;
+  // heatmap
+  for(let p=0;p<P;p++)for(let d=0;d<D;d++){
+    const i=Math.floor(d/2), th=Math.pow(10000,-2*i/D);
+    const v=(d%2===0)?Math.sin(p*th):Math.cos(p*th);
+    ctx.fillStyle=dvg(v);
+    ctx.fillRect(hx+d*cs,hy+p*4.4,cs-0.5,4);
+  }
+  pill(ctx,hx-1,hy-1,D*cs+2,P*4.4+2,3,null,'rgba(150,180,220,.6)',1.2);
+  mlbl(ctx,'dim →',hx+D*cs/2,hy-12,'#aac6e2',8.5);
+  ctx.save();ctx.translate(hx-14,hy+P*2.2);ctx.rotate(-Math.PI/2);
+  mlbl(ctx,'position ↓ (0…35)',0,0,'#aac6e2',8.5);ctx.restore();
+  mlbl(ctx,'fast clocks',hx+30,hy+P*4.4+12,'#ffbe6e',8);
+  mlbl(ctx,'slow clocks',hx+D*cs-34,hy+P*4.4+12,'#9fdcef',8);
+  // legend
+  [['-1',dvg(-1)],['0',dvg(0)],['+1',dvg(1)]].forEach((l,i)=>{
+    pill(ctx,610+i*44,hy+6,16,12,2,l[1],null);
+    mlbl(ctx,l[0],634+i*44,hy+12,'#aac6e2',8,'left');
+  });
+  // waves for 3 dims
+  const wy=242,wW=640,wx=120;
+  const dims=[[0,'#ffbe6e','pair 0 — fast'],[8,'#a8e6c0','pair 8 — medium'],[22,'#9fdcef','pair 22 — slow']];
+  dims.forEach((dm,k)=>{
+    const y0=wy+k*46;
+    mlbl(ctx,dm[2],wx-10,y0,dm[1],8.5,'right');
+    ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=.7;
+    ctx.beginPath();ctx.moveTo(wx,y0);ctx.lineTo(wx+wW,y0);ctx.stroke();
+    ctx.strokeStyle=dm[1];ctx.lineWidth=1.8;ctx.beginPath();
+    const th=Math.pow(10000,-2*dm[0]/D);
+    for(let px=0;px<=wW;px+=2){
+      const pos=px/wW*35;
+      const v=Math.sin(pos*th);
+      px===0?ctx.moveTo(wx+px,y0-v*17):ctx.lineTo(wx+px,y0-v*17);
+    }
+    ctx.stroke();
+    // dots at integer positions for the fast one
+    if(k===0)for(let p=0;p<=35;p+=1){
+      const v=Math.sin(p*th);
+      ctx.fillStyle='#fff';
+      ctx.beginPath();ctx.arc(wx+p/35*wW,y0-v*17,1.7,0,7);ctx.fill();
+    }
+  });
+  mlbl(ctx,'one row of the heatmap = reading all clocks at one position — a unique fingerprint',440,H-12,'#aac6e2',9);
+};
+
+/* ── P4: learned table + cliff ── */
+STATIC.p4=function(){
+  const ctx=gctx('p4');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  // token table
+  cellMat(ctx,90,60,6,6,20,(i)=>IDS[i]%9,TOKS);
+  mlbl(ctx,'token embeddings',150,40,'#a8caff',9);
+  mlbl(ctx,'indexed by ID',150,52,'#7e9cbb',7.5);
+  lbl(ctx,'+',260,120,'#c8e0f2',20,800);
+  // position table
+  const px=300,py=60;
+  for(let i=0;i<6;i++)for(let j=0;j<6;j++){
+    const v=av(i*3,j,7)*0.5+0.35;
+    ctx.fillStyle=`rgb(${90+v*120|0},${70+v*80|0},${160+v*90|0})`;
+    ctx.fillRect(px+j*20+1,py+i*20+1,18,18);
+  }
+  pill(ctx,px-1,py-1,122,122,4,null,'rgba(150,180,220,.6)',1.2);
+  for(let i=0;i<6;i++)mlbl(ctx,'pos '+i,px-8,py+i*20+10,'#d6a8ff',7.5,'right');
+  mlbl(ctx,'position embeddings',px+60,40,'#d6a8ff',9);
+  mlbl(ctx,'indexed by 0,1,2,…',px+60,52,'#7e9cbb',7.5);
+  lbl(ctx,'=',470,120,'#c8e0f2',20,800);
+  cellMat(ctx,510,60,6,6,20,(i)=>IDS[i]%9+i*2,null);
+  mlbl(ctx,'X with position baked in',570,40,'#a8e6c0',9);
+  // cliff
+  const cy=230;
+  ctx.strokeStyle='rgba(150,180,220,.5)';ctx.lineWidth=1.2;
+  ctx.beginPath();ctx.moveTo(90,cy+40);ctx.lineTo(700,cy+40);ctx.stroke();
+  // trained zone
+  ctx.fillStyle='rgba(72,186,106,.25)';ctx.fillRect(90,cy,420,40);
+  pill(ctx,90,cy,420,40,0,null,'#48ba6a',1.2);
+  lbl(ctx,'rows 0 … 1023 exist',300,cy+20,'#a8e6c0',10,700);
+  // cliff edge
+  ctx.strokeStyle='#f28b82';ctx.lineWidth=2.5;
+  ctx.beginPath();ctx.moveTo(510,cy-8);ctx.lineTo(510,cy+48);ctx.stroke();
+  lbl(ctx,'position 1024+ → no row → crash',640,cy+20,'#f28b82',10,700);
+  mlbl(ctx,'the table is a wall: the model cannot even run past max_len',395,cy+62,'#f0b3ac',8.5);
+};
+
+/* ── P5: relative bias diagonals ── */
+STATIC.p5=function(){
+  const ctx=gctx('p5');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  const N=8,cs=30;
+  const bx=120,by=60;
+  // bias matrix: color by |i-j| bucket
+  const buckets=['#ffe282','#ffbe6e','#ff9a52','#f0814a','#d86a4a','#b85a50','#985252','#7a4a52'];
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    const d=Math.min(Math.abs(i-j),7);
+    ctx.fillStyle=buckets[d];
+    ctx.globalAlpha=0.92;
+    ctx.fillRect(bx+j*cs+1,by+i*cs+1,cs-2,cs-2);
+    ctx.globalAlpha=1;
+    if(i===0&&j<4||j===0&&i<4){
+      mlbl(ctx,(i-j===0?'0':(j>i?'+':'')+ (j-i)),bx+j*cs+cs/2,by+i*cs+cs/2,'#3a2a10',8);
+    }
+  }
+  pill(ctx,bx-1,by-1,N*cs+2,N*cs+2,4,null,'rgba(150,180,220,.6)',1.2);
+  mlbl(ctx,'bias b(i−j) — one constant per diagonal',bx+N*cs/2,by-14,'#ffe282',9);
+  // diagonal arrows
+  ctx.strokeStyle='#fff';ctx.lineWidth=1.4;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(bx+10,by+10);ctx.lineTo(bx+N*cs-10,by+N*cs-10);ctx.stroke();ctx.setLineDash([]);
+  mlbl(ctx,'distance 0',bx+N*cs+10,by+N*cs-14,'#ffe282',8,'left');
+  // plus
+  lbl(ctx,'+',430,by+N*cs/2,'#c8e0f2',22,800);
+  // QK scores
+  const qx=470;
+  for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+    const v=av(i,j,4);
+    ctx.fillStyle=`rgb(${50+v*70|0},${85+v*110|0},${150+v*100|0})`;
+    ctx.fillRect(qx+j*cs+1,by+i*cs+1,cs-2,cs-2);
+  }
+  pill(ctx,qx-1,by-1,N*cs+2,N*cs+2,4,null,'rgba(150,180,220,.6)',1.2);
+  mlbl(ctx,'QKᵀ scores (content)',qx+N*cs/2,by-14,'#a8caff',9);
+  lbl(ctx,'→ softmax',qx+N*cs+70,by+N*cs/2,'#a8e6c0',11,700);
+  mlbl(ctx,'\u201c3 tokens back\u201d gets the same bias at position 10 or position 10,000 — translation-invariant',440,H-16,'#aac6e2',9);
+};
+
+/* ── P6m: motivation — add vs rotate ── */
+STATIC.p6m=function(){
+  const ctx=gctx('p6m');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  // LEFT: addition
+  const lx=225,ly=190;
+  lbl(ctx,'ADD  (sinusoidal / learned)',lx,34,'#f0b3ac',11,700);
+  // faint axes
+  ctx.strokeStyle='rgba(150,180,220,.25)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(lx-150,ly);ctx.lineTo(lx+150,ly);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(lx,ly-130);ctx.lineTo(lx,ly+90);ctx.stroke();
+  // content vector x_the
+  const xa=-0.62, xr=86; // angle, length
+  const xe=[lx+Math.cos(xa)*xr, ly+Math.sin(xa)*xr];
+  arrow(ctx,lx,ly,xe[0],xe[1],'#d6a8ff',2.6);
+  mlbl(ctx,'x(\u201cthe\u201d)',xe[0]+6,xe[1]-12,'#d6a8ff',9,'left');
+  // p0 appended
+  const p0=[34,-34], A=[xe[0]+p0[0], xe[1]+p0[1]];
+  arrow(ctx,xe[0],xe[1],A[0],A[1],'#a8caff',1.6);
+  mlbl(ctx,'+p\u2080',(xe[0]+A[0])/2+12,(xe[1]+A[1])/2,'#a8caff',8,'left');
+  arrow(ctx,lx,ly,A[0],A[1],'#a8caff',2.2);
+  mlbl(ctx,'\u201cthe\u201d at pos 0',A[0]+8,A[1],'#a8caff',8.5,'left');
+  // p4 appended differently
+  const p4=[10,52], B=[xe[0]+p4[0], xe[1]+p4[1]];
+  arrow(ctx,xe[0],xe[1],B[0],B[1],'#ffbe6e',1.6);
+  mlbl(ctx,'+p\u2084',(xe[0]+B[0])/2+12,(xe[1]+B[1])/2,'#ffbe6e',8,'left');
+  arrow(ctx,lx,ly,B[0],B[1],'#ffbe6e',2.2);
+  mlbl(ctx,'\u201cthe\u201d at pos 4',B[0]+8,B[1]+6,'#ffbe6e',8.5,'left');
+  // norm marks
+  const nA=Math.hypot(A[0]-lx,A[1]-ly).toFixed(0), nB=Math.hypot(B[0]-lx,B[1]-ly).toFixed(0);
+  mlbl(ctx,'two different vectors, two different lengths ('+nA+' vs '+nB+')',lx,ly+112,'#f0b3ac',8.5);
+  mlbl(ctx,'content and position fused \u2715',lx,ly+128,'#f28b82',9);
+
+  // divider
+  ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;ctx.setLineDash([5,5]);
+  ctx.beginPath();ctx.moveTo(440,30);ctx.lineTo(440,H-20);ctx.stroke();ctx.setLineDash([]);
+
+  // RIGHT: rotation
+  const rx=655,ry=180,R=96;
+  lbl(ctx,'ROTATE  (RoPE)',rx,34,'#a8e6c0',11,700);
+  pill(ctx,rx-R,ry-R,2*R,2*R,R,'rgba(52,70,100,.18)','rgba(150,180,220,.5)',1.2);
+  mlbl(ctx,'length never changes',rx,ry-R-12,'#a8e6c0',8);
+  const base=-0.62;
+  [['pos 0',0,'#a8caff'],['pos 2',-0.8,'#d6a8ff'],['pos 4',-1.6,'#ffbe6e']].forEach(s=>{
+    const a=base+s[1];
+    arrow(ctx,rx,ry,rx+Math.cos(a)*(R-12),ry+Math.sin(a)*(R-12),s[2],2.4);
+    mlbl(ctx,'\u201cthe\u201d '+s[0],rx+Math.cos(a)*(R+26),ry+Math.sin(a)*(R+20),s[2],8.5);
+  });
+  mlbl(ctx,'same length at every position; only the angle moves',rx,ry+R+18,'#a8e6c0',8.5);
+  mlbl(ctx,'content intact, position = pure angle \u2713',rx,ry+R+34,'#a8e6c0',9);
+};
+
+/* ── P6a: follow "sat" — split, rotate, reassemble ── */
+STATIC.p6a=function(){
+  const ctx=gctx('p6a');if(!ctx)return;const W=880,H=430;ctx.clearRect(0,0,W,H);
+  // prompt strip, sat highlighted
+  TOKS.forEach((t,i)=>{
+    const hl=i===2;
+    if(hl){ctx.shadowColor='#d6a8ff';ctx.shadowBlur=12;}
+    pill(ctx,190+i*86,18,78,30,6,hl?'rgba(176,94,250,.35)':'rgba(52,70,100,.4)',hl?'#d6a8ff':'rgba(150,180,220,.5)',hl?1.8:1);
+    ctx.shadowBlur=0;
+    lbl(ctx,t,229+i*86,33,hl?'#fff':'#c8e0f2',10,hl?700:500);
+    mlbl(ctx,'pos '+i,229+i*86,58,hl?'#d6a8ff':'#7e9cbb',7.5);
+  });
+  // q vector cells
+  const qv=[0.80,0.60,0.50,0.90];
+  const qx=120,qy=96;
+  mlbl(ctx,'q(\u201csat\u201d) =',qx-10,qy+16,'#d6a8ff',9.5,'right');
+  qv.forEach((v,j)=>{
+    const pairA=j<2;
+    pill(ctx,qx+j*56,qy,50,32,5,pairA?'rgba(255,190,110,.25)':'rgba(159,220,239,.2)',pairA?'#ffbe6e':'#9fdcef',1.4);
+    mlbl(ctx,v.toFixed(2),qx+25+j*56,qy+16,'#fff',9.5);
+  });
+  // pair braces
+  pill(ctx,qx-2,qy+38,108,14,4,null,'#ffbe6e',1.2);
+  mlbl(ctx,'pair A',qx+52,qy+45,'#ffbe6e',8);
+  pill(ctx,qx+110,qy+38,108,14,4,null,'#9fdcef',1.2);
+  mlbl(ctx,'pair B',qx+164,qy+45,'#9fdcef',8);
+  // arrows to dials
+  arrow(ctx,qx+52,qy+56,250,170,'#ffbe6e',1.3);
+  arrow(ctx,qx+164,qy+56,560,170,'#9fdcef',1.3);
+  // dials
+  function dial(cx,cy,R,vec,ang,col,nm,sub,resTxt){
+    pill(ctx,cx-R,cy-R,2*R,2*R,R,'rgba(52,70,100,.2)','rgba(150,180,220,.5)',1.2);
+    // ghost before
+    const n=Math.hypot(vec[0],vec[1]);
+    const a0=Math.atan2(-vec[1],vec[0]); // canvas y down
+    ctx.globalAlpha=.35;
+    arrow(ctx,cx,cy,cx+Math.cos(a0)*(R-14)*n,cy+Math.sin(a0)*(R-14)*n,col,2);
+    ctx.globalAlpha=1;
+    mlbl(ctx,'('+vec[0].toFixed(2)+', '+vec[1].toFixed(2)+')',cx+Math.cos(a0)*(R+30)*n,cy+Math.sin(a0)*(R+26)*n,col+'aa',7.5);
+    // rotated
+    const a1=a0-ang; // counter-clockwise visually
+    const rx=Math.cos(a1)*(R-14)*n, ry=Math.sin(a1)*(R-14)*n;
+    arrow(ctx,cx,cy,cx+rx,cy+ry,col,2.6);
+    // arc
+    ctx.strokeStyle='#ffe282';ctx.lineWidth=1.4;
+    ctx.beginPath();ctx.arc(cx,cy,R*0.45,a0,a1,true);ctx.stroke();
+    mlbl(ctx,resTxt,cx+Math.cos(a1)*(R+34)*n,cy+Math.sin(a1)*(R+30)*n,col,8);
+    lbl(ctx,nm,cx,cy+R+20,col,9.5,700);
+    mlbl(ctx,sub,cx,cy+R+36,'#c8e0f2',8);
+  }
+  dial(250,240,80,[0.80,0.60],2.0,'#ffbe6e','pair A — \u03b8\u2080=1.0','rotate 2\u00d71.0 = 2.0 rad (115\u00b0)','(\u22120.88, 0.48)');
+  dial(560,240,80,[0.50,0.90],0.02,'#9fdcef','pair B — \u03b8\u2081=0.01','rotate 2\u00d70.01 = 0.02 rad (1\u00b0)','(0.48, 0.91)');
+  mlbl(ctx,'big spin',250,150,'#ffbe6e',8.5);
+  mlbl(ctx,'barely moves',560,150,'#9fdcef',8.5);
+  // reassemble
+  arrow(ctx,345,250,710,330,'#ffbe6e',1.2);
+  arrow(ctx,648,260,716,322,'#9fdcef',1.2);
+  const rv=[-0.88,0.48,0.48,0.91];
+  const rx2=652,ry2=336;
+  rv.forEach((v,j)=>{
+    const pairA=j<2;
+    pill(ctx,rx2+j*54,ry2,48,30,5,pairA?'rgba(255,190,110,.3)':'rgba(159,220,239,.25)',pairA?'#ffbe6e':'#9fdcef',1.4);
+    mlbl(ctx,v.toFixed(2),rx2+24+j*54,ry2+15,'#fff',8.5);
+  });
+  mlbl(ctx,'q\u2032 — what attention uses',rx2+105,ry2+44,'#d6a8ff',8.5);
+  mlbl(ctx,'lengths unchanged \u2713 only directions encode position',rx2+105,ry2-12,'#a8e6c0',7.5);
+};
+
+/* ── P6b: whole prompt on two dials ── */
+STATIC.p6b=function(){
+  const ctx=gctx('p6b');if(!ctx)return;const W=880,H=370;ctx.clearRect(0,0,W,H);
+  const posCols=['#a8caff','#a8e6c0','#d6a8ff','#ffe282','#ffbe6e','#f28b82'];
+  function dial(cx,cy,R,th,nm,sub){
+    pill(ctx,cx-R,cy-R,2*R,2*R,R,'rgba(52,70,100,.2)','rgba(150,180,220,.5)',1.2);
+    ctx.strokeStyle='rgba(150,180,220,.4)';ctx.lineWidth=1;
+    ctx.beginPath();ctx.moveTo(cx+R-8,cy);ctx.lineTo(cx+R,cy);ctx.stroke();
+    for(let m=0;m<6;m++){
+      const ang=-m*th;
+      const ex=cx+Math.cos(ang)*(R-16), ey=cy+Math.sin(ang)*(R-16);
+      arrow(ctx,cx,cy,ex,ey,posCols[m],2.2);
+      const lx=cx+Math.cos(ang)*(R+22), ly=cy+Math.sin(ang)*(R+18);
+      mlbl(ctx,TOKS[m]+'('+m+')',lx,ly,posCols[m],8);
+    }
+    lbl(ctx,nm,cx,cy+R+24,'#c8e0f2',10,700);
+    mlbl(ctx,sub,cx,cy+R+42,'#aac6e2',8);
+  }
+  dial(240,160,98,1.0,'fast dial — \u03b8 = 1.0','six clearly different directions: tells neighbors apart');
+  dial(650,160,98,0.012,'slow dial — \u03b8 = 0.01','arrows huddle: only coarse location over long documents');
+  mlbl(ctx,'\u201cThe cat sat on the mat\u201d — one arrow per token, angle = position \u00d7 dial speed',440,26,'#c8e0f2',9.5);
+};
+
+/* ── P6c: only the gap survives — with the prompt ── */
+STATIC.p6c=function(){
+  const ctx=gctx('p6c');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const th=0.9;
+  function scene(cx,cy,R,mq,mk,qNm,kNm,qCol,kCol){
+    pill(ctx,cx-R,cy-R,2*R,2*R,R,'rgba(52,70,100,.2)','rgba(150,180,220,.5)',1.2);
+    const aq=-mq*th, ak=-mk*th;
+    ctx.fillStyle='rgba(252,198,40,.18)';
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,R-30,Math.min(aq,ak),Math.max(aq,ak));ctx.closePath();ctx.fill();
+    arrow(ctx,cx,cy,cx+Math.cos(aq)*(R-14),cy+Math.sin(aq)*(R-14),qCol,2.6);
+    arrow(ctx,cx,cy,cx+Math.cos(ak)*(R-14),cy+Math.sin(ak)*(R-14),kCol,2.6);
+    mlbl(ctx,qNm+' ('+mq+')',cx+Math.cos(aq)*(R+26),cy+Math.sin(aq)*(R+22),qCol,8.5);
+    mlbl(ctx,kNm+' ('+mk+')',cx+Math.cos(ak)*(R+26),cy+Math.sin(ak)*(R+22),kCol,8.5);
+    const mid=(aq+ak)/2;
+    mlbl(ctx,'1\u03b8',cx+Math.cos(mid)*(R-50),cy+Math.sin(mid)*(R-50),'#ffe282',10);
+  }
+  scene(225,160,96,2,1,'sat','cat','#d6a8ff','#a8e6c0');
+  mlbl(ctx,'\u201csat\u201d attends to \u201ccat\u201d',225,290,'#c8e0f2',9);
+  mlbl(ctx,'score = cos(1\u03b8) = 0.540',225,308,'#ffe282',9);
+  scene(655,160,96,5,4,'mat','the','#f28b82','#ffbe6e');
+  mlbl(ctx,'\u201cmat\u201d attends to \u201cthe\u201d',655,290,'#c8e0f2',9);
+  mlbl(ctx,'score = cos(1\u03b8) = 0.540',655,308,'#ffe282',9);
+  lbl(ctx,'different absolute angles',440,120,'#aac6e2',9.5,600);
+  lbl(ctx,'same wedge',440,148,'#ffe282',13,800);
+  lbl(ctx,'same score \u2713',440,172,'#a8e6c0',11,700);
+  arrow(ctx,330,150,385,150,'#ffe282',1.3);
+  arrow(ctx,550,150,495,150,'#ffe282',1.3);
+};
+
+/* ── P7: ALiBi ramps ── */
+STATIC.p7=function(){
+  const ctx=gctx('p7');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const N=8,cs=26;
+  const heads=[[0.5,'slope ½ — short-range head'],[0.25,'slope ¼'],[0.125,'slope ⅛ — long-range head']];
+  heads.forEach((hd,k)=>{
+    const bx=90+k*265, by=60;
+    for(let i=0;i<N;i++)for(let j=0;j<N;j++){
+      if(j>i){ // causal mask
+        ctx.fillStyle='rgba(40,52,72,.6)';
+        ctx.fillRect(bx+j*cs+1,by+i*cs+1,cs-2,cs-2);
+        continue;
+      }
+      const pen=hd[0]*(i-j); // penalty
+      const v=Math.max(0,1-pen/3.2);
+      ctx.fillStyle=`rgb(${60+v*195|0},${70+v*120|0},${100-v*40|0})`;
+      ctx.fillRect(bx+j*cs+1,by+i*cs+1,cs-2,cs-2);
+    }
+    pill(ctx,bx-1,by-1,N*cs+2,N*cs+2,4,null,'rgba(150,180,220,.6)',1.2);
+    mlbl(ctx,hd[1],bx+N*cs/2,by+N*cs+14,'#c8e0f2',8.5);
+    mlbl(ctx,'head '+(k+1),bx+N*cs/2,by-14,'#ffbe6e',9);
+  });
+  mlbl(ctx,'bright = full score · dark = heavily penalized · the ramp extends to ANY length — no table to run out of',440,316,'#aac6e2',9);
+  mlbl(ctx,'score −= slope × distance',440,30,'#ffbe6e',9.5);
+};
+
+/* ── P8: extrapolate vs interpolate vs per-frequency ── */
+STATIC.p8=function(){
+  const ctx=gctx('p8');if(!ctx)return;const W=880,H=420;ctx.clearRect(0,0,W,H);
+  const ax=180,aw=620;
+  function axis(y,trainEnd,total,nm,nmCol){
+    mlbl(ctx,nm,ax-12,y+8,nmCol,8.5,'right');
+    // full bar
+    pill(ctx,ax,y,aw,18,3,'rgba(48,66,96,.5)','rgba(150,180,220,.4)',.7);
+    // trained zone
+    const tw=aw*trainEnd/total;
+    ctx.fillStyle='rgba(72,186,106,.4)';ctx.fillRect(ax,y,tw,18);
+    return tw;
+  }
+  // Row 1: extrapolation
+  let tw=axis(54,4096,16384,'naive','#f0b3ac');
+  ctx.fillStyle='rgba(242,139,130,.3)';ctx.fillRect(ax+tw,54,aw-tw,18);
+  mlbl(ctx,'trained 0–4k ✓',ax+tw/2,63,'#a8e6c0',8);
+  mlbl(ctx,'4k–16k: angles never seen ✗ broken',ax+tw+(aw-tw)/2,63,'#f28b82',8);
+  // wave: continues uniformly, red past 4k
+  ctx.lineWidth=1.6;
+  ctx.beginPath();ctx.strokeStyle='#a8e6c0';
+  for(let px=0;px<=tw;px+=2){const p=px/aw*40;const v=Math.sin(p*1.6);px===0?ctx.moveTo(ax+px,96-v*13):ctx.lineTo(ax+px,96-v*13);}
+  ctx.stroke();
+  ctx.beginPath();ctx.strokeStyle='#f28b82';
+  for(let px=tw;px<=aw;px+=2){const p=px/aw*40;const v=Math.sin(p*1.6);px===tw?ctx.moveTo(ax+px,96-v*13):ctx.lineTo(ax+px,96-v*13);}
+  ctx.stroke();
+
+  // Row 2: PI
+  tw=axis(150,16384,16384,'PI','#9fdcef');
+  mlbl(ctx,'all 16k positions squeezed into the trained angle range',ax+aw/2,159,'#0a2a1a',8);
+  // squeeze arrows
+  for(let k=1;k<=5;k++){
+    const x=ax+aw*k/6;
+    arrow(ctx,x,140,x-26,142,'#9fdcef',1.1);
+  }
+  // wave compressed
+  ctx.beginPath();ctx.strokeStyle='#9fdcef';ctx.lineWidth=1.6;
+  for(let px=0;px<=aw;px+=2){const p=px/aw*40;const v=Math.sin(p*0.4);px===0?ctx.moveTo(ax+px,192-v*13):ctx.lineTo(ax+px,192-v*13);}
+  ctx.stroke();
+  mlbl(ctx,'price: neighbors crammed together — fine detail blurs',ax+aw/2,216,'#9fdcef',8);
+
+  // Row 3: NTK/YaRN per-frequency
+  axis(258,16384,16384,'YaRN','#ffe282');
+  mlbl(ctx,'per-frequency: stretch slow clocks, keep fast clocks',ax+aw/2,267,'#3a2a10',8);
+  // two waves: fast kept, slow stretched
+  ctx.beginPath();ctx.strokeStyle='#ffbe6e';ctx.lineWidth=1.5;
+  for(let px=0;px<=aw;px+=2){const p=px/aw*40;const v=Math.sin(p*1.5);px===0?ctx.moveTo(ax+px,300-v*10):ctx.lineTo(ax+px,300-v*10);}
+  ctx.stroke();
+  mlbl(ctx,'fast pair: untouched → neighbors stay sharp',ax+aw+8,300,'#ffbe6e',7.5,'left');
+  ctx.beginPath();ctx.strokeStyle='#9fdcef';ctx.lineWidth=1.5;
+  for(let px=0;px<=aw;px+=2){const p=px/aw*40;const v=Math.sin(p*0.18);px===0?ctx.moveTo(ax+px,332-v*10):ctx.lineTo(ax+px,332-v*10);}
+  ctx.stroke();
+  mlbl(ctx,'slow pair: stretched → covers 16k coarsely',ax+aw+8,332,'#9fdcef',7.5,'left');
+  mlbl(ctx,'position →',ax+aw/2,386,'#aac6e2',8.5);
+  // markers
+  [['0',0],['4k',0.25],['16k',1]].forEach(m=>{
+    mlbl(ctx,m[0],ax+aw*m[1],372,'#aac6e2',8);
+  });
+};
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

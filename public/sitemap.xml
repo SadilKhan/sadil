@@ -5,6 +5,30 @@
     <loc>//localhost:1314/blog/adventure/iceland/</loc>
     <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>//localhost:1314/blog/ai_blogs/</loc>
+    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:1314/series/ai-notebook/</loc>
+    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:1314/categories/</loc>
+    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:1314/categories/llm/</loc>
+    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:1314/blog/</loc>
+    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:1314/categories/reinforcement-learning/</loc>
+    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:1314/series/</loc>
+    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>//localhost:1314/categories/training/</loc>
+    <lastmod>2026-10-15T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>//localhost:1314/cv/</loc>
     <lastmod>2025-10-10T00:00:00+00:00</lastmod>
   </url><url>
@@ -15,15 +39,6 @@
     <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>//localhost:1314/series/adventure/</loc>
-    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:1314/categories/</loc>
-    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:1314/blog/</loc>
-    <lastmod>2025-08-24T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>//localhost:1314/series/</loc>
     <lastmod>2025-08-24T00:00:00+00:00</lastmod>
   </url><url>
     <loc>//localhost:1314/categories/travelling/</loc>

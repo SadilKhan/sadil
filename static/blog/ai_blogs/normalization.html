@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Normalization Methods — Visual Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;--s4:#222c3c;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;
+  --green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;
+  --yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;
+  --teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#8abcd8;--text3:#5a8cac;
+  --mono:'JetBrains Mono',monospace;
+  --sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.7;overflow-x:hidden}
+
+/* progress bar */
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--teal));z-index:999;transition:width .05s}
+
+/* nav */
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--bdr);z-index:1000;padding:.6rem 2rem}
+.nav-in{max-width:1020px;margin:0 auto;display:flex;align-items:center;gap:1.5rem}
+.nav-brand{font-size:.88rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--teal2),var(--purple2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.72rem;white-space:nowrap;padding:.28rem .5rem;border-radius:6px;transition:all .15s;font-weight:500}
+.nav-links a:hover,.nav-links a.act{color:var(--teal2);background:rgba(36,193,224,.1)}
+
+/* hero */
+.hero{text-align:center;padding:4rem 2rem 2rem;max-width:820px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.2rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;background:linear-gradient(135deg,#8ab4f8,#c58af9,#78d9ec);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.8rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:600px;margin:0 auto}
+
+/* tensor label */
+.tensor-label{display:inline-flex;align-items:center;gap:.3rem;background:var(--s2);border:1px solid var(--bdr2);border-radius:8px;padding:.3rem .9rem;font-family:var(--mono);font-size:.82rem;color:var(--teal2);margin:.6rem auto;letter-spacing:.04em}
+
+/* section cards */
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+.norm-card{background:var(--s1);border:1px solid var(--bdr);border-radius:16px;padding:1.8rem;margin-bottom:2.5rem;opacity:0;transform:translateY(18px);transition:opacity .5s,transform .5s}
+.norm-card.vis{opacity:1;transform:translateY(0)}
+.card-hdr{display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:.75rem;font-weight:700;padding:.28rem .7rem;border-radius:7px;letter-spacing:.05em}
+.card-title{font-size:1.35rem;font-weight:800;letter-spacing:-.02em}
+.used-by{font-size:.78rem;color:var(--text3);font-family:var(--mono);background:var(--s2);border:1px solid var(--bdr);border-radius:6px;padding:.2rem .6rem;margin-left:auto}
+
+.card-body{display:flex;flex-direction:column;gap:1rem}
+
+/* canvas */
+canvas.norm-canvas{display:block;width:100%;height:auto;border-radius:10px;background:transparent}
+
+/* formula + explanation side */
+.norm-info{display:flex;flex-direction:column;gap:1rem}
+.formula-box{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid;border-radius:0 10px 10px 0;padding:.9rem 1.1rem;overflow-x:auto}
+.formula-box .katex-display{margin:.1rem 0!important}
+.key-facts{display:flex;flex-direction:column;gap:.5rem}
+.fact{display:grid;grid-template-columns:80px 1fr;gap:.5rem;font-size:.82rem}
+.fact-label{color:var(--text3);font-family:var(--mono);font-size:.72rem;text-align:right;padding-top:.12rem}
+.fact-value{color:var(--text)}
+.dim-strip{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.25rem}
+.dim-tag{display:inline-flex;align-items:center;gap:.25rem;padding:.18rem .55rem;border-radius:5px;font-size:.72rem;font-family:var(--mono);font-weight:600}
+.dim-tag.active{font-size:.75rem}
+
+/* ctrl */
+.norm-ctrl{display:flex;align-items:center;gap:.5rem;margin-top:.7rem}
+.nbtn{background:var(--s2);border:1px solid var(--bdr2);border-radius:7px;padding:.3rem .85rem;color:var(--text2);font-size:.76rem;cursor:pointer;transition:all .12s;font-family:var(--sans)}
+.nbtn:hover{background:var(--s3);color:var(--text)}
+.nbtn.play{background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.4);color:var(--teal2)}
+.step-ind{display:inline-flex;align-items:center;padding:.28rem .8rem;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.25);border-radius:6px;font-size:.74rem;color:var(--teal2);font-family:var(--mono);font-weight:600;min-width:54px;justify-content:center}
+
+/* comparison table */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-top:1rem;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+.cmp-table th{background:var(--s3);color:var(--text2);padding:.6rem 1rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+.cmp-table td{padding:.55rem 1rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+.cmp-table tr:last-child td{border-bottom:none}
+.cmp-table tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+<div class="nav-in">
+  <div class="nav-brand">Normalization</div>
+  <div class="nav-links">
+    <a href="#bn-card">BatchNorm</a>
+    <a href="#ln-card">LayerNorm</a>
+    <a href="#rms-card">RMSNorm</a>
+    <a href="#gn-card">GroupNorm</a>
+    <a href="#in-card">InstanceNorm</a>
+    <a href="#cmp-card">Compare</a>
+  </div>
+</div>
+</nav>
+
+<div class="hero">
+  <h1>Normalization in Deep Learning</h1>
+  <p>Every method normalizes the same tensor. The only question is <em>which dimensions</em> you average over — and what that means for your batch, tokens, and features.</p>
+  <div class="tensor-label">tensor shape: [B, S, D] = [batch, sequence, embedding_dim]</div>
+</div>
+
+<main>
+<!-- ─── BATCH NORM ─── -->
+<div class="norm-card" id="bn-card">
+  <div class="card-hdr">
+    <span class="badge" style="background:rgba(66,133,244,.18);color:#8ab4f8">BN</span>
+    <span class="card-title">Batch Normalization</span>
+    <span class="used-by">CNNs · fully-connected layers</span>
+  </div>
+  <div class="card-body">
+    <div>
+      <canvas id="c-bn" class="norm-canvas" width="880" height="370"></canvas>
+      <div class="norm-ctrl">
+        <button class="nbtn" onclick="nStep('bn',-1)">◀</button>
+        <button class="nbtn play" id="bn-pb" onclick="nToggle('bn')">▶ Play</button>
+        <span class="step-ind" id="bn-si">1/3</span>
+        <button class="nbtn" onclick="nStep('bn',1)">▶</button>
+      </div>
+    </div>
+    <div class="norm-info">
+      <div class="formula-box" style="border-color:var(--blue)">
+        <div class="math-d">\hat{x}_{s,d} = \frac{x_{s,d} - \mu_d}{\sigma_d}, \quad \mu_d = \frac{1}{B}\sum_b x_{b,s,d}</div>
+      </div>
+      <div class="key-facts">
+        <div class="fact"><span class="fact-label">normalise</span><span class="fact-value">over the <strong>batch dimension B</strong> — one μ,σ per (S,D) position</span></div>
+        <div class="fact"><span class="fact-label">squash</span>
+          <div class="dim-strip">
+            <span class="dim-tag active" style="background:rgba(66,133,244,.25);border:1px solid #4285f4;color:#8ab4f8">B ← averaged</span>
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">S kept</span>
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">D kept</span>
+          </div>
+        </div>
+        <div class="fact"><span class="fact-label">problem</span><span class="fact-value">batch stats unstable at small B; breaks with B=1 (inference). Needs running mean/var for eval.</span></div>
+        <div class="fact"><span class="fact-label">learnable</span><span class="fact-value">γ, β per (S,D) position — scale & shift after normalisation</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── LAYER NORM ─── -->
+<div class="norm-card" id="ln-card">
+  <div class="card-hdr">
+    <span class="badge" style="background:rgba(251,188,4,.15);color:#fdd663">LN</span>
+    <span class="card-title">Layer Normalization</span>
+    <span class="used-by">Transformers · BERT · GPT</span>
+  </div>
+  <div class="card-body">
+    <div>
+      <canvas id="c-ln" class="norm-canvas" width="880" height="370"></canvas>
+      <div class="norm-ctrl">
+        <button class="nbtn" onclick="nStep('ln',-1)">◀</button>
+        <button class="nbtn play" id="ln-pb" onclick="nToggle('ln')">▶ Play</button>
+        <span class="step-ind" id="ln-si">1/3</span>
+        <button class="nbtn" onclick="nStep('ln',1)">▶</button>
+      </div>
+    </div>
+    <div class="norm-info">
+      <div class="formula-box" style="border-color:var(--yellow)">
+        <div class="math-d">\hat{x}_{b,s} = \frac{x_{b,s} - \mu_{b,s}}{\sigma_{b,s}}, \quad \mu_{b,s} = \frac{1}{D}\sum_d x_{b,s,d}</div>
+      </div>
+      <div class="key-facts">
+        <div class="fact"><span class="fact-label">normalise</span><span class="fact-value">over the <strong>embedding dimension D</strong> — one μ,σ per token (b,s)</span></div>
+        <div class="fact"><span class="fact-label">squash</span>
+          <div class="dim-strip">
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">B kept</span>
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">S kept</span>
+            <span class="dim-tag active" style="background:rgba(251,188,4,.2);border:1px solid #fbbc04;color:#fdd663">D ← averaged</span>
+          </div>
+        </div>
+        <div class="fact"><span class="fact-label">why LLMs</span><span class="fact-value">independent of B — works at B=1, no running stats needed, same at train/eval</span></div>
+        <div class="fact"><span class="fact-label">learnable</span><span class="fact-value">γ, β of size D — one scale & shift per embedding dimension</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── RMS NORM ─── -->
+<div class="norm-card" id="rms-card">
+  <div class="card-hdr">
+    <span class="badge" style="background:rgba(36,193,224,.15);color:#78d9ec">RMS</span>
+    <span class="card-title">RMSNorm</span>
+    <span class="used-by">LLaMA · Mistral · Gemma · Qwen</span>
+  </div>
+  <div class="card-body">
+    <div>
+      <canvas id="c-rms" class="norm-canvas" width="880" height="370"></canvas>
+      <div class="norm-ctrl">
+        <button class="nbtn" onclick="nStep('rms',-1)">◀</button>
+        <button class="nbtn play" id="rms-pb" onclick="nToggle('rms')">▶ Play</button>
+        <span class="step-ind" id="rms-si">1/3</span>
+        <button class="nbtn" onclick="nStep('rms',1)">▶</button>
+      </div>
+    </div>
+    <div class="norm-info">
+      <div class="formula-box" style="border-color:var(--teal)">
+        <div class="math-d">\hat{x}_{b,s} = \frac{x_{b,s}}{\text{RMS}(x_{b,s})}, \quad \text{RMS} = \sqrt{\frac{1}{D}\sum_d x_{b,s,d}^2}</div>
+      </div>
+      <div class="key-facts">
+        <div class="fact"><span class="fact-label">vs LayerNorm</span><span class="fact-value"><strong>no mean subtraction</strong> — only RMS scaling. Assumes zero mean, which holds in practice.</span></div>
+        <div class="fact"><span class="fact-label">squash</span>
+          <div class="dim-strip">
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">B kept</span>
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">S kept</span>
+            <span class="dim-tag active" style="background:rgba(36,193,224,.2);border:1px solid #24c1e0;color:#78d9ec">D → RMS only</span>
+          </div>
+        </div>
+        <div class="fact"><span class="fact-label">why faster</span><span class="fact-value">saves one mean computation per token — negligible in FLOPs but reduces numerical operations in the critical path</span></div>
+        <div class="fact"><span class="fact-label">learnable</span><span class="fact-value">γ of size D only — no β (no re-centering)</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── GROUP NORM ─── -->
+<div class="norm-card" id="gn-card">
+  <div class="card-hdr">
+    <span class="badge" style="background:rgba(52,168,83,.15);color:#81c995">GN</span>
+    <span class="card-title">Group Normalization</span>
+    <span class="used-by">Vision models · small batch size</span>
+  </div>
+  <div class="card-body">
+    <div>
+      <canvas id="c-gn" class="norm-canvas" width="880" height="370"></canvas>
+      <div class="norm-ctrl">
+        <button class="nbtn" onclick="nStep('gn',-1)">◀</button>
+        <button class="nbtn play" id="gn-pb" onclick="nToggle('gn')">▶ Play</button>
+        <span class="step-ind" id="gn-si">1/3</span>
+        <button class="nbtn" onclick="nStep('gn',1)">▶</button>
+      </div>
+    </div>
+    <div class="norm-info">
+      <div class="formula-box" style="border-color:var(--green)">
+        <div class="math-d">\hat{x}_{b,s,d} = \frac{x - \mu_g}{\sigma_g}, \quad g = \lfloor d \cdot G / D \rfloor</div>
+      </div>
+      <div class="key-facts">
+        <div class="fact"><span class="fact-label">normalise</span><span class="fact-value">D split into G groups — normalise within each group, per token</span></div>
+        <div class="fact"><span class="fact-label">squash</span>
+          <div class="dim-strip">
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">B kept</span>
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">S kept</span>
+            <span class="dim-tag active" style="background:rgba(52,168,83,.2);border:1px solid #34a853;color:#81c995">D/G ← averaged</span>
+          </div>
+        </div>
+        <div class="fact"><span class="fact-label">B-free</span><span class="fact-value">like LayerNorm, stats computed within a single sample. G=1 → LayerNorm; G=D → InstanceNorm.</span></div>
+        <div class="fact"><span class="fact-label">learnable</span><span class="fact-value">γ, β of size D</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── INSTANCE NORM ─── -->
+<div class="norm-card" id="in-card">
+  <div class="card-hdr">
+    <span class="badge" style="background:rgba(234,67,53,.15);color:#f28b82">IN</span>
+    <span class="card-title">Instance Normalization</span>
+    <span class="used-by">Style transfer · generative models</span>
+  </div>
+  <div class="card-body">
+    <div>
+      <canvas id="c-in" class="norm-canvas" width="880" height="370"></canvas>
+      <div class="norm-ctrl">
+        <button class="nbtn" onclick="nStep('in',-1)">◀</button>
+        <button class="nbtn play" id="in-pb" onclick="nToggle('in')">▶ Play</button>
+        <span class="step-ind" id="in-si">1/3</span>
+        <button class="nbtn" onclick="nStep('in',1)">▶</button>
+      </div>
+    </div>
+    <div class="norm-info">
+      <div class="formula-box" style="border-color:var(--red)">
+        <div class="math-d">\hat{x}_{b,d} = \frac{x_{b,d} - \mu_{b,d}}{\sigma_{b,d}}, \quad \mu_{b,d} = \frac{1}{S}\sum_s x_{b,s,d}</div>
+      </div>
+      <div class="key-facts">
+        <div class="fact"><span class="fact-label">normalise</span><span class="fact-value">over the <strong>sequence dimension S</strong> — one μ,σ per (batch, feature)</span></div>
+        <div class="fact"><span class="fact-label">squash</span>
+          <div class="dim-strip">
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">B kept</span>
+            <span class="dim-tag active" style="background:rgba(234,67,53,.2);border:1px solid #ea4335;color:#f28b82">S ← averaged</span>
+            <span class="dim-tag" style="background:rgba(255,255,255,.05);border:1px solid var(--bdr);color:var(--text3)">D kept</span>
+          </div>
+        </div>
+        <div class="fact"><span class="fact-label">effect</span><span class="fact-value">removes per-instance style information — useful for style transfer where you want to inject a new style</span></div>
+        <div class="fact"><span class="fact-label">in NLP</span><span class="fact-value">rarely used — averaging over sequence positions mixes positional meaning</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── COMPARISON TABLE ─── -->
+<div class="norm-card" id="cmp-card">
+  <div class="card-hdr">
+    <span class="badge" style="background:rgba(161,66,244,.15);color:#c58af9">CMP</span>
+    <span class="card-title">Side-by-Side Comparison</span>
+  </div>
+  <table class="cmp-table">
+    <thead>
+      <tr><th>Method</th><th>Avg over</th><th>Stats per</th><th>B=1 safe?</th><th>Train=Eval?</th><th>Use in LLMs?</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong style="color:#8ab4f8">BatchNorm</strong></td><td>B</td><td>(S,D) position</td><td><span class="tag" style="background:rgba(234,67,53,.15);color:#f28b82">✗ No</span></td><td><span class="tag" style="background:rgba(234,67,53,.15);color:#f28b82">✗ running stats</span></td><td>Rarely</td></tr>
+      <tr><td><strong style="color:#fdd663">LayerNorm</strong></td><td>D</td><td>token (b,s)</td><td><span class="tag" style="background:rgba(52,168,83,.15);color:#81c995">✓ Yes</span></td><td><span class="tag" style="background:rgba(52,168,83,.15);color:#81c995">✓ same</span></td><td>Standard (GPT, BERT)</td></tr>
+      <tr><td><strong style="color:#78d9ec">RMSNorm</strong></td><td>D (no mean)</td><td>token (b,s)</td><td><span class="tag" style="background:rgba(52,168,83,.15);color:#81c995">✓ Yes</span></td><td><span class="tag" style="background:rgba(52,168,83,.15);color:#81c995">✓ same</span></td><td>⭐ LLaMA, Mistral…</td></tr>
+      <tr><td><strong style="color:#81c995">GroupNorm</strong></td><td>D/G group</td><td>token × group</td><td><span class="tag" style="background:rgba(52,168,83,.15);color:#81c995">✓ Yes</span></td><td><span class="tag" style="background:rgba(52,168,83,.15);color:#81c995">✓ same</span></td><td>Vision / LoRA</td></tr>
+      <tr><td><strong style="color:#f28b82">InstanceNorm</strong></td><td>S</td><td>(b,d) pair</td><td><span class="tag" style="background:rgba(52,168,83,.15);color:#81c995">✓ Yes</span></td><td><span class="tag" style="background:rgba(52,168,83,.15);color:#81c995">✓ same</span></td><td>Style transfer only</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{
+    if(x.isIntersecting){ x.target.classList.add('vis'); }
+  }),{threshold:.06});
+  document.querySelectorAll('.norm-card').forEach(c=>obs.observe(c));
+
+  // nav active highlight
+  const navLinks=document.querySelectorAll('.nav-links a');
+  const navObs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        navLinks.forEach(a=>a.classList.remove('act'));
+        const a=document.querySelector('.nav-links a[href="#'+e.target.id+'"]');
+        if(a)a.classList.add('act');
+      }
+    });
+  },{threshold:.3});
+  document.querySelectorAll('.norm-card').forEach(c=>navObs.observe(c));
+
+  initAll();
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+
+/* ═══════════════════════════════════════════════
+   NORM CANVAS — fixed 880×370 resolution
+   ═══════════════════════════════════════════════ */
+const NORM_DEFS={
+  bn: {col:'#4285f4',col2:'#8ab4f8',sq:'B',
+    labels:['Full tensor [B, S, D]','B axis squeezes → stats per (S,D)','Result: [S,D] grid — one μ,σ shared across batch'],
+    narr:['Every cell holds one value. B=4 samples, S=6 tokens, D=8 dims.',
+          'Batch Norm averages over B. All 4 samples collapse into one μ,σ per (S,D) cell.',
+          'One statistics grid [S,D]. Same μ,σ applied to all B=4 samples.']},
+  ln: {col:'#fbbc04',col2:'#fdd663',sq:'D',
+    labels:['Full tensor [B, S, D]','D axis squeezes → stats per token (B,S)','Result: [B,S] grid — one μ,σ per token'],
+    narr:['Same tensor. Layer Norm works on each token independently.',
+          'For each token (b,s), all D=8 embedding values collapse into one μ,σ.',
+          'One scalar per token. Nothing crosses between tokens or batch items.']},
+  rms:{col:'#24c1e0',col2:'#78d9ec',sq:'D',
+    labels:['Full tensor [B, S, D]','D axis → RMS only (no mean)','Result: [B,S] grid — one RMS per token'],
+    narr:['Same tensor. RMSNorm also works token-by-token over D.',
+          'Compute RMS = √(Σx²/D) per token only — no mean subtraction step.',
+          'Same shape as LayerNorm result, one fewer operation per token.']},
+  gn: {col:'#34a853',col2:'#81c995',sq:'G',
+    labels:['Full tensor [B, S, D]','D split into G=2 groups, each squeezes','Result: [B,S,G=2] — two μ,σ per token'],
+    narr:['Same tensor. Group Norm splits D into G=2 groups of 4 dims each.',
+          'Each half of D squeezes independently — two μ,σ per token.',
+          'Finer than LayerNorm, B-independent. G=1→LayerNorm, G=D→InstanceNorm.']},
+  in: {col:'#ea4335',col2:'#f28b82',sq:'S',
+    labels:['Full tensor [B, S, D]','S axis squeezes → stats per (B,D)','Result: [B,D] grid — one μ,σ per feature'],
+    narr:['Same tensor. Instance Norm averages over S (sequence).',
+          'All S=6 token positions collapse into one μ,σ per (batch, feature) pair.',
+          'Removes sequence-level variation. Used for style transfer, not NLP.']}
+};
+
+function eo(t){return t<1?1-Math.pow(1-t,3):1;}
+
+function drawNormCanvas(id,phase,animT){
+  const cv=document.getElementById('c-'+id);if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const W=880,H=370;
+
+  const def=NORM_DEFS[id];
+  const col=def.col,col2=def.col2,sq=def.sq;
+  const squeeze=phase===1?eo(Math.min(animT*1.8,1)):(phase===2?1:0);
+
+  // ── Fixed isometric coords ──
+  // Origin = bottom-left-front corner of box
+  const OX=60,OY=348;
+  const uS=[80,0];          // S-axis unit (right)
+  const uD=[0,-36];         // D-axis unit (up)
+  const uB=[44,-22];        // B-axis unit (depth-right)
+
+  // Squeeze scales
+  const scB=(sq==='B')?Math.max(1-squeeze*0.96,0.04):1;
+  const scD=(sq==='D')?Math.max(1-squeeze*0.96,0.04):1;
+  const scS=(sq==='S')?Math.max(1-squeeze*0.96,0.04):1;
+  const scG=(sq==='G')?Math.max(1-squeeze*0.96,0.04):1; // both halves
+
+  function pt(s,d,b){
+    const sc_s=sq==='S'?scS:1, sc_d=sq==='G'?1:(sq==='D'?scD:1), sc_b=sq==='B'?scB:1;
+    return [OX+s*uS[0]*sc_s+d*uD[0]*sc_d+b*uB[0]*sc_b,
+            OY+s*uS[1]*sc_s+d*uD[1]*sc_d+b*uB[1]*sc_b];
+  }
+
+  function quad(a,b2,cc2,d2,fill,stroke,lw){
+    ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b2[0],b2[1]);
+    ctx.lineTo(cc2[0],cc2[1]);ctx.lineTo(d2[0],d2[1]);ctx.closePath();
+    if(fill){ctx.fillStyle=fill;ctx.fill();}
+    if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||.8;ctx.stroke();}
+  }
+
+  ctx.clearRect(0,0,W,H);
+
+  if(phase===2){
+    drawResult(ctx,id,W,H,col,col2,sq,def,animT);
+    return;
+  }
+
+  // ── Three faces ──
+  quad(pt(0,0,0),pt(6,0,0),pt(6,8,0),pt(0,8,0),'rgba(15,32,58,.95)','rgba(40,80,130,.6)');
+  quad(pt(0,8,0),pt(6,8,0),pt(6,8,4),pt(0,8,4),'rgba(10,24,44,.95)','rgba(30,65,110,.6)');
+  quad(pt(6,0,0),pt(6,8,0),pt(6,8,4),pt(6,0,4),'rgba(8,20,40,.95)','rgba(25,55,100,.6)');
+
+  // ── Grid lines ──
+  ctx.strokeStyle='rgba(40,80,130,.45)';ctx.lineWidth=.55;
+  for(let i=1;i<6;i++){ctx.beginPath();ctx.moveTo(...pt(i,0,0));ctx.lineTo(...pt(i,8,0));ctx.stroke();}
+  for(let i=1;i<8;i++){ctx.beginPath();ctx.moveTo(...pt(0,i,0));ctx.lineTo(...pt(6,i,0));ctx.stroke();}
+  for(let i=1;i<6;i++){ctx.beginPath();ctx.moveTo(...pt(i,8,0));ctx.lineTo(...pt(i,8,4));ctx.stroke();}
+  for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(...pt(0,8,i));ctx.lineTo(...pt(6,8,i));ctx.stroke();}
+  for(let i=1;i<8;i++){ctx.beginPath();ctx.moveTo(...pt(6,i,0));ctx.lineTo(...pt(6,i,4));ctx.stroke();}
+  for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(...pt(6,0,i));ctx.lineTo(...pt(6,8,i));ctx.stroke();}
+
+  // ── Highlight ──
+  if(phase===1&&squeeze>0){
+    const alpha=Math.round(Math.min(squeeze*0.7,0.65)*255).toString(16).padStart(2,'0');
+    ctx.shadowColor=col;ctx.shadowBlur=22*squeeze;
+    if(sq==='B'){
+      quad(pt(0,8,0),pt(6,8,0),pt(6,8,4),pt(0,8,4),col+alpha,col,2);
+      quad(pt(6,0,0),pt(6,8,0),pt(6,8,4),pt(6,0,4),col+alpha,col,2);
+    }
+    if(sq==='D'){
+      quad(pt(0,0,0),pt(6,0,0),pt(6,8,0),pt(0,8,0),col+alpha,col,2);
+      quad(pt(6,0,0),pt(6,8,0),pt(6,8,4),pt(6,0,4),col+alpha,col,2);
+    }
+    if(sq==='S'){
+      quad(pt(0,0,0),pt(6,0,0),pt(6,8,0),pt(0,8,0),col+alpha,col,2);
+      quad(pt(0,8,0),pt(6,8,0),pt(6,8,4),pt(0,8,4),col+alpha,col,2);
+    }
+    if(sq==='G'){
+      // two halves of front face (D split)
+      const half=4*scG;
+      const p0=pt(0,0,0),p6=pt(6,0,0),p6h=pt(6,4,0),p0h=pt(0,4,0);
+      const p0t=pt(0,8,0),p6t=pt(6,8,0);
+      quad(p0,p6,p6h,p0h,col+alpha,col,2);
+      quad(p0h,p6h,p6t,p0t,'#24c1e0'+alpha,'#24c1e0',2);
+    }
+    ctx.shadowBlur=0;
+
+    // percent label center of front face
+    const [cx2,cy2]=pt(3,4,0);
+    ctx.font='700 13px "JetBrains Mono",monospace';
+    ctx.fillStyle=col2;ctx.textAlign='center';ctx.textBaseline='middle';
+    const pct=Math.round(squeeze*100);
+    ctx.fillText(pct+'% collapsed',cx2,cy2);
+  } else {
+    // face labels when not squeezing
+    function flbl(s,d,b,txt,fsz,col_){
+      const [x,y]=pt(s,d,b);
+      ctx.font=`500 ${fsz||8.5}px "JetBrains Mono",monospace`;
+      ctx.fillStyle=col_||'rgba(70,110,160,.7)';
+      ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(txt,x,y);
+    }
+    flbl(3,4,0.02,'S × D  (front)',8.5);
+    flbl(3,8.2,2,'S × B  (top)',7.5);
+    flbl(6.3,4,2,'B × D  (right)',7.5);
+  }
+
+  // ── Axis arrows ──
+  function axArrow(p1,p2,lbl,offset){
+    const [x1,y1]=p1,[x2,y2]=p2;
+    ctx.strokeStyle='#2a4a70';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    const ang=Math.atan2(y2-y1,x2-x1);
+    ctx.fillStyle='#2a4a70';
+    ctx.beginPath();ctx.moveTo(x2,y2);
+    ctx.lineTo(x2-7*Math.cos(ang-.45),y2-7*Math.sin(ang-.45));
+    ctx.lineTo(x2-7*Math.cos(ang+.45),y2-7*Math.sin(ang+.45));
+    ctx.closePath();ctx.fill();
+    const ox=offset?offset[0]:0, oy=offset?offset[1]:0;
+    ctx.font='600 11px "JetBrains Mono",monospace';
+    ctx.fillStyle='#3a6080';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(lbl,(x1+x2)/2+ox,(y1+y2)/2+oy);
+  }
+  axArrow(pt(0,0,0),pt(6.6,0,0),'S=6',[0,14]);
+  axArrow(pt(0,0,0),pt(0,9,0),'D=8',[-22,0]);
+  axArrow(pt(0,0,0),pt(0,0,4.5),'B=4',[22,8]);
+
+  // ── Narration ──
+  ctx.font='500 11px "JetBrains Mono",monospace';
+  ctx.fillStyle=col2;ctx.textAlign='left';ctx.textBaseline='bottom';
+  ctx.fillText(def.labels[phase],10,H-22);
+  ctx.font='400 10px "Plus Jakarta Sans",sans-serif';
+  ctx.fillStyle='#3d5a78';
+  ctx.fillText(def.narr[phase],10,H-6);
+}
+
+function drawResult(ctx,id,W,H,col,col2,sq,def,animT){
+  const pulse=0.8+0.2*Math.sin(performance.now()*0.003);
+  ctx.shadowColor=col;ctx.shadowBlur=14*pulse;
+
+  const grids={
+    B:{rows:8,cols:6,lbl:'[S=6, D=8]',sub:'one μ,σ per cell — shared across all B=4 samples'},
+    D:{rows:4,cols:6,lbl:'[B=4, S=6]',sub:'one μ,σ per token — tokens normalised independently'},
+    G:{rows:8,cols:6,lbl:'[B=4, S=6, G=2]',sub:'two μ,σ per token — D split into 2 groups'},
+    S:{rows:4,cols:8,lbl:'[B=4, D=8]',sub:'one μ,σ per (batch, feature) — S positions collapsed'}
+  };
+  const g=grids[sq]||grids['D'];
+  const rows=g.rows,cols=g.cols;
+  const pad=60, cw=(W-pad*2)/cols, ch=(H-110)/rows;
+  const ox=pad, oy=28;
+
+  for(let r=0;r<rows;r++) for(let cc=0;cc<cols;cc++){
+    const x=ox+cc*cw, y=oy+r*ch;
+    // for GroupNorm, alternate color by group (row halves)
+    const isGrp1=sq==='G'&&r>=rows/2;
+    const fc=isGrp1?'#24c1e0':col;
+    ctx.fillStyle=fc+((r+cc)%2===0?'55':'33');
+    ctx.fillRect(x+1.5,y+1.5,cw-3,ch-3);
+    ctx.strokeStyle=fc+'99';ctx.lineWidth=.8;
+    ctx.strokeRect(x+1.5,y+1.5,cw-3,ch-3);
+    if(cw>32&&ch>18){
+      const lbl=sq==='G'?(isGrp1?'g1':'g0'):(sq==='rms'?'rms':'μ,σ');
+      ctx.font=`500 ${Math.min(cw/3.5,10)}px "JetBrains Mono",monospace`;
+      ctx.fillStyle='rgba(255,255,255,.7)';ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(lbl,x+cw/2,y+ch/2);
+    }
+  }
+  ctx.shadowBlur=0;
+
+  // row/col axis labels
+  const axLbls={B:['S','D'],D:['S','B'],G:['S','B'],S:['D','B']};
+  const [xAxis,yAxis]=axLbls[sq]||['S','B'];
+  ctx.font='600 11px "JetBrains Mono",monospace';
+  ctx.fillStyle='#3a6080';ctx.textAlign='center';
+  ctx.fillText('→ '+xAxis+' axis',ox+cols*cw/2,oy+rows*ch+18);
+  ctx.save();ctx.translate(ox-18,oy+rows*ch/2);ctx.rotate(-Math.PI/2);
+  ctx.fillText('→ '+yAxis+' axis',0,0);ctx.restore();
+
+  ctx.font='700 12px "JetBrains Mono",monospace';
+  ctx.fillStyle=col2;ctx.textAlign='center';
+  ctx.fillText(g.lbl+'  ✓  '+def.labels[2],W/2,oy+rows*ch+36);
+  ctx.font='400 10px "Plus Jakarta Sans",sans-serif';
+  ctx.fillStyle='#3d5a78';
+  ctx.fillText(g.sub,W/2,oy+rows*ch+52);
+  ctx.fillText(def.narr[2],W/2,oy+rows*ch+67);
+}
+
+/* ═══ animation state per method ═══ */
+const NSTATE={};
+['bn','ln','rms','gn','in'].forEach(id=>{
+  NSTATE[id]={phase:0,T:0,paused:true,running:false,anchors:[0,1,2]};
+});
+
+function nLoop(id){
+  const s=NSTATE[id];
+  if(!s.paused) s.T+=0.006;
+  // auto-advance phase at T=1.4 (hold 0.4 seconds at squeeze=100%)
+  if(!s.paused && s.T>=1.4){ s.T=0; s.phase=(s.phase+1)%3; }
+  drawNormCanvas(id, s.phase, s.T);
+  updNCtrl(id);
+  requestAnimationFrame(()=>nLoop(id));
+}
+
+function nToggle(id){
+  const s=NSTATE[id]; s.paused=!s.paused;
+  updNCtrl(id);
+}
+function nStep(id,dir){
+  const s=NSTATE[id]; s.paused=true;
+  s.phase=((s.phase+dir)+3)%3; s.T=0;
+  updNCtrl(id);
+}
+function updNCtrl(id){
+  const s=NSTATE[id];
+  const pb=document.getElementById(id+'-pb');
+  const si=document.getElementById(id+'-si');
+  if(pb) pb.textContent=s.paused?'▶ Play':'⏸ Pause';
+  if(si) si.textContent=(s.phase+1)+'/3';
+}
+
+function initAll(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        const id=e.target.id.replace('c-','');
+        if(!NSTATE[id].running){
+          NSTATE[id].running=true;
+          nLoop(id);
+        }
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:0.05});
+  ['bn','ln','rms','gn','in'].forEach(id=>{
+    const cv=document.getElementById('c-'+id);
+    if(cv) obs.observe(cv);
+  });
+}
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

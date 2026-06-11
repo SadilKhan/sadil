@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond PPO — GRPO, DAPO, GSPO, PRIME & More</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+<style>
+:root{
+  --gs:'Google Sans','Plus Jakarta Sans',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --bg:#0a0c10;--s1:#111318;--s2:#181c23;--s3:#1e232d;--s4:#252b38;--s5:#2d3545;
+  --bdr:#2a3040;--bdr2:#3a4560;
+  --gblue:#4285f4;--gblue2:#8ab4f8;--gblue3:#1a3a7a;
+  --ggreen:#34a853;--ggreen2:#81c995;
+  --gred:#ea4335;--gred2:#f28b82;
+  --gyellow:#fbbc04;--gyellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;
+  --teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e8edf5;--text2:#c8dcf4;--text3:#a8c4e8;--text4:#7090b8;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--gs);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--gblue),var(--purple),var(--ggreen),var(--gyellow));z-index:2000;transition:width .06s}
+nav{position:sticky;top:0;background:rgba(10,12,16,.94);backdrop-filter:blur(20px);border-bottom:1px answer var(--bdr);z-index:1000;padding:.6rem 2rem}
+.nav-in{max-width:1020px;margin:0 auto;display:flex;align-items:center;gap:1.5rem}
+.nav-brand{font-size:.88rem;font-weight:700;background:linear-gradient(90deg,var(--gblue2),var(--purple2),var(--ggreen2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.15rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.72rem;white-space:nowrap;padding:.28rem .5rem;border-radius:6px;transition:all .15s;font-weight:500}
+.nav-links a:hover,.nav-links a.act{color:var(--gblue2);background:rgba(66,133,244,.1)}
+main{max-width:940px;margin:0 auto;padding:0 2rem}
+/* HERO */
+.hero{padding:5rem 0 3rem;text-align:center;position:relative}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 30%,rgba(66,133,244,.05) 0%,transparent 70%);pointer-events:none}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.5rem;background:rgba(66,133,244,.08);border:1px answer rgba(66,133,244,.18);border-radius:100px;padding:.25rem 1rem;font-size:.74rem;color:var(--gblue2);margin-bottom:1.75rem;font-weight:600}
+.hero-eye-dot{width:7px;height:7px;border-radius:50%;background:var(--gblue);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;line-height:1.08;letter-spacing:-.03em;margin-bottom:1.2rem}
+.hero-sub{font-size:1.05rem;color:var(--text2);max-width:620px;margin:0 auto 2rem;line-height:1.8}
+.hero-chips{display:flex;justify-content:center;gap:.6rem;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:.3rem;background:var(--s2);border:1px answer var(--bdr);border-radius:100px;padding:.28rem .85rem;font-size:.74rem;color:var(--text2);font-weight:500}
+/* SECTIONS */
+.sec{padding:3.5rem 0;border-top:1px answer var(--bdr);opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s}
+.sec.vis{opacity:1;transform:translateY(0)}
+.sec-hdr{display:flex;align-items:flex-start;gap:1rem;margin-bottom:1.75rem}
+.sec-badge{min-width:2.4rem;height:2.4rem;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.72rem;flex-shrink:0;font-family:var(--mono)}
+.sec-badge.blue{background:var(--gblue3);border:1px answer rgba(66,133,244,.3);color:var(--gblue2)}
+.sec-badge.green{background:rgba(52,168,83,.15);border:1px answer rgba(52,168,83,.3);color:var(--ggreen2)}
+.sec-badge.yellow{background:rgba(251,188,4,.12);border:1px answer rgba(251,188,4,.3);color:var(--gyellow2)}
+.sec-badge.purple{background:rgba(161,66,244,.12);border:1px answer rgba(161,66,244,.3);color:var(--purple2)}
+.sec-badge.teal{background:rgba(36,193,224,.1);border:1px answer rgba(36,193,224,.3);color:var(--teal2)}
+.sec-badge.orange{background:rgba(255,109,0,.1);border:1px answer rgba(255,109,0,.3);color:var(--orange2)}
+.sec-badge.red{background:rgba(234,67,53,.1);border:1px answer rgba(234,67,53,.3);color:var(--gred2)}
+.sec h2{font-size:1.85rem;font-weight:800;letter-spacing:-.025em;color:#fff;line-height:1.15}
+.sec h3{font-size:1.15rem;font-weight:700;margin:2.25rem 0 .75rem;letter-spacing:-.01em}
+.sec h4{font-size:.96rem;font-weight:600;color:var(--text);margin:1.5rem 0 .5rem}
+.sec p{color:var(--text);margin-bottom:.9rem;line-height:1.78}
+.sec ul,.sec ol{margin:.5rem 0 1rem 1.5rem;color:var(--text)}
+.sec li{margin-bottom:.4rem;line-height:1.72}
+/* DIFF BOX */
+.diff{background:var(--s2);border:1px answer var(--bdr);border-radius:10px;overflow:hidden;margin:1.5rem 0}
+.diff-hdr{background:var(--s3);padding:.5rem 1rem;font-size:.73rem;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px answer var(--bdr);display:flex;gap:.75rem}
+.diff-body{padding:.65rem 1rem}
+.diff-row{display:flex;gap:.6rem;align-items:baseline;margin:.3rem 0;font-size:.82rem;font-family:var(--mono)}
+.diff-row.rm{color:var(--gred2)}
+.diff-row.rm::before{content:'−';color:var(--gred);min-width:.9rem;font-weight:700}
+.diff-row.add{color:var(--ggreen2)}
+.diff-row.add::before{content:'+';color:var(--ggreen);min-width:.9rem;font-weight:700}
+.diff-row.same{color:var(--text3)}
+.diff-row.same::before{content:' ';min-width:.9rem}
+/* CALLOUTS */
+.co{border-radius:10px;padding:1rem 1.25rem;margin:1.5rem 0;border-left:3px answer;display:grid;gap:.3rem}
+.co-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.co p{margin:0;font-size:.88rem;line-height:1.65}
+.co.blue{background:rgba(66,133,244,.06);border-color:var(--gblue);border-top:1px answer rgba(66,133,244,.1);border-right:1px answer rgba(66,133,244,.1);border-bottom:1px answer rgba(66,133,244,.1)}
+.co.blue .co-title{color:var(--gblue2)}
+.co.green{background:rgba(52,168,83,.06);border-color:var(--ggreen);border-top:1px answer rgba(52,168,83,.1);border-right:1px answer rgba(52,168,83,.1);border-bottom:1px answer rgba(52,168,83,.1)}
+.co.green .co-title{color:var(--ggreen2)}
+.co.yellow{background:rgba(251,188,4,.06);border-color:var(--gyellow);border-top:1px answer rgba(251,188,4,.1);border-right:1px answer rgba(251,188,4,.1);border-bottom:1px answer rgba(251,188,4,.1)}
+.co.yellow .co-title{color:var(--gyellow2)}
+.co.red{background:rgba(234,67,53,.06);border-color:var(--gred);border-top:1px answer rgba(234,67,53,.1);border-right:1px answer rgba(234,67,53,.1);border-bottom:1px answer rgba(234,67,53,.1)}
+.co.red .co-title{color:var(--gred2)}
+.co.purple{background:rgba(161,66,244,.06);border-color:var(--purple);border-top:1px answer rgba(161,66,244,.1);border-right:1px answer rgba(161,66,244,.1);border-bottom:1px answer rgba(161,66,244,.1)}
+.co.purple .co-title{color:var(--purple2)}
+.co.teal{background:rgba(36,193,224,.06);border-color:var(--teal);border-top:1px answer rgba(36,193,224,.1);border-right:1px answer rgba(36,193,224,.1);border-bottom:1px answer rgba(36,193,224,.1)}
+.co.teal .co-title{color:var(--teal2)}
+.co.orange{background:rgba(255,109,0,.06);border-color:var(--orange);border-top:1px answer rgba(255,109,0,.1);border-right:1px answer rgba(255,109,0,.1);border-bottom:1px answer rgba(255,109,0,.1)}
+.co.orange .co-title{color:var(--orange2)}
+/* MATH */
+.mb{background:var(--s2);border:1px answer var(--bdr);border-left:3px answer var(--gblue);border-radius:0 10px 10px 0;padding:1.1rem 1.5rem;margin:1.5rem 0;overflow-x:auto}
+.mb .katex-display{margin:.2rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.5rem;font-family:var(--mono)}
+/* FIGURES */
+.fig{background:var(--s1);border:1px answer var(--bdr);border-radius:14px;padding:1.5rem;margin:2rem 0}
+.fig-title{text-align:center;font-size:.75rem;font-weight:700;color:var(--text2);margin-bottom:1.25rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas{display:block;width:100%;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.85rem;font-style:italic;line-height:1.65}
+.fig-ctrl{display:flex;justify-content:center;gap:.6rem;margin-top:.85rem;flex-wrap:wrap;align-items:center}
+.fbtn{background:var(--s3);border:1px answer var(--bdr2);border-radius:8px;padding:.35rem 1rem;color:var(--text2);font-size:.78rem;cursor:pointer;transition:all .15s;font-family:var(--gs);font-weight:500}
+.fbtn:hover{background:var(--s4);color:var(--text)}
+.fbtn.primary{background:rgba(66,133,244,.15);border-color:rgba(66,133,244,.4);color:var(--gblue2)}
+.fbtn.green{background:rgba(52,168,83,.12);border-color:rgba(52,168,83,.4);color:var(--ggreen2)}
+/* CODE */
+.cw{margin:1.5rem 0;border-radius:10px;overflow:hidden;border:1px answer var(--bdr)}
+.ch{background:var(--s3);padding:.5rem 1rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px answer var(--bdr)}
+.cl{font-size:.74rem;color:var(--text2);font-family:var(--mono);display:flex;align-items:center;gap:.4rem}
+.cdot{width:7px;height:7px;border-radius:50%}
+pre code.hljs{font-family:var(--mono)!important;font-size:.81rem!important;padding:1.1rem 1.25rem!important;border-radius:0!important;border:none!important;background:#0d1117!important}
+.cpb{background:none;border:1px answer var(--bdr2);border-radius:4px;padding:.18rem .6rem;color:var(--text3);font-size:.7rem;cursor:pointer;font-family:var(--gs);transition:all .15s}
+.cpb:hover{color:var(--text);border-color:var(--gblue)}
+/* TABLES */
+.tw{overflow-x:auto;margin:1.5rem 0;border-radius:10px;border:1px answer var(--bdr)}
+table.main{width:100%;border-collapse:collapse;font-size:.83rem}
+table.main th{background:var(--s3);color:var(--gblue2);padding:.65rem 1rem;text-align:left;font-weight:600;border-bottom:1px answer var(--bdr2)}
+table.main td{padding:.58rem 1rem;border-bottom:1px answer var(--bdr);vertical-align:middle}
+table.main tr:last-child td{border-bottom:none}
+table.main tr:nth-child(even) td{background:rgba(17,19,24,.5)}
+.bdg{display:inline-block;padding:.12rem .5rem;border-radius:5px;font-size:.71rem;font-weight:600;font-family:var(--mono)}
+.bdg.g{background:rgba(52,168,83,.15);color:var(--ggreen2)}
+.bdg.r{background:rgba(234,67,53,.15);color:var(--gred2)}
+.bdg.y{background:rgba(251,188,4,.15);color:var(--gyellow2)}
+.bdg.b{background:rgba(66,133,244,.15);color:var(--gblue2)}
+.bdg.p{background:rgba(161,66,244,.15);color:var(--purple2)}
+.bdg.t{background:rgba(36,193,224,.12);color:var(--teal2)}
+/* NOTATION */
+.notebox{background:var(--s2);border:1px answer var(--bdr);border-radius:10px;overflow:hidden;margin:1.5rem 0}
+.notebox-hdr{background:var(--s3);padding:.6rem 1.1rem;font-size:.73rem;font-weight:700;color:var(--gyellow2);text-transform:uppercase;letter-spacing:.07em;border-bottom:1px answer var(--bdr)}
+.notebox table{width:100%;border-collapse:collapse;font-size:.82rem}
+.notebox td{padding:.55rem 1.1rem;border-bottom:1px answer var(--bdr)}
+.notebox tr:last-child td{border-bottom:none}
+.notebox td:first-child{font-family:var(--mono);color:var(--gblue2);white-space:nowrap;width:120px}
+.notebox td:nth-child(2){color:var(--gyellow2);width:170px}
+.notebox td:last-child{color:var(--text2)}
+/* SPLIT */
+.split2{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin:1.5rem 0}
+.split3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin:1.5rem 0}
+/* ALGO CARD */
+.algo-card{background:var(--s2);border:1px answer var(--bdr);border-radius:10px;padding:1.1rem 1.2rem;border-top:3px answer}
+.algo-card h4{font-size:.88rem;font-weight:700;margin:0 0 .35rem}
+.algo-card p{font-size:.8rem;color:var(--text2);margin:0;line-height:1.55}
+/* IC */
+.ic{background:rgba(66,133,244,.1);border:1px answer rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--gblue2)}
+/* STORY RECAP */
+.recap{background:linear-gradient(135deg,rgba(66,133,244,.06),rgba(161,66,244,.05));border:1px answer rgba(66,133,244,.2);border-radius:12px;padding:1.5rem;margin:2rem 0}
+.recap-title{font-size:.75rem;font-weight:700;color:var(--gblue2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.problem-pills{display:flex;flex-wrap:wrap;gap:.6rem;margin:1rem 0}
+.ppill{background:rgba(234,67,53,.1);border:1px answer rgba(234,67,53,.25);border-radius:8px;padding:.35rem .8rem;font-size:.78rem;color:var(--gred2);font-weight:500;display:flex;align-items:center;gap:.35rem}
+.ppill::before{content:'✗';color:var(--gred);font-weight:700}
+/* TIMELINE */
+.tl{position:relative;padding-left:2.2rem;margin:1.5rem 0}
+.tl::before{content:'';position:absolute;left:.6rem;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gblue),var(--purple),var(--ggreen),transparent)}
+.tl-item{position:relative;margin-bottom:1.25rem}
+.tl-item::before{content:'';position:absolute;left:-1.8rem;top:.35rem;width:.65rem;height:.65rem;border-radius:50%;box-shadow:0 0 6px currentColor}
+.tl-item.blue::before{background:var(--gblue);color:var(--gblue)}
+.tl-item.green::before{background:var(--ggreen);color:var(--ggreen)}
+.tl-item.yellow::before{background:var(--gyellow);color:var(--gyellow)}
+.tl-item.purple::before{background:var(--purple);color:var(--purple)}
+.tl-item.teal::before{background:var(--teal);color:var(--teal)}
+.tl-item.orange::before{background:var(--orange);color:var(--orange)}
+.tl-title{font-weight:600;font-size:.9rem;margin-bottom:.15rem;display:flex;align-items:center;gap:.6rem}
+.tl-desc{font-size:.82rem;color:var(--text2)}
+.tl-year{font-family:var(--mono);font-size:.7rem;padding:.1rem .5rem;border-radius:4px;font-weight:600}
+/* REFS */
+.refs{padding-bottom:4rem}
+.refs ol{padding-left:1.5rem}
+.refs li{font-size:.82rem;color:var(--text2);margin-bottom:.55rem;line-height:1.6}
+.refs a{color:var(--gblue);text-decoration:none}
+.refs a:hover{text-decoration:underline}
+@media(max-width:640px){.split2,.split3{grid-template-columns:1fr}.nav-links{display:none}.hero h1{font-size:2.1rem}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav>
+<div class="nav-in">
+  <div class="nav-brand">Beyond PPO</div>
+  <div class="nav-links">
+    <a href="#s0">Story So Far</a>
+    <a href="#s1">GRPO</a>
+    <a href="#s2">DAPO</a>
+    <a href="#s3">REINFORCE++</a>
+    <a href="#s4">RLOO</a>
+    <a href="#s5">Dr. GRPO</a>
+    <a href="#s6">GSPO</a>
+    <a href="#s7">GPG</a>
+    <a href="#s8">PRIME</a>
+    <a href="#s9">Comparison</a>
+  </div>
+</div>
+</nav>
+<main>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow"><div class="hero-eye-dot"></div>Continues from the PPO Deep Dive</div>
+  <h1 style="background:linear-gradient(135deg,#8ab4f8 0%,#c58af9 35%,#81c995 65%,#fdd663 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">Beyond PPO</h1>
+  <p class="hero-sub">Every algorithm that came after PPO. What was broken, what changed, and what it means for training your language model. Same notation as the PPO guide, with natural-language prompts and responses throughout.</p>
+  <div class="hero-chips">
+    <span class="chip">&#x1F501; Picks up from PPO Deep Dive</span>
+    <span class="chip">&#x2702;&#xFE0F; 8 algorithms</span>
+    <span class="chip">&#x1F3AC; 6 animations</span>
+    <span class="chip">&#x1F527; LLM-specific</span>
+  </div>
+</div>
+
+<!-- ===== S0: STORY SO FAR ===== -->
+<section class="sec" id="s0">
+  <div class="sec-hdr"><div class="sec-badge blue">00</div><h2>The Story So Far</h2></div>
+  <p>In the PPO guide we built up from REINFORCE &rarr; Actor-Critic &rarr; PPO. We applied it to a LLM and understood every symbol and every gradient. Here's what PPO gave us — and what it didn't.</p>
+  <div class="recap">
+    <div class="recap-title">&#x1F4AC; PPO gave us&#x2026;</div>
+    <p>A stable RL training loop with clipped updates (prevents catastrophic steps), a value function baseline (low-variance advantages via GAE), and a KL penalty against a reference policy (prevents reward hacking). Four models: policy <span class="ic">&pi;&theta;</span>, reference <span class="ic">&pi;ref</span>, reward model <span class="ic">r&phi;</span>, critic <span class="ic">V&psi;</span>.</p>
+  </div>
+  <h3>Four Problems PPO Did Not Solve</h3>
+  <div class="problem-pills">
+    <div class="ppill">4 models in VRAM simultaneously — 28GB+ for a 7B model</div>
+    <div class="ppill">Critic is hard to train from sparse end-of-sequence rewards</div>
+    <div class="ppill">Learned reward model can be gamed (reward hacking)</div>
+    <div class="ppill">Symmetric &epsilon;-clip kills entropy — diverse text ops get suppressed</div>
+    <div class="ppill">Single end-reward: 499 tokens get no signal, slow credit assignment</div>
+    <div class="ppill">All-correct or all-wrong batches waste compute entirely</div>
+  </div>
+  <p>Each algorithm below targets one or more of these. The notation stays identical to the PPO guide — new symbols are added for each method and listed explicitly.</p>
+  <h3>Notation Additions (new symbols only)</h3>
+  <div class="notebox">
+    <div class="notebox-hdr">New notation added in this guide — all PPO symbols carry over unchanged</div>
+    <table>
+      <tr><td>G</td><td>Group size</td><td>Number of responses sampled per prompt for advantage estimation. Replaces the critic. Typical: 8–16.</td></tr>
+      <tr><td>&mu;<sub>r</sub>, &sigma;<sub>r</sub></td><td>Group reward stats</td><td>Mean and std of rewards within a group of G responses to the same prompt.</td></tr>
+      <tr><td>&epsilon;<sub>low</sub>, &epsilon;<sub>high</sub></td><td>Asymmetric clip bounds</td><td>DAPO replaces PPO's symmetric &epsilon; with decoupled lower/upper bounds. &epsilon;<sub>high</sub> &gt; &epsilon;<sub>low</sub> allows low-prob tokens to grow.</td></tr>
+      <tr><td>s<sub>i</sub>(&theta;)</td><td>Sequence-level ratio</td><td>GSPO's single importance ratio per complete response, computed as the semantic mean of per-token ratios. Replaces the product of token-level ratios.</td></tr>
+      <tr><td>IPR<sub>t</sub></td><td>Implicit process reward</td><td>PRIME's dense per-step reward: log[&pi;&theta;(a<sub>t</sub>|s<sub>t</sub>) / &pi;<sub>ref</sub>(a<sub>t</sub>|s<sub>t</sub>)]. Already in our notation as a KL component — PRIME repurposes it as a reward signal.</td></tr>
+      <tr><td>o<sub>i</sub></td><td>Response i in a group</td><td>One of G generated responses for the same prompt x. Used in GRPO and all variants.</td></tr>
+    </table>
+  </div>
+  <h3>The Evolution Timeline</h3>
+  <div class="tl">
+    <div class="tl-item blue"><div class="tl-title"><span class="tl-year" style="background:rgba(66,133,244,.15);color:var(--gblue2)">2017</span>PPO</div><div class="tl-desc">The baseline. Stable, broadly applicable. Requires 4 models.</div></div>
+    <div class="tl-item green"><div class="tl-title"><span class="tl-year" style="background:rgba(52,168,83,.12);color:var(--ggreen2)">2024</span>GRPO + RLOO + ReMax</div><div class="tl-desc">Eliminate the critic. Group-based or leave-one-out baselines replace V&psi;. Down to 2–3 models.</div></div>
+    <div class="tl-item yellow"><div class="tl-title"><span class="tl-year" style="background:rgba(251,188,4,.1);color:var(--gyellow2)">Jan 2025</span>DeepSeek-R1 + RLVR breakthrough</div><div class="tl-desc">GRPO + rule-based rewards achieves SOTA reasoning. No learned reward model at all. Transforms the field.</div></div>
+    <div class="tl-item purple"><div class="tl-title"><span class="tl-year" style="background:rgba(161,66,244,.1);color:var(--purple2)">2025 Q1</span>DAPO + REINFORCE++ + Dr. GRPO</div><div class="tl-desc">Fix GRPO's failure modes: entropy collapse, normalization bias, dynamic sampling.</div></div>
+    <div class="tl-item teal"><div class="tl-title"><span class="tl-year" style="background:rgba(36,193,224,.08);color:var(--teal2)">2025 Q2</span>GSPO + GPG</div><div class="tl-desc">GSPO moves to sequence-level ratio (fixes MoE instability). GPG proves you can strip everything.</div></div>
+    <div class="tl-item orange"><div class="tl-title"><span class="tl-year" style="background:rgba(255,109,0,.08);color:var(--orange2)">2025</span>PRIME</div><div class="tl-desc">Dense process rewards without human annotation. Every step of the response sequence gets a reward signal.</div></div>
+  </div>
+</section>
+<!-- ===== S1: GRPO ===== -->
+<section class="sec" id="s1">
+  <div class="sec-hdr"><div class="sec-badge green">01</div><h2>GRPO — Kill the Critic</h2></div>
+  <p>GRPO's single insight: for LLMs, you can replace the expensive value function V<sub>&psi;</sub>(s<sub>t</sub>) with the <strong>group mean reward</strong>. Sample G responses to the same prompt; each response's advantage is simply how far its reward deviates from the group's average.</p>
+  <div class="diff">
+    <div class="diff-hdr"><span>Changes from PPO</span></div>
+    <div class="diff-body">
+      <div class="diff-row rm">Requires V<sub>&psi;</sub>(s_t) — a full-size critic model trained simultaneously</div>
+      <div class="diff-row rm">GAE advantage: &Acirc;_t = &delta;_t + (&gamma;&lambda;)&delta;_{t+1} + ... requires V at every token</div>
+      <div class="diff-row rm">4 models in memory: &pi;&theta;, &pi;ref, r&phi;, V&psi;</div>
+      <div class="diff-row add">Group advantage: &Acirc;_i = (r_i &minus; &mu;_r) / &sigma;_r — no model needed, just G reward evaluations</div>
+      <div class="diff-row add">2 models in memory: &pi;&theta; (trainable), &pi;ref (frozen)</div>
+      <div class="diff-row same">PPO-CLIP objective with clipping at [1&minus;&epsilon;, 1+&epsilon;] — unchanged</div>
+      <div class="diff-row same">KL penalty against &pi;ref — unchanged (added to objective sum)</div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\hat{A}_i = \frac{r_i - \mu_r}{\sigma_r}, \quad \mu_r = \frac{1}{G}\sum_{j=1}^G r_j, \quad \sigma_r = \sqrt{\frac{1}{G}\sum_j (r_j - \mu_r)^2}</div>
+    <div class="mb-label">GRPO advantage — the group is the critic. No V&psi; needed. Positive means above group average.</div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\mathcal{J}_{GRPO}(\theta) = \mathbb{E}_{x,\{o_i\}}\!\left[\frac{1}{G}\sum_{i=1}^G\sum_t \min\!\left(r_t(\theta)\hat{A}_i,\,\text{clip}(r_t(\theta),1-\varepsilon,1+\varepsilon)\hat{A}_i\right) - \beta\,D_{KL}(\pi_\theta\|\pi_{ref})\right]</div>
+    <div class="mb-label">Full GRPO objective — identical to PPO-CLIP in structure, but &Acirc;_i comes from group normalization, not V&psi;</div>
+  </div>
+  <div class="co green">
+    <div class="co-title">&#x1F527; Worked example — a group of G=8 answers to one prompt</div>
+    <p>Prompt: <span class="ic">Explain why the sky appears blue during the day.</span><br>
+    The model samples 8 answers. A judge model scores each on factual accuracy and clarity:<br>
+    r = [0.91, 0.83, 0.78, 0.94, 0.61, 0.88, 0.55, 0.82] &rarr; &mu;<sub>r</sub>=0.79, &sigma;<sub>r</sub>=0.13<br>
+    Response 4 (r=0.94): &Acirc;_4 = (0.94 &minus; 0.79)/0.13 = <strong>+1.15</strong> (well above average, push its token probabilities up)<br>
+    Response 5 (r=0.61): &Acirc;_5 = (0.61 &minus; 0.79)/0.13 = <strong>&minus;1.38</strong> (well below average, push its token probabilities down)</p>
+  </div>
+  <div class="fig">
+    <div class="fig-title">Figure 1 &mdash; GRPO: The Group of Sampled Answers Is the Critic</div>
+    <canvas id="c-grpo" height="300"></canvas>
+    <div class="fig-cap">Each bar is one answer sampled for the same prompt. The amber dashed line is the group mean, which acts as the free critic. Green bars (above the mean) get positive advantages and their token probabilities increase next step. Red bars (below the mean) get negative advantages and decrease. Click resample to draw a new batch.</div>
+    <div class="fig-ctrl">
+      <button class="fbtn primary" onclick="resampleGRPO()">&#x1F504; Resample Group</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== S2: DAPO ===== -->
+<section class="sec" id="s2">
+  <div class="sec-hdr"><div class="sec-badge yellow">02</div><h2>DAPO — Four Fixes to GRPO</h2></div>
+  <p>ByteDance identified four specific failure modes in GRPO when training at scale on long response sequences. Each has a targeted fix.</p>
+  <div class="diff">
+    <div class="diff-hdr"><span>Changes from GRPO</span></div>
+    <div class="diff-body">
+      <div class="diff-row rm">Symmetric clip: clip(r_t, 1&minus;&epsilon;, 1+&epsilon;) — kills low-probability tokens</div>
+      <div class="diff-row rm">Loss normalized per-response: divide by |o_i| — biases toward short sequences</div>
+      <div class="diff-row rm">KL divergence penalty &beta;·D_KL — can destabilize long-sequence training</div>
+      <div class="diff-row rm">All batches used — all-correct or all-wrong groups waste compute</div>
+      <div class="diff-row add">Asymmetric clip: clip(r_t, 1&minus;&epsilon;<sub>low</sub>, 1+&epsilon;<sub>high</sub>) — &epsilon;<sub>high</sub>&gt;&epsilon;<sub>low</sub>, low-prob tokens can grow</div>
+      <div class="diff-row add">Token-level normalization: divide by &Sigma;<sub>i</sub>|o<sub>i</sub>| — all tokens contribute equally regardless of seq length</div>
+      <div class="diff-row add">KL term removed — stability from asymmetric clip + dynamic sampling instead</div>
+      <div class="diff-row add">Dynamic sampling: filter batches where all G correct OR all G wrong (zero advantage batches)</div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\mathcal{J}_{DAPO}(\theta) = \mathbb{E}\!\left[\frac{1}{\sum_i|o_i|}\sum_{i=1}^G\sum_t \min\!\left(r_t(\theta)\hat{A}_i,\;\text{clip}(r_t(\theta),1-\varepsilon_{low},1+\varepsilon_{high})\hat{A}_i\right)\right]</div>
+    <div class="mb-label">DAPO objective — note: normalized by total tokens (not per-response), asymmetric clip, no KL term, filtered batches only</div>
+  </div>
+  <h3>Fix 1 — Clip-Higher: Preventing Entropy Collapse</h3>
+  <p>In GRPO/PPO, the symmetric clip <span class="ic">clip(r_t, 0.8, 1.2)</span> treats token probability increases and decreases the same way. But this is asymmetric in effect: for a <em>rare</em> token (think a low-frequency word like "albeit" or a specialized term like "Rayleigh"), even a small absolute increase in probability turns into a very high ratio r<sub>t</sub>(&theta;) &gg; 1, and the clip kills the gradient immediately. The model can never learn to use these words even when they would be perfect for the answer.</p>
+  <p>DAPO sets <span class="ic">&epsilon;<sub>low</sub>=0.2, &epsilon;<sub>high</sub>=0.28</span>. The clip for increasing probability is looser. Rare-but-valid tokens get room to grow during training.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 2 &mdash; Clip-Higher: GRPO vs DAPO Token Entropy</div>
+    <canvas id="c-clip" height="310"></canvas>
+    <div class="fig-cap">Probability mass for three vocabulary buckets over 2000 training steps. "the" is a common token; "scattering" is a moderate-frequency word for this prompt; "Rayleigh" is rare but the technically correct term. GRPO (left) clips the "Rayleigh" gradient aggressively, so its probability decays to zero and the word is never used again. DAPO (right) with &epsilon;<sub>high</sub>=0.28 lets it keep a viable probability throughout training.</div>
+  </div>
+  <h3>Fix 2 — Dynamic Sampling: Skip Zero-Gradient Batches</h3>
+  <p>When all G responses in a group are either all good (reward &approx; 1) or all bad (reward &approx; 0), the group advantage <span class="ic">&Acirc;_i = (r_i &minus; &mu;_r)/&sigma;_r</span> is near-zero for every sample. The gradient is essentially zero. DAPO filters these batches out entirely. Only batches with mixed outcomes (at least one good and one bad answer) are used for training.</p>
+  <div class="fig">
+    <div class="fig-title">Figure 3 &mdash; Dynamic Sampling: Filter Zero-Gradient Batches</div>
+    <canvas id="c-dynsampl" height="260"></canvas>
+    <div class="fig-cap">Incoming training batches. Each box is one of G=6 sampled answers (green = the judge accepted it, red = rejected). All-accepted and all-rejected batches have zero advantage everywhere — no gradient signal. DAPO discards them and only trains on mixed batches, which speeds up effective learning and avoids wasted compute.</div>
+    <div class="fig-ctrl"><button class="fbtn primary" onclick="nextBatch()">&#x25B6; Next Batch</button></div>
+  </div>
+  <h3>Fix 3 — Token-Level Normalization: Fix Length Bias</h3>
+  <p>GRPO normalizes the loss by each response's length: <span class="ic">sum_t / |o_i|</span>. A correct 4-token answer gets a gradient 3&times; larger per token than a correct 12-token answer with equal reward. This pushes the model to prefer terse responses even when a more detailed one is genuinely better.</p>
+  <p>DAPO divides by the <em>total</em> tokens across all G responses: <span class="ic">sum_i sum_t / (sum_i |o_i|)</span>. Every token contributes equally, regardless of which response it sits in.</p>
+  <div class="co yellow">
+    <div class="co-title">&#x1F527; Length bias, worked out</div>
+    <p>Group of 2 answering "Why is the sky blue?":<br>
+    Response A = "Sunlight scatters in air." (4 tokens, r=0.85)<br>
+    Response B = "Shorter blue wavelengths scatter more than longer red wavelengths in the atmosphere." (12 tokens, r=0.85)<br>
+    Same reward, but very different sentence quality.<br>
+    <strong>GRPO</strong>: A gradient weight = 1/4 = 0.25 per token. B gradient weight = 1/12 = 0.083 per token. A gets 3× more gradient pull per token despite the longer answer being more informative.<br>
+    <strong>DAPO</strong>: both normalized by 4+12=16 total tokens. A weight = 1/16. B weight = 1/16. Equal treatment.</p>
+  </div>
+</section>
+<!-- ===== S3: REINFORCE++ ===== -->
+<section class="sec" id="s3">
+  <div class="sec-hdr"><div class="sec-badge purple">03</div><h2>REINFORCE++ — PPO Stability, No Critic</h2></div>
+  <p>REINFORCE++ takes the opposite design philosophy to DAPO: instead of stripping things from GRPO, it adds PPO's stability tricks back to a clean REINFORCE baseline. The result is a method that matches PPO's training behavior without needing V<sub>&psi;</sub>.</p>
+  <div class="diff">
+    <div class="diff-hdr"><span>Changes from vanilla REINFORCE</span></div>
+    <div class="diff-body">
+      <div class="diff-row rm">No baseline — full reward as advantage signal — very high variance</div>
+      <div class="diff-row rm">No update constraint — large steps can destroy the policy</div>
+      <div class="diff-row add">Group mean baseline (from GRPO) — &Acirc;_i = r_i &minus; &mu;_r — variance reduction</div>
+      <div class="diff-row add">Per-token KL penalty &beta;·log(&pi;&theta;/&pi;ref) — from PPO, prevents reward hacking</div>
+      <div class="diff-row add">Clipped importance ratio r_t(&theta;) at [1&minus;&epsilon;, 1+&epsilon;] — from PPO, prevents catastrophic steps</div>
+      <div class="diff-row add">Advantage normalization across the batch — from GRPO, stabilizes gradient scale</div>
+      <div class="diff-row same">No critic V&psi; — same as GRPO</div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\hat{A}_i^{R++} = r_i - \mu_r \quad \text{(no } \div\sigma_r\text{, no critic)}</div>
+    <div class="mb-label">REINFORCE++ advantage — mean-centered only. No division by standard deviation (avoids the bias Dr. GRPO later identifies).</div>
+  </div>
+  <p>The KL penalty is the same per-token formulation from PPO: <span class="ic">&beta;·log[&pi;&theta;(a_t|s_t)/&pi;ref(a_t|s_t)]</span> subtracted from the reward at each token. This was removed in DAPO; REINFORCE++ keeps it, providing a softer anchor to the reference policy.</p>
+  <div class="co purple">
+    <div class="co-title">&#x1F527; Why the KL term matters in practice</div>
+    <p>Without a KL anchor to the reference policy, the model often collapses onto whatever generic phrasing happened to score well early. You see the same hedging openers (think "It is important to note that..." or "In summary,...") on every prompt, because those phrases never lose points and the policy slowly stops exploring. REINFORCE++ keeps the KL anchor while still avoiding the expensive critic. A good middle ground when you want more conservative training than DAPO.</p>
+  </div>
+</section>
+
+<!-- ===== S4: RLOO ===== -->
+<section class="sec" id="s4">
+  <div class="sec-hdr"><div class="sec-badge teal">04</div><h2>RLOO — Leave-One-Out Baseline</h2></div>
+  <p>RLOO (REINFORCE Leave-One-Out) makes one targeted fix to GRPO's advantage estimate: the baseline for response <em>i</em> should not include response <em>i</em> itself. GRPO's group mean includes the response being evaluated, introducing a small but measurable bias.</p>
+  <div class="diff">
+    <div class="diff-hdr"><span>Changes from GRPO</span></div>
+    <div class="diff-body">
+      <div class="diff-row rm">Baseline = &mu;_r = (1/G)&Sigma;<sub>j=1..G</sub> r_j — includes r_i in its own baseline</div>
+      <div class="diff-row add">Baseline = (1/(G-1))&Sigma;<sub>j&ne;i</sub> r_j — leave-one-out: r_i excluded from its own baseline</div>
+      <div class="diff-row same">PPO-CLIP objective — unchanged</div>
+      <div class="diff-row same">No critic, no KL term (optionally added) — unchanged from GRPO</div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\hat{A}_i^{RLOO} = r_i - \frac{1}{G-1}\sum_{j \neq i} r_j</div>
+    <div class="mb-label">RLOO advantage — unbiased estimator. Response i is not used in its own baseline. Provably lower bias than GRPO at small G.</div>
+  </div>
+  <div class="co teal">
+    <div class="co-title">&#x1F4A1; When does this bias actually bite?</div>
+    <p>Most noticeable at small G (4–6). With G=4, GRPO's mean includes 25% of r_i itself, which is a noisy estimate. RLOO's leave-one-out baseline is based on 3 independent samples. At G=16 the difference is negligible. If you're memory-constrained to G=4–6, RLOO is worth the switch.</p>
+  </div>
+</section>
+
+<!-- ===== S5: DR. GRPO ===== -->
+<section class="sec" id="s5">
+  <div class="sec-hdr"><div class="sec-badge red">05</div><h2>Dr. GRPO — Remove Normalization Bias</h2></div>
+  <p>Dr. GRPO identifies a subtle but consequential bug: dividing by &sigma;<sub>r</sub> (the group standard deviation) introduces a systematic bias that over-weights hard prompts and under-weights easy ones. In practice, hard prompts with widely varying answer quality dominate the gradient, while easy prompts with uniformly good answers contribute almost nothing, even when the small reward gaps there carry real signal.</p>
+  <div class="diff">
+    <div class="diff-hdr"><span>Changes from GRPO</span></div>
+    <div class="diff-body">
+      <div class="diff-row rm">&Acirc;_i = (r_i &minus; &mu;_r) / &sigma;_r — division by &sigma; inflates advantages on high-variance (hard) prompts</div>
+      <div class="diff-row add">&Acirc;_i = r_i &minus; &mu;_r — mean-centering only, no &sigma; normalization</div>
+      <div class="diff-row same">All other components identical to GRPO</div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\hat{A}_i^{DrGRPO} = r_i - \mu_r \quad \text{(no division by } \sigma_r\text{)}</div>
+    <div class="mb-label">Dr. GRPO advantage — mean-centered but not scaled. Advantages on easy and hard prompts are comparable in magnitude.</div>
+  </div>
+  <div class="co red">
+    <div class="co-title">&#x26A0;&#xFE0F; The &sigma; bias, made concrete</div>
+    <p><strong>Easy prompt</strong> (factual recall, e.g. "What is the capital of France?"): rewards [0.92, 0.90, 0.91, 0.89] &rarr; &sigma;=0.01. GRPO: &Acirc;_0 = (0.92&minus;0.905)/0.01 = <strong>+1.5</strong><br>
+    <strong>Hard prompt</strong> (open-ended reasoning, e.g. "Argue both sides of remote work."): rewards [0.94, 0.61, 0.78, 0.55] &rarr; &sigma;=0.16. GRPO: &Acirc;_0 = (0.94&minus;0.72)/0.16 = <strong>+1.375</strong><br>
+    GRPO treats these advantages as roughly equal, but the easy prompt's raw reward gap is tiny (0.015) compared to the hard prompt's (0.22). Dividing by &sigma; artificially magnifies the easy prompt's signal. Dr. GRPO removes that distortion.</p>
+  </div>
+</section>
+
+<!-- ===== S6: GSPO ===== -->
+<section class="sec" id="s6">
+  <div class="sec-hdr"><div class="sec-badge blue">06</div><h2>GSPO — Sequence-Level Importance Ratio</h2></div>
+  <p>GSPO makes a deeper structural argument: the probability ratio <span class="ic">r_t(&theta;) = &pi;&theta;(a_t|s_t)/&pi;old(a_t|s_t)</span> is at the wrong granularity. We apply a <em>token-level</em> correction to a <em>sequence-level</em> reward. The mismatch compounds over long responses, creating high variance — especially in MoE architectures where expert routing can differ between numerator and denominator.</p>
+  <div class="diff">
+    <div class="diff-hdr"><span>Changes from GRPO</span></div>
+    <div class="diff-body">
+      <div class="diff-row rm">Token-level ratio: r_t(&theta;) = &pi;&theta;(a_t|s_t) / &pi;old(a_t|s_t) — T separate ratios per response</div>
+      <div class="diff-row rm">Per-token clip applied independently to each r_t</div>
+      <div class="diff-row add">Sequence-level ratio: s_i(&theta;) = exp((1/|o_i|) &Sigma;_t log[&pi;&theta;/&pi;old]) — one ratio per full response</div>
+      <div class="diff-row add">Single clip applied to s_i — aligns the optimization unit with the reward unit</div>
+      <div class="diff-row same">Group advantage &Acirc;_i — same as GRPO</div>
+      <div class="diff-row same">KL penalty — unchanged</div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="math-d">s_i(\theta) = \exp\!\left(\frac{1}{|o_i|}\sum_{t=1}^{|o_i|}\log\frac{\pi_\theta(a_t|s_t)}{\pi_{old}(a_t|s_t)}\right)</div>
+    <div class="mb-label">GSPO sequence-level ratio — semantic mean of per-token ratios. One stable number per response instead of T noisy ones.</div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\mathcal{J}_{GSPO}(\theta)=\mathbb{E}\!\left[\frac{1}{G}\sum_{i=1}^G \min\!\left(s_i(\theta)\hat{A}_i,\;\text{clip}(s_i(\theta),1-\varepsilon,1+\varepsilon)\hat{A}_i\right)\right]</div>
+    <div class="mb-label">GSPO objective — identical structure to GRPO/PPO but uses s_i (one ratio per response) instead of r_t (one ratio per token)</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">Figure 4 &mdash; Token-Level vs Sequence-Level Ratio: Variance Comparison</div>
+    <canvas id="c-gspo" height="310"></canvas>
+    <div class="fig-cap">A 7-token answer "Dropout randomly zeroes units during training." Left: GRPO computes 7 separate token ratios — large variance, some land at ratio 1.6 (too high, gets clipped), some at 0.5 (too low). Right: GSPO collapses them into a single semantic mean &asymp; 1.04, which sits comfortably inside the [0.8, 1.2] clip range. One stable update signal per response.</div>
+    <div class="fig-ctrl"><button class="fbtn primary" onclick="resampleGSPO()">&#x1F504; Resample Ratios</button></div>
+  </div>
+</section>
+
+<!-- ===== S7: GPG ===== -->
+<section class="sec" id="s7">
+  <div class="sec-hdr"><div class="sec-badge orange">07</div><h2>GPG — The Bare Minimum</h2></div>
+  <p>GPG asks a provocative question: after stripping away the critic (GRPO), asymmetric clip, and KL penalty (DAPO), the sequence-level ratio (GSPO) — what actually remains? How much of PPO's machinery is truly necessary for verifiable rewards?</p>
+  <p>The answer: just the policy gradient with a group mean baseline. No surrogate objective, no clipping, no KL term, no reference model.</p>
+  <div class="diff">
+    <div class="diff-hdr"><span>Changes from GRPO</span></div>
+    <div class="diff-body">
+      <div class="diff-row rm">min(r_t·&Acirc;, clip(r_t,1&pm;&epsilon;)·&Acirc;) — clipped surrogate objective</div>
+      <div class="diff-row rm">KL divergence penalty &beta;·D_KL(&pi;&theta;||&pi;ref)</div>
+      <div class="diff-row rm">&pi;ref — reference model not needed</div>
+      <div class="diff-row add">Direct log-probability gradient: &Sigma;_t log &pi;&theta;(a_t|s_t) · &Acirc;_i</div>
+      <div class="diff-row add">No clipping — full gradient at every step</div>
+      <div class="diff-row same">Group mean baseline &Acirc;_i = r_i &minus; &mu;_r — from GRPO, unchanged</div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\mathcal{J}_{GPG}(\theta)=\mathbb{E}_{x,\{o_i\}}\!\left[\frac{1}{G}\sum_{i=1}^G\sum_{t=1}^{|o_i|}\log\pi_\theta(a_t|s_t)\cdot\hat{A}_i\right]</div>
+    <div class="mb-label">GPG objective — classical REINFORCE with group mean baseline. No surrogate loss, no clip, no KL, no reference model.</div>
+  </div>
+  <div class="co orange">
+    <div class="co-title">&#x26A0;&#xFE0F; When to reach for GPG</div>
+    <p>GPG is competitive with GRPO on math and code benchmarks <em>when rewards are verifiable and dense enough</em>. With a smooth scalar reward and a small learning rate, the missing clip may not hurt much in practice. But with binary 0/1 rewards (the answer is either right or wrong), the lack of clipping can produce unstable updates. DAPO is the safer default; treat GPG as a useful ablation baseline.</p>
+  </div>
+</section>
+<!-- ===== S8: PRIME ===== -->
+<section class="sec" id="s8">
+  <div class="sec-hdr"><div class="sec-badge teal">08</div><h2>PRIME — Dense Process Rewards</h2></div>
+  <p>Every method so far inherits PPO's fundamental reward structure: a single scalar at the end of the sequence. For a 500-token model response, 499 tokens receive zero reward signal. PRIME breaks this entirely. It assigns a dense reward to <em>every reasoning step</em> — with no human annotation and no separate PRM model.</p>
+  <h3>The Key Insight: The Log-Ratio Is Already a Reward</h3>
+  <p>From the PPO deep dive, we defined the implicit reward from the optimal policy derivation:</p>
+  <div class="mb">
+    <div class="math-d">r(x,y) = \beta\log\frac{\pi^*(y|x)}{\pi_{ref}(y|x)} + \beta\log Z(x)</div>
+    <div class="mb-label">Recall from Section 2 of the PPO guide — the reward is implicit in the policy ratio. This is how DPO derived its loss.</div>
+  </div>
+  <p>PRIME extends this to the <em>token level</em>. At each step t, define the <strong>Implicit Process Reward (IPR)</strong>:</p>
+  <div class="mb">
+    <div class="math-d">IPR_t = \log\frac{\pi_\theta(a_t|s_t)}{\pi_{ref}(a_t|s_t)}</div>
+    <div class="mb-label">PRIME implicit process reward — already computed in every PPO/GRPO update (it IS the per-token KL). PRIME reuses it as a dense reward signal.</div>
+  </div>
+  <div class="diff">
+    <div class="diff-hdr"><span>Changes from GRPO</span></div>
+    <div class="diff-body">
+      <div class="diff-row rm">Sparse reward: r̃_t = r(x,y) only at final token t=T, zero elsewhere</div>
+      <div class="diff-row rm">PRM requires expensive human step-level annotations to train</div>
+      <div class="diff-row add">Dense reward: r̃_t = &gamma;·IPR_t + (1&minus;&gamma;)·r(x,y)·[t==T] at every token</div>
+      <div class="diff-row add">PRM updated online using only policy rollouts + outcome labels — no human annotations</div>
+      <div class="diff-row same">Group sampling and advantage estimation from GRPO — unchanged</div>
+      <div class="diff-row same">PPO-CLIP objective structure — unchanged</div>
+    </div>
+  </div>
+  <div class="mb">
+    <div class="math-d">\tilde{r}_t^{PRIME} = \underbrace{\gamma \cdot \text{IPR}_t}_{\text{dense process reward}} + \underbrace{(1-\gamma)\cdot r(x,y)\cdot\mathbf{1}[t=T]}_{\text{outcome reward at final step}}</div>
+    <div class="mb-label">PRIME's modified reward at token t. &gamma; controls the balance. The IPR term is free — it's the log-ratio we already compute for the KL penalty.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">Figure 5 &mdash; PRIME vs GRPO: Dense vs Sparse Rewards Across the Answer</div>
+    <canvas id="c-prime" height="320"></canvas>
+    <div class="fig-cap">An answer being written step by step: topic sentence &rarr; first claim &rarr; supporting citation &rarr; second claim &rarr; another citation &rarr; conclusion. GRPO (bottom row) hands out zero reward to every step except the very last, so the model gets no feedback on whether the middle of the answer was reasonable. PRIME (top row) uses the implicit process reward IPR_t at every step, telling the model immediately whether each new sentence moved it closer to a strong final answer.</div>
+    <div class="fig-ctrl">
+      <button class="fbtn primary" id="prime-btn" onclick="togglePrime()">&#9646;&#9646; Pause</button>
+    </div>
+  </div>
+  <div class="co teal">
+    <div class="co-title">&#x1F527; Why dense rewards help a language model</div>
+    <p>Long-form answers are sequential and compositional. Each sentence builds on the previous ones, and the conclusion is only as good as the claims that led to it. With GRPO's sparse reward, the model only learns "the final answer scored 0.83" — it never finds out whether the topic sentence, the first claim, or the citation was the weak link.<br><br>
+    PRIME gives a signal at every step. If the next token is one the trained policy now favors more than the reference policy did, IPR &gt; 0 (we are moving in a direction the reward signal endorses). If it is one the policy is now less confident about, IPR &lt; 0. This step-level feedback dramatically improves credit assignment for tokens early in the response.</p>
+  </div>
+</section>
+
+<!-- ===== S9: COMPARISON ===== -->
+<section class="sec" id="s9">
+  <div class="sec-hdr"><div class="sec-badge purple">09</div><h2>Full Comparison</h2></div>
+  <div class="tw"><table class="main">
+    <thead><tr><th>Method</th><th>Removes</th><th>Adds / Changes</th><th>Models</th><th>Reach for it when&hellip;</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--gblue2)">PPO</strong></td><td>—</td><td>Baseline</td><td><span class="bdg r">4×</span></td><td>You have a learned reward model and plenty of VRAM</td></tr>
+      <tr><td><strong style="color:var(--ggreen2)">GRPO</strong></td><td>Critic V&psi;</td><td>Group mean baseline</td><td><span class="bdg y">2×</span></td><td>Good default when rewards are verifiable</td></tr>
+      <tr><td><strong style="color:var(--gyellow2)">DAPO</strong></td><td>KL term</td><td>Asymmetric clip, dynamic sampling, token-norm</td><td><span class="bdg y">2×</span></td><td><strong>&#x2B50; Recommended default</strong> — fixes entropy collapse on rare words</td></tr>
+      <tr><td><strong style="color:var(--purple2)">REINFORCE++</strong></td><td>Critic V&psi;</td><td>Adds KL + clip back to REINFORCE</td><td><span class="bdg y">2×</span></td><td>You want conservative training with a KL anchor</td></tr>
+      <tr><td><strong style="color:var(--teal2)">RLOO</strong></td><td>Critic V&psi;</td><td>Leave-one-out baseline (unbiased)</td><td><span class="bdg y">2×</span></td><td>Small group size G≤6, want an unbiased advantage</td></tr>
+      <tr><td><strong style="color:var(--gred2)">Dr. GRPO</strong></td><td>&sigma;_r normalization</td><td>Mean-only centering</td><td><span class="bdg y">2×</span></td><td>Training on a mix of easy and hard prompts</td></tr>
+      <tr><td><strong style="color:var(--gblue2)">GSPO</strong></td><td>Token-level ratio</td><td>Sequence-level semantic mean ratio</td><td><span class="bdg y">2×</span></td><td>Long responses (T&gt;500 tokens) or MoE architectures</td></tr>
+      <tr><td><strong style="color:var(--orange2)">GPG</strong></td><td>Clip, KL, &pi;ref</td><td>Pure REINFORCE + group mean</td><td><span class="bdg g">1×</span></td><td>Memory-extremely-constrained, smooth reward function</td></tr>
+      <tr><td><strong style="color:var(--teal2)">PRIME</strong></td><td>Sparse reward</td><td>Dense IPR at every step</td><td><span class="bdg y">2×</span></td><td><strong>&#x2B50; Highly recommended</strong> — step-level feedback for long answers</td></tr>
+    </tbody>
+  </table></div>
+  <h3>A Practical Recipe</h3>
+  <div class="fig">
+    <div class="fig-title">Figure 6 &mdash; Algorithm Decision Flow for LLM Post-Training</div>
+    <canvas id="c-flow" height="360"></canvas>
+    <div class="fig-cap">Decision tree for choosing your algorithm. The key branching points: do you have a verifiable reward? (yes = RLVR family) Can you define a step-level reward? (yes = PRIME) Are you training on long responses or MoE models? (yes = GSPO). The starred recommendation combines DAPO with PRIME's dense reward signal.</div>
+  </div>
+</section>
+
+<!-- ===== REFS ===== -->
+<section class="sec refs" id="refs">
+  <div class="sec-hdr"><div class="sec-badge blue" style="font-size:.6rem">REF</div><h2>References</h2></div>
+  <ol>
+    <li>Shao, Z. et al. (2024). <em>DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models (GRPO)</em>. <a href="https://arxiv.org/abs/2402.03300">arXiv:2402.03300</a></li>
+    <li>DeepSeek-AI (2025). <em>DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning</em>. <a href="https://arxiv.org/abs/2501.12948">arXiv:2501.12948</a></li>
+    <li>Yu, Q. et al. (2025). <em>DAPO: An Open-Source LLM Reinforcement Learning System at Scale</em>. <a href="https://arxiv.org/abs/2503.14476">arXiv:2503.14476</a></li>
+    <li>Hu, J. (2025). <em>REINFORCE++: A Simple and Efficient Approach for Aligning Large Language Models</em>. <a href="https://arxiv.org/abs/2501.03262">arXiv:2501.03262</a></li>
+    <li>Ahmadian, A. et al. (2024). <em>Back to Basics: Revisiting REINFORCE-Style Optimization for Learning from Human Feedback (RLOO)</em>. <a href="https://arxiv.org/abs/2402.14740">arXiv:2402.14740</a></li>
+    <li>Liu, Z. et al. (2025). <em>Understanding R1-Zero-Like Training: A Critical Perspective (Dr. GRPO)</em>. COLM 2025. <a href="https://arxiv.org/abs/2503.20783">arXiv:2503.20783</a></li>
+    <li>Zheng, C. et al. (2025). <em>GSPO: Group Sequence Policy Optimization</em>. <a href="https://arxiv.org/abs/2507.18071">arXiv:2507.18071</a></li>
+    <li>Chu, X. et al. (2025). <em>GPG: A Simple and Strong Reinforcement Learning Baseline for Model Reasoning</em>. <a href="https://arxiv.org/abs/2504.02546">arXiv:2504.02546</a></li>
+    <li>Yuan, L. et al. (2025). <em>PRIME: Process Reinforcement through Implicit Rewards</em>. <a href="https://arxiv.org/abs/2502.01456">arXiv:2502.01456</a></li>
+  </ol>
+</section>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false,strict:'ignore'});}catch(e){}
+  });
+  hljs.highlightAll();
+  setupCanvases();
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+  document.querySelectorAll('.sec').forEach(s=>{
+    const r=s.getBoundingClientRect();
+    if(r.top<120&&r.bottom>0)
+      document.querySelectorAll('.nav-links a').forEach(a=>a.classList.toggle('act',a.getAttribute('href')==='#'+s.id));
+  });
+});
+const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('vis');}),{threshold:.06});
+document.querySelectorAll('.sec').forEach(s=>obs.observe(s));
+function copyCode(b){navigator.clipboard.writeText(b.closest('.cw').querySelector('code').textContent).then(()=>{b.textContent='copied!';setTimeout(()=>b.textContent='copy',1500)});}
+
+/* ─── SHARED HELPERS ─── */
+const C={bg:'#0a0c10',s1:'#111318',s2:'#181c23',s3:'#1e232d',s4:'#252b38',
+  bdr:'#2a3040',bdr2:'#3a4560',
+  blue:'#4285f4',blue2:'#8ab4f8',
+  green:'#34a853',green2:'#81c995',
+  red:'#ea4335',red2:'#f28b82',
+  yellow:'#fbbc04',yellow2:'#fdd663',
+  purple:'#a142f4',purple2:'#c58af9',
+  teal:'#24c1e0',teal2:'#78d9ec',
+  orange:'#ff6d00',orange2:'#ffab40',
+  text:'#e8edf5',text2:'#c8dcf4',text3:'#a8c4e8',text4:'#7090b8',
+  gblue:'#4285f4',gblue2:'#8ab4f8',gblue3:'#1a3a7a',
+  ggreen:'#34a853',ggreen2:'#81c995',
+  gred:'#ea4335',gred2:'#f28b82',
+  gyellow:'#fbbc04',gyellow2:'#fdd663'
+};
+const gs=(size,weight)=>`${weight||400} ${size||12}px "Google Sans","Plus Jakarta Sans",sans-serif`;
+const mo=(size)=>`400 ${size||11}px "JetBrains Mono",monospace`;
+function rr(ctx,x,y,w,h,r,fill,stroke,sw){
+  ctx.beginPath();ctx.roundRect(x,y,w,h,r);
+  if(fill){ctx.fillStyle=fill;ctx.fill();}
+  if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=sw||1;ctx.stroke();}
+}
+function t(ctx,s,x,y,col,size,weight,align,base){
+  ctx.fillStyle=col;ctx.font=gs(size,weight);
+  ctx.textAlign=align||'left';ctx.textBaseline=base||'middle';ctx.fillText(s,x,y);
+}
+function mt(ctx,s,x,y,col,size,align){
+  ctx.fillStyle=col;ctx.font=mo(size);
+  ctx.textAlign=align||'left';ctx.textBaseline='middle';ctx.fillText(s,x,y);
+}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+function lerp(a,b,t){return a+(b-a)*t;}
+
+function setupCanvases(){
+  const ids=['c-grpo','c-clip','c-dynsampl','c-gspo','c-prime','c-flow'];
+  ids.forEach(id=>{const c=document.getElementById(id);if(c){c.width=820;c.height=parseInt(c.getAttribute('height'))||300;}});
+  initGRPO(); initClip(); initDynSampl(); initGSPO(); initPrime(); drawFlow();
+}
+
+/* ═══════════════════════════════════════════════════════
+   FIG 1: GRPO GROUP SAMPLING
+   ═══════════════════════════════════════════════════════ */
+const text_OPS=[
+  'Sunlight scatters\noff air molecules,\nblue more than red.',
+  'Air bends blue\nlight more than\nother colors.',
+  'Rayleigh scattering\nfavors short blue\nwavelengths.',
+  'The atmosphere\nfilters sunlight\ninto blue tones.',
+  'Blue photons bounce\naround more before\nreaching your eye.',
+  'Shorter wavelengths\nscatter more,\nso the sky looks blue.',
+  'Because the sky\nis blue.',
+  'It is blue from\nreflected ocean light.'
+];
+let grpoRew=[];
+function genGRPO(){return Array.from({length:8},()=>+(Math.random()*0.75+0.15).toFixed(3));}
+function initGRPO(){grpoRew=genGRPO();drawGRPO();}
+function resampleGRPO(){grpoRew=genGRPO();drawGRPO();}
+function drawGRPO(){
+  const c=document.getElementById('c-grpo');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height,G=grpoRew.length;
+  ctx.clearRect(0,0,W,H);
+  const mu=grpoRew.reduce((a,b)=>a+b,0)/G;
+  const sigma=Math.sqrt(grpoRew.reduce((a,b)=>a+(b-mu)**2,0)/G)||.001;
+  const advs=grpoRew.map(r=>(r-mu)/sigma);
+  const pL=12,pR=12,pT=55,bw=(W-pL-pR-(G-1)*8)/G;
+  // Header
+  t(ctx,'GRPO Group — 8 sampled answers to one prompt',W/2,20,C.text2,11,600,'center');
+  mt(ctx,'Prompt: "Explain why the sky appears blue." | Reward = 0.5·accuracy + 0.4·clarity + 0.1·brevity',W/2,36,C.text3,8.5,'center');
+  // Mean line
+  const maxR=1.0,ph=H-pT-80;
+  const meanY=pT+ph*(1-mu/maxR);
+  ctx.strokeStyle=C.yellow+'aa';ctx.lineWidth=1.5;ctx.setLineDash([7,4]);
+  ctx.beginPath();ctx.moveTo(pL,meanY);ctx.lineTo(W-pR,meanY);ctx.stroke();ctx.setLineDash([]);
+  mt(ctx,'\u03BC = '+mu.toFixed(3),W-pR+4,meanY,C.yellow2,9,'left');
+  // Bars + labels
+  grpoRew.forEach((r,i)=>{
+    const x=pL+i*(bw+8);
+    const adv=advs[i];
+    const isGood=r>mu;
+    const col=isGood?C.green:C.red,col2=isGood?C.green2:C.red2;
+    const barH=(r/maxR)*ph,barY=pT+ph-barH;
+    // Shadow
+    rr(ctx,x+2,barY+2,bw,barH,4,'rgba(0,0,0,.3)',null,0);
+    // Bar
+    const g=ctx.createLinearGradient(0,barY,0,pT+ph);
+    g.addColorStop(0,col);g.addColorStop(1,col+'30');
+    rr(ctx,x,barY,bw,barH,4,g,col+'60',1);
+    // Reward value
+    mt(ctx,r.toFixed(3),x+bw/2,barY-10,col2,9,'center');
+    // Advantage
+    const aStr=(adv>=0?'+':'')+adv.toFixed(2);
+    const aCol=adv>0?C.green2:C.red2;
+    // Advantage arrow
+    const midX=x+bw/2,aLen=Math.abs(adv)*15;
+    ctx.strokeStyle=aCol+'80';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(midX,meanY);ctx.lineTo(midX,meanY-(adv>0?aLen:-aLen));ctx.stroke();
+    // Op label
+    const ops=['scatters\nin air','bends\nblue light','Rayleigh\nscattering','atmosphere\nfilters','photons\nbounce','short\nwavelengths','too\nbrief','ocean\nreflection'];
+    rr(ctx,x,pT+ph+8,bw,44,4,C.s3,C.bdr,.6);
+    mt(ctx,ops[i],x+bw/2,pT+ph+18,C.text3,7.5,'center');
+    mt(ctx,aStr,x+bw/2,pT+ph+36,aCol,8,'center');
+  });
+  // Y axis labels
+  [0,.25,.5,.75,1].forEach(v=>{
+    const y=pT+ph*(1-v);
+    ctx.strokeStyle=C.bdr+'30';ctx.lineWidth=.5;ctx.setLineDash([3,3]);
+    ctx.beginPath();ctx.moveTo(pL,y);ctx.lineTo(W-pR,y);ctx.stroke();ctx.setLineDash([]);
+    mt(ctx,v.toFixed(2),pL-4,y,C.text3,8,'right');
+  });
+  ctx.save();ctx.translate(8,pT+ph/2);ctx.rotate(-Math.PI/2);
+  t(ctx,'reward r(x,y)',0,0,C.text2,10,400,'center');ctx.restore();
+  t(ctx,'Advantage \u00c2\u0100_i = (r_i \u2212 \u03bc) / \u03c3',W/2,H-8,C.text2,9,400,'center');
+}
+
+/* ═══════════════════════════════════════════════════════
+   FIG 2: CLIP-HIGHER — ENTROPY COMPARISON
+   ═══════════════════════════════════════════════════════ */
+let clipT=0,clipRAF=null,clipPaused=false;
+function initClip(){clipPaused=false;clipLoop();}
+function clipLoop(){clipT++;drawClip();if(!clipPaused)clipRAF=requestAnimationFrame(clipLoop);}
+function drawClip(){
+  const c=document.getElementById('c-clip');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const steps=2000, tf=clipT%300;
+  const progress=tf/300; // 0..1 per cycle
+  const half=W/2,pad=24,ph=H-100,pL=pad,pw=half-pad*1.5;
+  const ops=[{name:'the',p0:.35,pTarget:.62,col:C.blue2},{name:'scattering',p0:.18,pTarget:.28,col:C.teal2},{name:'Rayleigh',p0:.04,pTarget:.001,col:C.gred2}];
+  const opsD=[{name:'the',p0:.35,pTarget:.55,col:C.blue2},{name:'scattering',p0:.18,pTarget:.25,col:C.teal2},{name:'Rayleigh',p0:.04,pTarget:.038,col:C.green2}];
+  function drawPanel(ox,oy,data,title,subtitle,colBdr){
+    rr(ctx,ox,oy,pw,ph,8,C.s2,colBdr,.8);
+    t(ctx,title,ox+pw/2,oy+18,C.text,11,700,'center');
+    t(ctx,subtitle,ox+pw/2,oy+33,C.text3,9,400,'center');
+    const axL=ox+50,axR=ox+pw-16,axW=axR-axL,axT=oy+50,axB=oy+ph-32,axH=axB-axT;
+    // Axes
+    ctx.strokeStyle=C.bdr;ctx.lineWidth=.8;
+    ctx.beginPath();ctx.moveTo(axL,axT);ctx.lineTo(axL,axB);ctx.lineTo(axR,axB);ctx.stroke();
+    [0,.1,.2,.3,.4,.5,.6,.7].forEach(v=>{
+      const y=axT+axH*(1-v/.7);
+      ctx.strokeStyle=C.bdr+'40';ctx.lineWidth=.4;ctx.setLineDash([3,3]);
+      ctx.beginPath();ctx.moveTo(axL,y);ctx.lineTo(axR,y);ctx.stroke();ctx.setLineDash([]);
+      mt(ctx,(v*100).toFixed(0)+'%',axL-4,y,C.text3,7.5,'right');
+    });
+    // X axis labels
+    [0,500,1000,1500,2000].forEach(v=>{
+      const x=axL+(v/2000)*axW;
+      mt(ctx,v,x,axB+12,C.text3,7.5,'center');
+    });
+    mt(ctx,'training step',axL+axW/2,axB+24,C.text3,8,'center');
+    ctx.save();ctx.translate(ox+12,axT+axH/2);ctx.rotate(-Math.PI/2);
+    mt(ctx,'operation probability',0,0,C.text3,8,'center');ctx.restore();
+    // Draw each operation curve
+    data.forEach(op=>{
+      ctx.beginPath();ctx.lineWidth=1.8;ctx.strokeStyle=op.col;
+      for(let s=0;s<=Math.min(progress*2000,2000);s+=20){
+        const frac=s/2000;
+        let p;
+        if(op.name==='Rayleigh'&&data===ops){
+          // GRPO: rare token collapses fast due to clip killing low-prob growth
+          p=op.p0*Math.exp(-frac*3.5);
+        } else {
+          const speed=op.name==='the'?1.2:op.name==='scattering'?.9:.7;
+          p=op.p0+(op.pTarget-op.p0)*(1-Math.exp(-frac*speed*3));
+        }
+        const x=axL+(s/2000)*axW;
+        const y=axT+axH*(1-clamp(p/.7,0,1));
+        s===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      // Label at end
+      const curS=Math.min(progress*2000,2000);
+      const frac=curS/2000;
+      let p;
+      if(op.name==='Rayleigh'&&data===ops)p=op.p0*Math.exp(-frac*3.5);
+      else{const sp=op.name==='the'?1.2:op.name==='scattering'?.9:.7;p=op.p0+(op.pTarget-op.p0)*(1-Math.exp(-frac*sp*3));}
+      const ex=axL+(curS/2000)*axW,ey=axT+axH*(1-clamp(p/.7,0,1));
+      rr(ctx,ex-1,ey-1,2,2,1,op.col,null,0);
+      if(ex>axL+30)t(ctx,op.name,ex+4,ey,op.col,9,500,'left');
+    });
+    // Entropy collapse indicator for GRPO rare token
+    if(data===ops&&progress>.3){
+      const lootP=ops[2].p0*Math.exp(-progress*3.5);
+      const ly=axT+axH*(1-clamp(lootP/.7,0,1));
+      ctx.strokeStyle=C.red+'40';ctx.lineWidth=.6;ctx.setLineDash([2,2]);
+      ctx.beginPath();ctx.moveTo(axL+progress*.7*axW,ly);ctx.lineTo(axL+progress*.7*axW,axB);ctx.stroke();
+      ctx.setLineDash([]);
+      if(lootP<.005){
+        rr(ctx,axL+axW*.4,axT+axH*.6,110,18,4,'rgba(234,67,53,.15)','rgba(234,67,53,.4)',.8);
+        mt(ctx,'Rayleigh \u2192 0% (dead)',axL+axW*.4+55,axT+axH*.6+9,C.gred2,7.5,'center');
+      }
+    }
+    // Clip boundary
+    const epLow=0.2,epHigh=data===ops?0.2:0.28;
+    // visual: show clip zone at current max prob
+    mt(ctx,`\u03b5_high = ${epHigh.toFixed(2)}`,ox+pw-60,oy+ph-14,data===ops?C.gred2:C.green2,8,'right');
+  }
+  // GRPO panel (left)
+  drawPanel(pL,50,ops,'GRPO — Symmetric clip \u03b5 = 0.2','rare token "Rayleigh" rapidly suppressed',C.gred+'60');
+  // Separator
+  ctx.strokeStyle=C.bdr;ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(half,50);ctx.lineTo(half,H-20);ctx.stroke();
+  // DAPO panel (right)
+  drawPanel(half+pad*.5,50,opsD,'DAPO — Asymmetric clip \u03b5_low=0.2, \u03b5_high=0.28','rare token "Rayleigh" keeps a viable probability',C.green+'60');
+  // Step indicator
+  const curStep=Math.floor(progress*2000);
+  rr(ctx,W/2-60,18,120,20,6,C.s3,C.bdr,.8);
+  mt(ctx,'Training step: '+curStep,W/2,28,C.text2,9,'center');
+}
+
+/* ═══════════════════════════════════════════════════════
+   FIG 3: DYNAMIC SAMPLING
+   ═══════════════════════════════════════════════════════ */
+const BATCH_TYPES=[
+  {valid:[1,1,1,1,1,1],label:'ALL VALID — zero advantage',type:'all-good'},
+  {valid:[1,0,1,1,0,1],label:'MIXED — useful gradient signal',type:'mixed'},
+  {valid:[0,0,0,0,0,0],label:'ALL INVALID — zero advantage',type:'all-bad'},
+  {valid:[1,1,0,1,0,1],label:'MIXED — useful gradient signal',type:'mixed'},
+  {valid:[0,0,0,0,0,0],label:'ALL INVALID — wasted compute',type:'all-bad'},
+  {valid:[1,1,1,1,1,1],label:'ALL VALID — no contrast signal',type:'all-good'},
+  {valid:[0,1,1,0,1,0],label:'MIXED — used for training',type:'mixed'},
+];
+let dynBatchIdx=0;
+function initDynSampl(){drawDynSampl();}
+function nextBatch(){dynBatchIdx=(dynBatchIdx+1)%BATCH_TYPES.length;drawDynSampl();}
+function drawDynSampl(){
+  const c=document.getElementById('c-dynsampl');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const batch=BATCH_TYPES[dynBatchIdx];
+  const isMixed=batch.type==='mixed';
+  const isGood=batch.type==='all-good';
+  // Title
+  t(ctx,'Incoming batch ('+dynBatchIdx+'/'+( BATCH_TYPES.length-1)+'):',20,24,C.text2,11,600,'left');
+  // Boxes
+  const G=batch.valid.length,bw=90,bh=100,gap=12;
+  const totalW=G*(bw+gap)-gap,startX=(W-totalW)/2;
+  batch.valid.forEach((v,i)=>{
+    const x=startX+i*(bw+gap),y=55;
+    const col=v?C.green:C.red,col2=v?C.green2:C.red2;
+    const alpha=isMixed?1:0.35;
+    ctx.globalAlpha=alpha;
+    rr(ctx,x,y,bw,bh,8,v?'rgba(52,168,83,.12)':'rgba(234,67,53,.12)',col,.8);
+    t(ctx,v?'valid':'invalid',x+bw/2,y+28,col2,9,600,'center');
+    // Mini answer snippet — fragments of one sampled response
+    const ops=v?['"the sky','scatters',i%2?'blue light"':'Rayleigh"']:['"reflects','from','ocean"'];
+    ops.forEach((op,j)=>mt(ctx,op,x+bw/2,y+46+j*14,v?C.text3:C.gred2+'80',7,'center'));
+    // Reward badge
+    const r=(v?(.75+Math.random()*.2):(.1+Math.random()*.2)).toFixed(2);
+    rr(ctx,x+bw/2-18,y+bh-16,36,13,4,v?'rgba(52,168,83,.2)':'rgba(234,67,53,.2)',null,0);
+    mt(ctx,'r='+r,x+bw/2,y+bh-9,col2,7.5,'center');
+    ctx.globalAlpha=1;
+  });
+  // Result banner
+  const bY=170;
+  if(isMixed){
+    rr(ctx,80,bY,W-160,44,8,'rgba(52,168,83,.12)','rgba(52,168,83,.5)',1.5);
+    t(ctx,'\u2713 USED FOR TRAINING',W/2,bY+14,C.green2,12,700,'center');
+    t(ctx,'Group has both valid and invalid responses \u2014 advantages are non-zero \u2014 gradient flows',W/2,bY+32,C.text2,10,400,'center');
+  } else {
+    rr(ctx,80,bY,W-160,44,8,'rgba(234,67,53,.08)','rgba(234,67,53,.4)',1.5);
+    const reason=isGood?'All valid: \u00c2\u0100_i = (r_i \u2212 \u03bc)/\u03c3 \u2248 0 for all i':'All invalid: same \u2014 zero advantage, no gradient';
+    t(ctx,'\u2717 FILTERED OUT (DAPO Dynamic Sampling)',W/2,bY+14,C.gred2,12,700,'center');
+    t(ctx,reason,W/2,bY+32,C.text3,10,400,'center');
+  }
+  // Batch counter
+  mt(ctx,'Batch '+(dynBatchIdx+1)+' of '+BATCH_TYPES.length+' \u2014 click \u25B6 to advance',W/2,H-12,C.text3,8.5,'center');
+}
+
+/* ═══════════════════════════════════════════════════════
+   FIG 4: GSPO — TOKEN VS SEQUENCE RATIO
+   ═══════════════════════════════════════════════════════ */
+let gspoRatios=[];
+function genGSPO(){return [.55,.92,1.18,1.62,.78,1.08,.95].map(base=>+(base*(0.85+Math.random()*.3)).toFixed(3));}
+function initGSPO(){gspoRatios=genGSPO();drawGSPO();}
+function resampleGSPO(){gspoRatios=genGSPO();drawGSPO();}
+function drawGSPO(){
+  const c=document.getElementById('c-gspo');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const toks=['Dropout','randomly','zeroes','units','during','training','.'];
+  const N=toks.length;
+  const seqRatio=Math.exp(gspoRatios.reduce((a,b)=>a+Math.log(b),0)/N);
+  const eps=0.2,lo=1-eps,hi=1+eps;
+  const half=W/2,pad=20;
+  // Clip zone color
+  function ratioColor(r){return r>hi||r<lo?C.gred2:C.green2;}
+  function ratioBg(r){return r>hi||r<lo?'rgba(234,67,53,.12)':'rgba(52,168,83,.08)';}
+  // ── LEFT: GRPO token-level ──
+  t(ctx,'GRPO — Token-level ratios  r_t(\u03b8)',half/2,22,C.text,11,700,'center');
+  mt(ctx,'One ratio per token, clipped independently',half/2,36,C.text3,8,'center');
+  const tokW=(half-pad*2-10)/N;
+  toks.forEach((tok,i)=>{
+    const r=gspoRatios[i];
+    const x=pad+i*(tokW+2),y=52;
+    const col=ratioColor(r),bg=ratioBg(r);
+    rr(ctx,x,y,tokW,32,4,bg,col+'60',.8);
+    mt(ctx,tok.length>5?tok.substring(0,5):tok,x+tokW/2,y+11,C.text2,8,'center');
+    mt(ctx,r.toFixed(2),x+tokW/2,y+24,col,8,'center');
+  });
+  // Ratio axis (left)
+  const axY=100,axH=130,axL=pad+15,axW2=half-pad*2-20;
+  function plotRatioBar(x,r,bw,ay,ah){
+    const yScale=ah/2.5;
+    const mid=ay+ah/2;
+    const clipped=r>hi||r<lo;
+    const col=clipped?C.gred:C.green;
+    const barH=Math.abs(r-1)*yScale;
+    const by=r>1?mid-barH:mid;
+    const g=ctx.createLinearGradient(0,by,0,by+barH);
+    g.addColorStop(0,col);g.addColorStop(1,col+'30');
+    rr(ctx,x,by,bw,barH+1,2,g,null,0);
+    if(clipped){
+      mt(ctx,'CLIP',x+bw/2,r>1?by-10:by+barH+10,C.gred2,7,'center');
+    }
+  }
+  // Center line
+  const mid=axY+axH/2;
+  ctx.strokeStyle=C.bdr;ctx.lineWidth=1;ctx.setLineDash([4,4]);
+  ctx.beginPath();ctx.moveTo(axL,mid);ctx.lineTo(axL+axW2,mid);ctx.stroke();ctx.setLineDash([]);
+  mt(ctx,'r=1',axL-22,mid,C.text3,8,'left');
+  [lo,hi].forEach(bound=>{
+    const y=mid-(bound-1)*60;
+    ctx.strokeStyle=C.yellow+'50';ctx.lineWidth=.7;ctx.setLineDash([2,3]);
+    ctx.beginPath();ctx.moveTo(axL,y);ctx.lineTo(axL+axW2,y);ctx.stroke();ctx.setLineDash([]);
+    mt(ctx,bound.toFixed(1),axL-22,y,C.yellow2,7,'right');
+  });
+  // Shade clip zones
+  rr(ctx,axL,axY,axW2,mid-axY-(hi-1)*60,0,'rgba(234,67,53,.05)',null,0);
+  rr(ctx,axL,mid+(1-lo)*60,axW2,axH-(mid-axY)-(1-lo)*60,0,'rgba(234,67,53,.05)',null,0);
+  // Bars
+  const bw2=(axW2-N*4)/N;
+  gspoRatios.forEach((r,i)=>{plotRatioBar(axL+i*(bw2+4),r,bw2,axY,axH);});
+  // Stats
+  const nClipped=gspoRatios.filter(r=>r>hi||r<lo).length;
+  rr(ctx,pad,axY+axH+8,half-pad*2,28,6,nClipped>0?'rgba(234,67,53,.1)':'rgba(52,168,83,.1)',nClipped>0?C.gred+'40':C.green+'40',.8);
+  mt(ctx,nClipped+'/'+N+' tokens clipped (gradient=0 for those)',half/2,axY+axH+22,nClipped>0?C.gred2:C.green2,9,'center');
+  // ── DIVIDER ──
+  ctx.strokeStyle=C.bdr;ctx.lineWidth=1;ctx.setLineDash([3,3]);
+  ctx.beginPath();ctx.moveTo(half,14);ctx.lineTo(half,H-14);ctx.stroke();ctx.setLineDash([]);
+  // ── RIGHT: GSPO sequence-level ──
+  t(ctx,'GSPO — Sequence-level ratio  s_i(\u03b8)',half+half/2,22,C.text,11,700,'center');
+  mt(ctx,'One ratio for the entire response = semantic mean',half+half/2,36,C.text3,8,'center');
+  // Show all token ratios feeding into one
+  const rx=half+pad,ry=52,rw=(half-pad*2-10)/N;
+  toks.forEach((tok,i)=>{
+    const r=gspoRatios[i];
+    const x=rx+i*(rw+2);
+    rr(ctx,x,ry,rw,32,3,C.s3,C.bdr+'80',.5);
+    mt(ctx,tok.length>5?tok.substring(0,5):tok,x+rw/2,ry+11,C.text3,8,'center');
+    mt(ctx,r.toFixed(2),x+rw/2,ry+24,C.text3,8,'center');
+    // Arrow to center
+    if(i<N-1){
+      ctx.strokeStyle=C.bdr2+'60';ctx.lineWidth=.6;
+    }
+  });
+  // Funnel lines to semantic mean box
+  const gmX=half+(half-pad*2)/2+pad-45,gmY=95;
+  ctx.strokeStyle=C.blue+'40';ctx.lineWidth=.8;
+  toks.forEach((_,i)=>{
+    const sx=rx+i*(rw+2)+rw/2,sy=84;
+    ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(gmX+45,gmY);ctx.stroke();
+  });
+  rr(ctx,gmX,gmY,90,28,8,'rgba(66,133,244,.15)',C.blue+'60',1.5);
+  t(ctx,'Semantic mean',gmX+45,gmY+9,C.blue2,10,600,'center');
+  mt(ctx,'s_i = '+seqRatio.toFixed(4),gmX+45,gmY+22,C.blue2,9,'center');
+  // Clip check
+  const seqClipped=seqRatio>hi||seqRatio<lo;
+  const seqCol=seqClipped?C.gred:C.green;
+  const seqBg=seqClipped?'rgba(234,67,53,.12)':'rgba(52,168,83,.12)';
+  rr(ctx,gmX-10,gmY+36,110,54,8,seqBg,seqCol+'60',1.2);
+  t(ctx,'Clip check: in [0.8, 1.2]?',gmX+45,gmY+50,C.text2,9,500,'center');
+  t(ctx,seqClipped?'\u2717 CLIPPED (gradient=0)':'\u2713 OK (gradient flows)',gmX+45,gmY+66,seqCol,10,700,'center');
+  mt(ctx,seqRatio.toFixed(3)+' vs ['+lo.toFixed(1)+','+hi.toFixed(1)+']',gmX+45,gmY+80,seqCol,8,'center');
+  // Variance comparison
+  const varToken=gspoRatios.reduce((a,r)=>a+(r-1)**2,0)/N;
+  const varSeq=(seqRatio-1)**2;
+  rr(ctx,half+pad,230,half-pad*2,50,8,C.s2,C.bdr,.8);
+  t(ctx,'Variance reduction:',half+pad+10,247,C.text2,10,500,'left');
+  mt(ctx,'Token-level: \u03c3\u00b2='+varToken.toFixed(4),half+pad+10,262,C.gred2,8,'left');
+  mt(ctx,'Sequence-level: \u03c3\u00b2='+varSeq.toFixed(4)+' ('+((1-varSeq/varToken)*100).toFixed(0)+'% reduction)',half+pad+10,274,C.green2,8,'left');
+}
+
+/* ═══════════════════════════════════════════════════════
+   FIG 5: PRIME — DENSE PROCESS REWARDS
+   ═══════════════════════════════════════════════════════ */
+const text_STEPS=['Topic\nsentence','First\nclaim','Cite\nsource 1','Second\nclaim','Cite\nsource 2','DONE'];
+const PARTIAL_SHAPES=['','','','','','answer'];
+let primeT=0,primePaused=false;
+const GRPO_REWARDS=[0,0,0,0,0,0.91];
+// IPR values: log(π_θ/π_ref) — positive = policy more confident than reference (good direction)
+const IPR_VALS=[0.18,0.24,-0.05,0.31,0.12,0.06];
+const PRIME_REWARDS=IPR_VALS.map((ipr,i)=>i===5?GRPO_REWARDS[5]*0.7+ipr*0.04:ipr*0.04);
+function initPrime(){primePaused=false;primeLoop();}
+function primeLoop(){primeT=(primeT+0.4)%360;drawPrime();if(!primePaused)requestAnimationFrame(primeLoop);}
+function togglePrime(){
+  primePaused=!primePaused;
+  const btn=document.getElementById('prime-btn');
+  if(btn)btn.textContent=primePaused?'\u25B6 Play':'\u23F8 Pause';
+  if(!primePaused)primeLoop();
+}
+function drawPrime(){
+  const c=document.getElementById('c-prime');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  const N=text_STEPS.length;
+  const stepW=(W-40)/(N+.5),stepH=52;
+  const grpoY=70,primeY=190,rewardH=90;
+  // Labels
+  t(ctx,'GRPO (sparse reward): signal only at final token',24,grpoY-16,C.text2,10,600,'left');
+  t(ctx,'PRIME (dense process reward): signal at every step via IPR_t = log(\u03c0\u03b8/\u03c0ref)',24,primeY-16,C.teal2,10,600,'left');
+  // Animated highlight: which step is "active"
+  const activeStep=Math.floor((primeT/360)*N);
+  text_STEPS.forEach((step,i)=>{
+    const x=24+i*(stepW+4);
+    const isActive=i===activeStep;
+    const isDone=i<activeStep;
+    // Step box
+    const bdr=isActive?C.teal:isDone?C.green:C.bdr;
+    const bg=isActive?'rgba(36,193,224,.12)':isDone?'rgba(52,168,83,.06)':C.s2;
+    rr(ctx,x,grpoY,stepW,stepH,6,bg,bdr,isActive?1.5:.8);
+    mt(ctx,step,x+stepW/2,grpoY+stepH/2,isActive?C.teal2:isDone?C.green2:C.text2,7.5,'center');
+    // GRPO: only last step has reward
+    const gReward=GRPO_REWARDS[i];
+    if(gReward>0){
+      const rH=gReward*rewardH*.7,rY=grpoY+stepH+8;
+      const g=ctx.createLinearGradient(0,rY,0,rY+rH);
+      g.addColorStop(0,C.green);g.addColorStop(1,C.green+'20');
+      rr(ctx,x+4,rY,stepW-8,rH,3,g,null,0);
+      mt(ctx,'r='+gReward,x+stepW/2,rY+rH+10,C.green2,8,'center');
+    } else {
+      // Zero marker
+      mt(ctx,'r=0',x+stepW/2,grpoY+stepH+20,C.text4,8,'center');
+    }
+    // PRIME: reward at every step
+    const pR=PRIME_REWARDS[i];
+    const pAbs=Math.abs(pR);
+    rr(ctx,x,primeY,stepW,stepH,6,bg,bdr,isActive?1.5:.8);
+    mt(ctx,step,x+stepW/2,primeY+stepH/2,isActive?C.teal2:isDone?C.green2:C.text2,7.5,'center');
+    // Dense reward bar
+    const pRH=pAbs*rewardH*3,pRY=primeY+stepH+8;
+    const pCol=pR>=0?C.teal:C.gred;
+    const pg=ctx.createLinearGradient(0,pRY,0,pRY+pRH);
+    pg.addColorStop(0,pCol);pg.addColorStop(1,pCol+'20');
+    rr(ctx,x+4,pRY,stepW-8,Math.max(pRH,2),3,pg,null,0);
+    mt(ctx,(pR>=0?'+':'')+pR.toFixed(3),x+stepW/2,pRY+Math.max(pRH,2)+10,pR>=0?C.teal2:C.gred2,8,'center');
+    // IPR annotation on first pass
+    if(isActive&&i<N-1){
+      rr(ctx,x-8,primeY+stepH+50,stepW+16,24,4,'rgba(36,193,224,.15)',C.teal+'50',.8);
+      mt(ctx,'IPR_'+i+'='+IPR_VALS[i].toFixed(2),x+stepW/2,primeY+stepH+62,C.teal2,8,'center');
+    }
+    // Arrow to next step
+    if(i<N-1){
+      [grpoY,primeY].forEach(sy=>{
+        ctx.strokeStyle=C.bdr2+'60';ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(x+stepW+2,sy+stepH/2);ctx.lineTo(x+stepW+6,sy+stepH/2);ctx.stroke();
+        ctx.fillStyle=C.bdr2+'60';ctx.beginPath();ctx.moveTo(x+stepW+4,sy+stepH/2-3);ctx.lineTo(x+stepW+8,sy+stepH/2);ctx.lineTo(x+stepW+4,sy+stepH/2+3);ctx.fill();
+      });
+    }
+  });
+  // Formula annotation
+  rr(ctx,24,H-38,W-48,28,6,C.s2,C.bdr,.6);
+  mt(ctx,'GRPO: gradient \u2207_\u03b8 only from final token  |  PRIME: gradient flows at every step via r\u0303_t = \u03b3\u00b7IPR_t + (1\u2212\u03b3)\u00b7r(x,y)\u00b7[t=T]',W/2,H-24,C.text3,8,'center');
+}
+
+/* ═══════════════════════════════════════════════════════
+   FIG 6: DECISION FLOW
+   ═══════════════════════════════════════════════════════ */
+function drawFlow(){
+  const c=document.getElementById('c-flow');if(!c)return;
+  const ctx=c.getContext('2d'),W=c.width,H=c.height;
+  ctx.clearRect(0,0,W,H);
+  function box(x,y,w,h,label,sub,col,bg){
+    rr(ctx,x,y,w,h,8,bg||C.s2,col,1.2);
+    t(ctx,label,x+w/2,y+(sub?h/2-8:h/2),C.text,11,600,'center');
+    if(sub)t(ctx,sub,x+w/2,y+h/2+8,C.text3,9,400,'center');
+  }
+  function diamond(x,y,w,h,label,col){
+    const cx=x+w/2,cy=y+h/2;
+    ctx.beginPath();ctx.moveTo(cx,y);ctx.lineTo(x+w,cy);ctx.lineTo(cx,y+h);ctx.lineTo(x,cy);ctx.closePath();
+    ctx.fillStyle='rgba(251,188,4,.1)';ctx.fill();ctx.strokeStyle=col||C.gyellow;ctx.lineWidth=1.2;ctx.stroke();
+    t(ctx,label,cx,cy,C.gyellow2,10,600,'center');
+  }
+  function arr(x1,y1,x2,y2,col,lbl){
+    ctx.strokeStyle=col||C.bdr2;ctx.lineWidth=1.2;
+    ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+    ctx.fillStyle=col||C.bdr2;
+    const angle=Math.atan2(y2-y1,x2-x1);
+    ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-8*Math.cos(angle-0.4),y2-8*Math.sin(angle-0.4));ctx.lineTo(x2-8*Math.cos(angle+0.4),y2-8*Math.sin(angle+0.4));ctx.closePath();ctx.fill();
+    if(lbl)t(ctx,lbl,(x1+x2)/2+5,(y1+y2)/2-8,C.text3,9,400,'center');
+  }
+  // Start
+  box(340,12,140,32,'START: LLM Post-Training','',C.gblue2,'rgba(66,133,244,.1)');
+  arr(410,44,410,70,C.bdr2);
+  // Q1
+  diamond(290,70,240,46,'Verifiable rewards\n(correctness, format)?',C.gyellow);
+  arr(410,116,410,142,C.ggreen,'yes');
+  arr(290,93,140,93,C.gred);arr(140,93,140,170,C.gred);arr(140,170,60,170,C.gred,'no');
+  // DPO branch (no verifiable)
+  box(10,156,90,28,'Use DPO','or ORPO',C.purple2,'rgba(161,66,244,.08)');
+  // RLVR path
+  diamond(290,142,240,46,'Long sequences\nor MoE arch?',C.gyellow);
+  arr(410,188,410,214,C.gblue2,'no');
+  arr(530,165,680,165,C.teal);arr(680,165,680,214,C.teal,'yes');
+  // GSPO
+  box(636,214,88,32,'Add GSPO','seq-level ratio',C.teal2,'rgba(36,193,224,.08)');
+  // Q3 — entropy
+  diamond(274,214,272,46,'Entropy collapse\n(rare ops disappear)?',C.gyellow);
+  arr(410,260,410,286,C.gblue2,'no');
+  arr(274,237,160,237,C.gred);arr(160,237,160,286,C.gred,'yes');
+  // DAPO
+  box(100,274,120,32,'Use DAPO','\u03b5_high > \u03b5_low',C.gyellow2,'rgba(251,188,4,.08)');
+  // Q4 — process
+  diamond(278,286,264,46,'Need step-level\nfeedback?',C.gyellow);
+  arr(410,332,410,360,C.gblue2,'no');
+  arr(542,309,650,309,C.teal);arr(650,309,650,360,C.teal,'yes');
+  // PRIME add-on
+  box(608,348,84,32,'+PRIME','dense IPR_t',C.teal2,'rgba(36,193,224,.08)');
+  // Default recommendation
+  rr(ctx,334,348,152,42,10,'rgba(52,168,83,.15)','rgba(52,168,83,.5)',1.8);
+  t(ctx,'\u2B50 DAPO + PRIME','',C.ggreen2,13,700,'center');
+  t(ctx,'\u2B50 DAPO + PRIME',410,362,C.ggreen2,13,700,'center');
+  t(ctx,'Recommended default',410,376,C.green2,9,500,'center');
+}
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>
