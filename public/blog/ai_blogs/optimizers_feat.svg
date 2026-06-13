@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="op-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0c1016"/>
+      <stop offset="100%" stop-color="#101824"/>
+    </linearGradient>
+    <!-- Loss landscape heatmap colors: hot = high loss, cool = low loss -->
+    <linearGradient id="loss-hi" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#f97316"/>
+    </linearGradient>
+    <linearGradient id="loss-mid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#84cc16"/>
+    </linearGradient>
+    <linearGradient id="loss-lo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#op-bg)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="#1a2030" stroke-width="0.5" opacity="0.4">
+    <line x1="267" y1="0" x2="267" y2="450"/>
+    <line x1="534" y1="0" x2="534" y2="450"/>
+  </g>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL 1 — Loss landscape heatmap (left)
+       ═══════════════════════════════════════════ -->
+  <rect x="20" y="50" width="230" height="350" rx="10" fill="#0f1520" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="135" y="78" text-anchor="middle" fill="#f2b65a" font-family="monospace" font-size="12" font-weight="700" letter-spacing="1">LOSS LANDSCAPE</text>
+
+  <!-- 5×5 heatmap grid — each cell 36×36, top-left at (38, 92) -->
+  <!-- Row 0 (top = high loss = red/orange) -->
+  <rect x="38"  y="92"  width="36" height="36" rx="3" fill="#ef4444" opacity="0.85"/>
+  <rect x="78"  y="92"  width="36" height="36" rx="3" fill="#f97316" opacity="0.85"/>
+  <rect x="118" y="92"  width="36" height="36" rx="3" fill="#eab308" opacity="0.85"/>
+  <rect x="158" y="92"  width="36" height="36" rx="3" fill="#f97316" opacity="0.75"/>
+  <rect x="198" y="92"  width="36" height="36" rx="3" fill="#ef4444" opacity="0.75"/>
+  <!-- Row 1 -->
+  <rect x="38"  y="132" width="36" height="36" rx="3" fill="#f97316" opacity="0.75"/>
+  <rect x="78"  y="132" width="36" height="36" rx="3" fill="#eab308" opacity="0.85"/>
+  <rect x="118" y="132" width="36" height="36" rx="3" fill="#84cc16" opacity="0.85"/>
+  <rect x="158" y="132" width="36" height="36" rx="3" fill="#eab308" opacity="0.75"/>
+  <rect x="198" y="132" width="36" height="36" rx="3" fill="#f97316" opacity="0.65"/>
+  <!-- Row 2 -->
+  <rect x="38"  y="172" width="36" height="36" rx="3" fill="#eab308" opacity="0.70"/>
+  <rect x="78"  y="172" width="36" height="36" rx="3" fill="#84cc16" opacity="0.80"/>
+  <rect x="118" y="172" width="36" height="36" rx="3" fill="#22d3ee" opacity="0.90"/>
+  <rect x="158" y="172" width="36" height="36" rx="3" fill="#3b82f6" opacity="0.80"/>
+  <rect x="198" y="172" width="36" height="36" rx="3" fill="#eab308" opacity="0.60"/>
+  <!-- Row 3 -->
+  <rect x="38"  y="212" width="36" height="36" rx="3" fill="#f97316" opacity="0.55"/>
+  <rect x="78"  y="212" width="36" height="36" rx="3" fill="#eab308" opacity="0.65"/>
+  <rect x="118" y="212" width="36" height="36" rx="3" fill="#3b82f6" opacity="0.80"/>
+  <rect x="158" y="212" width="36" height="36" rx="3" fill="#22d3ee" opacity="0.85"/>
+  <rect x="198" y="212" width="36" height="36" rx="3" fill="#84cc16" opacity="0.60"/>
+  <!-- Row 4 (bottom) -->
+  <rect x="38"  y="252" width="36" height="36" rx="3" fill="#ef4444" opacity="0.50"/>
+  <rect x="78"  y="252" width="36" height="36" rx="3" fill="#f97316" opacity="0.55"/>
+  <rect x="118" y="252" width="36" height="36" rx="3" fill="#eab308" opacity="0.60"/>
+  <rect x="158" y="252" width="36" height="36" rx="3" fill="#84cc16" opacity="0.65"/>
+  <rect x="198" y="252" width="36" height="36" rx="3" fill="#22d3ee" opacity="0.70"/>
+
+  <!-- Optimizer path on landscape: Adam (teal bold) -->
+  <polyline points="216,100 196,130 156,150 136,172 136,190 118,190" fill="none" stroke="#43c9b8" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="216" cy="100" r="6" fill="#43c9b8"/>
+  <!-- SGD path (blue dashed, zigzag) -->
+  <polyline points="56,100 76,130 56,160 96,175 118,192" fill="none" stroke="#93c5fd" stroke-width="2.5" stroke-dasharray="6,3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="56" cy="100" r="5" fill="#93c5fd" opacity="0.8"/>
+  <!-- Minimum star -->
+  <circle cx="136" cy="190" r="8" fill="#f2b65a" opacity="0.9"/>
+  <text x="136" y="194" text-anchor="middle" fill="#0c1016" font-family="monospace" font-size="9" font-weight="700">★</text>
+
+  <!-- Legend -->
+  <rect x="38" y="305" width="14" height="4" rx="2" fill="#43c9b8"/>
+  <text x="58" y="312" fill="#43c9b8" font-family="monospace" font-size="9">Adam</text>
+  <rect x="38" y="318" width="14" height="3" rx="2" fill="#93c5fd" opacity="0.8"/>
+  <text x="58" y="325" fill="#93c5fd" font-family="monospace" font-size="9">SGD</text>
+  <circle cx="45" cy="335" r="5" fill="#f2b65a"/>
+  <text x="58" y="339" fill="#f2b65a" font-family="monospace" font-size="9">minimum θ*</text>
+  <text x="135" y="370" text-anchor="middle" fill="#4b5563" font-family="monospace" font-size="8">hot = high loss · cool = low</text>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL 2 — Optimizer badges (middle)
+       ═══════════════════════════════════════════ -->
+  <rect x="285" y="50" width="230" height="350" rx="10" fill="#0f1520" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="400" y="78" text-anchor="middle" fill="#43c9b8" font-family="monospace" font-size="12" font-weight="700" letter-spacing="1">OPTIMIZERS</text>
+
+  <!-- SGD badge -->
+  <rect x="305" y="98" width="190" height="44" rx="8" fill="#0d2040" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="400" y="116" text-anchor="middle" fill="#93c5fd" font-family="monospace" font-size="13" font-weight="700">SGD</text>
+  <text x="400" y="133" text-anchor="middle" fill="#1d4ed8" font-family="monospace" font-size="9">θ ← θ − α · g_t</text>
+
+  <!-- Momentum badge -->
+  <rect x="305" y="154" width="190" height="44" rx="8" fill="#12091a" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="400" y="172" text-anchor="middle" fill="#c4b5fd" font-family="monospace" font-size="13" font-weight="700">Momentum</text>
+  <text x="400" y="189" text-anchor="middle" fill="#7c3aed" font-family="monospace" font-size="9">v ← βv + g  ·  θ ← θ − αv</text>
+
+  <!-- RMSProp badge -->
+  <rect x="305" y="210" width="190" height="44" rx="8" fill="#051a0a" stroke="#34d399" stroke-width="1.5"/>
+  <text x="400" y="228" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="13" font-weight="700">RMSProp</text>
+  <text x="400" y="245" text-anchor="middle" fill="#059669" font-family="monospace" font-size="9">θ ← θ − α·g / √(E[g²]+ε)</text>
+
+  <!-- Adam badge -->
+  <rect x="305" y="266" width="190" height="44" rx="8" fill="#051a17" stroke="#43c9b8" stroke-width="2"/>
+  <text x="400" y="284" text-anchor="middle" fill="#43c9b8" font-family="monospace" font-size="13" font-weight="700">Adam</text>
+  <text x="400" y="301" text-anchor="middle" fill="#0d9488" font-family="monospace" font-size="9">m̂/(√v̂ + ε)  ·  β₁=0.9  β₂=0.999</text>
+
+  <!-- AdamW badge -->
+  <rect x="305" y="322" width="190" height="44" rx="8" fill="#1a1200" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="400" y="340" text-anchor="middle" fill="#fbbf24" font-family="monospace" font-size="13" font-weight="700">AdamW</text>
+  <text x="400" y="357" text-anchor="middle" fill="#b45309" font-family="monospace" font-size="9">Adam + decoupled weight decay</text>
+
+  <!-- ═══════════════════════════════════════════
+       PANEL 3 — Convergence race (right)
+       ═══════════════════════════════════════════ -->
+  <rect x="550" y="50" width="230" height="350" rx="10" fill="#0f1520" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="665" y="78" text-anchor="middle" fill="#ef6f6c" font-family="monospace" font-size="12" font-weight="700" letter-spacing="1">CONVERGENCE</text>
+
+  <!-- Progress bar race — steps to converge (fewer = better = longer bar) -->
+  <text x="665" y="104" text-anchor="middle" fill="#4b5563" font-family="monospace" font-size="8">steps to minimum  (more bar = faster)</text>
+
+  <!-- GD — slowest -->
+  <text x="568" y="130" fill="#6b7280" font-family="monospace" font-size="10" font-weight="600">GD</text>
+  <rect x="605" y="118" width="160" height="18" rx="4" fill="#1e2030" opacity="0.6"/>
+  <rect x="605" y="118" width="42" height="18" rx="4" fill="#6b7280" opacity="0.7"/>
+
+  <!-- SGD -->
+  <text x="568" y="158" fill="#93c5fd" font-family="monospace" font-size="10" font-weight="600">SGD</text>
+  <rect x="605" y="146" width="160" height="18" rx="4" fill="#1e2030" opacity="0.6"/>
+  <rect x="605" y="146" width="68" height="18" rx="4" fill="#3b82f6" opacity="0.75"/>
+
+  <!-- Momentum -->
+  <text x="568" y="186" fill="#c4b5fd" font-family="monospace" font-size="10" font-weight="600">Mom</text>
+  <rect x="605" y="174" width="160" height="18" rx="4" fill="#1e2030" opacity="0.6"/>
+  <rect x="605" y="174" width="96" height="18" rx="4" fill="#8b5cf6" opacity="0.80"/>
+
+  <!-- AdaGrad -->
+  <text x="568" y="214" fill="#6ee7b7" font-family="monospace" font-size="10" font-weight="600">AdaG</text>
+  <rect x="605" y="202" width="160" height="18" rx="4" fill="#1e2030" opacity="0.6"/>
+  <rect x="605" y="202" width="88" height="18" rx="4" fill="#10b981" opacity="0.75"/>
+
+  <!-- RMSProp -->
+  <text x="568" y="242" fill="#6ee7b7" font-family="monospace" font-size="10" font-weight="600">RMS</text>
+  <rect x="605" y="230" width="160" height="18" rx="4" fill="#1e2030" opacity="0.6"/>
+  <rect x="605" y="230" width="116" height="18" rx="4" fill="#059669" opacity="0.80"/>
+
+  <!-- Adam -->
+  <text x="568" y="270" fill="#43c9b8" font-family="monospace" font-size="10" font-weight="700">Adam</text>
+  <rect x="605" y="258" width="160" height="20" rx="4" fill="#1e2030" opacity="0.6"/>
+  <rect x="605" y="258" width="140" height="20" rx="4" fill="#0d9488" opacity="0.90"/>
+
+  <!-- AdamW — fastest (full bar) -->
+  <text x="568" y="300" fill="#fbbf24" font-family="monospace" font-size="10" font-weight="700">AdamW</text>
+  <rect x="605" y="288" width="160" height="20" rx="4" fill="#1e2030" opacity="0.6"/>
+  <rect x="605" y="288" width="156" height="20" rx="4" fill="#d97706" opacity="0.90"/>
+  <text x="765" y="302" fill="#fbbf24" font-family="monospace" font-size="8">✓</text>
+
+  <!-- LR schedule strip -->
+  <text x="665" y="328" text-anchor="middle" fill="#4b5563" font-family="monospace" font-size="8">learning-rate schedule</text>
+  <defs>
+    <linearGradient id="lr-sched" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%"   stop-color="#43c9b8"/>
+      <stop offset="30%"  stop-color="#43c9b8"/>
+      <stop offset="60%"  stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e2030"/>
+    </linearGradient>
+  </defs>
+  <rect x="568" y="335" width="196" height="14" rx="4" fill="url(#lr-sched)" opacity="0.85"/>
+  <text x="568" y="362" fill="#374151" font-family="monospace" font-size="8">warmup → cosine anneal → zero</text>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="410" width="800" height="40" fill="#06080e" opacity="0.9"/>
+  <text x="400" y="432" text-anchor="middle" fill="#374151" font-family="monospace" font-size="11" letter-spacing="2">AI NOTEBOOK · DEEP LEARNING</text>
+  <text x="30"  y="432" text-anchor="start"  fill="#1e2a3a" font-family="monospace" font-size="10">~40 min</text>
+  <text x="770" y="432" text-anchor="end"    fill="#1e2a3a" font-family="monospace" font-size="10">SGD · Adam · AdamW · schedules</text>
+</svg>

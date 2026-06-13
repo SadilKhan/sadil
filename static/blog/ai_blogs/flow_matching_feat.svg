@@ -1,0 +1,212 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+<defs>
+  <style>
+    text { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+    .panel-title { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; fill: #7e9cbb; }
+    .label { font-size: 8px; fill: #7e9cbb; }
+  </style>
+  <filter id="glow-t" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="glow-o" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <linearGradient id="flow-line" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#5a7a9a" stop-opacity="0.3"/>
+    <stop offset="100%" stop-color="#24c1e0" stop-opacity="0.9"/>
+  </linearGradient>
+  <linearGradient id="diff-line" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#5a7a9a" stop-opacity="0.3"/>
+    <stop offset="100%" stop-color="#ea4335" stop-opacity="0.7"/>
+  </linearGradient>
+</defs>
+
+<!-- Background -->
+<rect width="800" height="450" fill="#07090d"/>
+
+<!-- Panel dividers -->
+<line x1="267" y1="30" x2="267" y2="420" stroke="#1e2a3a" stroke-width="1"/>
+<line x1="534" y1="30" x2="534" y2="420" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- ═══════════════════════════════ PANEL 1: DIFFUSION vs FLOW ═══════════════════════════════ -->
+<text x="133" y="55" class="panel-title" text-anchor="middle">Diffusion vs Flow</text>
+<line x1="30" y1="62" x2="237" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- Noise source (left) -->
+<circle cx="55" cy="165" r="18" fill="rgba(90,122,154,0.12)" stroke="#2a3a50" stroke-width="1"/>
+<text x="55" y="169" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">N(0,I)</text>
+
+<!-- Data (right) -->
+<circle cx="210" cy="165" r="18" fill="rgba(36,193,224,0.1)" stroke="#24c1e0" stroke-width="1"/>
+<text x="210" y="169" font-size="8" fill="#78d9ec" text-anchor="middle" font-family="JetBrains Mono, monospace">data</text>
+
+<!-- DIFFUSION path (curved, multiple arcs) - red/orange winding path -->
+<text x="38" y="90" font-size="8" font-weight="700" fill="#f28b82" font-family="JetBrains Mono, monospace">diffusion</text>
+<path d="M 73 158 C 90 115, 100 200, 120 135 S 155 210, 170 155 S 195 145, 192 155" stroke="#ea4335" stroke-width="1.5" fill="none" stroke-dasharray="4,2" opacity="0.75"/>
+<polygon points="190,152 195,155 190,158" fill="#ea4335" opacity="0.75"/>
+
+<!-- Many small diffusion step dots -->
+<circle cx="82" cy="142" r="2" fill="#f28b82" opacity="0.6"/>
+<circle cx="92" cy="168" r="2" fill="#f28b82" opacity="0.55"/>
+<circle cx="103" cy="148" r="2" fill="#f28b82" opacity="0.6"/>
+<circle cx="113" cy="170" r="2" fill="#f28b82" opacity="0.55"/>
+<circle cx="124" cy="150" r="2" fill="#f28b82" opacity="0.5"/>
+<circle cx="135" cy="168" r="2" fill="#f28b82" opacity="0.6"/>
+<circle cx="146" cy="152" r="2" fill="#f28b82" opacity="0.55"/>
+<circle cx="157" cy="163" r="2" fill="#f28b82" opacity="0.5"/>
+<circle cx="168" cy="155" r="2" fill="#f28b82" opacity="0.6"/>
+<circle cx="178" cy="162" r="2" fill="#f28b82" opacity="0.5"/>
+
+<text x="133" y="115" font-size="7" fill="#f28b82" text-anchor="middle" font-family="JetBrains Mono, monospace">curved · 1000 steps</text>
+
+<!-- FLOW PATH: straight line - teal -->
+<text x="38" y="200" font-size="8" font-weight="700" fill="#78d9ec" font-family="JetBrains Mono, monospace">flow matching</text>
+<line x1="73" y1="210" x2="193" y2="210" stroke="url(#flow-line)" stroke-width="2.5"/>
+<line x1="193" y1="210" x2="190" y2="210" stroke="none"/>
+<polygon points="190,207 196,210 190,213" fill="#24c1e0" filter="url(#glow-t)"/>
+
+<!-- Few dots on straight path -->
+<circle cx="105" cy="210" r="3" fill="#24c1e0" opacity="0.8" filter="url(#glow-t)"/>
+<circle cx="133" cy="210" r="3" fill="#24c1e0" opacity="0.8" filter="url(#glow-t)"/>
+<circle cx="162" cy="210" r="3" fill="#24c1e0" opacity="0.8" filter="url(#glow-t)"/>
+
+<text x="133" y="228" font-size="7" fill="#78d9ec" text-anchor="middle" font-family="JetBrains Mono, monospace">straight · 20 steps</text>
+
+<!-- Key equation -->
+<rect x="30" y="248" width="207" height="32" rx="4" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<text x="133" y="263" font-size="9" fill="#c0d8f2" text-anchor="middle" font-family="JetBrains Mono, monospace">dx/dt = v_θ(x, t)</text>
+<text x="133" y="275" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">learn a vector field, not a score</text>
+
+<!-- CFM loss -->
+<rect x="30" y="295" width="207" height="22" rx="4" fill="rgba(36,193,224,0.06)" stroke="#24c1e0" stroke-width="1"/>
+<text x="133" y="310" font-size="9" fill="#78d9ec" text-anchor="middle" font-family="JetBrains Mono, monospace">L = E[‖v_θ(xₜ,t) - (x₁-x₀)‖²]</text>
+
+<!-- ═══════════════════════════════ PANEL 2: CONDITIONAL FLOWS ═══════════════════════════════ -->
+<text x="400" y="55" class="panel-title" text-anchor="middle">Conditional Flows</text>
+<line x1="283" y1="62" x2="518" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- Noise samples (left side) - grey dots -->
+<circle cx="305" cy="100" r="5" fill="#2a3a50" stroke="#5a7a9a" stroke-width="1"/>
+<circle cx="298" cy="140" r="5" fill="#2a3a50" stroke="#5a7a9a" stroke-width="1"/>
+<circle cx="310" cy="175" r="5" fill="#2a3a50" stroke="#5a7a9a" stroke-width="1"/>
+<circle cx="296" cy="215" r="5" fill="#2a3a50" stroke="#5a7a9a" stroke-width="1"/>
+<circle cx="308" cy="255" r="5" fill="#2a3a50" stroke="#5a7a9a" stroke-width="1"/>
+<text x="300" y="282" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">noise z₀</text>
+
+<!-- Data samples (right side) - colored -->
+<circle cx="490" cy="95" r="6" fill="#24c1e0" opacity="0.9" filter="url(#glow-t)"/>
+<circle cx="485" cy="138" r="6" fill="#ff6d00" opacity="0.8" filter="url(#glow-o)"/>
+<circle cx="492" cy="178" r="6" fill="#24c1e0" opacity="0.85" filter="url(#glow-t)"/>
+<circle cx="488" cy="218" r="6" fill="#ff6d00" opacity="0.75" filter="url(#glow-o)"/>
+<circle cx="493" cy="258" r="6" fill="#24c1e0" opacity="0.9" filter="url(#glow-t)"/>
+<text x="490" y="282" font-size="8" fill="#78d9ec" text-anchor="middle" font-family="JetBrains Mono, monospace">data x₁</text>
+
+<!-- Straight flow lines connecting pairs -->
+<line x1="313" y1="100" x2="482" y2="96" stroke="#24c1e0" stroke-width="1.5" opacity="0.7"/>
+<polygon points="479,93 486,96 479,99" fill="#24c1e0" opacity="0.7"/>
+
+<line x1="306" y1="140" x2="477" y2="138" stroke="#ff6d00" stroke-width="1.5" opacity="0.7"/>
+<polygon points="474,135 481,138 474,141" fill="#ff6d00" opacity="0.7"/>
+
+<line x1="318" y1="175" x2="484" y2="178" stroke="#24c1e0" stroke-width="1.5" opacity="0.6"/>
+<polygon points="481,175 488,178 481,181" fill="#24c1e0" opacity="0.6"/>
+
+<line x1="304" y1="215" x2="480" y2="218" stroke="#ff6d00" stroke-width="1.5" opacity="0.65"/>
+<polygon points="477,215 484,218 477,221" fill="#ff6d00" opacity="0.65"/>
+
+<line x1="316" y1="255" x2="485" y2="258" stroke="#24c1e0" stroke-width="1.5" opacity="0.7"/>
+<polygon points="482,255 489,258 482,261" fill="#24c1e0" opacity="0.7"/>
+
+<!-- Midpoint interpolation dots -->
+<circle cx="398" cy="98" r="3" fill="#78d9ec" opacity="0.5"/>
+<circle cx="395" cy="139" r="3" fill="#ffab40" opacity="0.5"/>
+<circle cx="400" cy="176" r="3" fill="#78d9ec" opacity="0.5"/>
+<circle cx="396" cy="216" r="3" fill="#ffab40" opacity="0.5"/>
+<circle cx="401" cy="257" r="3" fill="#78d9ec" opacity="0.5"/>
+
+<!-- t=0/0.5/1 labels -->
+<text x="300" y="72" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">t=0</text>
+<text x="400" y="72" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">t=0.5</text>
+<text x="490" y="72" font-size="8" fill="#78d9ec" text-anchor="middle" font-family="JetBrains Mono, monospace">t=1</text>
+<line x1="300" y1="77" x2="300" y2="270" stroke="#2a3a50" stroke-width="1" stroke-dasharray="2,3"/>
+<line x1="400" y1="77" x2="400" y2="270" stroke="#2a3a50" stroke-width="1" stroke-dasharray="2,3"/>
+<line x1="490" y1="77" x2="490" y2="270" stroke="#2a3a50" stroke-width="1" stroke-dasharray="2,3"/>
+
+<!-- CFM note -->
+<rect x="283" y="296" width="234" height="30" rx="4" fill="#0f1318" stroke="#2a3a50" stroke-width="1"/>
+<text x="400" y="311" font-size="9" font-weight="700" fill="#c0d8f2" text-anchor="middle" font-family="JetBrains Mono, monospace">p(x₁|x₀) — straight conditional</text>
+<text x="400" y="322" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">marginal FM = intractable; CFM = tractable</text>
+
+<!-- ═══════════════════════════════ PANEL 3: MODEL ECOSYSTEM ═══════════════════════════════ -->
+<text x="667" y="55" class="panel-title" text-anchor="middle">Model Ecosystem</text>
+<line x1="550" y1="62" x2="784" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- OT coupling annotation -->
+<rect x="553" y="75" width="233" height="36" rx="5" fill="#0f1318" stroke="#2a3a50" stroke-width="1"/>
+<text x="669" y="91" font-size="9" font-weight="700" fill="#c0d8f2" text-anchor="middle" font-family="JetBrains Mono, monospace">Optimal Transport Coupling</text>
+<text x="669" y="104" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">minimize expected path length</text>
+
+<!-- Model pills arranged in grid -->
+<!-- Row 1 -->
+<rect x="553" y="128" width="66" height="24" rx="12" fill="rgba(66,133,244,0.15)" stroke="#4285f4" stroke-width="1.5"/>
+<text x="586" y="144" font-size="9" font-weight="700" fill="#8ab4f8" text-anchor="middle" font-family="JetBrains Mono, monospace" filter="url(#glow-t)">SD3</text>
+
+<rect x="628" y="128" width="60" height="24" rx="12" fill="rgba(36,193,224,0.15)" stroke="#24c1e0" stroke-width="1.5"/>
+<text x="658" y="144" font-size="9" font-weight="700" fill="#78d9ec" text-anchor="middle" font-family="JetBrains Mono, monospace" filter="url(#glow-t)">FLUX</text>
+
+<rect x="697" y="128" width="90" height="24" rx="12" fill="rgba(255,109,0,0.15)" stroke="#ff6d00" stroke-width="1.5"/>
+<text x="742" y="144" font-size="9" font-weight="700" fill="#ffab40" text-anchor="middle" font-family="JetBrains Mono, monospace" filter="url(#glow-o)">Stable Audio</text>
+
+<!-- Row 2 -->
+<rect x="553" y="164" width="60" height="24" rx="12" fill="rgba(52,168,83,0.15)" stroke="#34a853" stroke-width="1.5"/>
+<text x="583" y="180" font-size="9" font-weight="700" fill="#81c995" text-anchor="middle" font-family="JetBrains Mono, monospace">Genie</text>
+
+<rect x="622" y="164" width="52" height="24" rx="12" fill="rgba(161,66,244,0.15)" stroke="#a142f4" stroke-width="1.5"/>
+<text x="648" y="180" font-size="9" font-weight="700" fill="#c58af9" text-anchor="middle" font-family="JetBrains Mono, monospace">Sora</text>
+
+<rect x="683" y="164" width="104" height="24" rx="12" fill="rgba(251,188,4,0.12)" stroke="#fbbc04" stroke-width="1.5"/>
+<text x="735" y="180" font-size="9" font-weight="700" fill="#fdd663" text-anchor="middle" font-family="JetBrains Mono, monospace">Movie Gen</text>
+
+<!-- Why FM wins -->
+<text x="669" y="212" class="label" text-anchor="middle" fill="#5a7a9a">why flow matching won</text>
+
+<rect x="553" y="220" width="100" height="48" rx="5" fill="rgba(36,193,224,0.06)" stroke="#24c1e0" stroke-width="1"/>
+<text x="603" y="236" font-size="9" font-weight="700" fill="#78d9ec" text-anchor="middle" font-family="JetBrains Mono, monospace">straight paths</text>
+<text x="603" y="249" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">less curvature</text>
+<text x="603" y="262" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">fewer NFE</text>
+
+<rect x="661" y="220" width="126" height="48" rx="5" fill="rgba(255,109,0,0.06)" stroke="#ff6d00" stroke-width="1"/>
+<text x="724" y="236" font-size="9" font-weight="700" fill="#ffab40" text-anchor="middle" font-family="JetBrains Mono, monospace">OT coupling</text>
+<text x="724" y="249" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">min. expected</text>
+<text x="724" y="262" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">path cost</text>
+
+<!-- Rectified flow note -->
+<rect x="553" y="282" width="233" height="28" rx="4" fill="#0f1318" stroke="#2a3a50" stroke-width="1"/>
+<text x="669" y="296" font-size="9" fill="#c0d8f2" text-anchor="middle" font-family="JetBrains Mono, monospace">Rectified Flow: iteratively</text>
+<text x="669" y="307" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">reflow to straighten trajectories</text>
+
+<!-- Bottom labels -->
+<text x="133" y="385" class="panel-title" text-anchor="middle">diffusion vs flow</text>
+<text x="400" y="385" class="panel-title" text-anchor="middle">conditional flow matching</text>
+<text x="667" y="385" class="panel-title" text-anchor="middle">model ecosystem</text>
+
+<!-- Bottom rule -->
+<line x1="40" y1="395" x2="760" y2="395" stroke="#1e2a3a" stroke-width="1"/>
+<text x="400" y="415" font-size="8" fill="#3a4a5a" text-anchor="middle" font-family="JetBrains Mono, monospace" letter-spacing="0.12em">AI NOTEBOOK · FLOW MATCHING</text>
+
+<!-- Animations -->
+<circle cx="490" cy="95" r="8" fill="none" stroke="#24c1e0" stroke-width="1" opacity="0">
+  <animate attributeName="opacity" values="0;0.5;0" dur="2.5s" repeatCount="indefinite"/>
+  <animate attributeName="r" values="8;13;8" dur="2.5s" repeatCount="indefinite"/>
+</circle>
+<circle cx="485" cy="138" r="8" fill="none" stroke="#ff6d00" stroke-width="1" opacity="0">
+  <animate attributeName="opacity" values="0;0.5;0" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+  <animate attributeName="r" values="8;13;8" dur="2.5s" begin="0.8s" repeatCount="indefinite"/>
+</circle>
+<circle cx="492" cy="178" r="8" fill="none" stroke="#24c1e0" stroke-width="1" opacity="0">
+  <animate attributeName="opacity" values="0;0.5;0" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
+  <animate attributeName="r" values="8;13;8" dur="2.5s" begin="1.6s" repeatCount="indefinite"/>
+</circle>
+</svg>

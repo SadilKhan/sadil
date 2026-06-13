@@ -1,0 +1,224 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+<defs>
+  <style>
+    text { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+    .panel-title { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; fill: #7e9cbb; }
+    .label { font-size: 8px; fill: #7e9cbb; }
+  </style>
+  <filter id="glow-p" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="glow-b" x="-40%" y="-40%" width="180%" height="180%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <radialGradient id="blob1" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#4285f4" stop-opacity="0.15"/>
+    <stop offset="100%" stop-color="#4285f4" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="blob2" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#a142f4" stop-opacity="0.15"/>
+    <stop offset="100%" stop-color="#a142f4" stop-opacity="0"/>
+  </radialGradient>
+</defs>
+
+<!-- Background -->
+<rect width="800" height="450" fill="#07090d"/>
+
+<!-- Panel dividers -->
+<line x1="267" y1="30" x2="267" y2="420" stroke="#1e2a3a" stroke-width="1"/>
+<line x1="534" y1="30" x2="534" y2="420" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- ═══════════════════════════════ PANEL 1: FORWARD PROCESS ═══════════════════════════════ -->
+<text x="133" y="55" class="panel-title" text-anchor="middle">Forward Process</text>
+<line x1="30" y1="62" x2="237" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- x0: clean data cluster -->
+<text x="50" y="82" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">t=0</text>
+<ellipse cx="55" cy="130" rx="18" ry="18" fill="url(#blob1)"/>
+<circle cx="50" cy="122" r="4" fill="#4285f4" opacity="0.9" filter="url(#glow-b)"/>
+<circle cx="58" cy="130" r="4" fill="#4285f4" opacity="0.85" filter="url(#glow-b)"/>
+<circle cx="52" cy="138" r="4" fill="#4285f4" opacity="0.9" filter="url(#glow-b)"/>
+<circle cx="62" cy="120" r="4" fill="#4285f4" opacity="0.75" filter="url(#glow-b)"/>
+<circle cx="46" cy="133" r="4" fill="#4285f4" opacity="0.8" filter="url(#glow-b)"/>
+<text x="55" y="162" font-size="8" fill="#4285f4" text-anchor="middle" font-family="JetBrains Mono, monospace">clean x₀</text>
+
+<!-- Arrow right -->
+<line x1="80" y1="130" x2="98" y2="130" stroke="#2a3a50" stroke-width="1.5" stroke-dasharray="3,2"/>
+<polygon points="98,127 103,130 98,133" fill="#2a3a50"/>
+
+<!-- t=250: slight noise -->
+<text x="107" y="82" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">t=250</text>
+<circle cx="108" cy="122" r="4" fill="#8ab4f8" opacity="0.7"/>
+<circle cx="118" cy="131" r="4" fill="#8ab4f8" opacity="0.65"/>
+<circle cx="112" cy="138" r="4" fill="#8ab4f8" opacity="0.7"/>
+<circle cx="104" cy="135" r="4" fill="#8ab4f8" opacity="0.6"/>
+<circle cx="122" cy="120" r="4" fill="#8ab4f8" opacity="0.55"/>
+<!-- Noise dots -->
+<circle cx="100" cy="115" r="2.5" fill="#5a7a9a" opacity="0.5"/>
+<circle cx="125" cy="140" r="2.5" fill="#5a7a9a" opacity="0.4"/>
+<circle cx="115" cy="112" r="2" fill="#5a7a9a" opacity="0.35"/>
+
+<!-- Arrow right -->
+<line x1="138" y1="130" x2="155" y2="130" stroke="#2a3a50" stroke-width="1.5" stroke-dasharray="3,2"/>
+<polygon points="155,127 160,130 155,133" fill="#2a3a50"/>
+
+<!-- t=1000: pure noise -->
+<text x="162" y="82" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">t=1000</text>
+<!-- Scattered noise dots -->
+<circle cx="170" cy="108" r="3" fill="#5a7a9a" opacity="0.6"/>
+<circle cx="186" cy="115" r="3" fill="#5a7a9a" opacity="0.5"/>
+<circle cx="175" cy="125" r="3" fill="#5a7a9a" opacity="0.7"/>
+<circle cx="195" cy="118" r="3" fill="#5a7a9a" opacity="0.45"/>
+<circle cx="165" cy="133" r="3" fill="#5a7a9a" opacity="0.6"/>
+<circle cx="190" cy="133" r="3" fill="#5a7a9a" opacity="0.5"/>
+<circle cx="178" cy="140" r="3" fill="#5a7a9a" opacity="0.55"/>
+<circle cx="200" cy="125" r="3" fill="#5a7a9a" opacity="0.4"/>
+<circle cx="168" cy="145" r="3" fill="#5a7a9a" opacity="0.5"/>
+<circle cx="185" cy="108" r="3" fill="#5a7a9a" opacity="0.35"/>
+<circle cx="163" cy="118" r="3" fill="#5a7a9a" opacity="0.4"/>
+<circle cx="198" cy="140" r="3" fill="#5a7a9a" opacity="0.45"/>
+<text x="183" y="162" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">N(0,I)</text>
+
+<!-- Add noise formula -->
+<rect x="30" y="180" width="207" height="28" rx="4" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<text x="133" y="193" font-size="9" fill="#c0d8f2" text-anchor="middle" font-family="JetBrains Mono, monospace">q(xₜ|xₜ₋₁) = N(√αₜ xₜ₋₁, βₜI)</text>
+<text x="133" y="204" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">closed form: xₜ = √ᾱₜ x₀ + √(1-ᾱₜ) ε</text>
+
+<!-- Score matching annotation -->
+<text x="133" y="238" class="label" text-anchor="middle" fill="#5a7a9a">learn to undo each step</text>
+<rect x="30" y="246" width="207" height="30" rx="4" fill="rgba(161,66,244,0.07)" stroke="#a142f4" stroke-width="1"/>
+<text x="133" y="260" font-size="9" font-weight="700" fill="#c58af9" text-anchor="middle" font-family="JetBrains Mono, monospace">ε_θ(xₜ, t) ≈ ε</text>
+<text x="133" y="272" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">predict the added noise</text>
+
+<!-- DDPM loss -->
+<rect x="30" y="292" width="207" height="22" rx="4" fill="#0f1318" stroke="#2a3a50" stroke-width="1"/>
+<text x="133" y="307" font-size="9" fill="#c0d8f2" text-anchor="middle" font-family="JetBrains Mono, monospace">L = E[‖ε - ε_θ(xₜ,t)‖²]</text>
+
+<!-- ═══════════════════════════════ PANEL 2: SCORE + SDE ═══════════════════════════════ -->
+<text x="400" y="55" class="panel-title" text-anchor="middle">Score Function</text>
+<line x1="283" y1="62" x2="518" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- Data distribution - two blobs -->
+<ellipse cx="340" cy="150" rx="35" ry="28" fill="url(#blob1)" opacity="0.8"/>
+<ellipse cx="430" cy="130" rx="30" ry="24" fill="url(#blob2)" opacity="0.8"/>
+
+<!-- Score arrows pointing toward blobs - cluster 1 -->
+<!-- From outside pointing inward toward blob 1 -->
+<line x1="295" y1="155" x2="312" y2="152" stroke="#4285f4" stroke-width="1.5"/>
+<polygon points="312,149 318,152 312,155" fill="#4285f4"/>
+<line x1="296" y1="180" x2="312" y2="165" stroke="#4285f4" stroke-width="1.5"/>
+<polygon points="311,162 317,165 311,168" fill="#4285f4"/>
+<line x1="308" y1="195" x2="320" y2="182" stroke="#4285f4" stroke-width="1.5"/>
+<polygon points="319,179 325,182 319,185" fill="#4285f4"/>
+<line x1="340" y1="202" x2="340" y2="186" stroke="#4285f4" stroke-width="1.5"/>
+<polygon points="337,186 340,180 343,186" fill="#4285f4"/>
+<line x1="372" y1="195" x2="360" y2="182" stroke="#4285f4" stroke-width="1.5"/>
+<polygon points="361,185 355,182 361,179" fill="#4285f4"/>
+<line x1="385" y1="155" x2="368" y2="152" stroke="#4285f4" stroke-width="1.5"/>
+<polygon points="368,155 362,152 368,149" fill="#4285f4"/>
+
+<!-- Score arrows cluster 2 -->
+<line x1="460" y1="125" x2="448" y2="127" stroke="#a142f4" stroke-width="1.5"/>
+<polygon points="448,124 442,127 448,130" fill="#a142f4"/>
+<line x1="462" y1="142" x2="450" y2="138" stroke="#a142f4" stroke-width="1.5"/>
+<polygon points="450,141 444,138 450,135" fill="#a142f4"/>
+<line x1="430" y1="162" x2="430" y2="150" stroke="#a142f4" stroke-width="1.5"/>
+<polygon points="427,150 430,144 433,150" fill="#a142f4"/>
+<line x1="400" y1="140" x2="410" y2="135" stroke="#a142f4" stroke-width="1.5"/>
+<polygon points="410,138 416,135 410,132" fill="#a142f4"/>
+
+<!-- Center dots (data modes) -->
+<circle cx="340" cy="148" r="7" fill="#4285f4" opacity="0.8" filter="url(#glow-b)"/>
+<circle cx="430" cy="128" r="6" fill="#a142f4" opacity="0.8" filter="url(#glow-p)"/>
+
+<!-- Score label -->
+<text x="395" y="200" font-size="9" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">∇ₓ log p(x) = score</text>
+<text x="395" y="212" font-size="8" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">points toward high density</text>
+
+<!-- SDE / ODE box -->
+<rect x="283" y="228" width="234" height="55" rx="5" fill="#0f1318" stroke="#2a3a50" stroke-width="1"/>
+<text x="291" y="244" font-size="8" fill="#a142f4" font-family="JetBrains Mono, monospace" font-weight="700">SDE view (forward):</text>
+<text x="291" y="257" font-size="8" fill="#c0d8f2" font-family="JetBrains Mono, monospace">dx = f(x,t)dt + g(t)dW</text>
+<text x="291" y="271" font-size="8" fill="#a142f4" font-family="JetBrains Mono, monospace" font-weight="700">ODE reverse (DDIM):</text>
+<text x="291" y="282" font-size="8" fill="#c0d8f2" font-family="JetBrains Mono, monospace">dx = [f - g²·s_θ]dt</text>
+
+<!-- Score = ε connection -->
+<rect x="283" y="296" width="234" height="22" rx="4" fill="rgba(52,168,83,0.07)" stroke="#34a853" stroke-width="1"/>
+<text x="400" y="311" font-size="8" fill="#81c995" text-anchor="middle" font-family="JetBrains Mono, monospace">s_θ(x,t) = -ε_θ(x,t) / √(1-ᾱₜ)</text>
+
+<!-- ═══════════════════════════════ PANEL 3: DDPM vs DDIM ═══════════════════════════════ -->
+<text x="667" y="55" class="panel-title" text-anchor="middle">DDPM vs DDIM</text>
+<line x1="550" y1="62" x2="784" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- DDPM timeline -->
+<text x="563" y="85" font-size="9" font-weight="700" fill="#a142f4" font-family="JetBrains Mono, monospace">DDPM</text>
+<text x="775" y="85" font-size="9" fill="#5a7a9a" text-anchor="end" font-family="JetBrains Mono, monospace">~1000 steps</text>
+
+<!-- Noisy zigzag path for DDPM -->
+<polyline points="560,100 568,108 576,96 584,112 592,98 600,110 608,100 616,106 624,97 632,108 640,99 648,107 656,98 664,104 672,96 680,102 688,97 696,103 704,98 710,100 718,97 724,99 730,98" stroke="#a142f4" stroke-width="1.5" fill="none" opacity="0.7"/>
+<!-- Noise indicator dots -->
+<circle cx="568" cy="108" r="2" fill="#a142f4" opacity="0.5"/>
+<circle cx="584" cy="112" r="2" fill="#a142f4" opacity="0.5"/>
+<circle cx="600" cy="110" r="2" fill="#a142f4" opacity="0.5"/>
+<circle cx="632" cy="108" r="2" fill="#a142f4" opacity="0.5"/>
+
+<!-- End arrow -->
+<line x1="730" y1="99" x2="775" y2="99" stroke="#a142f4" stroke-width="1.5" stroke-dasharray="2,2"/>
+<polygon points="775,96 780,99 775,102" fill="#a142f4"/>
+
+<!-- DDIM timeline -->
+<text x="563" y="138" font-size="9" font-weight="700" fill="#4285f4" font-family="JetBrains Mono, monospace">DDIM</text>
+<text x="775" y="138" font-size="9" fill="#4285f4" text-anchor="end" font-family="JetBrains Mono, monospace" filter="url(#glow-b)">~20 steps</text>
+
+<!-- Straight smooth path for DDIM -->
+<line x1="560" y1="152" x2="775" y2="152" stroke="#4285f4" stroke-width="2" filter="url(#glow-b)"/>
+<!-- Step markers -->
+<circle cx="571" cy="152" r="3" fill="#4285f4" filter="url(#glow-b)"/>
+<circle cx="604" cy="152" r="3" fill="#4285f4" filter="url(#glow-b)"/>
+<circle cx="638" cy="152" r="3" fill="#4285f4" filter="url(#glow-b)"/>
+<circle cx="671" cy="152" r="3" fill="#4285f4" filter="url(#glow-b)"/>
+<circle cx="704" cy="152" r="3" fill="#4285f4" filter="url(#glow-b)"/>
+<circle cx="775" cy="152" r="4" fill="#4285f4" filter="url(#glow-b)"/>
+
+<!-- Speedup annotation -->
+<rect x="556" y="168" width="230" height="20" rx="4" fill="rgba(52,168,83,0.1)" stroke="#34a853" stroke-width="1"/>
+<text x="671" y="182" font-size="9" font-weight="700" fill="#34a853" text-anchor="middle" font-family="JetBrains Mono, monospace" filter="url(#glow-b)">50× speedup, same model weights</text>
+
+<!-- Key insight: non-Markovian -->
+<rect x="556" y="202" width="230" height="42" rx="5" fill="#0f1318" stroke="#2a3a50" stroke-width="1"/>
+<text x="571" y="218" font-size="9" font-weight="700" fill="#c0d8f2" font-family="JetBrains Mono, monospace">DDIM key insight:</text>
+<text x="571" y="231" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">rewrite reverse as ODE —</text>
+<text x="571" y="242" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">deterministic, subsampleable</text>
+
+<!-- Model family pills -->
+<text x="671" y="268" class="label" text-anchor="middle" fill="#5a7a9a">builds on diffusion</text>
+<rect x="556" y="276" width="54" height="18" rx="9" fill="rgba(66,133,244,0.12)" stroke="#4285f4" stroke-width="1"/>
+<text x="583" y="289" font-size="8" font-weight="700" fill="#8ab4f8" text-anchor="middle" font-family="JetBrains Mono, monospace">Stable XL</text>
+<rect x="618" y="276" width="40" height="18" rx="9" fill="rgba(161,66,244,0.12)" stroke="#a142f4" stroke-width="1"/>
+<text x="638" y="289" font-size="8" font-weight="700" fill="#c58af9" text-anchor="middle" font-family="JetBrains Mono, monospace">DALL·E</text>
+<rect x="666" y="276" width="44" height="18" rx="9" fill="rgba(36,193,224,0.12)" stroke="#24c1e0" stroke-width="1"/>
+<text x="688" y="289" font-size="8" font-weight="700" fill="#78d9ec" text-anchor="middle" font-family="JetBrains Mono, monospace">Imagen</text>
+<rect x="718" y="276" width="68" height="18" rx="9" fill="rgba(52,168,83,0.12)" stroke="#34a853" stroke-width="1"/>
+<text x="752" y="289" font-size="8" font-weight="700" fill="#81c995" text-anchor="middle" font-family="JetBrains Mono, monospace">AudioLDM-2</text>
+
+<!-- Bottom labels -->
+<text x="133" y="385" class="panel-title" text-anchor="middle">clean → noisy</text>
+<text x="400" y="385" class="panel-title" text-anchor="middle">score matching</text>
+<text x="667" y="385" class="panel-title" text-anchor="middle">ddpm / ddim</text>
+
+<!-- Bottom rule -->
+<line x1="40" y1="395" x2="760" y2="395" stroke="#1e2a3a" stroke-width="1"/>
+<text x="400" y="415" font-size="8" fill="#3a4a5a" text-anchor="middle" font-family="JetBrains Mono, monospace" letter-spacing="0.12em">AI NOTEBOOK · DIFFUSION MODELS</text>
+
+<!-- Animations -->
+<circle cx="340" cy="148" r="12" fill="none" stroke="#4285f4" stroke-width="1" opacity="0">
+  <animate attributeName="opacity" values="0;0.4;0" dur="3s" repeatCount="indefinite"/>
+  <animate attributeName="r" values="12;20;12" dur="3s" repeatCount="indefinite"/>
+</circle>
+<circle cx="430" cy="128" r="10" fill="none" stroke="#a142f4" stroke-width="1" opacity="0">
+  <animate attributeName="opacity" values="0;0.4;0" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+  <animate attributeName="r" values="10;18;10" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+</circle>
+</svg>

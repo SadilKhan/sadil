@@ -1,0 +1,495 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+<defs>
+  <!-- Background gradient -->
+  <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#07090d"/>
+    <stop offset="100%" stop-color="#0d1420"/>
+  </linearGradient>
+
+  <!-- Sine heatmap cell colors -->
+  <linearGradient id="heatPos" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#1a2a4a"/>
+    <stop offset="50%" stop-color="#4285f4" stop-opacity="0.9"/>
+    <stop offset="100%" stop-color="#1a2a4a"/>
+  </linearGradient>
+
+  <!-- RoPE arrow glow -->
+  <filter id="arrowGlow" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur stdDeviation="2" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+
+  <!-- Panel glow -->
+  <filter id="panelGlow" x="-5%" y="-5%" width="110%" height="110%">
+    <feGaussianBlur stdDeviation="6" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+
+  <!-- Rope circle glow -->
+  <radialGradient id="ropeCircle" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#a142f4" stop-opacity="0.15"/>
+    <stop offset="100%" stop-color="#a142f4" stop-opacity="0"/>
+  </radialGradient>
+
+  <!-- Wave gradients for freq panel -->
+  <linearGradient id="waveFast" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#ffab40"/>
+    <stop offset="60%" stop-color="#ffab40"/>
+    <stop offset="100%" stop-color="#f28b82"/>
+  </linearGradient>
+  <linearGradient id="waveSlow" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="#78d9ec"/>
+    <stop offset="100%" stop-color="#78d9ec"/>
+  </linearGradient>
+
+  <!-- Cell animation keyframes -->
+  <style>
+    @keyframes cellPulse {
+      0%, 100% { opacity: 0.55; }
+      50% { opacity: 1; }
+    }
+    @keyframes arrowSpin {
+      from { transform-origin: 390px 225px; transform: rotate(0deg); }
+      to   { transform-origin: 390px 225px; transform: rotate(360deg); }
+    }
+    @keyframes dotOrbit {
+      from { offset-distance: 0%; }
+      to   { offset-distance: 100%; }
+    }
+    @keyframes waveDrift {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-40px); }
+    }
+    @keyframes labelFade {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    .heat-col { animation: cellPulse 3s ease-in-out infinite; }
+    .heat-col:nth-child(2n)   { animation-delay: -0.4s; }
+    .heat-col:nth-child(3n)   { animation-delay: -0.8s; }
+    .heat-col:nth-child(4n)   { animation-delay: -1.2s; }
+    .heat-col:nth-child(5n)   { animation-delay: -1.6s; }
+    .heat-col:nth-child(6n)   { animation-delay: -2.0s; }
+    .heat-col:nth-child(7n)   { animation-delay: -2.4s; }
+
+    .rope-arrow { animation: arrowSpin 8s linear infinite; will-change: transform; }
+    .rope-arrow2 { animation: arrowSpin 8s linear infinite reverse; animation-duration: 5.5s; will-change: transform; }
+
+    .wave-fast { animation: waveDrift 1.4s linear infinite; will-change: transform; }
+    .wave-slow { animation: waveDrift 4.2s linear infinite; will-change: transform; }
+
+    .lbl-pulse { animation: labelFade 2.8s ease-in-out infinite; }
+  </style>
+</defs>
+
+<!-- Background -->
+<rect width="800" height="450" fill="url(#bgGrad)"/>
+
+<!-- Subtle grid lines -->
+<line x1="265" y1="0" x2="265" y2="450" stroke="#1e2a3a" stroke-width="1"/>
+<line x1="535" y1="0" x2="535" y2="450" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- ════════════════ LEFT PANEL: Sinusoidal Heatmap ════════════════ -->
+<rect x="0" y="0" width="265" height="450" fill="#07090d"/>
+
+<!-- Panel label -->
+<text x="132" y="30" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600" fill="#4285f4" letter-spacing="2" opacity="0.85">SINUSOIDAL  PE</text>
+<line x1="20" y1="36" x2="112" y2="36" stroke="#1e2a3a" stroke-width="0.8"/>
+<line x1="152" y1="36" x2="244" y2="36" stroke="#1e2a3a" stroke-width="0.8"/>
+
+<!-- Axis labels -->
+<text x="132" y="54" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#4a5e7a">position →</text>
+<text x="14" y="250" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#4a5e7a" transform="rotate(-90,14,250)">dimension →</text>
+
+<!-- Heatmap: 14 cols × 18 rows, each cell 16×20, starting at x=24, y=60 -->
+<!-- We simulate the sinusoidal pattern: brighter where |sin| is high -->
+<!-- Pre-computed approximate brightness as opacity values -->
+
+<!-- col 0 (pos=0): sin(0/10000^0)=0, cos=1 → alternating 0,1 pattern -->
+<g class="heat-col" style="animation-delay:0s">
+  <rect x="24" y="60"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="80"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.85"/>
+  <rect x="24" y="100" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="120" width="15" height="19" rx="1" fill="#4285f4" opacity="0.80"/>
+  <rect x="24" y="140" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="160" width="15" height="19" rx="1" fill="#4285f4" opacity="0.75"/>
+  <rect x="24" y="180" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="200" width="15" height="19" rx="1" fill="#4285f4" opacity="0.70"/>
+  <rect x="24" y="220" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="240" width="15" height="19" rx="1" fill="#4285f4" opacity="0.65"/>
+  <rect x="24" y="260" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="280" width="15" height="19" rx="1" fill="#4285f4" opacity="0.60"/>
+  <rect x="24" y="300" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="320" width="15" height="19" rx="1" fill="#4285f4" opacity="0.55"/>
+  <rect x="24" y="340" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="360" width="15" height="19" rx="1" fill="#4285f4" opacity="0.50"/>
+  <rect x="24" y="380" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="24" y="400" width="15" height="19" rx="1" fill="#4285f4" opacity="0.45"/>
+</g>
+
+<!-- col 1 -->
+<g class="heat-col" style="animation-delay:-0.4s">
+  <rect x="41" y="60"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.75"/>
+  <rect x="41" y="80"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.55"/>
+  <rect x="41" y="100" width="15" height="19" rx="1" fill="#4285f4" opacity="0.30"/>
+  <rect x="41" y="120" width="15" height="19" rx="1" fill="#4285f4" opacity="0.72"/>
+  <rect x="41" y="140" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.60"/>
+  <rect x="41" y="160" width="15" height="19" rx="1" fill="#4285f4" opacity="0.20"/>
+  <rect x="41" y="180" width="15" height="19" rx="1" fill="#4285f4" opacity="0.68"/>
+  <rect x="41" y="200" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.55"/>
+  <rect x="41" y="220" width="15" height="19" rx="1" fill="#4285f4" opacity="0.15"/>
+  <rect x="41" y="240" width="15" height="19" rx="1" fill="#4285f4" opacity="0.65"/>
+  <rect x="41" y="260" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.50"/>
+  <rect x="41" y="280" width="15" height="19" rx="1" fill="#4285f4" opacity="0.12"/>
+  <rect x="41" y="300" width="15" height="19" rx="1" fill="#4285f4" opacity="0.62"/>
+  <rect x="41" y="320" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.46"/>
+  <rect x="41" y="340" width="15" height="19" rx="1" fill="#4285f4" opacity="0.10"/>
+  <rect x="41" y="360" width="15" height="19" rx="1" fill="#4285f4" opacity="0.58"/>
+  <rect x="41" y="380" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.42"/>
+  <rect x="41" y="400" width="15" height="19" rx="1" fill="#4285f4" opacity="0.08"/>
+</g>
+
+<!-- col 2 -->
+<g class="heat-col" style="animation-delay:-0.8s">
+  <rect x="58" y="60"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.90"/>
+  <rect x="58" y="80"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.12"/>
+  <rect x="58" y="100" width="15" height="19" rx="1" fill="#4285f4" opacity="0.60"/>
+  <rect x="58" y="120" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.82"/>
+  <rect x="58" y="140" width="15" height="19" rx="1" fill="#4285f4" opacity="0.08"/>
+  <rect x="58" y="160" width="15" height="19" rx="1" fill="#4285f4" opacity="0.55"/>
+  <rect x="58" y="180" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.78"/>
+  <rect x="58" y="200" width="15" height="19" rx="1" fill="#4285f4" opacity="0.06"/>
+  <rect x="58" y="220" width="15" height="19" rx="1" fill="#4285f4" opacity="0.50"/>
+  <rect x="58" y="240" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.74"/>
+  <rect x="58" y="260" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="58" y="280" width="15" height="19" rx="1" fill="#4285f4" opacity="0.46"/>
+  <rect x="58" y="300" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.70"/>
+  <rect x="58" y="320" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="58" y="340" width="15" height="19" rx="1" fill="#4285f4" opacity="0.42"/>
+  <rect x="58" y="360" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.66"/>
+  <rect x="58" y="380" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="58" y="400" width="15" height="19" rx="1" fill="#4285f4" opacity="0.38"/>
+</g>
+
+<!-- col 3 -->
+<g class="heat-col" style="animation-delay:-1.2s">
+  <rect x="75" y="60"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.72"/>
+  <rect x="75" y="80"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.40"/>
+  <rect x="75" y="100" width="15" height="19" rx="1" fill="#4285f4" opacity="0.82"/>
+  <rect x="75" y="120" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.65"/>
+  <rect x="75" y="140" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.35"/>
+  <rect x="75" y="160" width="15" height="19" rx="1" fill="#4285f4" opacity="0.77"/>
+  <rect x="75" y="180" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.60"/>
+  <rect x="75" y="200" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.30"/>
+  <rect x="75" y="220" width="15" height="19" rx="1" fill="#4285f4" opacity="0.72"/>
+  <rect x="75" y="240" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.56"/>
+  <rect x="75" y="260" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.27"/>
+  <rect x="75" y="280" width="15" height="19" rx="1" fill="#4285f4" opacity="0.68"/>
+  <rect x="75" y="300" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.52"/>
+  <rect x="75" y="320" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.24"/>
+  <rect x="75" y="340" width="15" height="19" rx="1" fill="#4285f4" opacity="0.64"/>
+  <rect x="75" y="360" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.48"/>
+  <rect x="75" y="380" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.22"/>
+  <rect x="75" y="400" width="15" height="19" rx="1" fill="#4285f4" opacity="0.60"/>
+</g>
+
+<!-- col 4 -->
+<g class="heat-col" style="animation-delay:-1.6s">
+  <rect x="92" y="60"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.30"/>
+  <rect x="92" y="80"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.82"/>
+  <rect x="92" y="100" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.65"/>
+  <rect x="92" y="120" width="15" height="19" rx="1" fill="#4285f4" opacity="0.25"/>
+  <rect x="92" y="140" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.78"/>
+  <rect x="92" y="160" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.60"/>
+  <rect x="92" y="180" width="15" height="19" rx="1" fill="#4285f4" opacity="0.20"/>
+  <rect x="92" y="200" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.74"/>
+  <rect x="92" y="220" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.56"/>
+  <rect x="92" y="240" width="15" height="19" rx="1" fill="#4285f4" opacity="0.18"/>
+  <rect x="92" y="260" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.70"/>
+  <rect x="92" y="280" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.52"/>
+  <rect x="92" y="300" width="15" height="19" rx="1" fill="#4285f4" opacity="0.16"/>
+  <rect x="92" y="320" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.66"/>
+  <rect x="92" y="340" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.48"/>
+  <rect x="92" y="360" width="15" height="19" rx="1" fill="#4285f4" opacity="0.14"/>
+  <rect x="92" y="380" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.62"/>
+  <rect x="92" y="400" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.44"/>
+</g>
+
+<!-- col 5 -->
+<g class="heat-col" style="animation-delay:-2.0s">
+  <rect x="109" y="60"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.78"/>
+  <rect x="109" y="80"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.72"/>
+  <rect x="109" y="100" width="15" height="19" rx="1" fill="#4285f4" opacity="0.10"/>
+  <rect x="109" y="120" width="15" height="19" rx="1" fill="#4285f4" opacity="0.74"/>
+  <rect x="109" y="140" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.68"/>
+  <rect x="109" y="160" width="15" height="19" rx="1" fill="#4285f4" opacity="0.08"/>
+  <rect x="109" y="180" width="15" height="19" rx="1" fill="#4285f4" opacity="0.70"/>
+  <rect x="109" y="200" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.64"/>
+  <rect x="109" y="220" width="15" height="19" rx="1" fill="#4285f4" opacity="0.07"/>
+  <rect x="109" y="240" width="15" height="19" rx="1" fill="#4285f4" opacity="0.66"/>
+  <rect x="109" y="260" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.60"/>
+  <rect x="109" y="280" width="15" height="19" rx="1" fill="#4285f4" opacity="0.06"/>
+  <rect x="109" y="300" width="15" height="19" rx="1" fill="#4285f4" opacity="0.62"/>
+  <rect x="109" y="320" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.56"/>
+  <rect x="109" y="340" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+  <rect x="109" y="360" width="15" height="19" rx="1" fill="#4285f4" opacity="0.58"/>
+  <rect x="109" y="380" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.52"/>
+  <rect x="109" y="400" width="15" height="19" rx="1" fill="#4285f4" opacity="0.05"/>
+</g>
+
+<!-- col 6 -->
+<g class="heat-col" style="animation-delay:-2.4s">
+  <rect x="126" y="60"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.50"/>
+  <rect x="126" y="80"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.18"/>
+  <rect x="126" y="100" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.78"/>
+  <rect x="126" y="120" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.46"/>
+  <rect x="126" y="140" width="15" height="19" rx="1" fill="#4285f4" opacity="0.15"/>
+  <rect x="126" y="160" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.74"/>
+  <rect x="126" y="180" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.42"/>
+  <rect x="126" y="200" width="15" height="19" rx="1" fill="#4285f4" opacity="0.13"/>
+  <rect x="126" y="220" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.70"/>
+  <rect x="126" y="240" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.38"/>
+  <rect x="126" y="260" width="15" height="19" rx="1" fill="#4285f4" opacity="0.11"/>
+  <rect x="126" y="280" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.66"/>
+  <rect x="126" y="300" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.35"/>
+  <rect x="126" y="320" width="15" height="19" rx="1" fill="#4285f4" opacity="0.10"/>
+  <rect x="126" y="340" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.62"/>
+  <rect x="126" y="360" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.32"/>
+  <rect x="126" y="380" width="15" height="19" rx="1" fill="#4285f4" opacity="0.09"/>
+  <rect x="126" y="400" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.58"/>
+</g>
+
+<!-- cols 7-13: increasingly slow oscillation (right half) -->
+<g class="heat-col" style="animation-delay:-0.6s">
+  <rect x="143" y="60"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.80"/>
+  <rect x="143" y="80"  width="15" height="19" rx="1" fill="#4285f4" opacity="0.76"/>
+  <rect x="143" y="100" width="15" height="19" rx="1" fill="#4285f4" opacity="0.62"/>
+  <rect x="143" y="120" width="15" height="19" rx="1" fill="#4285f4" opacity="0.38"/>
+  <rect x="143" y="140" width="15" height="19" rx="1" fill="#4285f4" opacity="0.10"/>
+  <rect x="143" y="160" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.30"/>
+  <rect x="143" y="180" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.62"/>
+  <rect x="143" y="200" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.82"/>
+  <rect x="143" y="220" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.82"/>
+  <rect x="143" y="240" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.62"/>
+  <rect x="143" y="260" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.30"/>
+  <rect x="143" y="280" width="15" height="19" rx="1" fill="#4285f4" opacity="0.10"/>
+  <rect x="143" y="300" width="15" height="19" rx="1" fill="#4285f4" opacity="0.38"/>
+  <rect x="143" y="320" width="15" height="19" rx="1" fill="#4285f4" opacity="0.62"/>
+  <rect x="143" y="340" width="15" height="19" rx="1" fill="#4285f4" opacity="0.76"/>
+  <rect x="143" y="360" width="15" height="19" rx="1" fill="#4285f4" opacity="0.80"/>
+  <rect x="143" y="380" width="15" height="19" rx="1" fill="#4285f4" opacity="0.74"/>
+  <rect x="143" y="400" width="15" height="19" rx="1" fill="#4285f4" opacity="0.58"/>
+</g>
+
+<!-- last 5 cols: very slow, large blocks of similar color -->
+<g class="heat-col" style="animation-delay:-1.0s">
+  <rect x="160" y="60"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.82"/>
+  <rect x="160" y="80"  width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.84"/>
+  <rect x="160" y="100" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.85"/>
+  <rect x="160" y="120" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.82"/>
+  <rect x="160" y="140" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.76"/>
+  <rect x="160" y="160" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.64"/>
+  <rect x="160" y="180" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.46"/>
+  <rect x="160" y="200" width="15" height="19" rx="1" fill="#4285f4" opacity="0.20"/>
+  <rect x="160" y="220" width="15" height="19" rx="1" fill="#4285f4" opacity="0.08"/>
+  <rect x="160" y="240" width="15" height="19" rx="1" fill="#4285f4" opacity="0.20"/>
+  <rect x="160" y="260" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.46"/>
+  <rect x="160" y="280" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.64"/>
+  <rect x="160" y="300" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.76"/>
+  <rect x="160" y="320" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.82"/>
+  <rect x="160" y="340" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.85"/>
+  <rect x="160" y="360" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.84"/>
+  <rect x="160" y="380" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.80"/>
+  <rect x="160" y="400" width="15" height="19" rx="1" fill="#8ab4f8" opacity="0.72"/>
+</g>
+
+<g class="heat-col" style="animation-delay:-1.8s">
+  <rect x="177" y="60"  width="15" height="190" rx="1" fill="#8ab4f8" opacity="0.82"/>
+  <rect x="177" y="252" width="15" height="168" rx="1" fill="#4285f4" opacity="0.12"/>
+</g>
+
+<g class="heat-col" style="animation-delay:-2.2s">
+  <rect x="194" y="60"  width="15" height="358" rx="1" fill="#8ab4f8" opacity="0.78"/>
+</g>
+
+<g class="heat-col" style="animation-delay:-1.4s">
+  <rect x="211" y="60"  width="15" height="358" rx="1" fill="#8ab4f8" opacity="0.72"/>
+</g>
+
+<g class="heat-col" style="animation-delay:-0.2s">
+  <rect x="228" y="60"  width="15" height="358" rx="1" fill="#8ab4f8" opacity="0.65"/>
+</g>
+
+<!-- Bottom label -->
+<text x="34" y="432" font-family="JetBrains Mono, monospace" font-size="7" fill="#4a5e7a">fast →</text>
+<text x="204" y="432" font-family="JetBrains Mono, monospace" font-size="7" fill="#4a5e7a">← slow</text>
+<text x="132" y="445" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#2a3a50">unique fingerprint per position</text>
+
+
+<!-- ════════════════ CENTER PANEL: RoPE Rotation ════════════════ -->
+<rect x="265" y="0" width="270" height="450" fill="#08080e"/>
+
+<text x="400" y="30" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600" fill="#a142f4" letter-spacing="2" opacity="0.85">ROPE  ROTATION</text>
+<line x1="275" y1="36" x2="352" y2="36" stroke="#1e2a3a" stroke-width="0.8"/>
+<line x1="448" y1="36" x2="525" y2="36" stroke="#1e2a3a" stroke-width="0.8"/>
+
+<!-- Circle background glow -->
+<circle cx="400" cy="215" r="72" fill="url(#ropeCircle)"/>
+
+<!-- Orbit circle -->
+<circle cx="400" cy="215" r="68" fill="none" stroke="#2a1a40" stroke-width="1" stroke-dasharray="4 4"/>
+
+<!-- Axis lines -->
+<line x1="322" y1="215" x2="478" y2="215" stroke="#1e2a3a" stroke-width="0.8"/>
+<line x1="400" y1="137" x2="400" y2="293" stroke="#1e2a3a" stroke-width="0.8"/>
+
+<!-- Token position arrows (6 tokens at different angles) -->
+<!-- The (pos 0): angle = 0 rad -->
+<line x1="400" y1="215" x2="466" y2="215" stroke="#8ab4f8" stroke-width="1.5" opacity="0.7"/>
+<circle cx="466" cy="215" r="4" fill="#8ab4f8" opacity="0.8"/>
+<text x="472" y="218" font-family="JetBrains Mono, monospace" font-size="8" fill="#8ab4f8" opacity="0.9">the</text>
+
+<!-- cat (pos 1): angle = 1 rad ≈ 57° -->
+<line x1="400" y1="215" x2="436" y2="158" stroke="#81c995" stroke-width="1.5" opacity="0.7"/>
+<circle cx="436" cy="158" r="4" fill="#81c995" opacity="0.8"/>
+<text x="440" y="155" font-family="JetBrains Mono, monospace" font-size="8" fill="#81c995" opacity="0.9">cat</text>
+
+<!-- sat (pos 2): angle = 2 rad ≈ 115° -->
+<line x1="400" y1="215" x2="371" y2="154" stroke="#ffab40" stroke-width="2" opacity="0.9"/>
+<circle cx="371" cy="154" r="5" fill="#ffab40" opacity="0.9"/>
+<text x="352" y="150" font-family="JetBrains Mono, monospace" font-size="8.5" fill="#ffab40" font-weight="600">sat</text>
+
+<!-- on (pos 3): angle = 3 rad ≈ 172° -->
+<line x1="400" y1="215" x2="333" y2="225" stroke="#f28b82" stroke-width="1.5" opacity="0.7"/>
+<circle cx="333" cy="225" r="4" fill="#f28b82" opacity="0.8"/>
+<text x="310" y="222" font-family="JetBrains Mono, monospace" font-size="8" fill="#f28b82" opacity="0.9">on</text>
+
+<!-- the2 (pos 4): angle = 4 rad ≈ 229° -->
+<line x1="400" y1="215" x2="356" y2="279" stroke="#78d9ec" stroke-width="1.5" opacity="0.7"/>
+<circle cx="356" cy="279" r="4" fill="#78d9ec" opacity="0.8"/>
+<text x="333" y="290" font-family="JetBrains Mono, monospace" font-size="8" fill="#78d9ec" opacity="0.9">the</text>
+
+<!-- mat (pos 5): angle = 5 rad ≈ 286° -->
+<line x1="400" y1="215" x2="418" y2="283" stroke="#c58af9" stroke-width="1.5" opacity="0.7"/>
+<circle cx="418" cy="283" r="4" fill="#c58af9" opacity="0.8"/>
+<text x="422" y="293" font-family="JetBrains Mono, monospace" font-size="8" fill="#c58af9" opacity="0.9">mat</text>
+
+<!-- Arc showing the gap angle between sat and cat -->
+<path d="M 436 158 A 68 68 0 0 0 371 154" fill="none" stroke="#ffab40" stroke-width="1" stroke-dasharray="3 2" opacity="0.6"/>
+<text x="400" y="140" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#ffab40" opacity="0.85">gap = 1θ</text>
+
+<!-- Center dot -->
+<circle cx="400" cy="215" r="3" fill="#a142f4" opacity="0.9"/>
+
+<!-- Key insight box -->
+<rect x="278" y="305" width="244" height="48" rx="6" fill="#14102a" stroke="#2a1840" stroke-width="1"/>
+<text x="400" y="321" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#c58af9" font-weight="600">q·k depends only on gap</text>
+<text x="400" y="336" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="8.5" fill="#7a6a9a">⟨R₂q, R₁k⟩ = f(q, k, 2−1)</text>
+<text x="400" y="349" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="8" fill="#5a4a7a">absolute positions cancel</text>
+
+<!-- Formula label -->
+<text x="400" y="380" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#3a2a50">θᵢ = 10000^(−2i/d)</text>
+
+<!-- Bottom pill -->
+<rect x="330" y="392" width="140" height="22" rx="11" fill="#1a1030" stroke="#3a2060" stroke-width="1"/>
+<text x="400" y="407" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#c58af9" opacity="0.9">zero parameters</text>
+
+<!-- "rotate Q, K only" annotation -->
+<text x="400" y="435" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#3a2a50" letter-spacing="1">rotate Q and K · leave V clean</text>
+
+
+<!-- ════════════════ RIGHT PANEL: Frequency Scaling / YaRN ════════════════ -->
+<rect x="535" y="0" width="265" height="450" fill="#070a0d"/>
+
+<text x="667" y="30" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" font-weight="600" fill="#ffab40" letter-spacing="2" opacity="0.85">YARN  SCALING</text>
+<line x1="545" y1="36" x2="620" y2="36" stroke="#1e2a3a" stroke-width="0.8"/>
+<line x1="714" y1="36" x2="784" y2="36" stroke="#1e2a3a" stroke-width="0.8"/>
+
+<!-- Method labels + wave rows -->
+
+<!-- Row 1: Naive extrapolation (broken) -->
+<text x="548" y="72" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#f28b82" font-weight="600">Extrapolate</text>
+<text x="548" y="83" font-family="JetBrains Mono, monospace" font-size="7" fill="#4a5e7a">trained: 4k → test: 16k</text>
+
+<!-- Wave clipped at 4k mark, then red zone -->
+<clipPath id="clipTrained">
+  <rect x="548" y="88" width="110" height="30"/>
+</clipPath>
+<clipPath id="clipUnseen">
+  <rect x="658" y="88" width="106" height="30"/>
+</clipPath>
+
+<g clip-path="url(#clipTrained)" class="wave-fast">
+  <path d="M548 103 C558 88,568 88,578 103 S598 118,608 103 S628 88,638 103 S648 118,658 103" fill="none" stroke="#81c995" stroke-width="1.8"/>
+  <path d="M588 103 C598 88,608 88,618 103 S638 118,648 103 S658 88,668 103" fill="none" stroke="#81c995" stroke-width="1.8"/>
+</g>
+<rect x="658" y="88" width="106" height="30" rx="3" fill="#f28b82" opacity="0.12"/>
+<line x1="658" y1="88" x2="658" y2="118" stroke="#f28b82" stroke-width="1" stroke-dasharray="3 2" opacity="0.7"/>
+<text x="710" y="106" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#f28b82" opacity="0.8">unseen angles ✗</text>
+
+<!-- Row 2: Position Interpolation -->
+<text x="548" y="138" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#78d9ec" font-weight="600">Interpolate  (PI)</text>
+<text x="548" y="149" font-family="JetBrains Mono, monospace" font-size="7" fill="#4a5e7a">squeeze all positions by L/L′</text>
+
+<clipPath id="clipPI">
+  <rect x="548" y="154" width="214" height="30"/>
+</clipPath>
+<g clip-path="url(#clipPI)" class="wave-slow">
+  <path d="M548 169 C568 154,588 154,608 169 S648 184,668 169 S708 154,728 169 S762 184,782 169" fill="none" stroke="#78d9ec" stroke-width="1.8" opacity="0.8"/>
+</g>
+<!-- compress arrows -->
+<path d="M690 158 L670 160" stroke="#78d9ec" stroke-width="0.8" marker-end="url(#arr)"/>
+<path d="M730 158 L710 160" stroke="#78d9ec" stroke-width="0.8"/>
+<text x="667" y="198" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#78d9ec" opacity="0.7">neighbors squeezed together</text>
+
+<!-- Row 3: YaRN per-frequency -->
+<text x="548" y="222" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#ffab40" font-weight="600">YaRN  (per-frequency)</text>
+<text x="548" y="233" font-family="JetBrains Mono, monospace" font-size="7" fill="#4a5e7a">stretch slow · keep fast</text>
+
+<!-- fast wave (untouched) -->
+<clipPath id="clipFast">
+  <rect x="548" y="238" width="214" height="22"/>
+</clipPath>
+<g clip-path="url(#clipFast)" class="wave-fast">
+  <path d="M548 249 C558 238,568 238,578 249 S598 260,608 249 S618 238,628 249 S638 260,648 249 S658 238,668 249 S678 260,688 249 S698 238,708 249 S718 260,728 249 S738 238,748 249 S758 260,768 249" fill="none" stroke="#ffab40" stroke-width="1.6"/>
+</g>
+<text x="764" y="252" font-family="JetBrains Mono, monospace" font-size="7" fill="#ffab40" opacity="0.9">fast: kept</text>
+
+<!-- slow wave (stretched) -->
+<clipPath id="clipSlowY">
+  <rect x="548" y="262" width="214" height="22"/>
+</clipPath>
+<g clip-path="url(#clipSlowY)" class="wave-slow">
+  <path d="M548 273 C598 262,648 262,698 273 S748 284,798 273" fill="none" stroke="#78d9ec" stroke-width="1.6"/>
+</g>
+<text x="764" y="276" font-family="JetBrains Mono, monospace" font-size="7" fill="#78d9ec" opacity="0.9">slow: stretched</text>
+
+<!-- Divider -->
+<line x1="545" y1="298" x2="784" y2="298" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- Who uses what -->
+<text x="667" y="316" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#ffab40" letter-spacing="1">SHIPS IN</text>
+
+<rect x="548" y="322" width="82" height="20" rx="4" fill="#1a1408" stroke="#3a2a10" stroke-width="1"/>
+<text x="589" y="335" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#ffab40">Qwen 2</text>
+
+<rect x="636" y="322" width="82" height="20" rx="4" fill="#1a1408" stroke="#3a2a10" stroke-width="1"/>
+<text x="677" y="335" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#ffab40">DeepSeek</text>
+
+<rect x="548" y="348" width="82" height="20" rx="4" fill="#081818" stroke="#0a2a28" stroke-width="1"/>
+<text x="589" y="361" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#78d9ec">LLaMA-3</text>
+
+<rect x="636" y="348" width="82" height="20" rx="4" fill="#081818" stroke="#0a2a28" stroke-width="1"/>
+<text x="677" y="361" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#78d9ec">Phi-3</text>
+
+<!-- Context length pills -->
+<rect x="548" y="378" width="214" height="28" rx="6" fill="#0f1008" stroke="#2a2a10" stroke-width="1"/>
+<text x="667" y="392" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="8" fill="#fdd663" font-weight="600">128k+  context</text>
+<text x="667" y="403" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#5a5a20">no extra training required</text>
+
+<!-- Bottom caption -->
+<text x="667" y="430" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7" fill="#2a3a28">base 2017: 512 tokens</text>
+<text x="667" y="443" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="7.5" fill="#3a4a20" letter-spacing="0.5">→  now: 1M+ (LongRoPE)</text>
+
+</svg>

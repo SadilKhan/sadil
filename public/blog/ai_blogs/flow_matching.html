@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow Matching: The Journey After Diffusion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;--green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;--yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;--teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#c0d8f2;--text3:#9ab8d4;
+  --mono:'JetBrains Mono',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--orange));z-index:999;transition:width .05s}
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);z-index:900;padding:.55rem 1.5rem}
+.nav-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.2rem}
+.nav-brand{font-size:.85rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.7rem;white-space:nowrap;padding:.25rem .5rem;border-radius:6px;font-weight:500;transition:all .12s}
+.nav-links a:hover{color:var(--teal2);background:rgba(0,212,255,.08)}
+.hero{text-align:center;padding:4rem 1.5rem 2.5rem;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.08;background:linear-gradient(135deg,#8ab4f8,#c58af9,#ffab40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:680px;margin:0 auto}
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+section{padding:2.8rem 0 .5rem;border-top:1px solid var(--bdr);margin-top:2.2rem}
+section:first-of-type{border-top:none;margin-top:0}
+.sec-hdr{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.sec-num{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;letter-spacing:.05em}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.12rem;font-weight:700;margin:1.8rem 0 .6rem}
+p{color:var(--text);margin-bottom:.85rem}
+p.note{color:var(--text2);font-size:.92rem}
+.fig{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:1.3rem;margin:1.6rem 0}
+.fig-title{text-align:center;font-size:.74rem;font-weight:700;color:var(--text2);margin-bottom:1rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas.anim{display:block;width:100%;height:auto;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.8rem;font-style:italic;line-height:1.6}
+.mb{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto}
+.mb .katex-display{margin:.15rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.4rem;font-family:var(--mono)}
+.co{border-radius:10px;padding:.95rem 1.2rem;margin:1.3rem 0;border-left:3px solid;font-size:.9rem}
+.co-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+.co p{margin:0;font-size:.87rem;line-height:1.65}
+.co.t{background:rgba(36,193,224,.05);border-color:var(--teal)}.co.t .co-title{color:var(--teal2)}
+.co.y{background:rgba(251,188,4,.05);border-color:var(--yellow)}.co.y .co-title{color:var(--yellow2)}
+.co.o{background:rgba(255,109,0,.05);border-color:var(--orange)}.co.o .co-title{color:var(--orange2)}
+.co.g{background:rgba(52,168,83,.05);border-color:var(--green)}.co.g .co-title{color:var(--green2)}
+.co.r{background:rgba(234,67,53,.05);border-color:var(--red)}.co.r .co-title{color:var(--red2)}
+.co.p{background:rgba(161,66,244,.05);border-color:var(--purple)}.co.p .co-title{color:var(--purple2)}
+table.cmp{width:100%;border-collapse:collapse;font-size:.82rem;margin:1.3rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+table.cmp th{background:var(--s3);color:var(--text2);padding:.6rem .9rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+table.cmp td{padding:.55rem .9rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.ic{background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--blue2)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+details.qa{background:var(--s2);border:1px solid rgba(252,198,40,.3);border-radius:12px;margin:1.6rem 0;overflow:hidden}
+details.qa summary{cursor:pointer;padding:.95rem 1.2rem;list-style:none;display:flex;align-items:center;gap:.8rem;user-select:none;transition:background .15s}
+details.qa summary:hover{background:rgba(252,198,40,.05)}
+details.qa summary::-webkit-details-marker{display:none}
+.qa-badge{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.07em;padding:.25rem .6rem;border-radius:6px;background:rgba(252,198,40,.15);color:var(--yellow2);white-space:nowrap}
+.qa-q{font-weight:600;font-size:.93rem;color:var(--text);flex:1}
+.qa-chev{color:var(--yellow2);font-size:.8rem;transition:transform .2s}
+details.qa[open] .qa-chev{transform:rotate(90deg)}
+.qa-body{padding:.4rem 1.3rem 1.2rem;border-top:1px solid var(--bdr)}
+.qa-body p{font-size:.91rem}
+@media(max-width:640px){.nav-links{display:none}}
+.hero-thumb{max-width:980px;margin:0 auto 2.4rem;padding:0 1.5rem}.hero-thumb img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-in">
+  <div class="nav-brand">Flow Matching</div>
+  <div class="nav-links">
+    <a href="#s1">The Itch</a><a href="#s2">Flows</a><a href="#s3">The Dream</a>
+    <a href="#s4">The Miracle</a><a href="#s5">Straight Lines</a><a href="#s6">Crossings</a>
+    <a href="#s7">Reunion</a><a href="#s8">Deeper</a><a href="#s9">Today</a>
+  </div>
+</div></nav>
+
+<div class="hero">
+  <h1>Flow Matching: Learn the River, Skip the Storm</h1>
+  <p>The diffusion blog ended with a confession: after all the stochastic scaffolding, sampling only ever needed a deterministic velocity field. Flow matching asks the obvious next question. If the field is all we need, can we learn it directly? The answer rebuilt generative modeling, and it fits in one regression loss.</p>
+</div>
+
+<main>
+
+<div class="hero-thumb"><img src="./flow_matching_feat.svg" alt="Flow Matching overview" loading="eager"/></div>
+
+<!-- ════════ S1: THE ITCH ════════ -->
+<section id="s1">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">01</span><h2>The Itch Diffusion Leaves Behind</h2></div>
+  <p>Recall the end of the diffusion journey. We built a forward SDE to drown data in noise, learned the score of every noised marginal, derived the reverse SDE, and then discovered the probability flow ODE: a <strong>deterministic velocity field</strong> whose smooth trajectories carry noise to data with exactly the right distribution. DDIM, the fast sampler everyone actually uses, is an integrator of that ODE.</p>
+  <p>Now look at the construction with fresh eyes. The thing we use at the end is a velocity field. The things we built to get it: a stochastic process, a score ladder, an ELBO, reverse time theorems. The entire stochastic apparatus was scaffolding around an object that is, in the end, just <strong>arrows telling points where to move</strong>.</p>
+  <p>Flow matching is the act of removing the scaffolding. Choose the path you want probability mass to follow from noise to data. Write down the velocity field of that path. Regress a network onto it. Done. No SDE, no score, no ELBO, and, as we will see, with the freedom to choose <strong>straight paths</strong>, which diffusion never had.</p>
+  <div class="fig">
+    <div class="fig-title">The Long Way and the Shortcut to the Same Object</div>
+    <canvas id="c-f1" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">Top route, the diffusion blog: forward SDE, score matching, reverse SDE, and finally the probability flow ODE. Bottom route, this blog: declare the path, derive its velocity, regress. Both end at a velocity field a network can learn. The shortcut also unlocks something the long way could not: the path is now a design choice, and the best choice turns out to be a straight line.</div>
+  </div>
+</section>
+
+<!-- ════════ S2: FLOWS ════════ -->
+<section id="s2">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">02</span><h2>The Object: Probability as a Fluid</h2></div>
+  <p>First, meet the object properly. A <strong>velocity field</strong> v(x, t) assigns an arrow to every point in space at every time. Drop a particle anywhere and it must follow the arrows:</p>
+  <div class="mb">
+    <div class="math-d">\frac{d}{dt}\,\phi_t(x) = v\big(\phi_t(x),\,t\big),\qquad \phi_0(x) = x</div>
+    <div class="mb-label">φ_t is the flow map: where a particle that started at x has been carried by time t. An ODE, the same species as diffusion's probability flow.</div>
+  </div>
+  <p>Now drop not one particle but an entire <strong>distribution</strong> of them, p₀. The flow carries the whole cloud, and the density at time t is the pushforward p_t = [φ_t]_* p₀. The deep law governing this is borrowed straight from fluid dynamics, the <strong>continuity equation</strong>:</p>
+  <div class="mb">
+    <div class="math-d">\frac{\partial p_t(x)}{\partial t} \;+\; \nabla \cdot \big(p_t(x)\, v(x,t)\big) \;=\; 0</div>
+    <div class="mb-label">Probability mass is an incompressible bookkeeping fluid: it is never created or destroyed, only transported by v. Density change at a point equals net inflow. This single PDE is the contract between a velocity field and the densities it generates.</div>
+  </div>
+  <p>So the generative recipe is: find a field v whose flow carries an easy p₀ (Gaussian noise) to the data distribution p₁ at t = 1, then sample by integrating the ODE. This idea is older than flow matching: <strong>continuous normalizing flows</strong> (2018) trained exactly this object by maximum likelihood. Their curse was the training cost: evaluating the likelihood requires <em>simulating the entire ODE and its divergence for every training example</em>. Beautiful theory, brutal compute. Flow matching exists to keep the object and delete the simulation.</p>
+  <div class="fig">
+    <div class="fig-title">A Cloud Carried by Arrows</div>
+    <canvas id="c-f2" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Three snapshots of one flow. The same particles, carried by the velocity field from a Gaussian blob at t = 0, through a stretched intermediate at t = 0.5, into a two island data distribution at t = 1. The arrows are v(x, t) at that moment. The continuity equation is what guarantees the moving cloud is a valid probability density at every instant.</div>
+  </div>
+</section>
+
+<!-- ════════ S3: THE DREAM ════════ -->
+<section id="s3">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(251,188,4,.12);color:var(--yellow2)">03</span><h2>The Dream Objective, and Why It Is Impossible</h2></div>
+  <p>Here is the loss we would love to optimize. Pick any probability path p_t you like, connecting noise p₀ to data p₁, with u_t(x) the true velocity field that generates it. Then just regress:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}_{FM}(\theta) = \mathbb{E}_{t,\;x \sim p_t}\Big[\big\|\,v_\theta(x, t) - u_t(x)\,\big\|^2\Big]</div>
+    <div class="mb-label">Flow Matching, the dream version: match the network to the true field, everywhere, at every time.</div>
+  </div>
+  <p>One problem: <strong>we cannot evaluate u_t(x)</strong>. The marginal velocity at a point depends on the entire data distribution at once, the same way diffusion's marginal score did. We know where individual samples are, not what the collective flow of the whole distribution looks like at an arbitrary point in space. The dream loss has an unknowable regression target.</p>
+  <p>If this feels familiar, it should. Diffusion hit the identical wall: the marginal score was intractable, and the rescue was Vincent's theorem, denoising score matching, which replaced the unknowable marginal with a computable per sample conditional. Flow matching is about to make exactly the same move, and the parallel is not an analogy, it is the same mathematics.</p>
+</section>
+
+<!-- ════════ S4: THE MIRACLE ════════ -->
+<section id="s4">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">04</span><h2>The Miracle: Conditional Flow Matching</h2></div>
+  <p>The rescue (Lipman et al., 2023). Stop trying to describe the whole river at once. Instead, describe the journey of <strong>one data point at a time</strong>. Condition on a single data sample x₁ and choose a simple conditional path p_t(x | x₁), a little moving cloud that starts inside the noise at t = 0 and lands on x₁ at t = 1. For a simple cloud, its conditional velocity u_t(x | x₁) is known in closed form. Then train on the conditional target:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}_{CFM}(\theta) = \mathbb{E}_{t,\;x_1 \sim q,\;x \sim p_t(\cdot|x_1)}\Big[\big\|\,v_\theta(x, t) - u_t(x \mid x_1)\,\big\|^2\Big]</div>
+    <div class="mb-label">Every term is now samplable and computable. No simulation, no score, no ELBO.</div>
+  </div>
+  <p>And now the theorem that makes the whole field work. The marginal velocity is exactly the <strong>conditional expectation</strong> of the per sample velocities passing through a point:</p>
+  <div class="mb">
+    <div class="math-d">u_t(x) = \mathbb{E}\big[\,u_t(x \mid x_1)\;\big|\; x_t = x\,\big] = \int u_t(x|x_1)\,\frac{p_t(x|x_1)\,q(x_1)}{p_t(x)}\,dx_1</div>
+    <div class="mb-label">At any point in space, the river's true flow is the weighted average of every individual journey currently passing through that point.</div>
+  </div>
+  <p>And least squares regression has a famous property: the minimizer of E‖v_θ(x) − Y‖² over functions of x is the conditional mean E[Y | x]. Expand both losses and the cross terms match through exactly this identity, giving:</p>
+  <div class="mb">
+    <div class="math-d">\nabla_\theta\, \mathcal{L}_{CFM}(\theta) \;=\; \nabla_\theta\, \mathcal{L}_{FM}(\theta)</div>
+    <div class="mb-label">The two objectives differ by a constant independent of θ. Training on cheap per sample targets IS training on the intractable marginal. This is the flow matching twin of Vincent 2011.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Marginal Field Is an Average of Journeys</div>
+    <canvas id="c-f3" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Several individual journeys, each from a noise draw to its own data point, pass through the neighborhood of one query point x. Each contributes its own conditional arrow. The true marginal velocity at x, the bold arrow, is their weighted average. The network never sees the average during training. It sees one random arrow at a time, and least squares regression converges to the average automatically.</div>
+  </div>
+</section>
+
+<!-- ════════ S5: STRAIGHT LINES ════════ -->
+<section id="s5">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">05</span><h2>Choose the Simplest Path: a Straight Line</h2></div>
+  <p>The theorem holds for any conditional path. So choose the simplest one imaginable. Connect a noise draw x₀ to a data point x₁ with <strong>linear interpolation</strong> (note the convention flip from the diffusion blog: here t = 0 is noise and t = 1 is data):</p>
+  <div class="mb">
+    <div class="math-d">x_t = (1-t)\,x_0 + t\,x_1 \qquad\Longrightarrow\qquad u_t(x_t \mid x_0, x_1) = \frac{d x_t}{dt} = x_1 - x_0</div>
+    <div class="mb-label">The conditional velocity is the displacement vector, constant along the entire segment. No schedules, no ᾱ, no square roots.</div>
+  </div>
+  <p>This is the rectified flow / optimal transport path, and it turns training into something almost embarrassingly simple:</p>
+  <div class="mb">
+    <div class="math-d">\begin{aligned}&\textbf{repeat: } x_1 \sim \text{data},\;\; x_0 \sim \mathcal{N}(0, I),\;\; t \sim \mathcal{U}[0,1]\\&\quad x_t = (1-t)\,x_0 + t\,x_1\\&\quad \text{gradient step on } \big\|\,v_\theta(x_t, t) - (x_1 - x_0)\,\big\|^2\end{aligned}</div>
+    <div class="mb-label">Compare with DDPM's training box from the diffusion blog. Same skeleton, but the blend is a lerp and the target is a subtraction.</div>
+  </div>
+  <p>The running worked example returns. The same pixel from the diffusion blog, data value <span class="ic">x₁ = 1.0</span>. Draw noise <span class="ic">x₀ = −0.4</span>, draw <span class="ic">t = 0.5</span>. The training input is x_t = 0.5 × (−0.4) + 0.5 × 1.0 = <span class="ic">0.3</span>. The regression target is x₁ − x₀ = 1.0 − (−0.4) = <span class="ic">1.4</span>, and it would be 1.4 at every t along this segment. If the network outputs 1.3, the loss is (0.1)² = 0.01. That is the entire training step.</p>
+  <p>Sampling is numerical ODE integration, Euler in the simplest case:</p>
+  <div class="mb">
+    <div class="math-d">x \;\leftarrow\; x + \Delta t \cdot v_\theta(x, t),\qquad \text{from } x \sim \mathcal{N}(0,I) \text{ at } t=0 \text{ to } t=1</div>
+    <div class="mb-label">10 to 50 steps in practice, or any off the shelf higher order solver. There is no noise to inject because there is no SDE.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Whole Recipe in One Picture, Numbers Included</div>
+    <canvas id="c-f4" class="anim" width="880" height="350"></canvas>
+    <div class="fig-cap">Noise draws on the left, data points on the right, each training pair joined by a straight segment with one constant velocity arrow along it. The highlighted segment is the worked example: from −0.4 to 1.0, midpoint 0.3, target velocity 1.4 everywhere on the segment. Training picks random points on random segments and regresses on the segment's arrow.</div>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">Different training segments cross each other. At a crossing point the network is told two different velocities for the same (x, t). How can one field satisfy both?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>It cannot, and it is not supposed to. This is the most instructive confusion in flow matching, and the answer was already planted in §4.</p>
+      <p>When two segments pass through the same point at the same time, the network receives contradictory targets there, sometimes the arrow of segment A, sometimes the arrow of segment B. Least squares regression under contradictory targets does not pick a winner. It converges to the <strong>conditional mean of the targets</strong>, the average arrow. And by the §4 identity, that average is precisely the true marginal velocity u_t(x). The contradiction is not a bug being tolerated. The averaging IS the mechanism that assembles the intractable marginal field out of cheap conditional pieces.</p>
+      <p>The price is geometric: where conditional segments cross, the averaged marginal flow must <strong>bend</strong> to stay a valid single valued field. So even though every training path was straight, the learned flow's trajectories are curved near crossings. Deterministic ODE trajectories cannot cross each other (uniqueness of solutions), so the marginal flow weaves smoothly where the training segments collided.</p>
+      <p>This single observation explains the next section: fewer crossings means straighter marginal flows means fewer solver steps. The whole rectification program is a war on crossings.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S6: CROSSINGS ════════ -->
+<section id="s6">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">06</span><h2>Crossings, Curvature, and Rectification</h2></div>
+  <p>So the learned flow is straight exactly where training segments did not fight. With the default <strong>independent coupling</strong> (any noise paired with any data point), fights are everywhere: segments from all over the noise blob to all over the data manifold crisscross constantly, and the marginal trajectories come out gently curved. Curved trajectories need more Euler steps. The straightness we chose for the conditionals did not fully survive the averaging.</p>
+  <p><strong>Rectified flow</strong> (Liu et al., 2022) fixes the coupling instead of the path. Train a first flow. Then generate pairs <em>with the model itself</em>: integrate noise x₀ forward to its output x̂₁, and keep (x₀, x̂₁) as a new training pair. These pairs are produced by non crossing ODE trajectories, so retraining on them, the <strong>reflow</strong> step, yields a dramatically straighter field. Each reflow provably does not increase transport cost and straightens trajectories, until one or two Euler steps suffice. This is the lineage behind one step image generators.</p>
+  <div class="fig">
+    <div class="fig-title">Why Marginals Bend, and How Reflow Unbends Them</div>
+    <canvas id="c-f5" class="anim" width="880" height="350"></canvas>
+    <div class="fig-cap">Left: independent coupling. Two straight conditional segments cross; at the crossing the field must average them, so the actual marginal trajectories (solid) bend around each other. Right: after reflow, the pairing is rewired by the model's own non crossing trajectories, segments no longer fight, and the marginal flow is nearly straight: one big Euler stride lands on target.</div>
+  </div>
+</section>
+
+<!-- ════════ S7: REUNION ════════ -->
+<section id="s7">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">07</span><h2>The Family Reunion: Diffusion Is a Flow Matching Choice</h2></div>
+  <p>Now the moment the two blogs merge. Flow matching let us choose the conditional path. What if, instead of a straight line, we choose a <strong>Gaussian path</strong> with a schedule, the little cloud shrinking onto the data point:</p>
+  <div class="mb">
+    <div class="math-d">p_t(x \mid x_1) = \mathcal{N}\big(\alpha_t\, x_1,\; \sigma_t^2 I\big) \qquad\Longrightarrow\qquad u_t(x \mid x_1) = \frac{\dot\sigma_t}{\sigma_t}\big(x - \alpha_t x_1\big) + \dot\alpha_t\, x_1</div>
+    <div class="mb-label">The general Gaussian conditional velocity. Every diffusion schedule is one choice of (α_t, σ_t).</div>
+  </div>
+  <p>Plug in the variance preserving schedule from the diffusion blog (α_t = √ᾱ, σ_t = √(1−ᾱ), reparameterized to continuous time) and the field you obtain is <strong>exactly the probability flow ODE</strong> of §8 of the diffusion blog. DDPM, score matching, DDIM: all of it is flow matching with one particular curved Gaussian path. The straight OT path is simply a different, and better behaved, point in the same design space. Sanity check the limiting cases of the straight path: α_t = t, σ_t = 1 − t gives u_t(x|x₁) = (x₁ − x)/(1 − t), and substituting x = (1−t)x₀ + t x₁ collapses it to x₁ − x₀, our constant arrow.</p>
+  <p>The dictionary between the languages is linear, extending the diffusion blog's table: for Gaussian paths, score, noise prediction, clean image prediction, and velocity are interconvertible: v = (σ̇/σ) x + σ²(σ̇/σ − α̇/α)·s(x, t) up to schedule constants, and ε, x̂₀, v parameterizations are affine re-labelings of one another. One object, now five lenses.</p>
+  <div class="fig">
+    <div class="fig-title">One Design Space: Diffusion's Arc and Flow Matching's Chord</div>
+    <canvas id="c-f6" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">The plane of (signal scale α_t, noise scale σ_t). Every generative path is a curve from the noise corner (α=0, σ=1) to the data corner (α=1, σ=0). Diffusion's variance preserving schedule walks the curved arc α² + σ² = 1. Flow matching's OT path takes the straight chord α + σ = 1. Same corners, same theorems, different geometry, and the chord is the one you can integrate in a few strides.</div>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">If Gaussian path flow matching reproduces diffusion exactly, is flow matching just diffusion with a different schedule, or is it genuinely more general?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>On the overlap, they are the same theory, and that is a feature: every diffusion result transfers. But the flow matching formulation is strictly larger in three real ways.</p>
+      <p><strong>The source can be anything.</strong> Diffusion's forward process must end at a Gaussian, by construction of the noising chain. Flow matching only needs samples from p₀ and p₁. Transport one image distribution to another, sketches to photos, low resolution to high, molecules to molecules. Noise is just the most common choice of p₀, not a requirement of the theory.</p>
+      <p><strong>The path can be anything satisfying the boundary conditions.</strong> Gaussian paths are one family. Straight lines, optimal transport couplings, paths confined to manifolds or constraint sets, and the general stochastic interpolant x_t = α_t x₁ + β_t x₀ + γ_t z (Albergo and Vanden Eijnden) all fit the same CFM theorem. Diffusion occupies one slice of this space.</p>
+      <p><strong>The coupling can be learned.</strong> Diffusion pairs every data point with independent noise, always. Flow matching can rewire who is paired with whom, minibatch OT coupling, reflow pairs, leading to straighter fields and fewer steps. That degree of freedom simply does not exist in the SDE story.</p>
+      <p>The honest summary: flow matching did not refute diffusion. It found the coordinate system in which diffusion is one curve among many, and then picked a better curve.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S8: DEEPER ════════ -->
+<section id="s8">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(234,67,53,.12);color:var(--red2)">08</span><h2>The Deeper Theory: Optimal Transport and the Cost of a Flow</h2></div>
+  <p>One more level down, for the expert shelf. Among <em>all</em> velocity fields that transport p₀ to p₁, which is the best one? Fluid dynamics has owned this question since Benamou and Brenier (2000): rank fields by their <strong>kinetic energy</strong>, the total effort of moving the probability fluid:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{K}(v) = \int_0^1 \!\! \int \big\|v(x,t)\big\|^2\, p_t(x)\; dx\; dt \qquad \text{minimized} \;\Longleftrightarrow\; \text{dynamic optimal transport}</div>
+    <div class="mb-label">The minimizer is the optimal transport flow: every particle travels in a straight line at constant speed, no wasted motion, and the total cost equals the squared Wasserstein distance W₂(p₀, p₁)².</div>
+  </div>
+  <p>This is the theoretical north star behind everything in §5 and §6. The OT flow is the straightest possible bridge. Per sample straight segments are the right local imitation of it. The reason independent coupling falls short is now precise: straightness of each segment is necessary but not sufficient, the <strong>pairing</strong> also has to be transport efficient, otherwise segments fly across the whole space and collide. Hence the two practical upgrades:</p>
+  <p><strong>Minibatch OT coupling.</strong> Inside each training batch, solve a small optimal transport matching between the batch of noise draws and the batch of data points, then connect matched pairs. Segments become short and nearly parallel, crossings plummet, the learned field straightens, all for the cost of a tiny assignment problem per batch.</p>
+  <p><strong>Reflow as cost descent.</strong> Each rectification round provably does not increase the kinetic energy of the flow and straightens trajectories. Reflow is a fixed point iteration crawling toward the OT flow, with the one step generator as the prize at the bottom.</p>
+  <div class="fig">
+    <div class="fig-title">Pairing Is the Hidden Half of Straightness</div>
+    <canvas id="c-f7" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">The same noise batch and data batch, paired two ways. Left, independent coupling: long segments thrown across the whole space, a thicket of crossings, high kinetic energy. Right, minibatch OT coupling: each noise point matched to a nearby data point, short parallel segments, few crossings, kinetic energy near the W₂ optimum. The conditional paths are straight in both pictures. Only the right one lets the marginal flow stay straight too.</div>
+  </div>
+</section>
+
+<!-- ════════ S9: TODAY ════════ -->
+<section id="s9">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">09</span><h2>Flow Matching Today, and the Whole Journey</h2></div>
+  <p>The industry verdict came fast. <strong>Stable Diffusion 3</strong> and <strong>Flux</strong> are rectified flow transformers, trained with the lerp and the subtraction of §5, with one practical refinement: t is sampled from a logit normal distribution concentrating effort on middle times, where the velocity is hardest. <strong>Meta's Movie Gen</strong> and the Voicebox and Audiobox line are flow matching, as are leading molecule and protein generators on manifolds. The reasons are the ones this blog earned: a five line training loop, no schedule zoo, stable optimization, few step sampling out of the box, and classifier free guidance carrying over verbatim (guide the velocity exactly as you guided the score).</p>
+  <table class="cmp">
+    <thead><tr><th></th><th>Diffusion (DDPM lineage)</th><th>Flow matching (RF lineage)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Training target</strong></td><td>noise ε in a corrupted sample</td><td>displacement x₁ − x₀ on a segment</td></tr>
+      <tr><td><strong>Blend</strong></td><td>√ᾱ x₀ + √(1−ᾱ) ε, schedule required</td><td>(1−t) x₀ + t x₁, a lerp</td></tr>
+      <tr><td><strong>Theory engine</strong></td><td>ELBO, denoising score matching, reverse SDE</td><td>continuity equation, CFM theorem, OT</td></tr>
+      <tr><td><strong>Sampling</strong></td><td>SDE or probability flow ODE, curved</td><td>ODE, near straight, 10 to 50 steps, 1 after reflow</td></tr>
+      <tr><td><strong>Source distribution</strong></td><td>must be Gaussian</td><td>anything you can sample</td></tr>
+      <tr><td><strong>Coupling</strong></td><td>independent, fixed</td><td>free: independent, minibatch OT, reflow</td></tr>
+      <tr><td><strong>Relationship</strong></td><td colspan="2">diffusion = flow matching on the Gaussian arc; the chord is the upgrade</td></tr>
+    </tbody>
+  </table>
+  <h3>The journey, end to end</h3>
+  <p>Stand back and the two blogs tell one story. The VAE built a bridge from noise to data in a single learned leap and paid in blur. Diffusion stretched the leap into a thousand stochastic whispers, discovered the score hiding in its noise predictor, took the continuum limit, and found, at the very bottom, a deterministic river: the probability flow ODE. Flow matching then asked the question the whole construction was begging for: if the river is the product, learn the river. Declare a path, average cheap per sample arrows into the true field by nothing more than least squares, choose the path straight, fix the pairing, and the thousand whispers become a handful of strides.</p>
+  <div class="co g"><div class="co-title">The one paragraph summary</div>
+    <p>Flow matching trains a velocity field by regression: interpolate a noise draw toward a data point, ask the network for the displacement vector, repeat. The conditional flow matching theorem guarantees this cheap per sample regression has the same gradients as matching the intractable marginal field, because least squares averages crossing targets into exactly the marginal velocity. Diffusion is the special case of a curved Gaussian path; the straight path plus transport aware pairing yields straighter flows, few step samplers, and, through reflow, one step generation. Probability is a fluid, the model is its river bed, and training is nothing but pointing arrows from noise to data.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+function gctx(id){const cv=document.getElementById('c-'+id);return cv?cv.getContext('2d'):null;}
+function lbl(ctx,s,x,y,col,sz,w,al){ctx.font=`${w||500} ${sz||10}px "Plus Jakarta Sans",sans-serif`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function mlbl(ctx,s,x,y,col,sz,al){ctx.font=`500 ${sz||9}px "JetBrains Mono",monospace`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function pill(ctx,x,y,w,h,r,fill,stroke,lw){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+function rnd(i){const v=Math.sin(i*12.9898+78.233)*43758.5453;return v-Math.floor(v);}
+function gauss(i){return (rnd(i)+rnd(i+0.17)+rnd(i+0.31)+rnd(i+0.47)-2)*1.6;}
+const STATIC={};
+(function(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id.replace('c-','');
+      if(STATIC[id]){STATIC[id]();obs.unobserve(e.target);}
+    }
+  }),{threshold:0.05});
+  window.addEventListener('DOMContentLoaded',()=>{
+    Object.keys(STATIC).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+  });
+})();
+
+/* ── F1: the shortcut map ── */
+STATIC.f1=function(){
+  const ctx=gctx('f1');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  lbl(ctx,'the diffusion blog: the long way',440,38,'#f0b3ac',10.5,700);
+  const long=[['forward SDE','#ffbe6e'],['score matching','#9fdcef'],['reverse SDE','#d6a8ff'],['probability flow ODE','#a8caff']];
+  long.forEach((s,i)=>{
+    pill(ctx,70+i*200,58,176,44,9,s[1]+'12',s[1],1.4);
+    mlbl(ctx,s[0],158+i*200,80,s[1],8.6);
+    if(i<3)arrow(ctx,248+i*200,80,266+i*200,80,'#aac6e2',1.4);
+  });
+  lbl(ctx,'this blog: the shortcut',440,150,'#a8e6c0',10.5,700);
+  pill(ctx,110,170,200,44,9,'rgba(72,186,106,.1)','#a8e6c0',1.5);
+  mlbl(ctx,'declare a path p_t',210,192,'#a8e6c0',8.8);
+  pill(ctx,360,170,200,44,9,'rgba(72,186,106,.1)','#a8e6c0',1.5);
+  mlbl(ctx,'derive its velocity u_t',460,192,'#a8e6c0',8.8);
+  pill(ctx,610,170,200,44,9,'rgba(72,186,106,.1)','#a8e6c0',1.5);
+  mlbl(ctx,'regress v_θ on it',710,192,'#a8e6c0',8.8);
+  arrow(ctx,312,192,356,192,'#a8e6c0',1.5);
+  arrow(ctx,562,192,606,192,'#a8e6c0',1.5);
+  // both converge
+  arrow(ctx,758,106,790,160,'#aac6e2',1.3);
+  pill(ctx,640,246,260,42,10,'rgba(120,217,236,.08)','#78d9ec',1.6);
+  lbl(ctx,'a learnable velocity field',770,267,'#78d9ec',10,700);
+  arrow(ctx,770,216,770,242,'#78d9ec',1.5);
+  arrow(ctx,820,106,830,160,'rgba(170,198,226,0)',0.1);
+  mlbl(ctx,'same destination, and now the path is a design choice',330,267,'#aac6e2',9);
+};
+
+/* ── F2: cloud carried by arrows ── */
+STATIC.f2=function(){
+  const ctx=gctx('f2');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const N=110;
+  // target islands
+  const tA=[-55,-34],tB=[48,42];
+  function panel(cx,cy,t,title){
+    pill(ctx,cx-118,cy-108,236,216,10,'rgba(52,70,100,.16)','rgba(150,180,220,.45)',1.1);
+    lbl(ctx,title,cx,cy+128,'#c8e0f2',9.5,700);
+    for(let i=0;i<N;i++){
+      const sx=gauss(i*3.3)*30, sy=gauss(i*7.1+1)*30;             // t=0 blob
+      const tgt=(rnd(i*1.7)<0.55)?tA:tB;
+      const ex=tgt[0]+gauss(i*5.9+2)*13, ey=tgt[1]+gauss(i*9.4+3)*13; // t=1 island
+      const x=cx+(1-t)*sx+t*ex, y=cy+(1-t)*sy+t*ey;
+      ctx.fillStyle=`rgba(${140+t*60|0},${190-t*20|0},${235-t*45|0},.9)`;
+      ctx.beginPath();ctx.arc(x,y,2.4,0,7);ctx.fill();
+      // velocity arrow for a sparse subset
+      if(i%17===0){
+        const vx=(ex-sx)*0.22,vy=(ey-sy)*0.22;
+        arrow(ctx,x,y,x+vx,y+vy,'rgba(255,226,130,.85)',1.2);
+      }
+    }
+  }
+  panel(160,150,0,'t = 0: noise blob');
+  panel(440,150,0.5,'t = 0.5: in transit');
+  panel(720,150,1,'t = 1: data islands');
+  arrow(ctx,284,150,316,150,'#aac6e2',1.4);
+  arrow(ctx,564,150,596,150,'#aac6e2',1.4);
+  mlbl(ctx,'yellow arrows = v(x, t) at that instant; the continuity equation keeps the moving cloud a valid density',440,H-14,'#aac6e2',8.5);
+};
+
+/* ── F3: marginal = average of journeys ── */
+STATIC.f3=function(){
+  const ctx=gctx('f3');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const q=[440,176]; // query point
+  // several segments passing near q
+  const segs=[
+    [[120,60],[800,260],'#9fdcef'],
+    [[110,260],[790,80],'#d6a8ff'],
+    [[150,170],[760,180],'#ffbe6e'],
+    [[210,300],[700,40],'#a8e6c0']
+  ];
+  let avx=0,avy=0;
+  segs.forEach((s,i)=>{
+    ctx.setLineDash([5,5]);ctx.strokeStyle=s[2]+'66';ctx.lineWidth=1.3;
+    ctx.beginPath();ctx.moveTo(s[0][0],s[0][1]);ctx.lineTo(s[1][0],s[1][1]);ctx.stroke();ctx.setLineDash([]);
+    // noise + data endpoints
+    ctx.fillStyle='#f28b82';ctx.beginPath();ctx.arc(s[0][0],s[0][1],4.4,0,7);ctx.fill();
+    ctx.fillStyle='#a8e6c0';ctx.beginPath();ctx.arc(s[1][0],s[1][1],4.4,0,7);ctx.fill();
+    // conditional arrow at q (direction of segment)
+    let dx=s[1][0]-s[0][0],dy=s[1][1]-s[0][1];
+    const m=Math.hypot(dx,dy);dx/=m;dy/=m;
+    arrow(ctx,q[0],q[1],q[0]+dx*54,q[1]+dy*54,s[2],1.7);
+    avx+=dx;avy+=dy;
+  });
+  // average arrow
+  const am=Math.hypot(avx,avy);
+  ctx.shadowColor='#fff';ctx.shadowBlur=8;
+  arrow(ctx,q[0],q[1],q[0]+avx/am*78,q[1]+avy/am*78,'#ffffff',3.2);
+  ctx.shadowBlur=0;
+  ctx.fillStyle='#ffe282';ctx.beginPath();ctx.arc(q[0],q[1],5.5,0,7);ctx.fill();
+  mlbl(ctx,'query point x',q[0]-12,q[1]+18,'#ffe282',8.5,'right');
+  lbl(ctx,'u_t(x) = weighted average',q[0]+150,q[1]-58,'#ffffff',10,700,'left');
+  mlbl(ctx,'of all journeys through x',q[0]+150,q[1]-42,'#c8e0f2',8,'left');
+  mlbl(ctx,'red dots: noise draws x₀     green dots: data points x₁     thin arrows: conditional velocities     bold: the marginal',440,H-14,'#aac6e2',8.3);
+};
+
+/* ── F4: straight line recipe with numbers ── */
+STATIC.f4=function(){
+  const ctx=gctx('f4');if(!ctx)return;const W=880,H=350;ctx.clearRect(0,0,W,H);
+  // axis: value vertical, t horizontal
+  const x0=140,x1=740,yv=v=>240-v*120; // value -1..1.4 region
+  mlbl(ctx,'t = 0 (noise)',x0,290,'#f0b3ac',8.5);
+  mlbl(ctx,'t = 1 (data)',x1,290,'#a8e6c0',8.5);
+  ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(x0,52);ctx.lineTo(x0,272);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(x1,52);ctx.lineTo(x1,272);ctx.stroke();
+  // background segments
+  const pairs=[[ -0.9, 0.62],[0.5,-0.25],[0.85,0.2],[-0.1,-0.78]];
+  pairs.forEach((p,i)=>{
+    ctx.strokeStyle='rgba(150,180,220,.4)';ctx.lineWidth=1.1;
+    ctx.beginPath();ctx.moveTo(x0,yv(p[0]));ctx.lineTo(x1,yv(p[1]));ctx.stroke();
+    ctx.fillStyle='#f28b82';ctx.beginPath();ctx.arc(x0,yv(p[0]),3.6,0,7);ctx.fill();
+    ctx.fillStyle='#a8e6c0';ctx.beginPath();ctx.arc(x1,yv(p[1]),3.6,0,7);ctx.fill();
+  });
+  // highlighted worked segment x0=-0.4 → x1=1.0
+  const ya=yv(-0.4), yb=yv(1.0);
+  ctx.shadowColor='#78d9ec';ctx.shadowBlur=8;
+  ctx.strokeStyle='#78d9ec';ctx.lineWidth=2.6;
+  ctx.beginPath();ctx.moveTo(x0,ya);ctx.lineTo(x1,yb);ctx.stroke();
+  ctx.shadowBlur=0;
+  ctx.fillStyle='#f28b82';ctx.beginPath();ctx.arc(x0,ya,5,0,7);ctx.fill();
+  ctx.fillStyle='#a8e6c0';ctx.beginPath();ctx.arc(x1,yb,5,0,7);ctx.fill();
+  mlbl(ctx,'x₀ = −0.4',x0-14,ya,'#f0b3ac',9,'right');
+  mlbl(ctx,'x₁ = 1.0',x1+14,yb,'#a8e6c0',9,'left');
+  // midpoint
+  const mx=(x0+x1)/2,my=(ya+yb)/2;
+  ctx.fillStyle='#ffe282';ctx.beginPath();ctx.arc(mx,my,5,0,7);ctx.fill();
+  mlbl(ctx,'t = 0.5: x_t = 0.3',mx,my+20,'#ffe282',9);
+  // constant velocity arrows along the segment
+  [0.2,0.5,0.8].forEach(tt=>{
+    const px=x0+(x1-x0)*tt, py=ya+(yb-ya)*tt;
+    const dx=(x1-x0),dy=(yb-ya),m=Math.hypot(dx,dy);
+    arrow(ctx,px,py,px+dx/m*44,py+dy/m*44,'#9fdcef',1.8);
+  });
+  mlbl(ctx,'target everywhere on the segment: v = x₁ − x₀ = 1.4',mx,my-34,'#9fdcef',9);
+  // loss chip
+  pill(ctx,620,60,220,56,9,'rgba(176,94,250,.1)','#d6a8ff',1.4);
+  mlbl(ctx,'network says 1.3',730,80,'#d6a8ff',9);
+  mlbl(ctx,'loss = (1.4 − 1.3)² = 0.01',730,100,'#cbb2ee',8.5);
+  mlbl(ctx,'training: pick a random point on a random segment, regress on its constant arrow',440,H-14,'#aac6e2',8.7);
+};
+
+/* ── F5: crossings and reflow ── */
+STATIC.f5=function(){
+  const ctx=gctx('f5');if(!ctx)return;const W=880,H=350;ctx.clearRect(0,0,W,H);
+  function panel(ox,title,col,crossed){
+    lbl(ctx,title,ox+190,36,col,10.5,700);
+    const nL=[[ox+40,90],[ox+40,230]];   // noise points
+    const dR=crossed?[[ox+340,230],[ox+340,90]]:[[ox+340,90],[ox+340,230]]; // data points
+    // conditional segments
+    nL.forEach((n,i)=>{
+      ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(150,180,220,.5)';ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.moveTo(n[0],n[1]);ctx.lineTo(dR[i][0],dR[i][1]);ctx.stroke();ctx.setLineDash([]);
+      ctx.fillStyle='#f28b82';ctx.beginPath();ctx.arc(n[0],n[1],5,0,7);ctx.fill();
+      ctx.fillStyle='#a8e6c0';ctx.beginPath();ctx.arc(dR[i][0],dR[i][1],5,0,7);ctx.fill();
+    });
+    if(crossed){
+      // crossing marker
+      lbl(ctx,'✕',ox+190,160,'#ffe282',15,800);
+      mlbl(ctx,'contradictory targets here',ox+190,182,'#ffe282',7.8);
+      // curved marginal trajectories weaving
+      ctx.strokeStyle=col;ctx.lineWidth=2.4;
+      ctx.beginPath();ctx.moveTo(ox+40,90);
+      ctx.bezierCurveTo(ox+170,110,ox+210,196,ox+340,216);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(ox+40,230);
+      ctx.bezierCurveTo(ox+170,210,ox+210,124,ox+340,104);ctx.stroke();
+      mlbl(ctx,'marginal flow must bend: ODE paths cannot cross',ox+190,290,'#ffbe6e',8.2);
+      mlbl(ctx,'curved ⇒ many solver steps',ox+190,308,'#f0b3ac',8.2);
+    } else {
+      ctx.strokeStyle=col;ctx.lineWidth=2.6;
+      nL.forEach((n,i)=>{
+        ctx.beginPath();ctx.moveTo(n[0],n[1]);ctx.lineTo(dR[i][0],dR[i][1]);ctx.stroke();
+      });
+      mlbl(ctx,'reflow rewired the pairs: no fights, no bending',ox+190,290,'#a8e6c0',8.2);
+      mlbl(ctx,'straight ⇒ one Euler stride lands',ox+190,308,'#9fd4b3',8.2);
+      arrow(ctx,ox+60,68,ox+330,68,'#78d9ec',1.6);
+      mlbl(ctx,'1 step',ox+190,56,'#78d9ec',8);
+    }
+  }
+  panel(50,'independent coupling: segments fight','#ffbe6e',true);
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(440,30);ctx.lineTo(440,H-16);ctx.stroke();ctx.setLineDash([]);
+  panel(450,'after reflow: pairs from the model\u2019s own paths','#a8e6c0',false);
+};
+
+/* ── F6: the (α, σ) design plane ── */
+STATIC.f6=function(){
+  const ctx=gctx('f6');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  const ox=250,oy=270,L=200;
+  // axes
+  arrow(ctx,ox,oy,ox+L+40,oy,'#aac6e2',1.4);
+  arrow(ctx,ox,oy,ox,oy-L-40,'#aac6e2',1.4);
+  mlbl(ctx,'signal scale α_t →',ox+L/2,oy+22,'#aac6e2',9);
+  ctx.save();ctx.translate(ox-22,oy-L/2);ctx.rotate(-Math.PI/2);
+  mlbl(ctx,'noise scale σ_t →',0,0,'#aac6e2',9);ctx.restore();
+  // corners
+  ctx.fillStyle='#f28b82';ctx.beginPath();ctx.arc(ox,oy-L,6,0,7);ctx.fill();
+  mlbl(ctx,'noise corner (α=0, σ=1), t=0',ox-14,oy-L-16,'#f0b3ac',8.5,'left');
+  ctx.fillStyle='#a8e6c0';ctx.beginPath();ctx.arc(ox+L,oy,6,0,7);ctx.fill();
+  mlbl(ctx,'data corner (α=1, σ=0), t=1',ox+L+12,oy-14,'#a8e6c0',8.5,'left');
+  // diffusion arc: α²+σ²=1
+  ctx.strokeStyle='#d6a8ff';ctx.lineWidth=2.6;
+  ctx.beginPath();
+  for(let k=0;k<=40;k++){const th=Math.PI/2*k/40;
+    const x=ox+Math.sin(th)*L, y=oy-Math.cos(th)*L;
+    k===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+  ctx.stroke();
+  mlbl(ctx,'diffusion: the arc α² + σ² = 1',ox+L*0.86,oy-L*0.8,'#d6a8ff',9,'left');
+  // FM chord: α+σ=1
+  ctx.strokeStyle='#78d9ec';ctx.lineWidth=2.6;
+  ctx.beginPath();ctx.moveTo(ox,oy-L);ctx.lineTo(ox+L,oy);ctx.stroke();
+  mlbl(ctx,'flow matching: the chord α + σ = 1',ox+L*0.28,oy-L*0.32,'#78d9ec',9,'left');
+  // dictionary chips
+  const chips=[['ε prediction','#ffbe6e'],['score s','#9fdcef'],['x̂₀ prediction','#a8e6c0'],['velocity v','#78d9ec']];
+  lbl(ctx,'one object, linear re-labelings',700,86,'#c8e0f2',9.5,700);
+  chips.forEach((c2,i)=>{
+    pill(ctx,610,104+i*40,180,30,8,c2[1]+'12',c2[1],1.2);
+    mlbl(ctx,c2[0],700,119+i*40,c2[1],8.6);
+    if(i<3){arrow(ctx,700,136+i*40,700,142+i*40,'#aac6e2',1);}
+  });
+  mlbl(ctx,'every path in this plane obeys the same CFM theorem; the chord is simply the straightest member',440,H-12,'#aac6e2',8.5);
+};
+
+/* ── F7: pairing matters ── */
+STATIC.f7=function(){
+  const ctx=gctx('f7');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const nPts=[],dPts=[];
+  for(let i=0;i<7;i++){
+    nPts.push([90+rnd(i*3.7)*90, 70+i*32+gauss(i)*5]);
+    dPts.push([300+rnd(i*9.1)*60, 70+i*32+gauss(i+9)*5]);
+  }
+  function panel(ox,title,col,pairing,energy){
+    lbl(ctx,title,ox+190,36,col,10.5,700);
+    nPts.forEach((p,i)=>{
+      const a=[p[0]+ox-90+0,p[1]], b=[dPts[pairing[i]][0]+ox-90,dPts[pairing[i]][1]];
+      ctx.strokeStyle=col+'99';ctx.lineWidth=1.5;
+      ctx.beginPath();ctx.moveTo(a[0],a[1]);ctx.lineTo(b[0],b[1]);ctx.stroke();
+      ctx.fillStyle='#f28b82';ctx.beginPath();ctx.arc(a[0],a[1],4.2,0,7);ctx.fill();
+      ctx.fillStyle='#a8e6c0';ctx.beginPath();ctx.arc(b[0],b[1],4.2,0,7);ctx.fill();
+    });
+    // kinetic energy bar
+    pill(ctx,ox+60,288,260,16,4,'rgba(48,66,96,.5)','rgba(150,180,220,.4)',.7);
+    ctx.fillStyle=col;ctx.fillRect(ox+62,290,256*energy,12);
+    mlbl(ctx,'kinetic energy',ox+44,296,'#aac6e2',7.8,'right');
+  }
+  panel(60,'independent pairing: a thicket','#ffbe6e',[4,6,0,5,1,3,2],0.95);
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(440,30);ctx.lineTo(440,H-14);ctx.stroke();ctx.setLineDash([]);
+  panel(470,'minibatch OT pairing: parallel and short','#a8e6c0',[0,1,2,3,4,5,6],0.34);
+  mlbl(ctx,'same points, different marriages: straight conditionals only stay straight in the marginal if the pairing is transport efficient',440,H-12,'#aac6e2',8.3);
+};
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

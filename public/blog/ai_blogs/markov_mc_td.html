@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Markov, Monte Carlo, TD: the Foundations You Keep Forgetting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;--green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;--yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;--teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#c0d8f2;--text3:#9ab8d4;
+  --mono:'JetBrains Mono',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--orange));z-index:999;transition:width .05s}
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);z-index:900;padding:.55rem 1.5rem}
+.nav-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.2rem}
+.nav-brand{font-size:.85rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.7rem;white-space:nowrap;padding:.25rem .5rem;border-radius:6px;font-weight:500;transition:all .12s}
+.nav-links a:hover{color:var(--teal2);background:rgba(0,212,255,.08)}
+.hero{text-align:center;padding:4rem 1.5rem 2.5rem;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.08;background:linear-gradient(135deg,#8ab4f8,#c58af9,#ffab40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:680px;margin:0 auto}
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+section{padding:2.8rem 0 .5rem;border-top:1px solid var(--bdr);margin-top:2.2rem}
+section:first-of-type{border-top:none;margin-top:0}
+.sec-hdr{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.sec-num{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;letter-spacing:.05em}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.12rem;font-weight:700;margin:1.8rem 0 .6rem}
+p{color:var(--text);margin-bottom:.85rem}
+p.note{color:var(--text2);font-size:.92rem}
+.fig{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:1.3rem;margin:1.6rem 0}
+.fig-title{text-align:center;font-size:.74rem;font-weight:700;color:var(--text2);margin-bottom:1rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas.anim{display:block;width:100%;height:auto;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.8rem;font-style:italic;line-height:1.6}
+.mb{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto}
+.mb .katex-display{margin:.15rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.4rem;font-family:var(--mono)}
+.co{border-radius:10px;padding:.95rem 1.2rem;margin:1.3rem 0;border-left:3px solid;font-size:.9rem}
+.co-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+.co p{margin:0;font-size:.87rem;line-height:1.65}
+.co.t{background:rgba(36,193,224,.05);border-color:var(--teal)}.co.t .co-title{color:var(--teal2)}
+.co.y{background:rgba(251,188,4,.05);border-color:var(--yellow)}.co.y .co-title{color:var(--yellow2)}
+.co.o{background:rgba(255,109,0,.05);border-color:var(--orange)}.co.o .co-title{color:var(--orange2)}
+.co.g{background:rgba(52,168,83,.05);border-color:var(--green)}.co.g .co-title{color:var(--green2)}
+.co.r{background:rgba(234,67,53,.05);border-color:var(--red)}.co.r .co-title{color:var(--red2)}
+.co.p{background:rgba(161,66,244,.05);border-color:var(--purple)}.co.p .co-title{color:var(--purple2)}
+table.cmp{width:100%;border-collapse:collapse;font-size:.82rem;margin:1.3rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+table.cmp th{background:var(--s3);color:var(--text2);padding:.6rem .9rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+table.cmp td{padding:.55rem .9rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.ic{background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--blue2)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+details.qa{background:var(--s2);border:1px solid rgba(252,198,40,.3);border-radius:12px;margin:1.6rem 0;overflow:hidden}
+details.qa summary{cursor:pointer;padding:.95rem 1.2rem;list-style:none;display:flex;align-items:center;gap:.8rem;user-select:none;transition:background .15s}
+details.qa summary:hover{background:rgba(252,198,40,.05)}
+details.qa summary::-webkit-details-marker{display:none}
+.qa-badge{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.07em;padding:.25rem .6rem;border-radius:6px;background:rgba(252,198,40,.15);color:var(--yellow2);white-space:nowrap}
+.qa-q{font-weight:600;font-size:.93rem;color:var(--text);flex:1}
+.qa-chev{color:var(--yellow2);font-size:.8rem;transition:transform .2s}
+details.qa[open] .qa-chev{transform:rotate(90deg)}
+.qa-body{padding:.4rem 1.3rem 1.2rem;border-top:1px solid var(--bdr)}
+.qa-body p{font-size:.91rem}
+@media(max-width:640px){.nav-links{display:none}}
+.hero-thumb{max-width:980px;margin:0 auto 2.4rem;padding:0 1.5rem}.hero-thumb img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-in">
+  <div class="nav-brand">Markov · MC · TD</div>
+  <div class="nav-links">
+    <a href="#s1">Why Forget</a><a href="#s2">Markov</a><a href="#s3">Chains</a>
+    <a href="#s4">MDP</a><a href="#s5">Returns</a><a href="#s6">Monte Carlo</a>
+    <a href="#s7">TD</a><a href="#s8">The Spectrum</a><a href="#s9">Into RL</a>
+  </div>
+</div></nav>
+
+<div class="hero">
+  <h1>Markov, Monte Carlo, TD: the Roots Under RL</h1>
+  <p>You keep forgetting these because they are taught as dry definitions with no picture and no thread. Here they are as one story, each idea a visible shape you can picture and reason from, finally seen living inside every RL algorithm you already know.</p>
+</div>
+
+<main>
+<div class="hero-thumb"><img src="./markov_mc_td_feat.svg" alt="Markov, Monte Carlo, TD" loading="eager"/></div>
+
+<!-- ════════ S1: WHY FORGET ════════ -->
+<section id="s1">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">01</span><h2>Why These Refuse to Stick</h2></div>
+  <p>Markov property, Monte Carlo, temporal difference. You have read them five times and they evaporate. The reason is not you. It is that they are usually presented as three disconnected definitions, each in its own notation, with no anchor to anything you can see. Definitions without pictures do not survive.</p>
+  <p>So we will do the opposite. One running world, drawn the same way every time. One question asked of it: <strong>how good is each situation?</strong> Three answers to that one question, which turn out to be three points on a single dial. By the end, "Markov", "Monte Carlo", and "TD" will not be vocabulary. They will be three things you can sketch on a napkin and reason about from the picture alone.</p>
+  <div class="fig">
+    <div class="fig-title">The One Thread Through Everything</div>
+    <canvas id="c-m1" class="anim" width="880" height="300"></canvas>
+    <div class="fig-cap">The spine of this blog. The Markov property is the assumption that makes the future computable. A Markov chain is a world that obeys it. An MDP adds choices and rewards. Then two ways to learn how good things are: Monte Carlo waits for the whole story, TD updates after one step. They are the two ends of one dial, and every RL algorithm you know sits somewhere on it.</div>
+  </div>
+</section>
+
+<!-- ════════ S2: MARKOV ════════ -->
+<section id="s2">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">02</span><h2>The Markov Property: the Present Is Enough</h2></div>
+  <p>Picture a board game where your next move depends only on the square you are standing on, not on the path you took to get there. It does not matter whether you arrived by a long detour or a lucky shortcut. Standing on "GO TO JAIL" sends you to jail regardless of your history. That is the Markov property: <em>the present square holds everything you need to know the future</em>.</p>
+  <p>Stated precisely, a process is Markov if the future is conditionally independent of the past given the present:</p>
+  <div class="mb">
+    <div class="math-d">\mathbb{P}\big(S_{t+1} \mid S_t, S_{t-1}, \dots, S_0\big) \;=\; \mathbb{P}\big(S_{t+1} \mid S_t\big)</div>
+    <div class="mb-label">The entire history collapses into the current state. The state is a sufficient statistic for the future.</div>
+  </div>
+  <p>The phrase that unlocks it: <strong>the state is a sufficient statistic for the future</strong>. If knowing where you are tells you everything that the full history would have told you about what comes next, the property holds. This is not a law of nature, it is a property of how you <em>define</em> the state. Choose the state badly and the property breaks; enrich the state and it returns.</p>
+  <div class="fig">
+    <div class="fig-title">History Erased: Two Paths, One Future</div>
+    <canvas id="c-m2" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">Two travelers reach the same square by completely different routes. Under the Markov property their futures are drawn from the identical distribution: the square forgot how they arrived. The greyed out trails are the discarded history. Everything the future needs is printed on the current square.</div>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">Real life clearly depends on history. Stock prices depend on trends, a conversation depends on what was said. So isn't the Markov property just false for everything interesting?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>The property is not false, it is a contract you satisfy by <strong>choosing the state correctly</strong>. The trick is to fold whatever history matters into the present.</p>
+      <p>Stock price depends on the trend? Then a single price is a bad state. Make the state the price <em>plus</em> recent velocity and volatility, and now the future depends only on that enriched present: Markov restored. A conversation depends on what was said? A single last word is a bad state. Make the state the full dialogue so far, and the next word depends only on that present. This is exactly what a transformer does: its context window IS the Markov state, which is why autoregressive generation is a Markov chain over sequences even though language is full of long range dependence.</p>
+      <p>The deep lesson, and the one interviewers want: <strong>Markov is a property of the state representation, not of the world</strong>. Any process can be made Markov by enriching the state enough, in the limit by stuffing the entire history into it. The art of RL and sequence modeling is choosing a state rich enough to be Markov but small enough to learn from. When the true state is hidden and you only see partial clues, you have a POMDP, and the standard fix is to rebuild an approximate state from history, with an RNN, a transformer, or a belief distribution.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S3: CHAINS ════════ -->
+<section id="s3">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">03</span><h2>Markov Chains: a World That Obeys the Rule</h2></div>
+  <p>A Markov chain is just a set of states and the probabilities of hopping between them, drawn as arrows. Our running world for the whole blog, a cartoon of a student's day:</p>
+  <div class="fig">
+    <div class="fig-title">The Running World: a Student's Day as a Chain</div>
+    <canvas id="c-m3" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">Five states. From Study you go to Pass with probability 0.7 or slip to Distracted with 0.3. From Distracted you recover to Study (0.5) or drift to Phone (0.5). Sleep is terminal, the day ends. Each arrow is a transition probability; every arrow leaving a state sums to 1. This is the whole chain: states plus arrows, nothing hidden, the present square is always enough.</div>
+  </div>
+  <p>Two questions a chain answers, both by pure bookkeeping. <strong>Where will I likely be in k steps?</strong> Multiply the transition matrix by itself k times. <strong>Where do I end up in the long run?</strong> The stationary distribution, the fixed point where the flow in equals the flow out, the same eigenvector idea behind PageRank ranking web pages by a random surfer's long run visit frequency. A chain has no rewards and no choices yet. It is the empty stage. Next we put an actor on it.</p>
+</section>
+
+<!-- ════════ S4: MDP ════════ -->
+<section id="s4">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(251,188,4,.12);color:var(--yellow2)">04</span><h2>Adding Choices and Rewards: the MDP</h2></div>
+  <p>A Markov chain is a world that happens to you. A <strong>Markov Decision Process</strong> is a world you act in. Three additions turn the empty stage into the setting of all RL:</p>
+  <p><strong>Actions.</strong> In each state you choose, and your choice bends the transition probabilities. <strong>Rewards.</strong> Each transition pays a number. <strong>A policy π.</strong> Your strategy: which action to take in each state. The chain's fixed arrows become a menu of arrows you select among.</p>
+  <div class="mb">
+    <div class="math-d">\text{MDP} = \big(\,\mathcal{S},\ \mathcal{A},\ P(s' \mid s, a),\ R(s, a),\ \gamma\,\big)</div>
+    <div class="mb-label">States, actions, transition probabilities now conditioned on the action, rewards, and the discount γ. Fix a policy π and the MDP collapses back into a plain Markov chain, the one your strategy induces.</div>
+  </div>
+  <p>That last sentence is the bridge nobody points out: <strong>a policy turns an MDP back into a Markov chain</strong>. Choose how you act, and the menu of arrows becomes a single set of arrows again, with rewards attached. Evaluating "how good is my strategy" is therefore a question about a Markov chain with payouts. That is precisely the question Monte Carlo and TD answer.</p>
+  <div class="fig">
+    <div class="fig-title">From Chain to MDP: Arrows Become Choices</div>
+    <canvas id="c-m4" class="anim" width="880" height="350"></canvas>
+    <div class="fig-cap">The student world upgraded. In Study you now choose: Grind (high chance of Pass, small reward now) or Break (pleasant now, risk of sliding to Distracted). Each action carries its own arrows and its own reward number. A policy picks one action per state, which selects one arrow bundle, which is again a Markov chain, now with rewards on every edge. The whole apparatus of RL is built to find the policy whose induced chain pays the most.</div>
+  </div>
+</section>
+
+<!-- ════════ S5: RETURNS ════════ -->
+<section id="s5">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">05</span><h2>The Quantity Everyone Wants: the Value</h2></div>
+  <p>One question rules them all: <strong>how good is it to be in state s under policy π?</strong> Good means how much total reward you expect to collect from here to the end. The total, discounted, is the return:</p>
+  <div class="mb">
+    <div class="math-d">G_t = R_{t+1} + \gamma R_{t+2} + \gamma^2 R_{t+3} + \cdots,\qquad V^\pi(s) = \mathbb{E}_\pi\big[\,G_t \mid S_t = s\,\big]</div>
+    <div class="mb-label">G is one rollout's total discounted reward, a random number. V is its expectation, the true value. This is the exact G_t and V from your PPO and Q-learning blogs.</div>
+  </div>
+  <p>The problem: V is an <em>expectation</em>, an average over all the random futures the chain could produce. We cannot see expectations. We can only see <strong>samples</strong>, individual days that actually happened. The entire subject of this blog is the two ways to climb from samples we can see to the expectation we want. Hold a concrete number in mind: suppose from Study the true value is <span class="ic">V(Study) = 6.0</span>. Neither method knows that. Both are trying to discover it from experience.</p>
+  <div class="fig">
+    <div class="fig-title">Value Is the Average Over Every Possible Day</div>
+    <canvas id="c-m5" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">From Study, three different days unfold by chance, each with its own total return: 8, 6, and 4. The value V(Study) is their probability weighted average, here 6.0. The catch that defines the field: you never observe the average, only one day at a time. Monte Carlo and TD are two strategies for recovering the hidden average from visible days.</div>
+  </div>
+</section>
+
+<!-- ════════ S6: MONTE CARLO ════════ -->
+<section id="s6">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">06</span><h2>Monte Carlo: Live the Whole Day, Then Average</h2></div>
+  <p>Want to know if a restaurant is good? Eat there many times, write down how much you enjoyed each full visit, average the scores. Do not guess halfway through the meal. Wait until you walk out, then record the total. That is the whole of Monte Carlo.</p>
+  <p>Formally, Monte Carlo estimates a value by averaging <em>complete returns</em>. Play an episode to termination, compute its actual G, and nudge the estimate toward it:</p>
+  <div class="mb">
+    <div class="math-d">V(s) \;\leftarrow\; V(s) + \alpha\,\big[\,G_t - V(s)\,\big]</div>
+    <div class="mb-label">G_t is the real, observed total return of this episode. No model, no bootstrapping, just "pull the estimate toward what actually happened".</div>
+  </div>
+  <p>Run it on the world. The estimate starts at V(Study) = 0. Three full days are lived to Sleep, with observed total returns 8, then 6, then 4. With α = 0.5: after day one V = 0 + 0.5(8 − 0) = 4.0. After day two V = 4 + 0.5(6 − 4) = 5.0. After day three V = 5 + 0.5(4 − 5) = 4.5, circling the true 6.0, and a running average would land on it exactly.</p>
+  <p>The character of Monte Carlo, the part interviewers want: <strong>unbiased but high variance</strong>. Each G is a true sample of the return, so the average is correct in expectation, no systematic error. But one day's total swings wildly because it accumulates every random coin flip along the entire episode. And it has a hard requirement: <strong>the episode must end</strong>. No ending, no return, no update. You cannot Monte Carlo an endless process.</p>
+  <div class="fig">
+    <div class="fig-title">Monte Carlo: Wait for the Ending, Then Learn</div>
+    <canvas id="c-m6" class="anim" width="880" height="350"></canvas>
+    <div class="fig-cap">Three complete days from Study to Sleep, drawn end to end. Only when each day finishes does its total return (8, 6, 4) flow back to update V(Study). The updates are correct on average but jumpy, because a single day's total carries the noise of every coin flip in it. Long episodes mean long waits and wide swings. That waiting and that swing are exactly what TD attacks next.</div>
+  </div>
+</section>
+
+<!-- ════════ S7: TD ════════ -->
+<section id="s7">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(234,67,53,.12);color:var(--red2)">07</span><h2>Temporal Difference: Don't Wait, Guess From the Next Guess</h2></div>
+  <p>You are driving home and you estimated 30 minutes. Ten minutes in, you hit traffic the moment you merge. You do not wait until you arrive to learn, you update right now: "this looks more like 40 minutes". You corrected your guess using a newer guess, before the trip ended. That is temporal difference learning.</p>
+  <p>Formally, TD replaces the full return G with a <strong>one step estimate</strong>: the reward you just got plus the discounted value of where you landed. Update toward that:</p>
+  <div class="mb">
+    <div class="math-d">V(s) \;\leftarrow\; V(s) + \alpha\,\big[\,\underbrace{R + \gamma V(s')}_{\text{TD target}} - V(s)\,\big],\qquad \underbrace{\delta = R + \gamma V(s') - V(s)}_{\text{the TD error}}</div>
+    <div class="mb-label">The target uses the current estimate V(s′) in place of the unknown future. Learning from a guess to improve a guess is bootstrapping.</div>
+  </div>
+  <p>Run it on the world. V(Study) = 0, V(Pass) = 8 currently. One step happens: from Study you go to Pass, collecting reward R = 0, with γ = 0.9. The TD target is 0 + 0.9 × 8 = 7.2. The error is 7.2 − 0 = 7.2. With α = 0.5, V(Study) ← 0 + 0.5 × 7.2 = <strong>3.6</strong>, learned from <em>one step</em>, no need to reach Sleep. The value of Pass seeped one state backward into Study immediately.</p>
+  <p>The character of TD, the mirror image of MC: <strong>biased but low variance</strong>. It leans on V(s′), which is currently wrong, so early estimates are systematically off, that is the bias. But it only absorbs <em>one</em> step of randomness per update instead of a whole episode's worth, so it is far steadier. And it needs no ending: TD learns online, step by step, in endless processes. That single property is why almost all of deep RL is built on TD, not MC.</p>
+  <div class="fig">
+    <div class="fig-title">TD: Learn From the Very Next Step</div>
+    <canvas id="c-m7" class="anim" width="880" height="350"></canvas>
+    <div class="fig-cap">One transition, Study to Pass. The TD target R + γV(Pass) = 7.2 is built from the immediate reward plus the existing estimate of the next state. The error 7.2 flows back into V(Study) the instant the step completes, no waiting for Sleep. Value information walks backward one state per step, the same backward seepage you saw drive Q-learning. Bias because V(Pass) is itself still a guess; low variance because only one coin flip entered.</div>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">TD updates a guess using another guess. At the start every value is wrong, so it is wrong numbers correcting wrong numbers. Why does this converge to the truth instead of spiraling into nonsense?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>You asked almost this exact question in the Q-learning blog, and the answer is the same machinery, worth seeing in this purer setting.</p>
+      <p>The save is that each TD target is not pure guess. It contains <strong>one piece of hard reality</strong>: the actual reward R the environment just paid. Every update is one part real reward, γ parts current belief. Truth physically enters the system at every step through R, and the bootstrap spreads it.</p>
+      <p>Watch it on the world. At the very start all values are 0, so most TD targets are 0 + 0.9 × 0 = 0 and nothing moves, except at the step into a rewarding terminal, where the target is the real reward with no guess attached. That genuine number anchors the state next to the reward. The following step has a target built partly from that now correct neighbor, and so truth ripples outward from the rewards, one state per sweep. The wrongness washes out from the anchors, it does not amplify.</p>
+      <p>The formal guarantee: the Bellman expectation operator is a γ contraction, every sweep pulls the value estimates at least a factor γ closer to the unique true V, so errors shrink geometrically. With a decaying learning rate and all states kept visited, tabular TD provably converges to the exact value. The honest footnote, identical to Q-learning: this proof is for tables. Bolt on a neural network for V and the contraction guarantee is gone, which is the deadly triad and the reason target networks exist.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S8: THE SPECTRUM ════════ -->
+<section id="s8">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">08</span><h2>One Dial: MC and TD Are the Two Ends</h2></div>
+  <p>Here is the unification that makes it all click. MC waits for the full return. TD looks one step ahead. What about two steps? Three? n steps? They are all valid, and they form a continuous dial called <strong>n step TD</strong>:</p>
+  <div class="mb">
+    <div class="math-d">G_t^{(n)} = R_{t+1} + \gamma R_{t+2} + \cdots + \gamma^{n-1} R_{t+n} + \gamma^n V(S_{t+n})</div>
+    <div class="mb-label">Take n real reward steps, then bootstrap with V for the rest. n = 1 is TD. n = ∞ (run to the end) is Monte Carlo. Everything between is a blend.</div>
+  </div>
+  <p>The dial is a bias variance trade. Turn toward TD (small n): low variance, high bias, fast online updates. Turn toward MC (large n): high variance, low bias, must wait. The sweet spot is usually in the middle, and there is an elegant way to average over <em>all</em> n at once with a decay factor λ, giving <strong>TD(λ)</strong> and eligibility traces, a single knob λ sliding smoothly from TD(0) = one step TD to TD(1) = Monte Carlo.</p>
+  <div class="fig">
+    <div class="fig-title">The Bias Variance Dial, Drawn</div>
+    <canvas id="c-m8" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">The single dial under everything. Far left, TD(0): one real reward then bootstrap, steady but biased. Far right, Monte Carlo: all real rewards, no bootstrap, unbiased but jumpy. n step methods are the labeled notches between. The lower panel shows the trade as two crossing curves: as n grows, variance climbs and bias falls. Most strong methods, including the GAE in your PPO blog, live deliberately in the middle of this dial.</div>
+  </div>
+</section>
+
+<!-- ════════ S9: INTO RL ════════ -->
+<section id="s9">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">09</span><h2>Now Watch Them Inside the RL You Know</h2></div>
+  <p>These are not separate topics from RL. They are its skeleton. Every algorithm in your other blogs is one of these primitives wearing a costume.</p>
+  <table class="cmp">
+    <thead><tr><th>What you know</th><th>Is really</th><th>The connection</th></tr></thead>
+    <tbody>
+      <tr><td><strong>The state in any RL problem</strong></td><td>a Markov state</td><td>chosen rich enough that the future depends only on it; a transformer's context window is one</td></tr>
+      <tr><td><strong>An environment + your policy</strong></td><td>an MDP collapsed to a chain</td><td>fixing π turns the action menu into one reward bearing Markov chain</td></tr>
+      <tr><td><strong>REINFORCE returns</strong></td><td>Monte Carlo</td><td>full episode returns, unbiased, high variance, the reason REINFORCE is noisy</td></tr>
+      <tr><td><strong>PPO / Q-learning critic</strong></td><td>TD</td><td>V and Q trained by the TD update of §7; the δ you bootstrap is the TD error</td></tr>
+      <tr><td><strong>GAE in PPO</strong></td><td>TD(λ)</td><td>exactly the n step dial of §8, λ averaging trades the critic's bias against the return's variance</td></tr>
+      <tr><td><strong>The Q-learning max</strong></td><td>TD + control</td><td>TD applied to Q with a max in the target, learning the best policy off policy</td></tr>
+      <tr><td><strong>DQN target network</strong></td><td>stabilized bootstrapping</td><td>freezing V(s′) in the TD target so the guess driving the guess holds still</td></tr>
+    </tbody>
+  </table>
+  <p>Read that table top to bottom and the whole field reorganizes. Markov gives you a state worth reasoning about. The MDP gives you choices and rewards on top of it. Value is the thing you want. Monte Carlo and TD are the two ways to estimate it from experience, and n step / TD(λ) is the dial between them. Policy gradient methods like PPO use these values to reduce the variance of their gradients; value methods like Q-learning use them as the whole answer. There is nothing else underneath. These four ideas <em>are</em> the foundation.</p>
+  <div class="co g"><div class="co-title">The one paragraph summary</div>
+    <p>The Markov property says the present state holds all you need to predict the future, which is true whenever you define the state richly enough. A Markov chain is a world obeying it; an MDP adds actions, rewards, and a policy, and fixing the policy turns it back into a chain with payouts. The thing we want is the value, the expected total reward from a state, which we can never see directly, only sample. Monte Carlo estimates it by living whole episodes and averaging their returns: unbiased, high variance, needs an ending. TD estimates it after a single step by trusting its own next guess plus the real reward just received: biased, low variance, works online forever. n step TD and TD(λ) are the dial between them, and every RL algorithm you know, REINFORCE, PPO, GAE, Q-learning, DQN, is one of these primitives in a costume.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+function gctx(id){const cv=document.getElementById('c-'+id);return cv?cv.getContext('2d'):null;}
+function lbl(ctx,s,x,y,col,sz,w,al){ctx.font=`${w||500} ${sz||10}px "Plus Jakarta Sans",sans-serif`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function mlbl(ctx,s,x,y,col,sz,al){ctx.font=`500 ${sz||9}px "JetBrains Mono",monospace`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function pill(ctx,x,y,w,h,r,fill,stroke,lw){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+function curve(ctx,x1,y1,x2,y2,bend,col,lw,dash){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;if(dash)ctx.setLineDash(dash);
+  const mx=(x1+x2)/2,my=(y1+y2)/2;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.quadraticCurveTo(mx,my+bend,x2,y2);ctx.stroke();
+  ctx.setLineDash([]);
+  const a=Math.atan2(y2-(my+bend),x2-mx);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+const STATIC={};
+(function(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){const id=e.target.id.replace('c-','');if(STATIC[id]){STATIC[id]();obs.unobserve(e.target);}}
+  }),{threshold:0.05});
+  window.addEventListener('DOMContentLoaded',()=>{
+    Object.keys(STATIC).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+  });
+})();
+
+/* state node */
+function snode(ctx,x,y,r,nm,col,sub){
+  ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=col+'22';ctx.fill();
+  ctx.strokeStyle=col;ctx.lineWidth=1.8;ctx.stroke();
+  lbl(ctx,nm,x,y-(sub?5:0),col,Math.max(r/3.2,9),700);
+  if(sub)mlbl(ctx,sub,x,y+11,col+'cc',7.5);
+}
+
+/* ── M1: the thread ── */
+STATIC.m1=function(){
+  const ctx=gctx('m1');if(!ctx)return;const W=880,H=300;ctx.clearRect(0,0,W,H);
+  const items=[
+    ['Markov','the assumption','#c58af9'],
+    ['Chain','a world obeying it','#81c995'],
+    ['MDP','+ choices & rewards','#fdd663'],
+    ['Value','how good is here?','#78d9ec']
+  ];
+  items.forEach((it,i)=>{
+    const x=70+i*150;
+    pill(ctx,x,70,134,56,10,it[2]+'14',it[2],1.5);
+    lbl(ctx,it[0],x+67,92,it[2],11,800);
+    mlbl(ctx,it[1],x+67,112,it[2]+'cc',7.6);
+    if(i<3)arrow(ctx,x+138,98,x+216,98,'#aac6e2',1.5);
+  });
+  // split into MC / TD
+  arrow(ctx,672,98,720,70,'#c58af9',1.4);
+  arrow(ctx,672,98,720,128,'#f28b82',1.4);
+  pill(ctx,724,52,130,36,9,'rgba(161,66,244,.12)','#c58af9',1.4);
+  lbl(ctx,'Monte Carlo',789,64,'#c58af9',9.5,700);mlbl(ctx,'wait, then average',789,79,'#cbb2ee',7.2);
+  pill(ctx,724,112,130,36,9,'rgba(234,67,53,.12)','#f28b82',1.4);
+  lbl(ctx,'TD',789,124,'#f28b82',9.5,700);mlbl(ctx,'update each step',789,139,'#f0b3ac',7.2);
+  // dial below
+  pill(ctx,250,200,380,52,10,'rgba(255,109,0,.06)','#ffbe6e',1.3);
+  lbl(ctx,'two ends of one dial',440,218,'#ffbe6e',10,700);
+  mlbl(ctx,'every RL algorithm you know sits somewhere on it',440,238,'#aac6e2',8.5);
+  arrow(ctx,724,70,632,210,'#c58af9aa',1);arrow(ctx,724,130,632,232,'#f28b82aa',1);
+};
+
+/* ── M2: history erased ── */
+STATIC.m2=function(){
+  const ctx=gctx('m2');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  // two greyed paths converging on one square
+  const meet=[440,160];
+  // path A (top, long detour)
+  ctx.strokeStyle='rgba(130,150,180,.45)';ctx.lineWidth=1.6;ctx.setLineDash([5,4]);
+  ctx.beginPath();ctx.moveTo(70,70);ctx.lineTo(180,50);ctx.lineTo(280,110);ctx.lineTo(360,90);ctx.lineTo(meet[0]-34,meet[1]-14);ctx.stroke();
+  // path B (bottom, shortcut)
+  ctx.beginPath();ctx.moveTo(70,270);ctx.lineTo(220,250);ctx.lineTo(meet[0]-34,meet[1]+14);ctx.stroke();
+  ctx.setLineDash([]);
+  mlbl(ctx,'traveler A: long detour (forgotten)',150,46,'#7e9cbb',8,'left');
+  mlbl(ctx,'traveler B: shortcut (forgotten)',150,290,'#7e9cbb',8,'left');
+  // the square
+  snode(ctx,meet[0],meet[1],34,'NOW','#c58af9');
+  // identical futures
+  const fut=[[640,80],[680,160],[640,240]];
+  fut.forEach((f,i)=>{
+    arrow(ctx,meet[0]+34,meet[1],f[0]-30,f[1],'#a8e6c0',1.6);
+    snode(ctx,f[0],f[1],26,'?'+(i+1),'#81c995');
+  });
+  pill(ctx,560,256,250,30,8,'rgba(72,186,106,.08)','#a8e6c0',1.2);
+  mlbl(ctx,'same future distribution, regardless of route',685,271,'#a8e6c0',8);
+  lbl(ctx,'the present square holds everything the future needs',440,30,'#c58af9',10,700);
+};
+
+/* ── M3: the chain ── */
+STATIC.m3=function(){
+  const ctx=gctx('m3');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  const N={Study:[230,120],Distracted:[230,270],Phone:[470,330],Pass:[560,120],Sleep:[760,200]};
+  const cols={Study:'#8ab4f8',Distracted:'#ffbe6e',Phone:'#f28b82',Pass:'#81c995',Sleep:'#c58af9'};
+  function edge(a,b,p,bend){
+    const A=N[a],B=N[b];
+    const dx=B[0]-A[0],dy=B[1]-A[1],m=Math.hypot(dx,dy);
+    const sx=A[0]+dx/m*36,sy=A[1]+dy/m*36,ex=B[0]-dx/m*36,ey=B[1]-dy/m*36;
+    curve(ctx,sx,sy,ex,ey,bend||0,'rgba(150,180,220,.6)',1.4);
+    const mx=(sx+ex)/2,my=(sy+ey)/2+(bend||0)/2;
+    pill(ctx,mx-16,my-9,32,17,4,'#0f1318','rgba(150,180,220,.5)',.8);
+    mlbl(ctx,p,mx,my,'#c8e0f2',8);
+  }
+  edge('Study','Pass','0.7',-30);
+  edge('Study','Distracted','0.3',0);
+  edge('Distracted','Study','0.5',-40);
+  edge('Distracted','Phone','0.5',0);
+  edge('Phone','Distracted','1.0',40);
+  edge('Pass','Sleep','1.0',-20);
+  for(const k in N)snode(ctx,N[k][0],N[k][1],34,k,cols[k],k==='Sleep'?'terminal':null);
+  lbl(ctx,'states + arrows = the whole world. every state\u2019s out-arrows sum to 1',440,28,'#c8e0f2',9.5);
+};
+
+/* ── M4: chain to MDP ── */
+STATIC.m4=function(){
+  const ctx=gctx('m4');if(!ctx)return;const W=880,H=350;ctx.clearRect(0,0,W,H);
+  snode(ctx,150,180,38,'Study','#8ab4f8');
+  // two action hubs
+  function action(x,y,nm,col){
+    pill(ctx,x-34,y-16,68,32,7,col+'18',col,1.4);
+    lbl(ctx,nm,x,y,col,9.5,700);
+  }
+  arrow(ctx,188,165,296,95,'#a8e6c0',1.5);
+  arrow(ctx,188,195,296,265,'#ffbe6e',1.5);
+  action(330,90,'Grind','#a8e6c0');
+  action(330,265,'Break','#ffbe6e');
+  // outcomes
+  snode(ctx,560,70,32,'Pass','#81c995');
+  snode(ctx,560,180,32,'Study','#8ab4f8','again');
+  snode(ctx,560,300,32,'Distr','#ffbe6e');
+  function redge(ax,ay,b,p,r,col){
+    const B=b;const dx=B[0]-ax,dy=B[1]-ay,m=Math.hypot(dx,dy);
+    arrow(ctx,ax+34,ay,B[0]-dx/m*34,B[1]-dy/m*34,col,1.3);
+    const mx=(ax+B[0])/2,my=(ay+B[1])/2;
+    pill(ctx,mx-30,my-9,60,17,4,'#0f1318',col+'88',.8);
+    mlbl(ctx,p+' r='+r,mx,my,col,7.2);
+  }
+  redge(330,90,[560,70],'0.9','+2','#a8e6c0');
+  redge(330,90,[560,180],'0.1','0','#a8e6c0');
+  redge(330,265,[560,300],'0.6','+1','#ffbe6e');
+  redge(330,265,[560,180],'0.4','0','#ffbe6e');
+  // policy selects
+  pill(ctx,650,150,200,60,10,'rgba(66,133,244,.08)','#8ab4f8',1.4);
+  lbl(ctx,'a policy π picks one action',750,172,'#8ab4f8',9.5,700);
+  mlbl(ctx,'→ one arrow bundle → a chain',750,192,'#aac6e2',8);
+  arrow(ctx,610,180,646,180,'#8ab4f8',1.3);
+  lbl(ctx,'in Study you now CHOOSE: Grind or Break, each with its own arrows and reward',440,30,'#c8e0f2',9.5);
+};
+
+/* ── M5: value as average ── */
+STATIC.m5=function(){
+  const ctx=gctx('m5');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  snode(ctx,110,165,36,'Study','#8ab4f8');
+  const days=[['#81c995',60,'8','day A'],['#ffbe6e',165,'6','day B'],['#f28b82',270,'4','day C']];
+  days.forEach(d=>{
+    // path squiggle
+    ctx.strokeStyle=d[0]+'aa';ctx.lineWidth=1.8;
+    ctx.beginPath();ctx.moveTo(150,165);
+    ctx.bezierCurveTo(320,d[1],460,d[1],600,d[1]);ctx.stroke();
+    mlbl(ctx,d[3],330,d[1]-12,d[0],8);
+    pill(ctx,612,d[1]-15,86,30,7,d[0]+'18',d[0],1.4);
+    mlbl(ctx,'return = '+d[2],655,d[1],d[0],9);
+  });
+  // average
+  arrow(ctx,704,60,760,150,'#ffe282',1.2);
+  arrow(ctx,704,165,760,165,'#ffe282',1.2);
+  arrow(ctx,704,270,760,180,'#ffe282',1.2);
+  pill(ctx,762,140,108,50,9,'rgba(252,198,40,.1)','#ffe282',1.6);
+  lbl(ctx,'V = 6.0',816,158,'#ffe282',12,800);
+  mlbl(ctx,'the average',816,178,'#eedda0',7.5);
+  lbl(ctx,'value = probability weighted average over every possible day',440,28,'#c8e0f2',9.5);
+  mlbl(ctx,'you never see the average, only one day at a time',440,308,'#aac6e2',9);
+};
+
+/* ── M6: monte carlo ── */
+STATIC.m6=function(){
+  const ctx=gctx('m6');if(!ctx)return;const W=880,H=350;ctx.clearRect(0,0,W,H);
+  const seq=['Study','Distr','Study','Pass','Sleep'];
+  const days=[['8',70,'#81c995'],['6',170,'#ffbe6e'],['4',270,'#f28b82']];
+  days.forEach((d,r)=>{
+    const y=d[1];
+    seq.forEach((s,i)=>{
+      const x=70+i*120;
+      pill(ctx,x,y-15,84,30,7,'rgba(52,70,100,.4)','rgba(150,180,220,.5)',1);
+      mlbl(ctx,s,x+42,y,'#c8e0f2',8.5);
+      if(i<seq.length-1)arrow(ctx,x+86,y,x+118,y,'rgba(150,180,220,.5)',1.1);
+    });
+    // only at end, return flows back
+    pill(ctx,670,y-15,70,30,7,d[2]+'18',d[2],1.4);
+    mlbl(ctx,'G = '+d[0],705,y,d[2],9);
+    if(r===2){
+      curve(ctx,705,y+16,150,310,40,d[2]+'cc',1.4,[5,4]);
+    }
+  });
+  mlbl(ctx,'V(Study): 0 → 4.0 → 5.0 → 4.5 …  circling the true 6.0',300,322,'#aac6e2',8.6);
+  lbl(ctx,'wait for SLEEP, then pull V(Study) toward the full return',440,30,'#c58af9',10,700);
+  pill(ctx,615,300,250,24,6,'rgba(161,66,244,.08)','#c58af9',1.1);
+  mlbl(ctx,'unbiased · high variance · needs an ending',740,312,'#c58af9',8);
+};
+
+/* ── M7: TD ── */
+STATIC.m7=function(){
+  const ctx=gctx('m7');if(!ctx)return;const W=880,H=350;ctx.clearRect(0,0,W,H);
+  snode(ctx,200,170,42,'Study','#8ab4f8','V=0');
+  snode(ctx,560,170,42,'Pass','#81c995','V=8');
+  arrow(ctx,244,170,514,170,'#aac6e2',1.8);
+  pill(ctx,330,148,140,24,6,'#0f1318','rgba(150,180,220,.5)',.9);
+  mlbl(ctx,'reward R = 0',400,160,'#c8e0f2',8.5);
+  // TD target box
+  pill(ctx,470,240,260,60,10,'rgba(36,193,224,.08)','#78d9ec',1.5);
+  mlbl(ctx,'TD target = R + γ·V(Pass)',600,260,'#78d9ec',9);
+  mlbl(ctx,'= 0 + 0.9 × 8 = 7.2',600,280,'#9fdcef',9.5);
+  arrow(ctx,560,216,600,236,'#78d9ec',1.2);
+  // error flows back
+  curve(ctx,470,270,210,216,40,'#ffe282',1.8,[5,4]);
+  pill(ctx,250,250,210,52,9,'rgba(252,198,40,.1)','#ffe282',1.5);
+  mlbl(ctx,'error 7.2 → V(Study)',355,268,'#ffe282',9);
+  mlbl(ctx,'← 0 + 0.5×7.2 = 3.6',355,286,'#eedda0',9);
+  lbl(ctx,'learn from ONE step: the value of Pass seeps back into Study immediately',440,30,'#f28b82',10,700);
+  pill(ctx,250,318,360,24,6,'rgba(234,67,53,.06)','#f28b82',1.1);
+  mlbl(ctx,'biased (V(Pass) is a guess) · low variance · no ending needed',430,330,'#f0b3ac',8);
+};
+
+/* ── M8: the dial ── */
+STATIC.m8=function(){
+  const ctx=gctx('m8');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  // dial bar
+  const x0=90,x1=790,y=90;
+  pill(ctx,x0,y-4,x1-x0,8,4,'rgba(48,66,96,.6)','rgba(150,180,220,.4)',.8);
+  const notches=[['TD(0)','n=1','#f28b82',0],['n=2','','#ffbe6e',0.2],['n=3','','#ffbe6e',0.35],['n-step','','#fdd663',0.6],['MC','n=∞','#c58af9',1]];
+  notches.forEach(nt=>{
+    const x=x0+(x1-x0)*nt[3];
+    ctx.fillStyle=nt[2];ctx.beginPath();ctx.arc(x,y,6,0,7);ctx.fill();
+    lbl(ctx,nt[0],x,y-22,nt[2],9,700);
+    if(nt[1])mlbl(ctx,nt[1],x,y-36,nt[2]+'cc',7.5);
+  });
+  mlbl(ctx,'one real step + bootstrap',x0+40,y+24,'#f28b82',8,'left');
+  mlbl(ctx,'all real steps, no bootstrap',x1-40,y+24,'#c58af9',8,'right');
+  // mini ladders showing n steps
+  function ladder(cx,n,col,lbltxt){
+    const top=150;
+    for(let i=0;i<4;i++){
+      const real=i<n;
+      pill(ctx,cx-28,top+i*26,56,18,3,real?col+'30':'rgba(52,70,100,.4)',real?col:'rgba(150,180,220,.4)',real?1.2:.7);
+      mlbl(ctx,real?'R':'V',cx,top+i*26+9,real?col:'#7e9cbb',8);
+    }
+    mlbl(ctx,lbltxt,cx,top+4*26+12,col,7.6);
+  }
+  ladder(180,1,'#f28b82','TD: 1 real, then guess');
+  ladder(340,3,'#fdd663','n=3: 3 real, then guess');
+  ladder(500,4,'#c58af9','MC: all real');
+  // bias variance curves
+  const gx=600,gy=160,gw=230,gh=120;
+  pill(ctx,gx,gy,gw,gh,8,'rgba(52,70,100,.18)','rgba(150,180,220,.4)',1);
+  mlbl(ctx,'TD',gx+8,gy+gh+10,'#f28b82',7.5);mlbl(ctx,'MC',gx+gw-8,gy+gh+10,'#c58af9',7.5);
+  // variance rising
+  ctx.strokeStyle='#f28b82';ctx.lineWidth=2;ctx.beginPath();
+  for(let i=0;i<=gw;i+=6){const t=i/gw;ctx.lineTo(gx+i,gy+gh-10-t*t*95);}ctx.stroke();
+  mlbl(ctx,'variance ↑',gx+gw-44,gy+18,'#f28b82',7.5);
+  // bias falling
+  ctx.strokeStyle='#78d9ec';ctx.lineWidth=2;ctx.beginPath();
+  for(let i=0;i<=gw;i+=6){const t=i/gw;ctx.lineTo(gx+i,gy+18+t*t*88);}ctx.stroke();
+  mlbl(ctx,'bias ↓',gx+30,gy+gh-14,'#78d9ec',7.5);
+  lbl(ctx,'n-step TD: the continuous dial from one-step TD to Monte Carlo',440,28,'#ffbe6e',10,700);
+  mlbl(ctx,'GAE (your PPO blog) lives deliberately in the middle of this dial',440,338,'#aac6e2',9);
+};
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

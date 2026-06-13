@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="llm-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b27"/>
+    </linearGradient>
+    <linearGradient id="llm-attn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4f8ef7" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#2a5bd7" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="llm-tok" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a78bfa" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="llm-norm" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#059669" stop-opacity="0.7"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#llm-bg)"/>
+
+  <!-- Subtle grid -->
+  <g stroke="#1e2a3a" stroke-width="0.5" opacity="0.4">
+    <line x1="0" y1="150" x2="800" y2="150"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="200" y1="0" x2="200" y2="450"/>
+    <line x1="400" y1="0" x2="400" y2="450"/>
+    <line x1="600" y1="0" x2="600" y2="450"/>
+  </g>
+
+  <!-- Panel 1: Attention heatmap -->
+  <!-- Panel bg -->
+  <rect x="30" y="60" width="220" height="330" rx="10" fill="#111827" stroke="#1e3a5f" stroke-width="1"/>
+  <text x="140" y="88" text-anchor="middle" fill="#60a5fa" font-family="monospace" font-size="11" font-weight="600" letter-spacing="1">ATTENTION</text>
+
+  <!-- Heatmap grid 5x5 -->
+  <g transform="translate(55, 105)">
+    <!-- Row 0 -->
+    <rect x="0"   y="0"  width="34" height="34" rx="3" fill="#1e3a5f" opacity="0.4"/>
+    <rect x="38"  y="0"  width="34" height="34" rx="3" fill="#2563eb" opacity="0.7"/>
+    <rect x="76"  y="0"  width="34" height="34" rx="3" fill="#1d4ed8" opacity="0.5"/>
+    <rect x="114" y="0"  width="34" height="34" rx="3" fill="#3b82f6" opacity="0.8"/>
+    <rect x="152" y="0"  width="34" height="34" rx="3" fill="#1e3a5f" opacity="0.3"/>
+    <!-- Row 1 -->
+    <rect x="0"   y="38" width="34" height="34" rx="3" fill="#2563eb" opacity="0.6"/>
+    <rect x="38"  y="38" width="34" height="34" rx="3" fill="#60a5fa" opacity="0.9"/>
+    <rect x="76"  y="38" width="34" height="34" rx="3" fill="#3b82f6" opacity="0.7"/>
+    <rect x="114" y="38" width="34" height="34" rx="3" fill="#1e3a5f" opacity="0.4"/>
+    <rect x="152" y="38" width="34" height="34" rx="3" fill="#2563eb" opacity="0.5"/>
+    <!-- Row 2 -->
+    <rect x="0"   y="76" width="34" height="34" rx="3" fill="#1d4ed8" opacity="0.5"/>
+    <rect x="38"  y="76" width="34" height="34" rx="3" fill="#3b82f6" opacity="0.6"/>
+    <rect x="76"  y="76" width="34" height="34" rx="3" fill="#93c5fd" opacity="0.95"/>
+    <rect x="114" y="76" width="34" height="34" rx="3" fill="#3b82f6" opacity="0.7"/>
+    <rect x="152" y="76" width="34" height="34" rx="3" fill="#1e3a5f" opacity="0.4"/>
+    <!-- Row 3 -->
+    <rect x="0"   y="114" width="34" height="34" rx="3" fill="#1e3a5f" opacity="0.3"/>
+    <rect x="38"  y="114" width="34" height="34" rx="3" fill="#2563eb" opacity="0.5"/>
+    <rect x="76"  y="114" width="34" height="34" rx="3" fill="#3b82f6" opacity="0.6"/>
+    <rect x="114" y="114" width="34" height="34" rx="3" fill="#60a5fa" opacity="0.85"/>
+    <rect x="152" y="114" width="34" height="34" rx="3" fill="#2563eb" opacity="0.6"/>
+    <!-- Row 4 -->
+    <rect x="0"   y="152" width="34" height="34" rx="3" fill="#1e3a5f" opacity="0.3"/>
+    <rect x="38"  y="152" width="34" height="34" rx="3" fill="#1d4ed8" opacity="0.4"/>
+    <rect x="76"  y="152" width="34" height="34" rx="3" fill="#2563eb" opacity="0.5"/>
+    <rect x="114" y="152" width="34" height="34" rx="3" fill="#3b82f6" opacity="0.65"/>
+    <rect x="152" y="152" width="34" height="34" rx="3" fill="#60a5fa" opacity="0.9"/>
+  </g>
+
+  <!-- Token labels -->
+  <g fill="#6b7280" font-family="monospace" font-size="9">
+    <text x="72"  y="310" text-anchor="middle">the</text>
+    <text x="110" y="310" text-anchor="middle">cat</text>
+    <text x="148" y="310" text-anchor="middle">sat</text>
+    <text x="186" y="310" text-anchor="middle">on</text>
+    <text x="224" y="310" text-anchor="middle">mat</text>
+  </g>
+
+  <text x="140" y="345" text-anchor="middle" fill="#374151" font-family="monospace" font-size="9">QK^T / √d_k softmax</text>
+
+  <!-- Panel 2: Transformer block stack -->
+  <rect x="290" y="60" width="220" height="330" rx="10" fill="#111827" stroke="#3b1f5e" stroke-width="1"/>
+  <text x="400" y="88" text-anchor="middle" fill="#a78bfa" font-family="monospace" font-size="11" font-weight="600" letter-spacing="1">TRANSFORMER</text>
+
+  <!-- Block stack -->
+  <g transform="translate(315, 105)">
+    <!-- Block N -->
+    <rect x="0" y="0" width="170" height="42" rx="6" fill="#1f1635" stroke="#7c3aed" stroke-width="1"/>
+    <text x="85" y="16" text-anchor="middle" fill="#c4b5fd" font-family="monospace" font-size="9">Multi-Head Attention</text>
+    <text x="85" y="30" text-anchor="middle" fill="#6d28d9" font-family="monospace" font-size="8">Q · K · V → concat → proj</text>
+    <line x1="85" y1="42" x2="85" y2="55" stroke="#4c1d95" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <!-- Add & Norm -->
+    <rect x="30" y="55" width="110" height="22" rx="4" fill="#2d1b69" stroke="#5b21b6" stroke-width="0.8"/>
+    <text x="85" y="70" text-anchor="middle" fill="#8b5cf6" font-family="monospace" font-size="9">Add &amp; LayerNorm</text>
+    <line x1="85" y1="77" x2="85" y2="90" stroke="#4c1d95" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <!-- FFN -->
+    <rect x="0" y="90" width="170" height="42" rx="6" fill="#1f1635" stroke="#7c3aed" stroke-width="1"/>
+    <text x="85" y="106" text-anchor="middle" fill="#c4b5fd" font-family="monospace" font-size="9">Feed-Forward</text>
+    <text x="85" y="120" text-anchor="middle" fill="#6d28d9" font-family="monospace" font-size="8">Linear → GELU → Linear</text>
+    <line x1="85" y1="132" x2="85" y2="145" stroke="#4c1d95" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <!-- Add & Norm 2 -->
+    <rect x="30" y="145" width="110" height="22" rx="4" fill="#2d1b69" stroke="#5b21b6" stroke-width="0.8"/>
+    <text x="85" y="160" text-anchor="middle" fill="#8b5cf6" font-family="monospace" font-size="9">Add &amp; LayerNorm</text>
+    <!-- x N label -->
+    <line x1="85" y1="167" x2="85" y2="180" stroke="#4c1d95" stroke-width="1.5" stroke-dasharray="3,2"/>
+    <text x="85" y="195" text-anchor="middle" fill="#4c1d95" font-family="monospace" font-size="11" font-weight="700">× N layers</text>
+    <!-- RoPE badge -->
+    <rect x="10" y="215" width="70" height="20" rx="4" fill="#1a0f3a" stroke="#4c1d95" stroke-width="0.8"/>
+    <text x="45" y="229" text-anchor="middle" fill="#7c3aed" font-family="monospace" font-size="8">RoPE / ALiBi</text>
+    <rect x="90" y="215" width="70" height="20" rx="4" fill="#1a0f3a" stroke="#4c1d95" stroke-width="0.8"/>
+    <text x="125" y="229" text-anchor="middle" fill="#7c3aed" font-family="monospace" font-size="8">MoE / GQA</text>
+  </g>
+
+  <!-- Panel 3: Training concepts -->
+  <rect x="550" y="60" width="220" height="330" rx="10" fill="#111827" stroke="#064e3b" stroke-width="1"/>
+  <text x="660" y="88" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="11" font-weight="600" letter-spacing="1">INTERNALS</text>
+
+  <!-- Normalization curve -->
+  <g transform="translate(570, 105)">
+    <!-- LayerNorm diagram -->
+    <text x="90" y="15" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="9" font-weight="600">Normalization</text>
+    <rect x="10" y="22" width="160" height="55" rx="5" fill="#022c22" stroke="#065f46" stroke-width="0.8"/>
+    <!-- before/after bars -->
+    <rect x="25"  y="52" width="12" height="18" fill="#059669" opacity="0.4"/>
+    <rect x="40"  y="38" width="12" height="32" fill="#059669" opacity="0.5"/>
+    <rect x="55"  y="30" width="12" height="40" fill="#059669" opacity="0.6"/>
+    <rect x="70"  y="43" width="12" height="27" fill="#059669" opacity="0.5"/>
+    <rect x="85"  y="55" width="12" height="15" fill="#059669" opacity="0.4"/>
+    <!-- normalized -->
+    <rect x="105" y="46" width="12" height="22" fill="#34d399" opacity="0.7"/>
+    <rect x="120" y="44" width="12" height="24" fill="#34d399" opacity="0.8"/>
+    <rect x="135" y="45" width="12" height="23" fill="#34d399" opacity="0.9"/>
+    <rect x="150" y="44" width="12" height="24" fill="#34d399" opacity="0.8"/>
+    <line x1="97" y1="22" x2="97" y2="77" stroke="#065f46" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="47" y="87" text-anchor="middle" fill="#374151" font-family="monospace" font-size="7.5">before</text>
+    <text x="147" y="87" text-anchor="middle" fill="#374151" font-family="monospace" font-size="7.5">after LN</text>
+  </g>
+
+  <!-- MoE diagram -->
+  <g transform="translate(570, 215)">
+    <text x="90" y="15" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="9" font-weight="600">Mixture of Experts</text>
+    <rect x="10" y="22" width="160" height="80" rx="5" fill="#022c22" stroke="#065f46" stroke-width="0.8"/>
+    <!-- Router -->
+    <rect x="60" y="30" width="60" height="20" rx="4" fill="#065f46"/>
+    <text x="90" y="44" text-anchor="middle" fill="#a7f3d0" font-family="monospace" font-size="8">Router</text>
+    <!-- Expert boxes -->
+    <rect x="18"  y="64" width="32" height="26" rx="3" fill="#064e3b" stroke="#059669" stroke-width="0.8"/>
+    <text x="34"  y="81" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="7">E1</text>
+    <rect x="58"  y="64" width="32" height="26" rx="3" fill="#064e3b" stroke="#34d399" stroke-width="1.2"/>
+    <text x="74"  y="81" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="7">E2</text>
+    <rect x="98"  y="64" width="32" height="26" rx="3" fill="#064e3b" stroke="#059669" stroke-width="0.8"/>
+    <text x="114" y="81" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="7">E3</text>
+    <rect x="138" y="64" width="32" height="26" rx="3" fill="#064e3b" stroke="#059669" stroke-width="0.8"/>
+    <text x="154" y="81" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="7">E4</text>
+    <!-- Router arrows to top 2 -->
+    <line x1="90" y1="50" x2="74"  y2="64" stroke="#34d399" stroke-width="1.2"/>
+    <line x1="90" y1="50" x2="114" y2="64" stroke="#059669" stroke-width="0.8" stroke-dasharray="3,2"/>
+  </g>
+
+  <!-- Bottom title bar -->
+  <rect x="0" y="410" width="800" height="40" fill="#0a0f18" opacity="0.8"/>
+  <text x="400" y="432" text-anchor="middle" fill="#374151" font-family="monospace" font-size="11" letter-spacing="2">AI NOTEBOOK · LLM</text>
+  <text x="30"  y="432" text-anchor="start"  fill="#1e3a5f" font-family="monospace" font-size="10">5 posts</text>
+  <text x="770" y="432" text-anchor="end"    fill="#1e3a5f" font-family="monospace" font-size="10">attention · encoding · normalization</text>
+</svg>

@@ -860,11 +860,11 @@
     <div class="bs-hero__grain"></div>
 
     <div class="bs-hero__inner">
-      <a href="/blog/" class="bs-hero__back">
+      <a href="{{ .Parent.RelPermalink }}" class="bs-hero__back">
         <svg viewBox="0 0 16 16" fill="none">
           <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        All Series
+        {{ .Parent.Title }}
       </a>
 
       <div class="bs-hero__kicker">
@@ -913,20 +913,8 @@
   </header>
 
   {{/* ────────── BODY ────────── */}}
-  {{/* Helper for "external link" posts — front-matter `link:` overrides the
-       generated permalink so the card jumps to a static HTML file in /static/. */}}
   {{ if .RegularPages }}
-    {{/* lead_story: title of the post to pin as Lead Story (set in _index.md).
-         Falls back to the most recent post if not set. */}}
     {{ $pages := .RegularPages.ByDate.Reverse }}
-    {{ $first := index $pages 0 }}
-    {{ with .Params.lead_story }}
-      {{ range $pages }}
-        {{ if eq .Title $.Params.lead_story }}{{ $first = . }}{{ end }}
-      {{ end }}
-    {{ end }}
-    {{ $firstHref := or $first.Params.link $first.RelPermalink }}
-    {{ $firstExt  := hasPrefix (or $first.Params.link "") "http" }}
 
     {{/* Live filter for this series */}}
     <section class="bs-search">
@@ -951,136 +939,61 @@
       Nothing matched. Try a shorter query.
     </div>
 
-    <section class="bs-section">
-      <div class="bs-section__head bs-reveal">
-        <span class="bs-section__tag">Lead Story</span>
-        <span class="bs-section__rule"></span>
+    {{ if gt (len $pages) 1 }}
+    <div style="width: min(1200px, 100% - 4rem); margin: 1.4rem auto 0;">
+      <div class="bs-sort-bar">
+        <div class="bs-sort-by">
+          <span class="bs-sort-label">Sort</span>
+          <button class="bs-sort-btn is-active" data-sort="date">Date</button>
+          <button class="bs-sort-btn" data-sort="title">Title</button>
+          <button class="bs-sort-btn" data-sort="read">Read time</button>
+        </div>
+        <button class="bs-sort-dir" id="bs-sort-dir">↓ Desc</button>
       </div>
-
-      {{ $firstSearch := lower (printf "%s %s %s %s" $first.Title (or $first.Params.subtitle "") (or $first.Params.excerpt "") (delimit (or $first.Params.categories slice) " ")) }}
-      <article class="bs-lead bs-reveal" data-searchable="{{ $firstSearch }}">
-        <a href="{{ $firstHref }}" class="bs-lead__media-link" aria-label="{{ $first.Title }}"{{ if $firstExt }} target="_blank" rel="noopener"{{ end }}>
-          <div class="bs-lead__media">
-            {{ $thumb := "" }}
-            {{ range $first.Resources.ByType "image" }}
-              {{ if findRE "featured" .Name }}{{ $thumb = .RelPermalink }}{{ end }}
-            {{ end }}
-            {{ if not $thumb }}
-              {{ with $first.Params.featured_image }}{{ $thumb = . }}{{ end }}
-            {{ end }}
-            {{ if $thumb }}
-              <img src="{{ $thumb }}" alt="{{ $first.Title }}" loading="eager"/>
-            {{ end }}
-            <span class="bs-lead__badge">{{ $first.Date.Format "January 2006" }}</span>
-          </div>
-        </a>
-
-        <div class="bs-lead__body">
-          <div class="bs-lead__meta">
-            <span>No. 01</span>
-            <span class="bs-dot"></span>
-            <span>{{ or $first.Params.read_time $first.ReadingTime }} min read</span>
-            {{ with $first.Params.categories }}
-              <span class="bs-dot"></span>
-              <span>{{ index . 0 }}</span>
-            {{ end }}
-          </div>
-
-          <h2 class="bs-lead__title">
-            <a href="{{ $firstHref }}"{{ if $firstExt }} target="_blank" rel="noopener"{{ end }}>{{ $first.Title }}</a>
-          </h2>
-
-          {{ with $first.Params.subtitle }}
-            {{ if . }}<p class="bs-lead__subtitle">{{ . }}</p>{{ end }}
-          {{ end }}
-
-          {{ with $first.Params.excerpt }}
-            <div class="bs-lead__excerpt">{{ . | markdownify }}</div>
-          {{ else }}
-            {{ with $first.Summary }}
-              <p class="bs-lead__excerpt">{{ . }}</p>
-            {{ end }}
-          {{ end }}
-
-          <a href="{{ $firstHref }}" class="bs-lead__cta"{{ if $firstExt }} target="_blank" rel="noopener"{{ end }}>
-            Read the story
-            <svg viewBox="0 0 14 14" fill="none">
-              <path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </div>
-      </article>
-    </section>
-
-    {{/* ── Numbered backlist (when 2+ posts) ── */}}
-    {{ if gt (len .RegularPages) 1 }}
-      <section class="bs-section">
-        <div class="bs-section__head bs-reveal">
-          <span class="bs-section__tag">The Backlist</span>
-          <span class="bs-section__rule"></span>
-        </div>
-
-        <div class="bs-sort-bar">
-          <div class="bs-sort-by">
-            <span class="bs-sort-label">Sort</span>
-            <button class="bs-sort-btn is-active" data-sort="date">Date</button>
-            <button class="bs-sort-btn" data-sort="title">Title</button>
-            <button class="bs-sort-btn" data-sort="read">Read time</button>
-          </div>
-          <button class="bs-sort-dir" id="bs-sort-dir">↓ Desc</button>
-        </div>
-
-        <div class="bs-list">
-          {{ $i := 0 }}
-          {{ range $p := $pages }}
-            {{ if ne $p.Title $first.Title }}
-            {{ $href := or $p.Params.link $p.RelPermalink }}
-            {{ $ext  := hasPrefix (or $p.Params.link "") "http" }}
-            {{ $rowSearch := lower (printf "%s %s %s %s" $p.Title (or $p.Params.subtitle "") (or $p.Params.excerpt "") (delimit (or $p.Params.categories slice) " ")) }}
-            <a class="bs-row bs-reveal" href="{{ $href }}"{{ if $ext }} target="_blank" rel="noopener"{{ end }} data-searchable="{{ $rowSearch }}" data-date="{{ $p.Date.Format "2006-01-02" }}" data-title="{{ $p.Title | lower }}" data-read="{{ or $p.Params.read_time $p.ReadingTime }}" style="transition-delay: {{ mul $i 80 }}ms">
-              <span class="bs-row__num">{{ printf "%02d" (add $i 1) }}</span>
-            {{ $i = add $i 1 }}
-
-              <div class="bs-row__meta">
-                <span class="bs-row__date">{{ $p.Date.Format "Jan 2, 2006" }}</span>
-                <span>{{ or $p.Params.read_time $p.ReadingTime }} min read</span>
-              </div>
-
-              <div class="bs-row__main">
-                <h3 class="bs-row__title">{{ $p.Title }}</h3>
-                {{ with $p.Params.excerpt }}
-                  <p class="bs-row__excerpt">{{ . | plainify | truncate 140 }}</p>
-                {{ else }}
-                  {{ with $p.Summary }}
-                    <p class="bs-row__excerpt">{{ . | plainify | truncate 140 }}</p>
-                  {{ end }}
-                {{ end }}
-              </div>
-
-              <div class="bs-row__thumb">
-                {{ $thumb := "" }}
-                {{ range $p.Resources.ByType "image" }}
-                  {{ if findRE "featured" .Name }}{{ $thumb = .RelPermalink }}{{ end }}
-                {{ end }}
-                {{ if not $thumb }}{{ with $p.Params.featured_image }}{{ $thumb = . }}{{ end }}{{ end }}
-                {{ if $thumb }}
-                  <img src="{{ $thumb }}" alt="{{ $p.Title }}" loading="lazy"/>
-                {{ end }}
-              </div>
-
-              <span class="bs-row__arrow" aria-hidden="true">→</span>
-            </a>
-            {{ end }}
-          {{ end }}
-        </div>
-      </section>
+    </div>
     {{ end }}
+
+    <section class="bs-section">
+      <div class="bs-list">
+        {{ range $i, $p := $pages }}
+          {{ $href := or $p.Params.link $p.RelPermalink }}
+          {{ $ext  := hasPrefix (or $p.Params.link "") "http" }}
+          {{ $rowSearch := lower (printf "%s %s %s %s" $p.Title (or $p.Params.subtitle "") (or $p.Params.excerpt "") (delimit (or $p.Params.categories slice) " ")) }}
+          <a class="bs-row bs-reveal" href="{{ $href }}"{{ if $ext }} target="_blank" rel="noopener"{{ end }} data-searchable="{{ $rowSearch }}" data-date="{{ $p.Date.Format "2006-01-02" }}" data-title="{{ $p.Title | lower }}" data-read="{{ or $p.Params.read_time $p.ReadingTime }}" style="transition-delay: {{ mul $i 80 }}ms">
+            <span class="bs-row__num">{{ printf "%02d" (add $i 1) }}</span>
+            <div class="bs-row__meta">
+              <span class="bs-row__date">{{ $p.Date.Format "Jan 2, 2006" }}</span>
+              <span>{{ or $p.Params.read_time $p.ReadingTime }} min read</span>
+            </div>
+            <div class="bs-row__main">
+              <h3 class="bs-row__title">{{ $p.Title }}</h3>
+              {{ with $p.Params.excerpt }}
+                <p class="bs-row__excerpt">{{ . | plainify | truncate 140 }}</p>
+              {{ else }}
+                {{ with $p.Summary }}
+                  <p class="bs-row__excerpt">{{ . | plainify | truncate 140 }}</p>
+                {{ end }}
+              {{ end }}
+            </div>
+            <div class="bs-row__thumb">
+              {{ $thumb := "" }}
+              {{ range $p.Resources.ByType "image" }}
+                {{ if findRE "featured" .Name }}{{ $thumb = .RelPermalink }}{{ end }}
+              {{ end }}
+              {{ if not $thumb }}{{ with $p.Params.featured_image }}{{ $thumb = . }}{{ end }}{{ end }}
+              {{ if $thumb }}<img src="{{ $thumb }}" alt="{{ $p.Title }}" loading="lazy"/>{{ end }}
+            </div>
+            <span class="bs-row__arrow" aria-hidden="true">→</span>
+          </a>
+        {{ end }}
+      </div>
+    </section>
 
     <div class="bs-footnote bs-reveal">
       <div class="bs-footnote__line"></div>
       <p class="bs-footnote__text">End of series.</p>
-      <a href="/blog/" class="bs-footnote__cta">
-        Browse other series
+      <a href="{{ .Parent.RelPermalink }}" class="bs-footnote__cta">
+        Back to {{ .Parent.Title }}
         <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
           <path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -1165,8 +1078,8 @@
 })();
 
 (function () {
-  var list = document.querySelector('.bs-list');
-  if (!list) return;
+  var lists = Array.prototype.slice.call(document.querySelectorAll('.bs-list'));
+  if (!lists.length) return;
   var state = { field: 'date', dir: 'desc' };
 
   function cmpVal(el) {
@@ -1177,16 +1090,18 @@
   }
 
   function doSort() {
-    var rows = Array.prototype.slice.call(list.querySelectorAll('.bs-row'));
-    rows.sort(function (a, b) {
-      var av = cmpVal(a), bv = cmpVal(b);
-      var cmp = (state.field === 'read') ? av - bv : (av < bv ? -1 : av > bv ? 1 : 0);
-      return state.dir === 'asc' ? cmp : -cmp;
-    });
-    rows.forEach(function (r, i) {
-      var n = r.querySelector('.bs-row__num');
-      if (n) n.textContent = String(i + 1).padStart(2, '0');
-      list.appendChild(r);
+    lists.forEach(function (list) {
+      var rows = Array.prototype.slice.call(list.querySelectorAll('.bs-row'));
+      rows.sort(function (a, b) {
+        var av = cmpVal(a), bv = cmpVal(b);
+        var cmp = (state.field === 'read') ? av - bv : (av < bv ? -1 : av > bv ? 1 : 0);
+        return state.dir === 'asc' ? cmp : -cmp;
+      });
+      rows.forEach(function (r, i) {
+        var n = r.querySelector('.bs-row__num');
+        if (n) n.textContent = String(i + 1).padStart(2, '0');
+        list.appendChild(r);
+      });
     });
   }
 

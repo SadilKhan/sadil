@@ -2084,7 +2084,7 @@ body.dark-mode .sk-drawer,
         <svg viewBox="0 0 16 16" fill="none">
           <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
-        All Series
+        My Blogs
       </a>
 
       <div class="bs-hero__kicker">
@@ -2135,12 +2135,6 @@ body.dark-mode .sk-drawer,
 
   
   
-  
-    
-    
-    
-    
-    
     
 
     
@@ -2166,91 +2160,69 @@ body.dark-mode .sk-drawer,
       Nothing matched. Try a shorter query.
     </div>
 
+    
+
     <section class="bs-section">
-      <div class="bs-section__head bs-reveal">
-        <span class="bs-section__tag">Lead Story</span>
-        <span class="bs-section__rule"></span>
-      </div>
-
-      
-      <article class="bs-lead bs-reveal" data-searchable="iceland trip  in august 2025, we took a week-long campervan trip around iceland — from *golden circle hot springs* to *south coast waterfalls*, *glacier lagoons*, *eastfjords fishing villages*, and the *wildlife of the north and snæfellsnes*. travelling adventure vacation">
-        <a href="/blog/adventure/iceland/" class="bs-lead__media-link" aria-label="Iceland Trip">
-          <div class="bs-lead__media">
-            
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-              
-            
-            
-            
-              <img src="/blog/adventure/iceland/featured.JPG" alt="Iceland Trip" loading="eager"/>
-            
-            <span class="bs-lead__badge">August 2025</span>
-          </div>
-        </a>
-
-        <div class="bs-lead__body">
-          <div class="bs-lead__meta">
-            <span>No. 01</span>
-            <span class="bs-dot"></span>
-            <span>4 min read</span>
-            
-              <span class="bs-dot"></span>
-              <span>Travelling</span>
-            
-          </div>
-
-          <h2 class="bs-lead__title">
-            <a href="/blog/adventure/iceland/">Iceland Trip</a>
-          </h2>
-
+      <div class="bs-list">
+        
           
-
           
-            <div class="bs-lead__excerpt">In August 2025, we took a week-long campervan trip around Iceland — from <em>Golden Circle hot springs</em> to <em>South Coast waterfalls</em>, <em>glacier lagoons</em>, <em>Eastfjords fishing villages</em>, and the <em>wildlife of the north and Snæfellsnes</em>.</div>
           
-
-          <a href="/blog/adventure/iceland/" class="bs-lead__cta">
-            Read the story
-            <svg viewBox="0 0 14 14" fill="none">
-              <path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+          <a class="bs-row bs-reveal" href="/blog/adventure/iceland/" data-searchable="iceland trip  in august 2025, we took a week-long campervan trip around iceland — from *golden circle hot springs* to *south coast waterfalls*, *glacier lagoons*, *eastfjords fishing villages*, and the *wildlife of the north and snæfellsnes*. travelling adventure vacation" data-date="2025-08-24" data-title="iceland trip" data-read="4" style="transition-delay: 0ms">
+            <span class="bs-row__num">01</span>
+            <div class="bs-row__meta">
+              <span class="bs-row__date">Aug 24, 2025</span>
+              <span>4 min read</span>
+            </div>
+            <div class="bs-row__main">
+              <h3 class="bs-row__title">Iceland Trip</h3>
+              
+                <p class="bs-row__excerpt">In August 2025, we took a week-long campervan trip around Iceland — from *Golden Circle hot springs* to *South Coast waterfalls*, *glacier …</p>
+              
+            </div>
+            <div class="bs-row__thumb">
+              
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+              
+              <img src="/blog/adventure/iceland/featured.JPG" alt="Iceland Trip" loading="lazy"/>
+            </div>
+            <span class="bs-row__arrow" aria-hidden="true">→</span>
           </a>
-        </div>
-      </article>
+        
+      </div>
     </section>
-
-    
-    
 
     <div class="bs-footnote bs-reveal">
       <div class="bs-footnote__line"></div>
       <p class="bs-footnote__text">End of series.</p>
       <a href="/blog/" class="bs-footnote__cta">
-        Browse other series
+        Back to My Blogs
         <svg viewBox="0 0 14 14" fill="none" width="12" height="12">
           <path d="M3 7H11M11 7L7 3M11 7L7 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
@@ -2331,8 +2303,8 @@ body.dark-mode .sk-drawer,
 })();
 
 (function () {
-  var list = document.querySelector('.bs-list');
-  if (!list) return;
+  var lists = Array.prototype.slice.call(document.querySelectorAll('.bs-list'));
+  if (!lists.length) return;
   var state = { field: 'date', dir: 'desc' };
 
   function cmpVal(el) {
@@ -2343,16 +2315,18 @@ body.dark-mode .sk-drawer,
   }
 
   function doSort() {
-    var rows = Array.prototype.slice.call(list.querySelectorAll('.bs-row'));
-    rows.sort(function (a, b) {
-      var av = cmpVal(a), bv = cmpVal(b);
-      var cmp = (state.field === 'read') ? av - bv : (av < bv ? -1 : av > bv ? 1 : 0);
-      return state.dir === 'asc' ? cmp : -cmp;
-    });
-    rows.forEach(function (r, i) {
-      var n = r.querySelector('.bs-row__num');
-      if (n) n.textContent = String(i + 1).padStart(2, '0');
-      list.appendChild(r);
+    lists.forEach(function (list) {
+      var rows = Array.prototype.slice.call(list.querySelectorAll('.bs-row'));
+      rows.sort(function (a, b) {
+        var av = cmpVal(a), bv = cmpVal(b);
+        var cmp = (state.field === 'read') ? av - bv : (av < bv ? -1 : av > bv ? 1 : 0);
+        return state.dir === 'asc' ? cmp : -cmp;
+      });
+      rows.forEach(function (r, i) {
+        var n = r.querySelector('.bs-row__num');
+        if (n) n.textContent = String(i + 1).padStart(2, '0');
+        list.appendChild(r);
+      });
     });
   }
 

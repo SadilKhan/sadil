@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diffusion Models: From VAE to DDPM, Score Matching, SDEs and DDIM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;--green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;--yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;--teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#c0d8f2;--text3:#9ab8d4;
+  --mono:'JetBrains Mono',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--orange));z-index:999;transition:width .05s}
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);z-index:900;padding:.55rem 1.5rem}
+.nav-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.2rem}
+.nav-brand{font-size:.85rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.7rem;white-space:nowrap;padding:.25rem .5rem;border-radius:6px;font-weight:500;transition:all .12s}
+.nav-links a:hover{color:var(--teal2);background:rgba(0,212,255,.08)}
+.hero{text-align:center;padding:4rem 1.5rem 2.5rem;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.08;background:linear-gradient(135deg,#8ab4f8,#c58af9,#ffab40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:680px;margin:0 auto}
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+section{padding:2.8rem 0 .5rem;border-top:1px solid var(--bdr);margin-top:2.2rem}
+section:first-of-type{border-top:none;margin-top:0}
+.sec-hdr{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.sec-num{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;letter-spacing:.05em}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.12rem;font-weight:700;margin:1.8rem 0 .6rem}
+p{color:var(--text);margin-bottom:.85rem}
+p.note{color:var(--text2);font-size:.92rem}
+.fig{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:1.3rem;margin:1.6rem 0}
+.fig-title{text-align:center;font-size:.74rem;font-weight:700;color:var(--text2);margin-bottom:1rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas.anim{display:block;width:100%;height:auto;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.8rem;font-style:italic;line-height:1.6}
+.mb{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto}
+.mb .katex-display{margin:.15rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.4rem;font-family:var(--mono)}
+.co{border-radius:10px;padding:.95rem 1.2rem;margin:1.3rem 0;border-left:3px solid;font-size:.9rem}
+.co-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+.co p{margin:0;font-size:.87rem;line-height:1.65}
+.co.t{background:rgba(36,193,224,.05);border-color:var(--teal)}.co.t .co-title{color:var(--teal2)}
+.co.y{background:rgba(251,188,4,.05);border-color:var(--yellow)}.co.y .co-title{color:var(--yellow2)}
+.co.o{background:rgba(255,109,0,.05);border-color:var(--orange)}.co.o .co-title{color:var(--orange2)}
+.co.g{background:rgba(52,168,83,.05);border-color:var(--green)}.co.g .co-title{color:var(--green2)}
+.co.r{background:rgba(234,67,53,.05);border-color:var(--red)}.co.r .co-title{color:var(--red2)}
+.co.p{background:rgba(161,66,244,.05);border-color:var(--purple)}.co.p .co-title{color:var(--purple2)}
+table.cmp{width:100%;border-collapse:collapse;font-size:.82rem;margin:1.3rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+table.cmp th{background:var(--s3);color:var(--text2);padding:.6rem .9rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+table.cmp td{padding:.55rem .9rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.ic{background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--blue2)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+details.qa{background:var(--s2);border:1px solid rgba(252,198,40,.3);border-radius:12px;margin:1.6rem 0;overflow:hidden}
+details.qa summary{cursor:pointer;padding:.95rem 1.2rem;list-style:none;display:flex;align-items:center;gap:.8rem;user-select:none;transition:background .15s}
+details.qa summary:hover{background:rgba(252,198,40,.05)}
+details.qa summary::-webkit-details-marker{display:none}
+.qa-badge{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.07em;padding:.25rem .6rem;border-radius:6px;background:rgba(252,198,40,.15);color:var(--yellow2);white-space:nowrap}
+.qa-q{font-weight:600;font-size:.93rem;color:var(--text);flex:1}
+.qa-chev{color:var(--yellow2);font-size:.8rem;transition:transform .2s}
+details.qa[open] .qa-chev{transform:rotate(90deg)}
+.qa-body{padding:.4rem 1.3rem 1.2rem;border-top:1px solid var(--bdr)}
+.qa-body p{font-size:.91rem}
+@media(max-width:640px){.nav-links{display:none}}
+.hero-thumb{max-width:980px;margin:0 auto 2.4rem;padding:0 1.5rem}.hero-thumb img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-in">
+  <div class="nav-brand">Diffusion Models</div>
+  <div class="nav-links">
+    <a href="#s1">The Map</a><a href="#s2">VAE</a><a href="#s3">The Bridge</a>
+    <a href="#s4">Forward</a><a href="#s5">Reverse</a><a href="#s6">Train + Sample</a>
+    <a href="#s7">Score</a><a href="#s8">SDE</a><a href="#s9">DDIM</a><a href="#s10">One Object</a>
+  </div>
+</div></nav>
+
+<div class="hero">
+  <h1>Diffusion: One Idea, Four Languages</h1>
+  <p>You know VAEs. This is the road from there to the entire diffusion stack: DDPM as a thousand-layer VAE, score matching as its physics, SDEs as its continuous limit, DDIM as its fast lane. Deep math, deep theory, and a picture for every step.</p>
+</div>
+
+<main>
+
+<div class="hero-thumb"><img src="./diffusion_feat.svg" alt="Diffusion Models overview" loading="eager"/></div>
+
+<!-- ════════ S1: THE MAP ════════ -->
+<section id="s1">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">01</span><h2>The Goal, and the Map of This Journey</h2></div>
+  <p>Generative modeling has one job: given samples of data x, learn the distribution p(x) well enough to <strong>draw new samples</strong> from it. The difficulty is always the same: real data lives on a thin, twisted manifold inside a huge space, and we must build a bridge between something easy to sample (a Gaussian) and that manifold.</p>
+  <p>Every model in this blog is one bridge design. The VAE builds the bridge as a single learned leap. Diffusion builds it as a thousand tiny steps, and that one change unlocks everything else: the DDPM training recipe, the score matching interpretation, the SDE limit, and the DDIM shortcut are four descriptions of the same staircase.</p>
+  <div class="fig">
+    <div class="fig-title">One Staircase, Four Languages</div>
+    <canvas id="c-d1" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">The journey of this blog. Start at the VAE you know. Stretch its single jump into many small ones (DDPM). Squint at the small steps and see a vector field (score matching). Take the step size to zero and get a differential equation (SDE). Remove the randomness from the equation and get a fast deterministic sampler (DDIM, the probability flow ODE). Same bridge, four blueprints.</div>
+  </div>
+</section>
+
+<!-- ════════ S2: VAE ════════ -->
+<section id="s2">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">02</span><h2>The Anchor: What a VAE Actually Does</h2></div>
+  <p>Quick but careful recap, because every piece returns later. A VAE posits a latent variable model: sample z from a simple prior, decode it into data:</p>
+  <div class="mb">
+    <div class="math-d">p_\theta(x) = \int p_\theta(x|z)\, p(z)\, dz, \qquad p(z) = \mathcal{N}(0, I)</div>
+    <div class="mb-label">The integral over all z makes the likelihood intractable. This single intractability causes everything that follows.</div>
+  </div>
+  <p>Since we cannot maximize log p(x) directly, we introduce an <strong>encoder</strong> q_φ(z|x) as a stand-in for the true posterior and derive the quantity every generative model in this blog secretly optimizes. Start from log p(x), multiply by 1, and split:</p>
+  <div class="mb">
+    <div class="math-d">\log p_\theta(x) = \underbrace{\mathbb{E}_{q_\phi(z|x)}\big[\log p_\theta(x|z)\big] - D_{KL}\big(q_\phi(z|x)\,\|\,p(z)\big)}_{\text{ELBO}} \;+\; \underbrace{D_{KL}\big(q_\phi(z|x)\,\|\,p_\theta(z|x)\big)}_{\geq\,0,\ \text{the gap}}</div>
+    <div class="mb-label">The gap is a KL, always nonnegative, so the ELBO is a true lower bound. Maximizing the ELBO pushes log p(x) up and squeezes the encoder toward the true posterior at the same time.</div>
+  </div>
+  <p>The ELBO reads as a contract: <strong>reconstruct well</strong> (first term) while <strong>keeping the latent code simple</strong> (second term). Training uses the reparameterization trick, z = μ_φ(x) + σ_φ(x) ⊙ ε with ε from N(0, I), so gradients flow through the sampling.</p>
+  <div class="fig">
+    <div class="fig-title">The VAE Bridge: One Learned Leap Each Way</div>
+    <canvas id="c-d2" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">Data is squeezed through a low dimensional bottleneck in one shot and rebuilt in one shot. Both directions are learned, and both must cross the entire distance between a structured image and structureless noise in a single hop. That distance is the problem.</div>
+  </div>
+  <h3>Why the single leap hurts</h3>
+  <p><strong>Blurry samples.</strong> The decoder must map every neighborhood of the prior to a plausible x in one function evaluation. Ambiguity gets averaged, and averages of images are blur.</p>
+  <p><strong>A fragile two-network tug of war.</strong> The encoder is learned, so it can cheat. If the decoder grows strong enough, the KL term pushes q(z|x) onto the prior and z stops carrying information: posterior collapse. The two networks are coupled through one bottleneck and they fight.</p>
+  <p><strong>One step must do everything.</strong> Turning pure noise into a face is simply a very hard function. We are asking one network forward pass to perform the whole miracle.</p>
+</section>
+
+<!-- ════════ S3: THE BRIDGE ════════ -->
+<section id="s3">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">03</span><h2>The Bridge: Stretch One Leap Into a Thousand Steps</h2></div>
+  <p>Here is the single thought that creates diffusion models. Keep the VAE skeleton, change three design choices:</p>
+  <p><strong>1. Make the encoder fixed, not learned.</strong> Corrupting an image is easy, no network needed: just add a little Gaussian noise. The "encoder" becomes a dumb, frozen noising rule. Half of the VAE tug of war disappears, and posterior collapse becomes impossible because there is nothing to collapse.</p>
+  <p><strong>2. Keep the latent the same size as the data.</strong> No bottleneck. The latent of an image is a noisier image.</p>
+  <p><strong>3. Take many tiny steps instead of one leap.</strong> Chain T = 1000 noising steps until the image is indistinguishable from pure Gaussian noise. The generative model then learns to walk back down the chain, undoing <em>one small step at a time</em>.</p>
+  <p>Why tiny steps are the magic: <strong>undoing a tiny corruption is almost easy</strong>. If only a whisper of noise was added, the reverse step is provably close to a Gaussian whose mean is a small correction of the input. A thousand easy problems replace one impossible one. Formally, a diffusion model <em>is</em> a hierarchical VAE with a fixed encoder, and its training objective will turn out to be exactly an ELBO.</p>
+  <div class="fig">
+    <div class="fig-title">One Impossible Leap vs a Thousand Easy Steps</div>
+    <canvas id="c-d3" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">Top: the VAE asks one network to jump the full gap from noise to data, and one (learned) encoder to jump back. Bottom: diffusion fixes the rightward direction to be trivial noising, and learns only tiny leftward corrections. Each reverse step is nearly Gaussian, hence learnable. The price is paid at sampling time: a thousand network calls instead of one. DDIM will negotiate that price down later.</div>
+  </div>
+</section>
+
+<!-- ════════ S4: FORWARD ════════ -->
+<section id="s4">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(251,188,4,.12);color:var(--yellow2)">04</span><h2>The Forward Process: Drowning Data, Carefully</h2></div>
+  <p>Fix a small noise schedule β₁ … β_T (typically growing linearly from 0.0001 to 0.02 over T = 1000). One forward step shrinks the signal slightly and adds a matched dose of noise:</p>
+  <div class="mb">
+    <div class="math-d">q(x_t \mid x_{t-1}) = \mathcal{N}\big(\sqrt{1-\beta_t}\;x_{t-1},\;\; \beta_t I\big)</div>
+    <div class="mb-label">The shrink factor and the noise variance are matched so that variance is preserved: if x has unit variance, it keeps unit variance forever.</div>
+  </div>
+  <p>Chaining Gaussians gives Gaussians, and the whole chain collapses into one jump. Define α_t = 1 − β_t and the running product ᾱ_t = α₁α₂⋯α_t. Then:</p>
+  <div class="mb">
+    <div class="math-d">q(x_t \mid x_0) = \mathcal{N}\big(\sqrt{\bar\alpha_t}\,x_0,\;(1-\bar\alpha_t) I\big) \quad\Longleftrightarrow\quad x_t = \sqrt{\bar\alpha_t}\,x_0 + \sqrt{1-\bar\alpha_t}\;\varepsilon,\;\; \varepsilon \sim \mathcal{N}(0,I)</div>
+    <div class="mb-label">The most used equation in diffusion. Any noise level is reachable from the clean image in a single sample. ᾱ_t is the surviving fraction of signal variance.</div>
+  </div>
+  <p>Concrete numbers with the standard schedule: ᾱ₁₀₀ ≈ 0.90 (image barely dusty), ᾱ₅₀₀ ≈ 0.08 (mostly noise, shadows of structure), ᾱ₁₀₀₀ ≈ 0.00004 (statistically pure Gaussian). The endpoint is the prior, by construction, with nothing learned.</p>
+  <p>Our running worked example, used through the whole blog: a one pixel image <span class="ic">x₀ = 1.0</span>, at a time where <span class="ic">ᾱ = 0.5</span>. Then x_t = 0.707 × 1.0 + 0.707 × ε. Suppose the dice give ε = 0.3. The noisy pixel is <span class="ic">x_t = 0.707 + 0.212 = 0.919</span>. Remember these three numbers: clean 1.0, noise draw 0.3, observed 0.919.</p>
+  <div class="fig">
+    <div class="fig-title">A Point Cloud Drowning, and the Signal Budget</div>
+    <canvas id="c-d4" class="anim" width="880" height="380"></canvas>
+    <div class="fig-cap">Top: a 2D dataset shaped like a spiral, pushed through the forward process. Structure dissolves smoothly, and by t = T the cloud is indistinguishable from the Gaussian prior. Bottom: the signal budget over time. The green bar is √ᾱ (surviving signal), the red bar is √(1−ᾱ) (accumulated noise). They trade off so total variance stays constant. Diffusion never destroys information violently. It dilutes it, one whisper at a time.</div>
+  </div>
+</section>
+
+<!-- ════════ S5: REVERSE ════════ -->
+<section id="s5">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(234,67,53,.12);color:var(--red2)">05</span><h2>The Reverse Process: the Math That Makes It Work</h2></div>
+  <p>Generation means sampling x_T from the prior and walking the chain backwards through p_θ(x_{t−1}|x_t). The true reverse kernel q(x_{t−1}|x_t) is intractable: answering "what was the image before this noise" requires knowing the whole data distribution. But here is the miracle that powers all of DDPM: <strong>conditioned on the clean image, the reverse step is an exact, known Gaussian</strong>. Bayes' rule on three Gaussians gives, in closed form:</p>
+  <div class="mb">
+    <div class="math-d">q(x_{t-1} \mid x_t, x_0) = \mathcal{N}\big(\tilde\mu_t(x_t, x_0),\; \tilde\beta_t I\big),\qquad \tilde\mu_t = \frac{\sqrt{\bar\alpha_{t-1}}\,\beta_t}{1-\bar\alpha_t}\,x_0 + \frac{\sqrt{\alpha_t}\,(1-\bar\alpha_{t-1})}{1-\bar\alpha_t}\,x_t,\qquad \tilde\beta_t = \frac{1-\bar\alpha_{t-1}}{1-\bar\alpha_t}\,\beta_t</div>
+    <div class="mb-label">Read the mean as a precision weighted blend: part anchor toward the clean image, part stay near where you are. Every quantity is a known schedule constant except x₀.</div>
+  </div>
+  <p>So the only missing ingredient at generation time is x₀ itself, the very thing we are trying to create. The plan: <strong>train a network to guess it</strong>. And the ELBO tells us exactly how, because the hierarchical VAE view of §3 decomposes the bound into per step terms:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L} = \underbrace{D_{KL}\big(q(x_T|x_0)\,\|\,p(x_T)\big)}_{L_T \approx 0\ \text{by construction}} + \sum_{t=2}^{T}\underbrace{D_{KL}\big(q(x_{t-1}|x_t,x_0)\,\|\,p_\theta(x_{t-1}|x_t)\big)}_{L_{t-1}:\ \text{match the known Gaussian}} \;-\; \underbrace{\mathbb{E}\,\log p_\theta(x_0|x_1)}_{L_0}</div>
+    <div class="mb-label">Compare with the VAE ELBO of §2: same creature, unrolled over T levels. Each middle term is a KL between two Gaussians, so it reduces to a squared distance between means.</div>
+  </div>
+  <h3>The reparameterization that changed everything</h3>
+  <p>The network could predict x₀ directly. DDPM instead solves the forward equation for the noise: since x_t = √ᾱ_t x₀ + √(1−ᾱ_t) ε, knowing the noise is knowing the image: x₀ = (x_t − √(1−ᾱ_t) ε)/√ᾱ_t. Substituting this into μ̃ and simplifying collapses the entire weighted ELBO into one stunningly simple objective:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}_{simple} = \mathbb{E}_{x_0,\,t,\,\varepsilon}\Big[\big\|\,\varepsilon - \varepsilon_\theta\big(\underbrace{\sqrt{\bar\alpha_t}x_0 + \sqrt{1-\bar\alpha_t}\,\varepsilon}_{x_t},\; t\big)\big\|^2\Big]</div>
+    <div class="mb-label">The whole of DDPM training: corrupt an image with known noise, ask the network to point at the noise, do regression. Ho et al. found dropping the ELBO term weights (this unweighted version) trains best.</div>
+  </div>
+  <p>Run the worked example through it. We observed the noisy pixel 0.919 at ᾱ = 0.5. The network sees (0.919, t) and must output the noise that was drawn: <strong>0.3</strong>. If it predicts ε̂ = 0.25, the loss on this sample is (0.3 − 0.25)² = 0.0025, and the implied clean pixel is x̂₀ = (0.919 − 0.707 × 0.25)/0.707 = 1.05, slightly off the true 1.0, exactly consistent with the slightly off noise guess.</p>
+  <div class="fig">
+    <div class="fig-title">One Training Sample, All the Numbers</div>
+    <canvas id="c-d5" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">The worked example as a picture. Clean pixel 1.0 and a known noise draw 0.3 are blended by the schedule into the observed 0.919. The network sees only the blend and the time, and is graded on recovering the noise. Predicting the noise, predicting the clean image, and predicting the score (§7) are linear re-labelings of the same task.</div>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">Why train the network to predict the noise ε instead of just predicting the clean image x₀ directly? They are linearly equivalent, so why does everyone choose ε?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>Equivalent in algebra is not equivalent in optimization. Three practical reasons the field settled on ε.</p>
+      <p><strong>The target has constant scale.</strong> ε is always a unit Gaussian, at every t. An x₀ target makes the task trivially easy at small t (the input nearly is x₀) and brutally hard at large t, so the loss landscape across t is wildly uneven. The ε target keeps every timestep's regression in the same numeric range.</p>
+      <p><strong>The implicit loss weighting is better.</strong> Plugging the ε parameterization into the ELBO and then dropping the per term weights (the L_simple move) silently downweights very low noise steps, which are perceptually unimportant, and emphasizes the mid range where structure is actually decided. Predicting x₀ with uniform weights does roughly the opposite.</p>
+      <p><strong>It matches the geometry of the problem.</strong> At high noise, x_t is mostly ε, so predicting ε is close to an identity task with a structured residual, a friendly shape for neural networks, similar in spirit to why residual connections work.</p>
+      <p>The honest footnote: the choice is not sacred. Later systems revisit it. The v-parameterization (v = √ᾱ ε − √(1−ᾱ) x₀) interpolates between the two and behaves better for fast samplers and distillation, and some modern models predict x₀ at high noise levels. The deep point stands: all of these are linear re-labelings of one underlying object, the score of §7.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S6: TRAIN + SAMPLE ════════ -->
+<section id="s6">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">06</span><h2>DDPM in Practice: Train, Then Walk Back Down</h2></div>
+  <p>Training is embarrassingly simple. Loop forever: pick an image, pick a random timestep, pick fresh noise, blend, regress:</p>
+  <div class="mb">
+    <div class="math-d">\begin{aligned}&\textbf{repeat: } x_0 \sim \text{data},\;\; t \sim \text{Uniform}(1..T),\;\; \varepsilon \sim \mathcal{N}(0,I)\\&\quad x_t = \sqrt{\bar\alpha_t}\,x_0 + \sqrt{1-\bar\alpha_t}\,\varepsilon\\&\quad \text{gradient step on } \|\varepsilon - \varepsilon_\theta(x_t, t)\|^2\end{aligned}</div>
+    <div class="mb-label">No adversary, no encoder, no chain unrolling. Each sample trains one random rung of the staircase. The same network handles all t, told which rung via a time embedding.</div>
+  </div>
+  <p>Sampling walks the chain top down. At each rung, use the noise guess to form the posterior mean, then add back the right amount of fresh noise (the reverse step is a distribution, not a point):</p>
+  <div class="mb">
+    <div class="math-d">x_{t-1} = \frac{1}{\sqrt{\alpha_t}}\Big(x_t - \frac{\beta_t}{\sqrt{1-\bar\alpha_t}}\,\varepsilon_\theta(x_t,t)\Big) + \sqrt{\tilde\beta_t}\; z,\qquad z \sim \mathcal{N}(0,I),\;\; z=0 \text{ at } t=1</div>
+    <div class="mb-label">Term one: remove the predicted noise, rescale. Term two: re-inject a calibrated dose of randomness. T network calls per image.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Two Loops of DDPM</div>
+    <canvas id="c-d6" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">Top lane, training: sample a rung at random, blend, regress on the noise. Every minibatch trains scattered rungs independently, which is why training is stable and parallel. Bottom lane, sampling: start from pure noise and descend every rung in order, denoise a little, re-noise a little less, a thousand times. The asymmetry is the famous cost: training touches rungs randomly, sampling must visit all of them.</div>
+  </div>
+</section>
+
+<!-- ════════ S7: SCORE ════════ -->
+<section id="s7">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">07</span><h2>Score Matching: the Physics Hiding Inside ε_θ</h2></div>
+  <p>Now the second language. Forget chains for a moment and ask a different question: instead of learning the density p(x), what if we learned its <strong>gradient field</strong>?</p>
+  <div class="mb">
+    <div class="math-d">s(x) \;=\; \nabla_x \log p(x)</div>
+    <div class="mb-label">The score: at every point in space, the direction of steepest ascent of log probability. An arrow pointing toward "more plausible data".</div>
+  </div>
+  <p>Why prefer the gradient over the density itself? Because of the partition function. Any unnormalized model p(x) = e^{f(x)}/Z needs the intractable constant Z to be a density, but the score kills it: ∇ log p = ∇f − ∇ log Z = ∇f, and <strong>Z vanishes because it does not depend on x</strong>. Scores are learnable where densities are not.</p>
+  <p>And if you own the score, you can sample without ever knowing p, by noisy hill climbing, Langevin dynamics:</p>
+  <div class="mb">
+    <div class="math-d">x_{k+1} = x_k + \frac{\delta}{2}\, s(x_k) + \sqrt{\delta}\; z_k,\qquad z_k \sim \mathcal{N}(0, I)</div>
+    <div class="mb-label">Climb the log density, jiggle, repeat. As δ shrinks and steps grow, the iterates are distributed exactly as p(x). Compare it with the DDPM sampling step above: same shape, correction plus calibrated noise.</div>
+  </div>
+  <p>One problem blocks the naive plan: where data is absent, the score of the raw data distribution is undefined or useless, and a fresh sample starts exactly there, in the empty void far from the manifold. The fix is the same trick diffusion already made: <strong>blur the data with Gaussian noise</strong>. The noised distribution fills all of space with gentle gradients pointing back toward the manifold. Use a ladder of noise levels: heavy noise gives far reaching arrows, light noise gives precise ones.</p>
+  <p>The final piece is the theorem (Vincent, 2011) that makes the score learnable, denoising score matching: <strong>the score of noise blurred data is exactly computable from the noise itself</strong>. For our Gaussian corruption, the conditional score is ∇ log q(x_t|x₀) = −ε/√(1−ᾱ_t), and regressing on it recovers the true marginal score. Set that next to the DDPM objective and the two languages collide:</p>
+  <div class="mb">
+    <div class="math-d">s_\theta(x_t, t) \;=\; -\,\frac{\varepsilon_\theta(x_t, t)}{\sqrt{1-\bar\alpha_t}}</div>
+    <div class="mb-label">The noise predictor IS the score network, up to a known rescaling. DDPM has been doing score matching all along. Predicting the noise = pointing away from the data manifold; the negative sign turns it into the arrow home.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Score Field, and a Langevin Walk Home</div>
+    <canvas id="c-d7" class="anim" width="880" height="380"></canvas>
+    <div class="fig-cap">A 2D data distribution with two islands of density. The arrows are the score of the noise blurred distribution: everywhere defined, everywhere pointing toward plausible data, stronger far away and gentle near the islands. The dotted trajectory is Langevin dynamics: start in the void, follow arrows, jiggle, arrive on the manifold. A diffusion model's ε_θ is secretly this entire vector field, one field per noise level.</div>
+  </div>
+</section>
+
+<!-- ════════ S8: SDE ════════ -->
+<section id="s8">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">08</span><h2>The SDE View: Take the Step Size to Zero</h2></div>
+  <p>Third language. DDPM takes 1000 discrete noising steps. What happens as T goes to infinity and each step becomes infinitesimal? The discrete chain converges to a <strong>stochastic differential equation</strong>, continuous time noising (Song et al., 2021):</p>
+  <div class="mb">
+    <div class="math-d">dx = \underbrace{-\tfrac{1}{2}\beta(t)\,x\,dt}_{\text{drift: shrink toward 0}} \;+\; \underbrace{\sqrt{\beta(t)}\;dw}_{\text{diffusion: Brownian jitter}}</div>
+    <div class="mb-label">The VP (variance preserving) SDE, the continuum limit of the DDPM forward chain. dw is Brownian motion, the continuous limit of adding tiny Gaussian noises.</div>
+  </div>
+  <p>The payoff for going continuous is a classical theorem (Anderson, 1982): every diffusion SDE has an exact <strong>reverse time SDE</strong>, and the only unknown object in it is the score:</p>
+  <div class="mb">
+    <div class="math-d">dx = \Big[-\tfrac{1}{2}\beta(t)\,x \;-\; \beta(t)\,\underbrace{\nabla_x \log p_t(x)}_{\text{the score, } s_\theta}\Big]dt \;+\; \sqrt{\beta(t)}\;d\bar w</div>
+    <div class="mb-label">Run time backwards, drift corrected by the score, fresh Brownian noise. Plug in the learned s_θ and integrate numerically: that IS sampling. DDPM's sampler is one particular discretization of this equation.</div>
+  </div>
+  <p>And the continuous view hands us a gift the discrete chain hid. The same marginal densities p_t can be produced by a <strong>deterministic</strong> equation, the probability flow ODE:</p>
+  <div class="mb">
+    <div class="math-d">dx = \Big[-\tfrac{1}{2}\beta(t)\,x \;-\; \tfrac{1}{2}\beta(t)\, s_\theta(x, t)\Big]dt</div>
+    <div class="mb-label">No dw. Half the score coefficient. Every noise sample x_T flows along a smooth, unique path to one specific image. Same distribution of endpoints as the SDE, zero randomness along the way.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">Same Marginals, Two Kinds of Path</div>
+    <canvas id="c-d8" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">Time runs right to left, from the noise prior to data. Jittery paths: the reverse SDE, Brownian kicks all the way, the continuous DDPM. Smooth paths: the probability flow ODE through the same density landscape, each noise point gliding deterministically to its image. At every vertical slice the cloud of paths has the same distribution. This single picture is the theoretical heart of fast sampling, inversion, and DDIM.</div>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">If the probability flow ODE is deterministic, where does the diversity of generated images come from? Doesn't generation need randomness?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>All the randomness moves to a single moment: the draw of the starting point x_T from the Gaussian prior. After that the ODE is a fixed, invertible map from noise space to image space. Different starting noise, different image; same starting noise, exactly the same image, every time.</p>
+      <p>This is not a weakness, it is a feature with three consequences. First, <strong>every image gets a unique latent</strong>: run the ODE forwards (data to noise) and you can encode any real image into the noise space, then edit there and decode back, which is the basis of diffusion based image editing and interpolation. Second, the map is smooth, so nearby noises decode to semantically nearby images, giving meaningful latent interpolations. Third, determinism is what allows <strong>big solver steps</strong>: a smooth ODE trajectory can be integrated with 20 to 50 evaluations where the jittery SDE needed a thousand, because there is no noise to resolve along the way.</p>
+      <p>The SDE sampler is not obsolete though. The fresh noise it injects at every step actively corrects accumulated errors of the score network, a stochastic regularizer along the trajectory, which is why full SDE sampling often edges out ODE sampling in final quality when you can afford the steps. Speed versus self correction is the real trade.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S9: DDIM ════════ -->
+<section id="s9">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">09</span><h2>DDIM: the Shortcut That Needs No Retraining</h2></div>
+  <p>Fourth language, and the practical payoff. DDPM sampling is slow because its derivation assumed a Markov chain: to honor the per step posterior, you must visit every rung. Song et al. (2020) asked a sneaky question: <strong>which other processes have the exact same marginals q(x_t|x₀)</strong>, the only thing the training objective ever used?</p>
+  <p>Answer: an entire family of non Markovian processes, indexed by a noise knob σ_t. They all share the marginals, so <strong>the already trained ε_θ serves every member, no retraining</strong>. The generalized reverse step makes the logic explicit:</p>
+  <div class="mb">
+    <div class="math-d">x_{t-1} = \sqrt{\bar\alpha_{t-1}}\;\underbrace{\hat x_0}_{\text{predicted clean image}} \;+\; \underbrace{\sqrt{1-\bar\alpha_{t-1}-\sigma_t^2}\;\;\varepsilon_\theta(x_t,t)}_{\text{re-apply noise, deterministically}} \;+\; \underbrace{\sigma_t\, z}_{\text{fresh randomness}},\qquad \hat x_0 = \frac{x_t - \sqrt{1-\bar\alpha_t}\,\varepsilon_\theta(x_t,t)}{\sqrt{\bar\alpha_t}}</div>
+    <div class="mb-label">Three moves per step: jump to the predicted clean image, ride partway back up to noise level t−1 along the predicted noise direction, optionally sprinkle fresh noise σ_t.</div>
+  </div>
+  <p>The knob interpolates between everything you have seen. Set σ_t to the DDPM value: you recover stochastic DDPM exactly. Set <strong>σ_t = 0</strong>: every step is deterministic, and this is <strong>DDIM</strong>. In the continuous limit, DDIM is precisely an integrator of §8's probability flow ODE. The four languages have fused.</p>
+  <p>And because each DDIM step explicitly reconstructs x̂₀ and re-noises it, nothing forces consecutive rungs: jump t = 1000 → 950 → 900 → … and take 20 or 50 strides instead of 1000 steps. Run the worked example once more: at ᾱ = 0.5 the model saw 0.919 and predicted ε̂ = 0.25, so x̂₀ = 1.05. A DDIM stride to ᾱ_next = 0.8 computes x_next = √0.8 × 1.05 + √0.2 × 0.25 = 0.939 + 0.112 = 1.051, landed in one stride, no dice rolled.</p>
+  <div class="fig">
+    <div class="fig-title">A Thousand Stumbles or Fifty Strides</div>
+    <canvas id="c-d9" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Both samplers ride the same trained network through the same density landscape. DDPM: a thousand small stochastic stumbles, fresh noise at every rung. DDIM: fifty deterministic strides along the probability flow, each one jumping to the current best guess of the clean image and re-noising to the next level, no randomness after the first draw. Same endpoints in distribution, twenty times cheaper, and invertible.</div>
+  </div>
+</section>
+
+<!-- ════════ S10: ONE OBJECT ════════ -->
+<section id="s10">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">10</span><h2>One Object, Four Lenses</h2></div>
+  <p>Step back and the whole blog is one sentence: <strong>everything trains the same network, and everything samples the same field</strong>. The noise predictor, the score, the reverse SDE drift, and the DDIM direction are linear re-labelings of one learned object.</p>
+  <table class="cmp">
+    <thead><tr><th>Lens</th><th>The object</th><th>Training view</th><th>Sampling view</th><th>Buys you</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--purple2)">Hierarchical VAE</strong></td><td>per step posterior</td><td>ELBO, decomposed per rung</td><td>ancestral, rung by rung</td><td>the derivation, the why of L_simple</td></tr>
+      <tr><td><strong style="color:var(--yellow2)">DDPM</strong></td><td>ε_θ(x_t, t)</td><td>noise regression</td><td>denoise + re-noise, T steps</td><td>stable training, SOTA quality</td></tr>
+      <tr><td><strong style="color:var(--teal2)">Score matching</strong></td><td>s_θ = −ε_θ/√(1−ᾱ)</td><td>denoising score matching</td><td>annealed Langevin</td><td>the physics, no partition function</td></tr>
+      <tr><td><strong style="color:var(--orange2)">SDE / ODE</strong></td><td>drift field with s_θ inside</td><td>continuous time DSM</td><td>any numerical solver</td><td>theory, inversion, fast solvers</td></tr>
+      <tr><td><strong style="color:var(--blue2)">DDIM</strong></td><td>same ε_θ, σ = 0</td><td>none, reuses DDPM weights</td><td>20 to 50 strides, deterministic</td><td>speed, latents, editing</td></tr>
+    </tbody>
+  </table>
+  <h3>Where the story goes from here</h3>
+  <p><strong>Latent diffusion</strong> (Stable Diffusion) runs the entire machinery of this blog inside the latent space of, fittingly, a VAE: the anchor of §2 returns as the compressor that makes diffusion affordable. <strong>Classifier free guidance</strong> steers the score field with a conditioning signal, sharpening samples toward a prompt. <strong>Distillation and consistency models</strong> compress the ODE trajectory into one or few network calls. <strong>Flow matching</strong>, the current frontier, learns the probability flow field directly with straight line paths, skipping the stochastic scaffolding entirely. Every one of these is a move on the board this blog laid out, and you now read the board fluently.</p>
+  <div class="co g"><div class="co-title">The one paragraph summary</div>
+    <p>A diffusion model is a thousand layer VAE whose encoder is frozen Gaussian noising. Training reduces to guessing the noise in a corrupted sample, which is provably the same as learning the gradient field of the noised data distribution. Sampling is rolling back the corruption, either stochastically (DDPM, the reverse SDE) or deterministically along the probability flow (DDIM, the ODE), trading self correction for speed. One network, four lenses, one bridge from Gaussian chaos to the data manifold.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+
+/* ── helpers ── */
+function gctx(id){const cv=document.getElementById('c-'+id);return cv?cv.getContext('2d'):null;}
+function lbl(ctx,s,x,y,col,sz,w,al){ctx.font=`${w||500} ${sz||10}px "Plus Jakarta Sans",sans-serif`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function mlbl(ctx,s,x,y,col,sz,al){ctx.font=`500 ${sz||9}px "JetBrains Mono",monospace`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function pill(ctx,x,y,w,h,r,fill,stroke,lw){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+function rnd(i){const v=Math.sin(i*12.9898+78.233)*43758.5453;return v-Math.floor(v);}
+function gauss(i){return (rnd(i)+rnd(i+0.17)+rnd(i+0.31)+rnd(i+0.47)-2)*1.6;}
+const STATIC={};
+(function(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id.replace('c-','');
+      if(STATIC[id]){STATIC[id]();obs.unobserve(e.target);}
+    }
+  }),{threshold:0.05});
+  window.addEventListener('DOMContentLoaded',()=>{
+    Object.keys(STATIC).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+  });
+})();
+
+/* spiral dataset points */
+function spiral(n,scale){
+  const pts=[];
+  for(let k=0;k<n;k++){
+    const a=k/n*4.6, r=(10+a*22)*scale/110;
+    pts.push([Math.cos(a*1.9)*r*110, Math.sin(a*1.9)*r*110]);
+  }
+  return pts;
+}
+
+/* ── D1: the map ── */
+STATIC.d1=function(){
+  const ctx=gctx('d1');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  const stops=[
+    ['VAE','one learned leap','#d6a8ff'],
+    ['DDPM','a thousand tiny steps','#ffe282'],
+    ['Score','the steps are a vector field','#9fdcef'],
+    ['SDE / ODE','step size goes to zero','#ffbe6e'],
+    ['DDIM','drop the noise, stride','#a8caff']
+  ];
+  const labels=['stretch the leap','squint at the steps','take the limit','remove randomness'];
+  stops.forEach((s,i)=>{
+    const x=60+i*166, y=110;
+    pill(ctx,x,y,140,76,11,s[2]+'14',s[2],1.6);
+    lbl(ctx,s[0],x+70,y+26,s[2],13,800);
+    mlbl(ctx,s[1],x+70,y+52,'#c8e0f2',7.6);
+    if(i<4){
+      arrow(ctx,x+144,y+38,x+162,y+38,'#aac6e2',1.6);
+      mlbl(ctx,labels[i],x+153,y-14+((i%2)?104:0),'#aac6e2',7.6);
+    }
+  });
+  mlbl(ctx,'you start here',130,84,'#ffe282',8.5);
+  pill(ctx,70,72,120,20,10,'rgba(252,198,40,.14)','#ffe282',1.1);
+  mlbl(ctx,'★ known territory',130,82,'#ffe282',8);
+  // staircase motif
+  ctx.strokeStyle='rgba(150,180,220,.25)';ctx.lineWidth=1.4;
+  ctx.beginPath();
+  let sx=120,sy=262;
+  for(let i=0;i<14;i++){ctx.lineTo(sx,sy);sx+=46;ctx.lineTo(sx,sy);sy-=4;}
+  ctx.stroke();
+  mlbl(ctx,'one bridge from noise to data, four blueprints',440,292,'#aac6e2',9);
+};
+
+/* ── D2: VAE pipeline ── */
+STATIC.d2=function(){
+  const ctx=gctx('d2');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  function imgBlock(x,y,s,blur,seed){
+    const n=8,cs=s/n;
+    for(let i=0;i<n;i++)for(let j=0;j<n;j++){
+      let v=rnd(seed+i*n+j);
+      if(blur){ // average with neighbors crudely
+        v=(v+rnd(seed+((i+1)%n)*n+j)+rnd(seed+i*n+(j+1)%n))/3*0.7+0.18;
+      }
+      const c2=Math.floor(60+v*150);
+      ctx.fillStyle=`rgb(${c2*0.55|0},${c2*0.75|0},${c2})`;
+      ctx.fillRect(x+j*cs,y+i*cs,cs-1,cs-1);
+    }
+    pill(ctx,x-2,y-2,s+4,s+4,5,null,'rgba(150,180,220,.6)',1.3);
+  }
+  imgBlock(70,90,130,false,3);
+  lbl(ctx,'x',135,70,'#a8caff',12,800);
+  // encoder trapezoid
+  ctx.fillStyle='rgba(176,94,250,.16)';ctx.strokeStyle='#d6a8ff';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(220,95);ctx.lineTo(330,135);ctx.lineTo(330,185);ctx.lineTo(220,225);ctx.closePath();ctx.fill();ctx.stroke();
+  lbl(ctx,'encoder',275,160,'#d6a8ff',10,700);
+  mlbl(ctx,'q(z|x)  learned',275,178,'#cbb2ee',7.6);
+  // z
+  pill(ctx,352,130,80,30,7,'rgba(252,198,40,.16)','#ffe282',1.4);
+  mlbl(ctx,'μ, σ',392,145,'#ffe282',9.5);
+  pill(ctx,352,170,80,30,7,'rgba(36,193,224,.14)','#9fdcef',1.4);
+  mlbl(ctx,'z ~ N(μ,σ²)',392,185,'#9fdcef',8.2);
+  mlbl(ctx,'tiny bottleneck',392,216,'#aac6e2',8);
+  // decoder trapezoid
+  ctx.fillStyle='rgba(72,186,106,.13)';ctx.strokeStyle='#a8e6c0';ctx.lineWidth=1.5;
+  ctx.beginPath();ctx.moveTo(454,135);ctx.lineTo(564,95);ctx.lineTo(564,225);ctx.lineTo(454,185);ctx.closePath();ctx.fill();ctx.stroke();
+  lbl(ctx,'decoder',509,160,'#a8e6c0',10,700);
+  mlbl(ctx,'p(x|z)  learned',509,178,'#9fd4b3',7.6);
+  imgBlock(600,90,130,true,3);
+  lbl(ctx,'x̂  (soft, averaged)',665,70,'#a8e6c0',10,700);
+  arrow(ctx,204,160,218,160,'#aac6e2',1.4);
+  arrow(ctx,334,160,348,160,'#aac6e2',1.4);
+  arrow(ctx,436,160,450,160,'#aac6e2',1.4);
+  arrow(ctx,568,160,594,160,'#aac6e2',1.4);
+  // leap label
+  pill(ctx,280,256,320,26,13,'rgba(234,67,53,.08)','#f28b82',1.2);
+  mlbl(ctx,'one leap down, one leap up: the whole miracle in one hop',440,269,'#f0b3ac',8.2);
+  mlbl(ctx,'sampling: draw z from N(0, I), decode once',440,300,'#aac6e2',8.5);
+};
+
+/* ── D3: leap vs staircase ── */
+STATIC.d3=function(){
+  const ctx=gctx('d3');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  function block(x,y,nm,col,w){
+    pill(ctx,x,y,w||96,54,8,col+'1c',col,1.5);
+    lbl(ctx,nm,x+(w||96)/2,y+27,col,10.5,700);
+  }
+  // top: VAE
+  lbl(ctx,'VAE: two giant learned jumps',440,34,'#f0b3ac',10.5,700);
+  block(90,58,'DATA','#a8e6c0');
+  block(694,58,'NOISE','#f28b82');
+  // curved arcs
+  ctx.strokeStyle='#d6a8ff';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(190,72);ctx.quadraticCurveTo(440,18,690,72);ctx.stroke();
+  ctx.fillStyle='#d6a8ff';ctx.beginPath();ctx.moveTo(690,72);ctx.lineTo(680,64);ctx.lineTo(682,76);ctx.closePath();ctx.fill();
+  mlbl(ctx,'encoder, learned',440,40,'#d6a8ff',8);
+  ctx.strokeStyle='#a8e6c0';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(690,98);ctx.quadraticCurveTo(440,150,190,98);ctx.stroke();
+  ctx.fillStyle='#a8e6c0';ctx.beginPath();ctx.moveTo(190,98);ctx.lineTo(200,106);ctx.lineTo(198,94);ctx.closePath();ctx.fill();
+  mlbl(ctx,'decoder, learned, must do everything ⚠',440,134,'#a8e6c0',8);
+  // bottom: staircase
+  lbl(ctx,'Diffusion: fixed noising right, learned baby steps left',440,182,'#9fd4b3',10.5,700);
+  const n=8;
+  for(let i=0;i<n;i++){
+    const x=90+i*88, y=210;
+    const t=i/(n-1);
+    // block colored from data-green to noise-red
+    const col=`rgb(${120+t*120|0},${200-t*120|0},${140-t*40|0})`;
+    pill(ctx,x,y,66,44,6,'rgba(52,70,100,.35)',col,1.5);
+    mlbl(ctx,i===0?'x₀':i===n-1?'x_T':'x'+i,x+33,y+22,'#e8f2fc',8.5);
+    if(i<n-1){
+      // fixed right arrow (top)
+      arrow(ctx,x+68,y+10,x+86,y+10,'rgba(170,198,226,.8)',1.2);
+      // learned left arrow (bottom)
+      arrow(ctx,x+86,y+36,x+68,y+36,'#a8e6c0',1.6);
+    }
+  }
+  mlbl(ctx,'→ fixed: just add a whisper of noise, no network',300,286,'#aac6e2',8.5);
+  mlbl(ctx,'← learned: tiny correction, provably near Gaussian',620,286,'#a8e6c0',8.5);
+  mlbl(ctx,'a thousand easy problems replace one impossible one',440,310,'#9fd4b3',9);
+};
+
+/* ── D4: forward noising + signal budget ── */
+STATIC.d4=function(){
+  const ctx=gctx('d4');if(!ctx)return;const W=880,H=380;ctx.clearRect(0,0,W,H);
+  const stages=[[1.0,'t = 0','clean data'],[0.90,'t = 100','barely dusty'],[0.08,'t = 500','shadows of structure'],[0.00004,'t = 1000','pure Gaussian']];
+  const pts=spiral(130,1);
+  stages.forEach((st,k)=>{
+    const cx=125+k*210, cy=120, ab=st[0];
+    pill(ctx,cx-95,cy-92,190,184,10,'rgba(52,70,100,.18)','rgba(150,180,220,.45)',1.1);
+    const sA=Math.sqrt(ab), sN=Math.sqrt(1-ab);
+    pts.forEach((p,i)=>{
+      const nx=gauss(i*3.1+k*97)*38, ny=gauss(i*5.7+k*131)*38;
+      const x=cx+p[0]*0.72*sA+nx*sN*1.9, y=cy+p[1]*0.72*sA+ny*sN*1.9;
+      if(Math.abs(x-cx)>92||Math.abs(y-cy)>88)return;
+      ctx.fillStyle=`rgba(${120+135*sN|0},${200-60*sN|0},${230-40*sN|0},.85)`;
+      ctx.beginPath();ctx.arc(x,y,2.2,0,7);ctx.fill();
+    });
+    lbl(ctx,st[1],cx,cy+108,'#c8e0f2',9.5,700);
+    mlbl(ctx,st[2],cx,cy+124,'#aac6e2',7.6);
+    mlbl(ctx,'ᾱ = '+(st[0]<0.001?st[0].toExponential(0):st[0]),cx,cy-104,'#ffe282',8);
+    if(k<3)arrow(ctx,cx+100,cy,cx+112,cy,'#aac6e2',1.4);
+  });
+  // signal budget bars
+  const bx=180,by=300,bw=520;
+  mlbl(ctx,'signal  √ᾱ',bx-14,by+14,'#a8e6c0',8.5,'right');
+  mlbl(ctx,'noise  √(1−ᾱ)',bx-14,by+40,'#f28b82',8.5,'right');
+  [[0,1.0],[0.25,0.90],[0.5,0.5],[0.75,0.08],[1,0.00004]].forEach(s=>{
+    const x=bx+s[0]*bw;
+    const sA=Math.sqrt(s[1]),sN=Math.sqrt(1-s[1]);
+    pill(ctx,x,by+6,70*sA+1,14,3,'#48ba6a','#a8e6c0',.8);
+    pill(ctx,x,by+32,70*sN+1,14,3,'#ea5a4e','#f28b82',.8);
+    mlbl(ctx,['t=0','100','285','500','1000'][[0,0.25,0.5,0.75,1].indexOf(s[0])],x+34,by-8,'#aac6e2',7.6);
+  });
+  mlbl(ctx,'variance preserved: the two budgets always trade, never sum past 1',440,H-12,'#aac6e2',8.5);
+};
+
+/* ── D5: worked example anatomy ── */
+STATIC.d5=function(){
+  const ctx=gctx('d5');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  function chip(x,y,w,h,nm,val,col){
+    pill(ctx,x,y,w,h,8,col+'16',col,1.5);
+    mlbl(ctx,nm,x+w/2,y+16,col,8.5);
+    lbl(ctx,val,x+w/2,y+h-18,col,13,800);
+  }
+  chip(60,60,120,64,'clean pixel x₀','1.0','#a8e6c0');
+  chip(60,180,120,64,'noise draw ε','0.3','#ffbe6e');
+  mlbl(ctx,'× √ᾱ = 0.707',236,82,'#a8e6c0',8.5);
+  mlbl(ctx,'× √(1−ᾱ) = 0.707',236,212,'#ffbe6e',8.5);
+  arrow(ctx,184,92,304,140,'#a8e6c0',1.6);
+  arrow(ctx,184,212,304,166,'#ffbe6e',1.6);
+  chip(310,120,130,66,'observed x_t','0.919','#a8caff');
+  mlbl(ctx,'0.707 + 0.212',375,196,'#9fbcd8',8);
+  // network
+  arrow(ctx,444,153,486,153,'#aac6e2',1.6);
+  pill(ctx,492,108,150,90,10,'rgba(176,94,250,.12)','#d6a8ff',1.7);
+  lbl(ctx,'ε_θ(x_t, t)',567,136,'#d6a8ff',11,800);
+  mlbl(ctx,'sees only (0.919, t)',567,158,'#cbb2ee',7.8);
+  mlbl(ctx,'must recover the dice',567,176,'#cbb2ee',7.8);
+  arrow(ctx,646,153,688,153,'#aac6e2',1.6);
+  chip(694,84,126,60,'prediction ε̂','0.25','#9fdcef');
+  chip(694,166,126,60,'target ε','0.3','#ffbe6e');
+  pill(ctx,694,244,126,30,7,'rgba(234,67,53,.1)','#f28b82',1.2);
+  mlbl(ctx,'loss (0.05)² = 0.0025',757,259,'#f0b3ac',7.8);
+  // implied x0
+  pill(ctx,310,236,180,42,8,'rgba(72,186,106,.08)','#a8e6c0',1.2);
+  mlbl(ctx,'implied x̂₀ = (0.919 − 0.707·0.25)/0.707',400,250,'#a8e6c0',7);
+  mlbl(ctx,'= 1.05, near the true 1.0',400,266,'#9fd4b3',7.6);
+  mlbl(ctx,'guess the noise ⇔ guess the image ⇔ point along the score: one task, three labels',440,308,'#aac6e2',8.5);
+};
+
+/* ── D6: the two loops ── */
+STATIC.d6=function(){
+  const ctx=gctx('d6');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  // ladder shared motif
+  function ladder(x,y0,h,n,hits){
+    pill(ctx,x-3,y0-6,46,h+12,8,'rgba(52,70,100,.25)','rgba(150,180,220,.5)',1);
+    for(let i=0;i<n;i++){
+      const y=y0+i*(h/(n-1));
+      const hit=hits&&hits.includes(i);
+      pill(ctx,x,y-5,40,10,3,hit?'rgba(252,198,40,.5)':'rgba(150,180,220,.22)',hit?'#ffe282':null,hit?1.2:0);
+    }
+    mlbl(ctx,'t = T',x+20,y0-16,'#f0b3ac',7.5);
+    mlbl(ctx,'t = 0',x+20,y0+h+16,'#a8e6c0',7.5);
+  }
+  // TRAINING lane
+  lbl(ctx,'TRAINING: hit random rungs',230,34,'#ffe282',10.5,700);
+  ladder(70,64,220,12,[2,5,9]);
+  const steps=[['pick x₀, t, ε','#a8caff'],['blend: x_t = √ᾱ x₀ + √(1−ᾱ) ε','#ffbe6e'],['regress ‖ε − ε_θ(x_t,t)‖²','#d6a8ff']];
+  steps.forEach((s,i)=>{
+    pill(ctx,150,70+i*62,250,44,8,s[1]+'12',s[1],1.4);
+    mlbl(ctx,s[0],275,92+i*62,s[1],8.6);
+    if(i<2)arrow(ctx,275,116+i*62,275,128+i*62,'#aac6e2',1.3);
+  });
+  // loop arrow
+  ctx.strokeStyle='#aac6e2';ctx.lineWidth=1.3;
+  ctx.beginPath();ctx.moveTo(404,258);ctx.quadraticCurveTo(440,160,404,92);ctx.stroke();
+  ctx.fillStyle='#aac6e2';ctx.beginPath();ctx.moveTo(404,92);ctx.lineTo(412,102);ctx.lineTo(400,102);ctx.closePath();ctx.fill();
+  mlbl(ctx,'repeat',436,176,'#aac6e2',8);
+  mlbl(ctx,'stable, parallel, no chain unrolled',275,300,'#9fd4b3',8.2);
+  // divider
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(480,26);ctx.lineTo(480,H-16);ctx.stroke();ctx.setLineDash([]);
+  // SAMPLING lane
+  lbl(ctx,'SAMPLING: visit every rung',680,34,'#9fdcef',10.5,700);
+  ladder(520,64,220,12,Array.from({length:12},(_,i)=>i));
+  const sst=[['draw x_T ~ N(0, I)','#f28b82'],['denoise: subtract predicted ε','#9fdcef'],['re-noise: + √β̃ z (skip at t=1)','#ffbe6e']];
+  sst.forEach((s,i)=>{
+    pill(ctx,600,70+i*62,250,44,8,s[1]+'12',s[1],1.4);
+    mlbl(ctx,s[0],725,92+i*62,s[1],8.6);
+    if(i<2)arrow(ctx,725,116+i*62,725,128+i*62,'#aac6e2',1.3);
+  });
+  ctx.strokeStyle='#aac6e2';ctx.lineWidth=1.3;
+  ctx.beginPath();ctx.moveTo(854,258);ctx.quadraticCurveTo(872,180,854,154);ctx.stroke();
+  ctx.fillStyle='#aac6e2';ctx.beginPath();ctx.moveTo(854,154);ctx.lineTo(862,164);ctx.lineTo(850,164);ctx.closePath();ctx.fill();
+  mlbl(ctx,'×T',869,206,'#aac6e2',8);
+  mlbl(ctx,'T = 1000 network calls per image',725,300,'#f0b3ac',8.2);
+};
+
+/* ── D7: score field + Langevin ── */
+STATIC.d7=function(){
+  const ctx=gctx('d7');if(!ctx)return;const W=880,H=380;ctx.clearRect(0,0,W,H);
+  const blobs=[[300,190,1.0],[590,210,0.8]];
+  // density glow
+  blobs.forEach(b=>{
+    for(let r=86;r>8;r-=9){
+      ctx.fillStyle=`rgba(72,186,106,${0.028+(86-r)*0.0028})`;
+      ctx.beginPath();ctx.arc(b[0],b[1],r*b[2],0,7);ctx.fill();
+    }
+    mlbl(ctx,'data island',b[0],b[1],'#d2f5dd',8.5);
+  });
+  // score arrows on a grid
+  for(let gx=80;gx<=800;gx+=58)for(let gy=60;gy<=330;gy+=52){
+    // weighted pull toward blobs
+    let vx=0,vy=0;
+    blobs.forEach(b=>{
+      const dx=b[0]-gx, dy=b[1]-gy, d2=dx*dx+dy*dy;
+      const w=Math.exp(-d2/30000)*b[2]+0.16*b[2]/Math.sqrt(d2+900);
+      vx+=dx*w*0.02; vy+=dy*w*0.02;
+    });
+    const m=Math.hypot(vx,vy); if(m<0.02)continue;
+    const L=Math.min(m*42,20);
+    const ex=gx+vx/m*L, ey=gy+vy/m*L;
+    // skip arrows deep inside an island
+    if(blobs.some(b=>Math.hypot(b[0]-gx,b[1]-gy)<34))continue;
+    arrow(ctx,gx,gy,ex,ey,'rgba(159,220,239,.75)',1.2);
+  }
+  // Langevin walk
+  const path=[[810,76]];
+  for(let k=0;k<26;k++){
+    const p=path[path.length-1];
+    let vx=0,vy=0;
+    blobs.forEach(b=>{
+      const dx=b[0]-p[0],dy=b[1]-p[1],d2=dx*dx+dy*dy;
+      const w=Math.exp(-d2/30000)*b[2]+0.16*b[2]/Math.sqrt(d2+900);
+      vx+=dx*w*0.02; vy+=dy*w*0.02;
+    });
+    const m=Math.hypot(vx,vy)||1;
+    path.push([p[0]+vx/m*26+gauss(k*7)*9, p[1]+vy/m*26+gauss(k*13+3)*9]);
+  }
+  ctx.setLineDash([4,4]);ctx.strokeStyle='#ffe282';ctx.lineWidth=1.8;
+  ctx.beginPath();path.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));ctx.stroke();
+  ctx.setLineDash([]);
+  path.forEach((p,i)=>{if(i%4===0){ctx.fillStyle='#ffe282';ctx.beginPath();ctx.arc(p[0],p[1],2.6,0,7);ctx.fill();}});
+  mlbl(ctx,'start in the void',810,58,'#ffe282',8.5);
+  mlbl(ctx,'Langevin: follow arrows + jiggle',700,330,'#ffe282',8.5);
+  mlbl(ctx,'arrows = score of the noise blurred data: defined everywhere, pointing home',440,H-14,'#aac6e2',9);
+};
+
+/* ── D8: SDE vs ODE paths ── */
+STATIC.d8=function(){
+  const ctx=gctx('d8');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  const x0=110,x1=800,ymid=180;
+  // funnel background: wide at right (noise), two branches at left (data modes)
+  ctx.fillStyle='rgba(88,148,250,.05)';
+  ctx.beginPath();
+  ctx.moveTo(x1,ymid-120);
+  ctx.quadraticCurveTo(420,ymid-130,x0,ymid-96);
+  ctx.lineTo(x0,ymid-30);
+  ctx.quadraticCurveTo(430,ymid-40,x1,ymid+120);
+  ctx.lineTo(x1,ymid-120);ctx.fill();
+  ctx.fillStyle='rgba(88,148,250,.05)';
+  ctx.beginPath();
+  ctx.moveTo(x1,ymid+120);
+  ctx.quadraticCurveTo(420,ymid+130,x0,ymid+96);
+  ctx.lineTo(x0,ymid+34);
+  ctx.quadraticCurveTo(430,ymid+44,x1,ymid-110);
+  ctx.lineTo(x1,ymid+120);ctx.fill();
+  // endpoints labels
+  lbl(ctx,'data',64,ymid-62,'#a8e6c0',11,800);
+  lbl(ctx,'(two modes)',64,ymid-44,'#9fd4b3',7.6);
+  pill(ctx,x0-14,ymid-86,16,52,8,'rgba(72,186,106,.5)','#a8e6c0',1.2);
+  pill(ctx,x0-14,ymid+42,16,52,8,'rgba(72,186,106,.5)','#a8e6c0',1.2);
+  lbl(ctx,'noise prior',840,ymid-110,'#f0b3ac',10,700);
+  pill(ctx,x1-4,ymid-94,16,190,8,'rgba(234,67,53,.3)','#f28b82',1.2);
+  mlbl(ctx,'time runs right → left during sampling',440,40,'#aac6e2',8.5);
+  // SDE jittery paths
+  for(let p=0;p<3;p++){
+    const yT=ymid-70+p*70, target=p<2?ymid-60:ymid+68;
+    ctx.strokeStyle='rgba(255,190,110,.85)';ctx.lineWidth=1.5;
+    ctx.beginPath();
+    let y=yT;
+    for(let k=0;k<=46;k++){
+      const x=x1-(x1-x0)*k/46;
+      const pull=(target-y)*0.09;
+      y+=pull+gauss(p*131+k*7)*8*(1-k/52);
+      k===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+  }
+  // ODE smooth paths
+  for(let p=0;p<3;p++){
+    const yT=ymid-94+p*86, target=p<2?ymid-66:ymid+62;
+    ctx.strokeStyle='rgba(120,217,236,.95)';ctx.lineWidth=2.2;
+    ctx.beginPath();
+    ctx.moveTo(x1,yT);
+    ctx.bezierCurveTo(560,yT,360,target,x0,target);
+    ctx.stroke();
+  }
+  pill(ctx,150,300,250,24,12,'rgba(255,190,110,.1)','#ffbe6e',1.1);
+  mlbl(ctx,'reverse SDE: Brownian kicks all the way',275,312,'#ffbe6e',8);
+  pill(ctx,460,300,290,24,12,'rgba(120,217,236,.1)','#78d9ec',1.1);
+  mlbl(ctx,'probability flow ODE: smooth, deterministic',605,312,'#78d9ec',8);
+  mlbl(ctx,'every vertical slice: identical distribution of paths',440,344,'#aac6e2',8.5);
+};
+
+/* ── D9: DDPM vs DDIM ── */
+STATIC.d9=function(){
+  const ctx=gctx('d9');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const x0=120,x1=790;
+  // endpoints
+  pill(ctx,x0-22,96,18,150,9,'rgba(72,186,106,.45)','#a8e6c0',1.3);
+  lbl(ctx,'data',70,86,'#a8e6c0',10,700);
+  pill(ctx,x1+4,96,18,150,9,'rgba(234,67,53,.3)','#f28b82',1.3);
+  lbl(ctx,'noise',830,86,'#f0b3ac',10,700);
+  // DDPM jitter path
+  ctx.strokeStyle='rgba(255,190,110,.9)';ctx.lineWidth=1.4;
+  ctx.beginPath();
+  let y=140;
+  for(let k=0;k<=140;k++){
+    const x=x1-(x1-x0)*k/140;
+    y+=(150-y)*0.03+gauss(k*3.7)*5.2*(1-k/160);
+    k===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+  mlbl(ctx,'DDPM: 1000 stochastic stumbles, fresh dice each rung',420,84,'#ffbe6e',8.6);
+  // DDIM strides
+  const nodes=[];
+  for(let k=0;k<=8;k++){
+    const x=x1-(x1-x0)*k/8;
+    const yy=212+Math.sin(k/8*2.2)*16-k*1.2;
+    nodes.push([x,yy]);
+  }
+  ctx.strokeStyle='#78d9ec';ctx.lineWidth=2.2;
+  ctx.beginPath();nodes.forEach((p,i)=>i===0?ctx.moveTo(p[0],p[1]):ctx.lineTo(p[0],p[1]));ctx.stroke();
+  nodes.forEach(p=>{ctx.fillStyle='#78d9ec';ctx.beginPath();ctx.arc(p[0],p[1],4,0,7);ctx.fill();});
+  mlbl(ctx,'DDIM: 50 deterministic strides (here 8 drawn), σ = 0, no dice after the start',420,262,'#78d9ec',8.6);
+  // stride annotation
+  pill(ctx,470,286,330,26,12,'rgba(120,217,236,.08)','#78d9ec',1.1);
+  mlbl(ctx,'each stride: jump to x̂₀, re-noise to the next level',635,299,'#9fdcef',8);
+  pill(ctx,90,286,330,26,12,'rgba(255,190,110,.08)','#ffbe6e',1.1);
+  mlbl(ctx,'noise re-injected each step: self correcting, slow',255,299,'#ffbe6e',8);
+};
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Beyond PPO — algorithm family tree">
+  <style>
+    .bg { fill: #0a0c10; }
+    .grid { stroke: rgba(138, 180, 248, 0.06); stroke-width: 1; }
+    .ax-label { font: 700 11px 'JetBrains Mono', monospace; fill: rgba(138, 180, 248, 0.55); letter-spacing: 0.10em; text-transform: uppercase; }
+    .root  { fill: #1a3a7a; stroke: #8ab4f8; stroke-width: 1.6; }
+    .child { fill: #1e232d; stroke: rgba(138,180,248,0.42); stroke-width: 1.2; }
+    .glow  { stroke: #8ab4f8; stroke-width: 1.4; fill: none; opacity: 0.7; stroke-linecap: round; filter: drop-shadow(0 0 4px rgba(138, 180, 248, 0.35)); }
+    .lbl-root  { font: 800 16px 'Plus Jakarta Sans', sans-serif; fill: #ffffff; text-anchor: middle; letter-spacing: 0.02em; }
+    .lbl-child { font: 700 13px 'Plus Jakarta Sans', sans-serif; fill: #e8eaed; text-anchor: middle; letter-spacing: 0.04em; }
+    .lbl-note  { font: 500 9.5px 'JetBrains Mono', monospace; fill: rgba(138, 180, 248, 0.7); text-anchor: middle; letter-spacing: 0.08em; text-transform: uppercase; }
+    .title { font: 800 13px 'Plus Jakarta Sans', sans-serif; fill: #e8eaed; letter-spacing: 0.04em; }
+    .sub  { font: 600 10px 'JetBrains Mono', monospace; fill: rgba(138, 180, 248, 0.60); letter-spacing: 0.10em; text-transform: uppercase; }
+
+    @keyframes draw-line {
+      from { stroke-dashoffset: 180; }
+      to   { stroke-dashoffset: 0; }
+    }
+    @keyframes pulse-node {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50%      { transform: scale(1.06); opacity: 0.92; }
+    }
+    @keyframes pop-in {
+      0%   { opacity: 0; transform: scale(0.6); }
+      60%  { opacity: 1; transform: scale(1.08); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .branch       { stroke-dasharray: 180; animation: draw-line 1.4s ease forwards; }
+    .branch-1     { animation-delay: 0.20s; }
+    .branch-2     { animation-delay: 0.45s; }
+    .branch-3     { animation-delay: 0.70s; }
+    .branch-4     { animation-delay: 0.95s; }
+    .branch-5     { animation-delay: 1.20s; }
+    .node-pop     { animation: pop-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; transform-origin: center; transform-box: fill-box; }
+    .node-1       { animation-delay: 0.50s; }
+    .node-2       { animation-delay: 0.75s; }
+    .node-3       { animation-delay: 1.00s; }
+    .node-4       { animation-delay: 1.25s; }
+    .node-5       { animation-delay: 1.50s; }
+    .root-pulse   { animation: pulse-node 3s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+    @media (prefers-reduced-motion: reduce) {
+      .branch, .node-pop, .root-pulse { animation: none; }
+      .branch { stroke-dashoffset: 0; }
+    }
+  </style>
+
+  <rect class="bg" width="600" height="400"/>
+
+  <!-- header -->
+  <text class="sub"   x="40" y="38">RL algorithms · post-PPO family</text>
+  <text class="title" x="40" y="58">PPO branches into newer alignment objectives</text>
+
+  <!-- branches (drawn before nodes so they sit behind) -->
+  <g fill="none">
+    <path class="glow branch branch-1" d="M300 178 Q 230 200, 130 250"/>
+    <path class="glow branch branch-2" d="M300 178 Q 248 210, 218 280"/>
+    <path class="glow branch branch-3" d="M300 178 Q 300 230, 300 290"/>
+    <path class="glow branch branch-4" d="M300 178 Q 352 210, 382 280"/>
+    <path class="glow branch branch-5" d="M300 178 Q 370 200, 470 250"/>
+  </g>
+
+  <!-- root: PPO -->
+  <g class="root-pulse">
+    <rect class="root" x="245" y="135" width="110" height="46" rx="11"/>
+    <text class="lbl-root" x="300" y="166">PPO</text>
+  </g>
+
+  <!-- children: DPO, ORPO, KTO, GRPO, REINFORCE -->
+  <g class="node-pop node-1">
+    <rect class="child" x="78"  y="246" width="98" height="42" rx="10"/>
+    <text class="lbl-child" x="127" y="266">DPO</text>
+    <text class="lbl-note"  x="127" y="280">offline · pair</text>
+  </g>
+  <g class="node-pop node-2">
+    <rect class="child" x="168" y="282" width="98" height="42" rx="10"/>
+    <text class="lbl-child" x="217" y="302">ORPO</text>
+    <text class="lbl-note"  x="217" y="316">no ref · ratio</text>
+  </g>
+  <g class="node-pop node-3">
+    <rect class="child" x="252" y="294" width="98" height="42" rx="10"/>
+    <text class="lbl-child" x="301" y="314">KTO</text>
+    <text class="lbl-note"  x="301" y="328">unpaired</text>
+  </g>
+  <g class="node-pop node-4">
+    <rect class="child" x="334" y="282" width="98" height="42" rx="10"/>
+    <text class="lbl-child" x="383" y="302">GRPO</text>
+    <text class="lbl-note"  x="383" y="316">group baseline</text>
+  </g>
+  <g class="node-pop node-5">
+    <rect class="child" x="422" y="246" width="98" height="42" rx="10"/>
+    <text class="lbl-child" x="471" y="266">REINFORCE</text>
+    <text class="lbl-note"  x="471" y="280">on-policy</text>
+  </g>
+</svg>

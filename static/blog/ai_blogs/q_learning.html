@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Q-Learning: The Other Half of RL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;--green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;--yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;--teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#c0d8f2;--text3:#9ab8d4;
+  --mono:'JetBrains Mono',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--orange));z-index:999;transition:width .05s}
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);z-index:900;padding:.55rem 1.5rem}
+.nav-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.2rem}
+.nav-brand{font-size:.85rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.7rem;white-space:nowrap;padding:.25rem .5rem;border-radius:6px;font-weight:500;transition:all .12s}
+.nav-links a:hover{color:var(--teal2);background:rgba(0,212,255,.08)}
+.hero{text-align:center;padding:4rem 1.5rem 2.5rem;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.08;background:linear-gradient(135deg,#8ab4f8,#c58af9,#ffab40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:680px;margin:0 auto}
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+section{padding:2.8rem 0 .5rem;border-top:1px solid var(--bdr);margin-top:2.2rem}
+section:first-of-type{border-top:none;margin-top:0}
+.sec-hdr{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.sec-num{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;letter-spacing:.05em}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.12rem;font-weight:700;margin:1.8rem 0 .6rem}
+p{color:var(--text);margin-bottom:.85rem}
+p.note{color:var(--text2);font-size:.92rem}
+.fig{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:1.3rem;margin:1.6rem 0}
+.fig-title{text-align:center;font-size:.74rem;font-weight:700;color:var(--text2);margin-bottom:1rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas.anim{display:block;width:100%;height:auto;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.8rem;font-style:italic;line-height:1.6}
+.mb{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto}
+.mb .katex-display{margin:.15rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.4rem;font-family:var(--mono)}
+.co{border-radius:10px;padding:.95rem 1.2rem;margin:1.3rem 0;border-left:3px solid;font-size:.9rem}
+.co-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+.co p{margin:0;font-size:.87rem;line-height:1.65}
+.co.t{background:rgba(36,193,224,.05);border-color:var(--teal)}.co.t .co-title{color:var(--teal2)}
+.co.y{background:rgba(251,188,4,.05);border-color:var(--yellow)}.co.y .co-title{color:var(--yellow2)}
+.co.o{background:rgba(255,109,0,.05);border-color:var(--orange)}.co.o .co-title{color:var(--orange2)}
+.co.g{background:rgba(52,168,83,.05);border-color:var(--green)}.co.g .co-title{color:var(--green2)}
+.co.r{background:rgba(234,67,53,.05);border-color:var(--red)}.co.r .co-title{color:var(--red2)}
+.co.p{background:rgba(161,66,244,.05);border-color:var(--purple)}.co.p .co-title{color:var(--purple2)}
+table.cmp{width:100%;border-collapse:collapse;font-size:.82rem;margin:1.3rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+table.cmp th{background:var(--s3);color:var(--text2);padding:.6rem .9rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+table.cmp td{padding:.55rem .9rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.ic{background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--blue2)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+details.qa{background:var(--s2);border:1px solid rgba(252,198,40,.3);border-radius:12px;margin:1.6rem 0;overflow:hidden}
+details.qa summary{cursor:pointer;padding:.95rem 1.2rem;list-style:none;display:flex;align-items:center;gap:.8rem;user-select:none;transition:background .15s}
+details.qa summary:hover{background:rgba(252,198,40,.05)}
+details.qa summary::-webkit-details-marker{display:none}
+.qa-badge{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.07em;padding:.25rem .6rem;border-radius:6px;background:rgba(252,198,40,.15);color:var(--yellow2);white-space:nowrap}
+.qa-q{font-weight:600;font-size:.93rem;color:var(--text);flex:1}
+.qa-chev{color:var(--yellow2);font-size:.8rem;transition:transform .2s}
+details.qa[open] .qa-chev{transform:rotate(90deg)}
+.qa-body{padding:.4rem 1.3rem 1.2rem;border-top:1px solid var(--bdr)}
+.qa-body p{font-size:.91rem}
+@media(max-width:640px){.nav-links{display:none}}
+.hero-thumb{max-width:980px;margin:0 auto 2.4rem;padding:0 1.5rem}.hero-thumb img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-in">
+  <div class="nav-brand">Q-Learning</div>
+  <div class="nav-links">
+    <a href="#s1">The Map</a><a href="#s2">Playground</a><a href="#s3">V to Q</a>
+    <a href="#s4">Bellman</a><a href="#s5">The Update</a><a href="#s6">Watch It Learn</a>
+    <a href="#s7">Explore</a><a href="#s8">Off-Policy</a><a href="#s9">DQN</a><a href="#s10">Your World</a>
+  </div>
+</div></nav>
+
+<div class="hero">
+  <h1>Q-Learning: The Other Half of RL</h1>
+  <p>You learned RL backwards. You started at PPO and GRPO, the policy side, because that is what trains LLMs. This is the journey through the value side: Q-learning from first principles, on a tiny world where every number can be computed by hand, ending exactly where your knowledge began.</p>
+</div>
+
+<main>
+
+<div class="hero-thumb"><img src="./q_learning_feat.svg" alt="Q-Learning overview" loading="eager"/></div>
+
+<!-- ════════ S1: THE MAP ════════ -->
+<section id="s1">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">01</span><h2>Where You Stand on the RL Map</h2></div>
+  <p>Everything you know lives on one branch. REINFORCE, PPO, GRPO, DAPO: these are <strong>policy methods</strong>. They hold a policy π and ask "in which direction should I nudge π so good outputs become more likely?" The gradient acts on the policy directly, and value functions, when they appear at all, are assistants (PPO's critic V) or are deleted entirely (GRPO).</p>
+  <p>Q-learning is the opposite philosophy, the <strong>value branch</strong>: never store a policy at all. Instead learn a number for every action in every situation, "how much total reward will I collect if I do this?", and let the policy be a free by-product: just act greedily on the numbers. Where GRPO killed the critic and kept the policy, Q-learning kills the policy and keeps only the critic.</p>
+  <div class="fig">
+    <div class="fig-title">The Two Branches, and Where You Are</div>
+    <canvas id="c-q1" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">Policy branch: act on π directly (your PPO and GRPO world). Value branch: learn action values, derive the policy by argmax. Actor-critic sits in the middle and uses both, which is why PPO's critic V will feel familiar in everything that follows.</div>
+  </div>
+</section>
+
+<!-- ════════ S2: PLAYGROUND ════════ -->
+<section id="s2">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">02</span><h2>The Playground: a World Small Enough to Compute by Hand</h2></div>
+  <p>LLM post-training is a terrible classroom for Q-learning: 100k actions per step, million-step credit horizons, fuzzy rewards. So we shrink the world to its essence. Our fixed example for this whole blog is a <strong>4×3 grid</strong>:</p>
+  <p>A robot starts at the bottom left. It can move <span class="ic">N S E W</span>, one cell per step. The diamond cell pays <strong>+1</strong> and ends the episode. The pit pays <strong>−1</strong> and ends the episode. One cell is a wall. Every other step pays 0, and future reward is discounted by <strong>γ = 0.9</strong> per step, so finishing sooner is worth more.</p>
+  <div class="fig">
+    <div class="fig-title">The Whole Universe: 11 States, 4 Actions</div>
+    <canvas id="c-q2" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">State = which cell the robot is in. Action = N, S, E or W. Bumping a wall or the border means staying in place. The discount γ = 0.9 is the same γ from your PPO guide: a reward k steps away is worth 0.9 to the power k today. The best route from start to diamond takes 5 steps, so acting perfectly from the start is worth 0.9⁴ × 1 ≈ 0.656 today.</div>
+  </div>
+  <div class="co g"><div class="co-title">Same words you already use</div>
+    <p>Episode, trajectory, reward, return, discount: identical meaning to your PPO vocabulary. The return here is G = r₁ + γr₂ + γ²r₃ + …, exactly the cumulative R_t from the PPO guide. The only change is the world got small enough that we can write every value down.</p>
+  </div>
+</section>
+
+<!-- ════════ S3: V TO Q ════════ -->
+<section id="s3">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">03</span><h2>From V (Which You Know) to Q (One Step Finer)</h2></div>
+  <p>From PPO you already know <span class="ic">V(s)</span>: the critic's estimate of "how good is it to stand in state s", the expected return from here on. V answers <em>where am I</em>. It cannot answer <em>what should I do</em>, because it scores the situation, not the options.</p>
+  <p><span class="ic">Q(s, a)</span> is the same idea, split four ways: "how good is it to stand in s <strong>and take action a</strong>, then act well afterwards?" One number per door out of the room. And once you have Q, the policy is free:</p>
+  <div class="mb">
+    <div class="math-d">V^*(s) = \max_a Q^*(s,a) \qquad\qquad \pi^*(s) = \arg\max_a Q^*(s,a)</div>
+    <div class="mb-label">The best state value is the value of the best action. The best policy is: read the four numbers, walk through the biggest one.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">One Cell, Seen by V and Seen by Q</div>
+    <canvas id="c-q3" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">The cell two steps from the diamond, the one directly above the pit's left neighbor. V compresses it to a single 0.90. Q keeps one number per door: North continues toward the goal (0.90), West bumps the wall and wastes a step (0.81), South retreats (0.73), and East falls into the pit (−1.00). The argmax arrow is the policy. This is why Q is enough on its own and V is not: V says you are in a good spot, Q says which door to take and which door kills you.</div>
+  </div>
+</section>
+
+<!-- ════════ S4: BELLMAN ════════ -->
+<section id="s4">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(251,188,4,.12);color:var(--yellow2)">04</span><h2>The Bellman Equation: Values Are Built From Neighbor Values</h2></div>
+  <p>How would we ever know that Q((3,2), N) = 0.90 without playing out the whole future? Bellman's insight: <strong>you do not need the whole future, only one step of it</strong>. The value of an action is the reward you collect now, plus the discounted value of the best thing you can do from wherever you land:</p>
+  <div class="mb">
+    <div class="math-d">Q^*(s,a) \;=\; r \;+\; \gamma \,\max_{a'} Q^*(s',\,a')</div>
+    <div class="mb-label">r = immediate reward, s′ = the cell you land in, max over a′ = assume you act perfectly afterwards.</div>
+  </div>
+  <p>Check it on the grid with real numbers. Take the move North from the cell below-left of the pit, landing right next to the diamond:</p>
+  <div class="mb">
+    <div class="math-d">Q((3,2),\,N) = \underbrace{0}_{\text{step reward}} + \underbrace{0.9}_{\gamma} \times \underbrace{\max\{1.0,\;0.81,\;0.73,\;0.9\}}_{\text{best Q in the landing cell}} = 0.9 \times 1.0 = 0.90\;\checkmark</div>
+    <div class="mb-label">The landing cell's best action is East into the diamond, worth 1.0. One step of lookahead reproduced the value exactly.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">One Step of Lookahead Is Enough</div>
+    <canvas id="c-q4" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">The recursion drawn out: the value of (state, action) decomposes into the reward on the arrow plus γ times the best value available in the landing state. Every Q value in the grid is consistent with its neighbors this way. The whole table is a self-consistent web, and the diamond and pit are the anchors the web hangs from.</div>
+  </div>
+  <div class="co y"><div class="co-title">Déjà vu from GAE</div>
+    <p>You met this structure in the PPO guide: the TD error δ = r + γV(s′) − V(s) measures exactly how much a value estimate disagrees with the one-step Bellman prediction. GAE is built from stacked δs. Q-learning is what happens when that consistency check is promoted from an assistant to the entire algorithm.</p>
+  </div>
+</section>
+
+<!-- ════════ S5: THE UPDATE ════════ -->
+<section id="s5">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">05</span><h2>The Q-Learning Update: Nudge Toward the One-Step Truth</h2></div>
+  <p>Bellman tells us what the values must satisfy at the end. Q-learning turns it into a learning rule: start the table at all zeros, walk around, and after every single step nudge one cell of the table toward its one-step target:</p>
+  <div class="mb">
+    <div class="math-d">Q(s,a) \;\leftarrow\; Q(s,a) \;+\; \alpha\,\Big[\underbrace{r + \gamma \max_{a'} Q(s',a')}_{\text{target: what one step of reality says}} \;-\; \underbrace{Q(s,a)}_{\text{prediction: what the table says}}\Big]</div>
+    <div class="mb-label">α is the learning rate. The bracket is the TD error, the same δ shape you know from GAE, with a max inside.</div>
+  </div>
+  <p>Run it by hand with α = 0.5. The robot wanders, and at some point stands next to the diamond and steps East:</p>
+  <p><strong>Visit 1.</strong> Table says Q((3,3), E) = 0. Reality says: reward +1, episode over, so target = 1 + 0.9 × 0 = 1.0. Error = 1.0 − 0 = 1.0. Update: Q ← 0 + 0.5 × 1.0 = <strong>0.50</strong>.</p>
+  <p><strong>Visit 2.</strong> Same move later. Target is still 1.0, table now says 0.50. Error = 0.5. Update: Q ← 0.50 + 0.5 × 0.5 = <strong>0.75</strong>. Then 0.875, 0.9375, … crawling toward the true 1.0.</p>
+  <p><strong>The interesting visit.</strong> Now the robot is one cell lower at (3,2) and steps North. Reward 0, but the landing cell's table already says max = 0.50. Target = 0 + 0.9 × 0.50 = 0.45. Update: Q((3,2), N) ← 0 + 0.5 × 0.45 = <strong>0.225</strong>. The diamond's value just <em>seeped one cell backward</em> without the robot ever being told anything at (3,2).</p>
+  <div class="fig">
+    <div class="fig-title">Anatomy of One Update, With the Numbers Above</div>
+    <canvas id="c-q5" class="anim" width="880" height="300"></canvas>
+    <div class="fig-cap">Prediction 0, target 1.0, error 1.0, learning rate half: the table value jumps to the midpoint 0.5. Each later visit halves the remaining gap. Below: the second-order effect, the update at the neighbor cell whose target was built from the freshly learned 0.5. Reward information travels backward one handshake per visit.</div>
+  </div>
+  <div class="co t"><div class="co-title">This answers your old question</div>
+    <p>In the PPO guide you asked how the value function gets its training signal when only the final token carries reward, and the answer was: bootstrapping, values pulling on neighboring values through their slope. Here it is in its purest form. The diamond anchors one cell, and a thousand small handshakes drag the rest of the table into a gradient that points at it.</p>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">The target r + γ max Q is built from the table itself. The table starts as garbage. Isn't this circular, garbage teaching garbage?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>It is circular, and that is the design. The saving grace is that the target is not pure table: it contains <strong>one step of ground truth</strong>, the real reward r that the environment actually paid. Every target is "one part reality, γ parts current belief".</p>
+      <p>Watch what that mixture does on the grid. At the start everything is 0, so every target is 0 + 0.9 × 0 = 0 and nothing moves… until the robot stumbles into the diamond. That target is 1 + 0, pure reality, no belief involved, because the episode ends. The cell next to the diamond becomes correct-ish (0.5). From then on, the cell two steps out has a target with real information inside (0.9 × 0.5), and so on outward. Truth enters at the terminal rewards and is propagated by the bootstrap; the garbage is progressively flushed from the anchors outward.</p>
+      <p>The formal version: the Bellman optimality operator is a γ-contraction, every application pulls any table at least a factor γ closer to the unique fixed point Q*. With a decaying learning rate and the guarantee that every (state, action) pair keeps being visited, tabular Q-learning provably converges to Q* no matter how wrong the initial table was. Garbage in is fine, because reality leaks in at a rate the contraction amplifies.</p>
+      <p>The honest footnote: that proof is for tables. Replace the table with a neural network and the guarantee evaporates, which is exactly the instability story of §9.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S6: WATCH IT LEARN ════════ -->
+<section id="s6">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">06</span><h2>Watch the Table Learn</h2></div>
+  <p>Put it together: loop episodes, act, update one cell per step. Nothing else. The whole algorithm fits in six lines:</p>
+  <div class="mb">
+    <div class="math-d">\begin{aligned}&\textbf{init } Q(s,a)=0\\&\textbf{loop episodes: } s \leftarrow \text{start}\\&\quad\textbf{loop steps: } a \leftarrow \varepsilon\text{-greedy}(Q,s);\;\; \text{take } a,\ \text{observe } r, s'\\&\quad\quad Q(s,a) \mathrel{+}= \alpha\,[\,r + \gamma \max_{a'}Q(s',a') - Q(s,a)\,]\\&\quad\quad s \leftarrow s'\ \text{ until terminal}\end{aligned}</div>
+    <div class="mb-label">ε-greedy explained in §7. Everything else you have already seen.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Same Grid After 1, 50 and 500 Episodes</div>
+    <canvas id="c-q6" class="anim" width="880" height="380"></canvas>
+    <div class="fig-cap">Cell brightness = value of the best action there. Episode 1: a single lit cell next to the diamond, everything else still dark. Episode 50: a glow spreading backward, brightest near the diamond, noisy at the frontier. Episode 500: the converged field, value 0.9 to the power of distance, with the greedy arrows tracing the optimal route from start and steering wide of the pit. The model was never shown a route. The route condensed out of the values.</div>
+  </div>
+</section>
+
+<!-- ════════ S7: EXPLORE ════════ -->
+<section id="s7">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">07</span><h2>ε-Greedy: Why the Robot Must Sometimes Be Stupid</h2></div>
+  <p>One ingredient in the loop is still unexplained. Why ε-greedy, acting randomly with probability ε, instead of always taking the best known action?</p>
+  <p>Because a pure greedy learner locks in the first thing that ever worked. Suppose the robot's first lucky episode reached the diamond by a long detour around the bottom. Those cells now hold small positive values while the shorter top route still holds zeros. Greedy forever prefers something over nothing: it will repeat the detour every episode, polish its values, and never once try the corridor that is actually faster. The values it has are self-confirming.</p>
+  <div class="mb">
+    <div class="math-d">a = \begin{cases}\arg\max_a Q(s,a) & \text{with probability } 1-\varepsilon\\ \text{random action} & \text{with probability } \varepsilon\end{cases}</div>
+    <div class="mb-label">Typical: start ε near 1 (explore everything), decay toward 0.05 as the table fills with truth.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Greedy Trap, and the Ten Percent That Saves You</div>
+    <canvas id="c-q7" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">Left: greedy locks onto the first discovered route (value 0.53 via the long way) and the better corridor stays at zero forever, unvisited and therefore unlearned. Right: with ε = 0.1, one in ten steps is random; eventually a random step pokes into the corridor, its true higher value (0.81) gets written into the table, and greedy gladly switches. Exploration is the tax you pay so the argmax has honest numbers to choose from.</div>
+  </div>
+  <div class="co o"><div class="co-title">You have fought this exact battle</div>
+    <p>This is entropy collapse wearing different clothes. DAPO's clip-higher exists because GRPO's symmetric clip suppressed rare-but-valid actions until the policy could never sample them again. Same disease: the learner stops visiting, so it stops learning, so it stops visiting. ε-greedy is the tabular world's clip-higher.</p>
+  </div>
+</section>
+
+<!-- ════════ S8: OFF-POLICY ════════ -->
+<section id="s8">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">08</span><h2>The Max Is a Superpower: Off-Policy Learning</h2></div>
+  <p>Look once more at the target: <span class="ic">r + γ max Q(s′, a′)</span>. The robot behaves ε-greedy, sometimes stepping randomly. But the target does not ask "what will I actually do next?" It asks "what would the <strong>best</strong> action be worth?" Q-learning evaluates the greedy policy while following a different, messier one. Learning about one policy from data generated by another is called <strong>off-policy</strong>, and it is the property that defines Q-learning.</p>
+  <p>The on-policy sibling is SARSA. It swaps the max for the action a′ the agent really takes next, ε-wobbles included:</p>
+  <div class="mb">
+    <div class="math-d">\text{SARSA: } Q \mathrel{+}= \alpha[\,r + \gamma\, Q(s',a'_{\text{actually taken}}) - Q\,] \qquad \text{Q-learning: } Q \mathrel{+}= \alpha[\,r + \gamma \max_{a'} Q(s',a') - Q\,]</div>
+    <div class="mb-label">One symbol of difference, two different personalities.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Cliff: One Symbol, Two Personalities</div>
+    <canvas id="c-q8" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Classic cliff world: the bottom edge pays −100. Q-learning, evaluating the perfect future, judges the cliff-hugging route optimal and walks it, even though its ε-wobbles occasionally toss it over the edge during training. SARSA evaluates the policy it actually runs, wobbles included, so cells near the cliff look dangerous to it and it learns the safe higher road. Neither is wrong. They are answering different questions: "what is the best route" versus "what is the best route for a robot that trips ten percent of the time".</div>
+  </div>
+  <div class="co p"><div class="co-title">Now PPO's machinery makes sense in reverse</div>
+    <p>You know why PPO needs importance ratios, clipping, and fresh rollouts every iteration: policy gradients are on-policy, data from an old π is only usable through the ratio correction, and only barely. Q-learning has no such constraint. Any transition (s, a, r, s′), however old, from however bad a policy, is a valid training example, because the target recomputes the max under the <em>current</em> table. This is what makes experience replay possible in the next section, and it is the sample-efficiency superpower the policy branch gave up.</p>
+  </div>
+</section>
+
+<!-- ════════ S9: DQN ════════ -->
+<section id="s9">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(234,67,53,.12);color:var(--red2)">09</span><h2>When the Table Dies: DQN</h2></div>
+  <p>Our grid has 11 states. Chess has more states than atoms in the universe, and an Atari screen is one of 256 to the power 33,600 images. No table fits. The 2013 answer, DQN, is the move you already know from everywhere else in deep learning: <strong>replace the lookup with a neural network</strong> Q(s, a; θ) that maps a state to all action values at once, and train it by regression onto the Bellman target.</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}(\theta) = \Big(\,r + \gamma \max_{a'} Q(s', a';\, \theta^{-}) \;-\; Q(s,a;\,\theta)\,\Big)^2</div>
+    <div class="mb-label">Same error as §5, now a loss. θ⁻ is a frozen copy of the network, explained below.</div>
+  </div>
+  <p>But the naive version diverges, because three things are now true at once: function approximation (one weight update moves <em>many</em> states), bootstrapping (targets built from the moving network), and correlated data (consecutive frames look alike). The deadly triad. DQN survives with two stabilizers:</p>
+  <p><strong>Experience replay.</strong> Store transitions (s, a, r, s′) in a big buffer; train on random minibatches from it. Breaks the correlation, reuses every sample many times, and it is only legal because §8 made Q-learning off-policy: stale data is valid data.</p>
+  <p><strong>Target network θ⁻.</strong> Build targets from a frozen copy of the network, refreshed every few thousand steps. The regression chases a fixed bullseye instead of its own tail. You know this trick by another name: it is the same instinct as π_old in PPO, freeze a reference so the moving thing has something stable to be measured against.</p>
+  <div class="fig">
+    <div class="fig-title">Table to Network, and the Two Bolts That Keep It From Shaking Apart</div>
+    <canvas id="c-q9" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">Left: the table approach crossed out at scale. Middle: one network maps the state to all four Q values in a single forward pass. Right: the two stabilizers. The replay buffer shuffles history into uncorrelated minibatches; the target network is a frozen twin providing still targets. Successors refined it: Double DQN decouples action selection from evaluation to fix max-driven overestimation, Dueling DQN splits the network into V(s) plus advantages A(s,a), the same V and A decomposition you know from GAE.</div>
+  </div>
+</section>
+
+<!-- ════════ S10: YOUR WORLD ════════ -->
+<section id="s10">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">10</span><h2>Connecting Back to Your World</h2></div>
+  <p>You now own both branches. Here is the full map in one table, with the LLM column you live in:</p>
+  <table class="cmp">
+    <thead><tr><th></th><th>Value branch (Q-learning)</th><th>Policy branch (PPO, GRPO)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>What is learned</strong></td><td>Q(s,a), policy is argmax for free</td><td>π directly, values are assistants or absent</td></tr>
+      <tr><td><strong>Data regime</strong></td><td>off-policy, replay buffers, stale data fine</td><td>on-policy, fresh rollouts, ratio + clip to stretch them</td></tr>
+      <tr><td><strong>Exploration</strong></td><td>ε-greedy on top of argmax</td><td>sampling from π, entropy kept alive (clip-higher)</td></tr>
+      <tr><td><strong>Action spaces</strong></td><td>needs a cheap max over actions</td><td>anything you can sample and score</td></tr>
+      <tr><td><strong>Stability story</strong></td><td>deadly triad, target networks</td><td>destructive updates, clipping, KL anchors</td></tr>
+      <tr><td><strong>Convergence</strong></td><td>provable for tables</td><td>local, no guarantees, works anyway</td></tr>
+    </tbody>
+  </table>
+  <p>And why your LLM world runs on the policy branch: a token step has a vocabulary of 100k+ actions, so the max in the target is computable but the greedy argmax policy it implies is brittle over 1000-token horizons, and bootstrapped values are hard to learn from sparse end-of-sequence rewards. Sampling from a softmax policy and nudging it, the PPO way, fits the shape of language generation better.</p>
+  <p>But the value branch did not disappear from your world. It went undercover:</p>
+  <p><strong>PPO's critic</strong> is trained by exactly the TD regression of §5, minus the max. <strong>GAE's δ</strong> is the TD error. <strong>Offline RL for LLMs</strong> (ILQL and friends) learns token-level Q values from logged data, pure off-policy, pure §8. <strong>Value-guided decoding and process reward models</strong> score partial sequences to steer search, which is Q(s, a) by another name: how promising is this continuation. When you read those papers now, you will recognize every moving part.</p>
+  <div class="co g"><div class="co-title">The one-sentence summary</div>
+    <p>Q-learning maintains a table of "what is each action worth", improves it by nudging each entry toward one step of reality plus γ times its own best neighbor, explores with ε so the argmax has honest numbers, learns off-policy thanks to the max, and scales past tables as DQN. The policy you know from PPO is replaced by a single greedy read of the table.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+
+/* ── helpers ── */
+function gctx(id){const cv=document.getElementById('c-'+id);return cv?cv.getContext('2d'):null;}
+function lbl(ctx,s,x,y,col,sz,w,al){ctx.font=`${w||500} ${sz||10}px "Plus Jakarta Sans",sans-serif`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function mlbl(ctx,s,x,y,col,sz,al){ctx.font=`500 ${sz||9}px "JetBrains Mono",monospace`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function pill(ctx,x,y,w,h,r,fill,stroke,lw){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+const STATIC={};
+(function(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){
+      const id=e.target.id.replace('c-','');
+      if(STATIC[id]){STATIC[id]();obs.unobserve(e.target);}
+    }
+  }),{threshold:0.05});
+  window.addEventListener('DOMContentLoaded',()=>{
+    Object.keys(STATIC).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+  });
+})();
+
+/* the grid world: col 1..4 (left to right), row 1..3 (bottom to top) */
+const VMAP={'1,1':0.656,'2,1':0.729,'3,1':0.81,'4,1':0.729,'1,2':0.729,'3,2':0.9,'1,3':0.81,'2,3':0.9,'3,3':1.0};
+const POLICY={'1,1':'N','1,2':'N','1,3':'E','2,3':'E','3,3':'E','2,1':'E','3,1':'N','3,2':'N','4,1':'W'};
+function vheat(v){ // 0..1 → dark slate to bright green
+  if(v===undefined)return 'rgba(52,70,100,.5)';
+  const t=Math.max(0,Math.min(1,v));
+  return `rgb(${36+t*70|0},${90+t*120|0},${70+t*60|0})`;
+}
+function drawArrowGlyph(ctx,cx,cy,dir,col,len){
+  const L=len||14;
+  const d={N:[0,-L],S:[0,L],E:[L,0],W:[-L,0]}[dir];
+  arrow(ctx,cx-d[0]*0.6,cy-d[1]*0.6,cx+d[0],cy+d[1],col,2);
+}
+// draws the 4x3 world; opts: {values:bool|map, arrows:bool, labels:bool, dim:set of 'c,r' to dim}
+function gridWorld(ctx,x0,y0,cs,opts){
+  opts=opts||{};
+  const vm=opts.values===true?VMAP:(opts.values||null);
+  for(let r=3;r>=1;r--)for(let c2=1;c2<=4;c2++){
+    const key=c2+','+r;
+    const x=x0+(c2-1)*cs, y=y0+(3-r)*cs;
+    if(key==='2,2'){ // wall
+      pill(ctx,x+2,y+2,cs-4,cs-4,4,'rgba(110,125,150,.55)','rgba(160,180,210,.7)',1);
+      mlbl(ctx,'wall',x+cs/2,y+cs/2,'#dde6f2',Math.max(cs/7,8));
+      continue;
+    }
+    if(key==='4,3'){ // goal
+      pill(ctx,x+2,y+2,cs-4,cs-4,4,'rgba(72,186,106,.45)','#a8e6c0',1.6);
+      lbl(ctx,'◆',x+cs/2,y+cs/2-7,'#d2f5dd',Math.max(cs/4,12),800);
+      mlbl(ctx,'+1',x+cs/2,y+cs/2+12,'#d2f5dd',Math.max(cs/7,8.5));
+      continue;
+    }
+    if(key==='4,2'){ // pit
+      pill(ctx,x+2,y+2,cs-4,cs-4,4,'rgba(234,67,53,.4)','#f28b82',1.6);
+      lbl(ctx,'pit',x+cs/2,y+cs/2-7,'#ffd2cd',Math.max(cs/6.4,9),700);
+      mlbl(ctx,'−1',x+cs/2,y+cs/2+10,'#ffd2cd',Math.max(cs/7,8.5));
+      continue;
+    }
+    const v=vm?vm[key]:undefined;
+    pill(ctx,x+2,y+2,cs-4,cs-4,4,vm?vheat(v):'rgba(52,70,100,.35)','rgba(150,180,220,.55)',1);
+    if(vm&&v!==undefined&&opts.labels!==false)mlbl(ctx,v.toFixed(2),x+cs/2,y+cs/2+(opts.arrows?12:0),'#eaf6ff',Math.max(cs/6.6,8.5));
+    if(opts.arrows&&POLICY[key])drawArrowGlyph(ctx,x+cs/2,y+cs/2-(cs>56?8:5),POLICY[key],'#fdf3c9',cs/5.2);
+    if(key==='1,1'&&opts.start!==false){mlbl(ctx,'start',x+cs/2,y+cs-10,'#a8caff',Math.max(cs/8,7.5));}
+  }
+  pill(ctx,x0,y0,4*cs,3*cs,6,null,'rgba(150,180,220,.55)',1.4);
+}
+
+/* ── Q1: the RL map ── */
+STATIC.q1=function(){
+  const ctx=gctx('q1');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  pill(ctx,370,24,140,40,9,'rgba(52,70,100,.4)','rgba(150,180,220,.6)',1.4);
+  lbl(ctx,'Reinforcement',440,38,'#e0e8f4',11,700); lbl(ctx,'Learning',440,52,'#e0e8f4',11,700);
+  arrow(ctx,392,66,250,102,'#a8caff',1.6);
+  arrow(ctx,488,66,630,102,'#a8e6c0',1.6);
+  // policy branch
+  pill(ctx,80,108,340,150,12,'rgba(88,148,250,.07)','#a8caff',1.6);
+  lbl(ctx,'POLICY BRANCH',250,128,'#a8caff',11,800);
+  mlbl(ctx,'learn π directly, nudge it with gradients',250,146,'#9fbcd8',8.5);
+  const chainP=['REINFORCE','PPO','GRPO / DAPO'];
+  chainP.forEach((nm,i)=>{
+    pill(ctx,108+i*102,168,94,30,7,'rgba(88,148,250,.18)','#a8caff',1.2);
+    mlbl(ctx,nm,155+i*102,183,'#d8e8ff',8);
+    if(i<2)arrow(ctx,202+i*102,183,208+i*102,183,'#a8caff',1.2);
+  });
+  pill(ctx,168,216,164,26,13,'rgba(252,198,40,.18)','#ffe282',1.4);
+  mlbl(ctx,'★ you started here',250,229,'#ffe282',8.5);
+  // value branch
+  pill(ctx,460,108,340,150,12,'rgba(72,186,106,.06)','#a8e6c0',1.6);
+  lbl(ctx,'VALUE BRANCH',630,128,'#a8e6c0',11,800);
+  mlbl(ctx,'learn what actions are worth, argmax for free',630,146,'#9fd4b3',8.5);
+  const chainV=['Q-learning','DQN','Rainbow…'];
+  chainV.forEach((nm,i)=>{
+    pill(ctx,488+i*102,168,94,30,7,'rgba(72,186,106,.16)','#a8e6c0',1.2);
+    mlbl(ctx,nm,535+i*102,183,'#d2f5dd',8);
+    if(i<2)arrow(ctx,582+i*102,183,588+i*102,183,'#a8e6c0',1.2);
+  });
+  pill(ctx,548,216,164,26,13,'rgba(36,193,224,.14)','#9fdcef',1.4);
+  mlbl(ctx,'this blog',630,229,'#9fdcef',8.5);
+  // actor-critic bridge
+  pill(ctx,352,278,176,28,14,'rgba(176,94,250,.14)','#d6a8ff',1.4);
+  mlbl(ctx,'actor-critic: uses both',440,292,'#d6a8ff',8.5);
+  arrow(ctx,300,258,372,280,'#d6a8ff',1.1);
+  arrow(ctx,580,258,508,280,'#d6a8ff',1.1);
+};
+
+/* ── Q2: the playground ── */
+STATIC.q2=function(){
+  const ctx=gctx('q2');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  gridWorld(ctx,160,40,62,{values:null});
+  mlbl(ctx,'4 columns × 3 rows',284,28,'#aac6e2',8.5);
+  // compass
+  const cx=560,cy=110;
+  lbl(ctx,'actions',cx,cy-46,'#c8e0f2',9.5,700);
+  ['N','S','E','W'].forEach(d=>{
+    drawArrowGlyph(ctx,cx,cy,d,'#ffbe6e',22);
+  });
+  mlbl(ctx,'N',cx,cy-36,'#ffbe6e',9); mlbl(ctx,'S',cx,cy+38,'#ffbe6e',9);
+  mlbl(ctx,'E',cx+38,cy,'#ffbe6e',9); mlbl(ctx,'W',cx-38,cy,'#ffbe6e',9);
+  // rules
+  const rules=[['step reward','0','#a8caff'],['reach ◆','+1, episode ends','#a8e6c0'],['fall in pit','−1, episode ends','#f28b82'],['bump wall / border','stay in place','#dde6f2'],['discount γ','0.9 per step','#ffe282']];
+  rules.forEach((r,i)=>{
+    const y=176+i*28;
+    pill(ctx,500,y,150,22,5,r[2]+'22',r[2],1);
+    mlbl(ctx,r[0],575,y+11,r[2],8.5);
+    mlbl(ctx,r[1],662,y+11,'#c8e0f2',8.5,'left');
+  });
+  mlbl(ctx,'best route: 5 steps, worth 0.9⁴ = 0.656 from the start',330,266,'#aac6e2',9);
+};
+
+/* ── Q3: V vs Q ── */
+STATIC.q3=function(){
+  const ctx=gctx('q3');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  // left: V view
+  lbl(ctx,'V sees the cell',210,36,'#a8caff',11,700);
+  const lx=140,ly=70,cs=140;
+  pill(ctx,lx,ly,cs,cs,8,vheat(0.9),'#a8caff',1.8);
+  lbl(ctx,'V = 0.90',lx+cs/2,ly+cs/2,'#fff',16,800);
+  mlbl(ctx,'\u201cgood spot\u201d and nothing more',lx+cs/2,ly+cs+18,'#9fbcd8',8.5);
+  // divider
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(400,30);ctx.lineTo(400,H-16);ctx.stroke();ctx.setLineDash([]);
+  // right: Q view of cell (3,2)
+  lbl(ctx,'Q sees the four doors',640,36,'#a8e6c0',11,700);
+  const rx=560,ry=70;
+  pill(ctx,rx,ry,cs,cs,8,'rgba(52,70,100,.4)','#a8e6c0',1.8);
+  // wedges with values
+  const qs=[['N',0.90,'#a8e6c0',rx+cs/2,ry+24,true],['S',0.73,'#9fbcd8',rx+cs/2,ry+cs-24,false],['E',-1.0,'#f28b82',rx+cs-30,ry+cs/2,false],['W',0.81,'#9fbcd8',rx+30,ry+cs/2,false]];
+  qs.forEach(q=>{
+    drawArrowGlyph(ctx,q[3],q[4],q[0],q[2],13);
+    const off={N:[0,22],S:[0,-22],E:[-2,18],W:[2,18]}[q[0]];
+    mlbl(ctx,q[1].toFixed(2),q[3]+off[0],q[4]+off[1],q[2],9);
+  });
+  // argmax halo on N
+  pill(ctx,rx+cs/2-30,ry+4,60,42,8,null,'#ffe282',1.8);
+  mlbl(ctx,'argmax',rx+cs/2,ry-12,'#ffe282',8.5);
+  // context: pit to the east
+  pill(ctx,rx+cs+18,ry+cs/2-26,52,52,6,'rgba(234,67,53,.35)','#f28b82',1.4);
+  mlbl(ctx,'pit',rx+cs+44,ry+cs/2,'#ffd2cd',9);
+  mlbl(ctx,'East literally walks into the pit: Q knows, V cannot say',640,ry+cs+18,'#9fd4b3',8.5);
+};
+
+/* ── Q4: Bellman lookahead ── */
+STATIC.q4=function(){
+  const ctx=gctx('q4');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  // source cell
+  pill(ctx,90,100,120,120,8,'rgba(52,70,100,.4)','#d6a8ff',1.8);
+  lbl(ctx,'(3,2)',150,148,'#d6a8ff',12,700);
+  mlbl(ctx,'Q(s, N) = ?',150,172,'#e8d8ff',9.5);
+  // action arrow with reward chip
+  arrow(ctx,216,160,330,160,'#ffbe6e',2.4);
+  pill(ctx,244,132,66,22,11,'rgba(255,190,110,.16)','#ffbe6e',1.2);
+  mlbl(ctx,'r = 0',277,143,'#ffbe6e',9);
+  mlbl(ctx,'move N',277,176,'#ffbe6e',8.5);
+  // landing cell with its four Q values
+  pill(ctx,336,80,170,160,8,vheat(0.78),'#a8e6c0',1.8);
+  lbl(ctx,'landing: (3,3)',421,100,'#eafff2',10.5,700);
+  const qq=[['E → ◆',1.00,true],['W',0.81,false],['S',0.81,false],['N (border)',0.90,false]];
+  qq.forEach((q,i)=>{
+    const y=120+i*26;
+    pill(ctx,352,y,138,21,5,q[2]?'rgba(252,198,40,.25)':'rgba(10,20,16,.25)',q[2]?'#ffe282':'rgba(220,240,230,.4)',q[2]?1.6:.8);
+    mlbl(ctx,q[0],386,y+10,q[2]?'#ffe282':'#d8efe2',8);
+    mlbl(ctx,q[1].toFixed(2),466,y+10,q[2]?'#ffe282':'#d8efe2',8.5);
+  });
+  mlbl(ctx,'max = 1.00',421,252,'#ffe282',9.5);
+  // composition
+  arrow(ctx,512,160,560,160,'#9fdcef',1.8);
+  pill(ctx,566,120,250,84,10,'rgba(36,193,224,.07)','#9fdcef',1.6);
+  mlbl(ctx,'target = r + γ · max',691,142,'#9fdcef',9.5);
+  mlbl(ctx,'= 0 + 0.9 × 1.00',691,162,'#c8eef8',10);
+  lbl(ctx,'= 0.90 ✓',691,184,'#9fdcef',13,800);
+  mlbl(ctx,'one step of lookahead reproduces the true value: the table is a self-consistent web anchored at ◆ and the pit',440,300,'#aac6e2',9);
+};
+
+/* ── Q5: update anatomy ── */
+STATIC.q5=function(){
+  const ctx=gctx('q5');if(!ctx)return;const W=880,H=300;ctx.clearRect(0,0,W,H);
+  // number line update 1
+  lbl(ctx,'visit 1 at ((3,3), E):  prediction 0, target 1.0, α = 0.5',300,34,'#c8e0f2',10,700);
+  const nx=120,ny=80,nw=560;
+  pill(ctx,nx,ny,nw,8,4,'rgba(52,70,100,.5)','rgba(150,180,220,.4)',.8);
+  // markers
+  function mark(v,lblTxt,col,below){
+    const x=nx+v*nw;
+    ctx.fillStyle=col;ctx.beginPath();ctx.arc(x,ny+4,5,0,7);ctx.fill();
+    mlbl(ctx,lblTxt,x,ny+(below?24:-14),col,9);
+  }
+  mark(0,'Q = 0 (prediction)','#f28b82',true);
+  mark(1,'target = 1.0','#a8e6c0',true);
+  mark(0.5,'new Q = 0.5','#ffe282',false);
+  arrow(ctx,nx+8,ny-26,nx+nw*0.5-10,ny-26,'#ffe282',2);
+  mlbl(ctx,'α × error = 0.5 × 1.0: jump halfway',nx+nw*0.25,ny-40,'#ffe282',8.5);
+  // chips
+  const chips=[['error = 1.0 − 0 = 1.0','#9fdcef'],['next visits: 0.75, 0.875, 0.94 → 1.0','#a8e6c0']];
+  chips.forEach((c2,i)=>{
+    pill(ctx,700,56+i*34,160,26,6,c2[1]+'14',c2[1],1.1);
+    mlbl(ctx,c2[0],780,69+i*34,c2[1],7.6);
+  });
+  // second-order update
+  lbl(ctx,'the interesting visit at ((3,2), N):  target built from the fresh 0.5',330,160,'#c8e0f2',10,700);
+  pill(ctx,120,184,200,54,8,'rgba(176,94,250,.1)','#d6a8ff',1.4);
+  mlbl(ctx,'target = 0 + 0.9 × 0.5',220,202,'#d6a8ff',9);
+  mlbl(ctx,'= 0.45',220,222,'#e8d8ff',10);
+  arrow(ctx,326,211,374,211,'#9fdcef',1.6);
+  pill(ctx,380,184,230,54,8,'rgba(36,193,224,.08)','#9fdcef',1.4);
+  mlbl(ctx,'Q((3,2),N) ← 0 + 0.5 × 0.45',495,202,'#9fdcef',8.5);
+  mlbl(ctx,'= 0.225',495,222,'#c8eef8',10);
+  pill(ctx,640,184,220,54,8,'rgba(72,186,106,.08)','#a8e6c0',1.4);
+  mlbl(ctx,'the diamond\u2019s value seeped',750,202,'#a8e6c0',8.2);
+  mlbl(ctx,'one cell backward',750,222,'#a8e6c0',8.2);
+  mlbl(ctx,'reward enters at the terminals; the bootstrap carries it outward, one handshake per visit',440,276,'#aac6e2',9);
+};
+
+/* ── Q6: watch it learn ── */
+STATIC.q6=function(){
+  const ctx=gctx('q6');if(!ctx)return;const W=880,H=380;ctx.clearRect(0,0,W,H);
+  const EP1={'3,3':0.5};
+  const EP50={'3,3':0.94,'2,3':0.66,'3,2':0.61,'1,3':0.38,'3,1':0.31,'2,1':0.12,'1,2':0.22,'1,1':0.07,'4,1':0.04};
+  const snaps=[[EP1,'after episode 1','one lucky step lit one cell',false],
+               [EP50,'after episode 50','the glow spreads backward',false],
+               [VMAP,'after episode 500','converged: 0.9 to the power of distance',true]];
+  snaps.forEach((sn,k)=>{
+    const x0=42+k*292, cs=62;
+    gridWorld(ctx,x0,60,cs,{values:sn[0],arrows:sn[3],start:false});
+    lbl(ctx,sn[1],x0+2*cs,42,'#c8e0f2',10.5,700);
+    mlbl(ctx,sn[2],x0+2*cs,60+3*cs+16,'#aac6e2',8);
+  });
+  mlbl(ctx,'brightness = value of the best action in that cell · arrows in the last panel = the greedy policy, never taught, condensed out of the values',440,H-18,'#aac6e2',8.5);
+};
+
+/* ── Q7: the greedy trap ── */
+STATIC.q7=function(){
+  const ctx=gctx('q7');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  function maze(x0,nm,nmCol,corridorVals,trapLit){
+    lbl(ctx,nm,x0+150,36,nmCol,10.5,700);
+    // simple 5x2 schematic: bottom = long discovered route, top = direct corridor
+    const cs=58;
+    // top corridor cells
+    for(let i=0;i<5;i++){
+      const v=corridorVals[i];
+      pill(ctx,x0+i*cs,60,cs-4,cs-4,5,v===null?'rgba(52,70,100,.4)':vheat(v),v===null?'rgba(150,180,220,.5)':'#a8e6c0',1.1);
+      mlbl(ctx,v===null?'0':v.toFixed(2),x0+i*cs+cs/2-2,60+cs/2-2,v===null?'#9fbcd8':'#eafff2',8.5);
+    }
+    mlbl(ctx,'direct corridor (true value 0.81)',x0+150,60+cs+10,'#9fd4b3',8);
+    // bottom route cells (always lit weakly)
+    for(let i=0;i<5;i++){
+      const v=trapLit[i];
+      pill(ctx,x0+i*cs,170,cs-4,cs-4,5,vheat(v),'#ffbe6e',1.1);
+      mlbl(ctx,v.toFixed(2),x0+i*cs+cs/2-2,170+cs/2-2,'#fff4df',8.5);
+    }
+    mlbl(ctx,'first lucky detour (true value 0.53)',x0+150,170+cs+10,'#ffbe6e',8);
+    return x0;
+  }
+  // left: greedy
+  maze(64,'pure greedy: locked in','#f28b82',[null,null,null,null,null],[0.31,0.38,0.42,0.47,0.53]);
+  arrow(ctx,64+10,258,64+280,258,'#ffbe6e',2);
+  mlbl(ctx,'walks the lit breadcrumbs forever; corridor stays 0, unvisited, unlearned ✗',214,286,'#f0b3ac',8.2);
+  // divider
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(440,28);ctx.lineTo(440,H-14);ctx.stroke();ctx.setLineDash([]);
+  // right: epsilon
+  maze(518,'ε = 0.1: one random poke','#a8e6c0',[0.66,0.73,0.81,0.73,0.66],[0.31,0.38,0.42,0.47,0.53]);
+  arrow(ctx,518+10,88,518+280,88,'#a8e6c0',2);
+  mlbl(ctx,'a stray step writes the corridor\u2019s true values; argmax switches routes ✓',668,286,'#9fd4b3',8.2);
+  pill(ctx,518+118,118,70,22,11,'rgba(252,198,40,.18)','#ffe282',1.2);
+  mlbl(ctx,'ε poke ↑',518+153,129,'#ffe282',8);
+};
+
+/* ── Q8: the cliff ── */
+STATIC.q8=function(){
+  const ctx=gctx('q8');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const cols=8,rows=3,cs=64,x0=140,y0=70;
+  for(let r=0;r<rows;r++)for(let c2=0;c2<cols;c2++){
+    const x=x0+c2*cs,y=y0+r*cs;
+    const isCliff=(r===2&&c2>0&&c2<cols-1);
+    const isStart=(r===2&&c2===0), isGoal=(r===2&&c2===cols-1);
+    if(isCliff){
+      pill(ctx,x+2,y+2,cs-4,cs-4,4,'rgba(234,67,53,.35)','#f28b82',1.2);
+      if(c2===4)mlbl(ctx,'cliff −100',x+cs/2,y+cs/2,'#ffd2cd',9);
+      continue;
+    }
+    pill(ctx,x+2,y+2,cs-4,cs-4,4,isStart?'rgba(88,148,250,.25)':isGoal?'rgba(72,186,106,.35)':'rgba(52,70,100,.35)','rgba(150,180,220,.5)',1);
+    if(isStart)mlbl(ctx,'start',x+cs/2,y+cs/2,'#a8caff',9);
+    if(isGoal)mlbl(ctx,'goal',x+cs/2,y+cs/2,'#a8e6c0',9);
+  }
+  pill(ctx,x0,y0,cols*cs,rows*cs,6,null,'rgba(150,180,220,.55)',1.4);
+  // Q-learning path: hug the row above cliff
+  const qy=y0+1.5*cs;
+  ctx.strokeStyle='#d6a8ff';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(x0+0.5*cs,y0+2.5*cs);ctx.lineTo(x0+0.5*cs,qy);ctx.lineTo(x0+7.5*cs,qy);ctx.lineTo(x0+7.5*cs,y0+2.5*cs);ctx.stroke();
+  mlbl(ctx,'Q-learning: shortest, hugs the edge',x0+4*cs,qy-14,'#d6a8ff',9);
+  // slip ghost
+  ctx.setLineDash([4,4]);ctx.strokeStyle='#f28b82';ctx.lineWidth=1.6;
+  ctx.beginPath();ctx.moveTo(x0+3.5*cs,qy);ctx.lineTo(x0+3.5*cs,y0+2.3*cs);ctx.stroke();ctx.setLineDash([]);
+  mlbl(ctx,'ε slip during training',x0+3.5*cs+58,y0+2.22*cs,'#f0b3ac',7.5);
+  // SARSA path: top row
+  const sy=y0+0.5*cs;
+  ctx.strokeStyle='#78d9ec';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(x0+0.5*cs,y0+2.5*cs);ctx.lineTo(x0+0.5*cs,sy);ctx.lineTo(x0+7.5*cs,sy);ctx.lineTo(x0+7.5*cs,y0+2.5*cs);ctx.stroke();
+  mlbl(ctx,'SARSA: longer, safe',x0+4*cs,sy-14,'#78d9ec',9);
+  mlbl(ctx,'max in the target → evaluates the perfect future → edge is fine   |   actual a′ in the target → wobbles priced in → edge looks scary',440,H-20,'#aac6e2',8.3);
+};
+
+/* ── Q9: DQN ── */
+STATIC.q9=function(){
+  const ctx=gctx('q9');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  // left: dead table
+  lbl(ctx,'the table at scale',130,40,'#f0b3ac',10,700);
+  for(let i=0;i<7;i++)for(let j=0;j<4;j++){
+    pill(ctx,60+j*36,60+i*26,32,22,3,'rgba(52,70,100,.4)','rgba(150,180,220,.4)',.7);
+  }
+  mlbl(ctx,'…',130,250,'#9fbcd8',14);
+  mlbl(ctx,'10⁷⁰ rows for chess',130,272,'#f0b3ac',8.5);
+  ctx.strokeStyle='#f28b82';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(52,58);ctx.lineTo(212,248);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(212,58);ctx.lineTo(52,248);ctx.stroke();
+  // middle: network
+  lbl(ctx,'a network instead',420,40,'#9fdcef',10,700);
+  pill(ctx,300,120,76,80,8,'rgba(88,148,250,.16)','#a8caff',1.4);
+  mlbl(ctx,'state s',338,152,'#a8caff',9);
+  mlbl(ctx,'(pixels,',338,168,'#9fbcd8',7.5);
+  mlbl(ctx,'features…)',338,180,'#9fbcd8',7.5);
+  // hidden layers
+  for(let l=0;l<2;l++)for(let n=0;n<5;n++){
+    pill(ctx,398+l*44,108+n*24,30,16,8,'rgba(36,193,224,.2)','#9fdcef',1);
+  }
+  arrow(ctx,380,160,394,160,'#9fdcef',1.2);
+  arrow(ctx,472,160,486,160,'#9fdcef',1.2);
+  // outputs
+  ['Q(s,N)','Q(s,S)','Q(s,E)','Q(s,W)'].forEach((nm,i)=>{
+    pill(ctx,492,98+i*38,86,28,6,'rgba(72,186,106,.16)','#a8e6c0',1.2);
+    mlbl(ctx,nm,535,112+i*38,'#d2f5dd',8.5);
+  });
+  mlbl(ctx,'one forward pass, all actions',440,268,'#9fdcef',8.5);
+  // right: stabilizers
+  lbl(ctx,'two bolts',740,40,'#ffbe6e',10,700);
+  pill(ctx,640,60,200,88,9,'rgba(255,190,110,.07)','#ffbe6e',1.4);
+  mlbl(ctx,'replay buffer',740,76,'#ffbe6e',9);
+  for(let i=0;i<4;i++)pill(ctx,660+i*44,90,38,18,4,'rgba(255,190,110,.2)','#ffbe6e',.9);
+  mlbl(ctx,'(s,a,r,s′) ×1M, sample at random',740,126,'#fff0da',7.6);
+  pill(ctx,640,166,200,88,9,'rgba(176,94,250,.07)','#d6a8ff',1.4);
+  mlbl(ctx,'target network θ⁻',740,182,'#d6a8ff',9);
+  mlbl(ctx,'❄ frozen twin builds targets',740,204,'#e8d8ff',8);
+  mlbl(ctx,'sync every N steps',740,222,'#e8d8ff',8);
+  mlbl(ctx,'(the π_old instinct)',740,240,'#cbb2ee',7.6);
+  mlbl(ctx,'function approx + bootstrapping + correlated data = the deadly triad; these two bolts hold it together',440,H-22,'#aac6e2',8.5);
+};
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

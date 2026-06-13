@@ -1,0 +1,248 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+<defs>
+  <style>
+    text { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+    .panel-title { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; fill: #7e9cbb; }
+    .label { font-size: 8px; fill: #7e9cbb; }
+    .val { font-size: 9px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    .eq-text { font-size: 10px; fill: #c0d8f2; }
+    .eq-key { font-size: 10px; fill: #4285f4; font-weight: 700; }
+    .eq-small { font-size: 8px; fill: #9ab8d4; }
+  </style>
+  <filter id="glow-b" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="glow-g" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2.5" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+
+<!-- Background -->
+<rect width="800" height="450" fill="#07090d"/>
+<rect width="800" height="450" fill="url(#grain)" opacity="0.03"/>
+
+<!-- Panel dividers -->
+<line x1="267" y1="30" x2="267" y2="420" stroke="#1e2a3a" stroke-width="1"/>
+<line x1="534" y1="30" x2="534" y2="420" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- ═══════════════════════════════ PANEL 1: Q-TABLE ═══════════════════════════════ -->
+<text x="133" y="55" class="panel-title" text-anchor="middle">Q-Table</text>
+<line x1="60" y1="62" x2="206" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- Column headers: actions -->
+<text x="95" y="78" class="label" text-anchor="middle">↑</text>
+<text x="120" y="78" class="label" text-anchor="middle">↓</text>
+<text x="145" y="78" class="label" text-anchor="middle">←</text>
+<text x="170" y="78" class="label" text-anchor="middle">→</text>
+
+<!-- Row s0 -->
+<text x="70" y="100" class="label" text-anchor="middle">s0</text>
+<rect x="83" y="86" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="108" y="86" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="133" y="86" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="158" y="86" width="24" height="18" rx="2" fill="#0d1b30" stroke="#4285f4" stroke-width="1.5"/>
+<text x="95" y="99" class="val" text-anchor="middle" fill="#5a7a9a">0.2</text>
+<text x="120" y="99" class="val" text-anchor="middle" fill="#5a7a9a">0.1</text>
+<text x="145" y="99" class="val" text-anchor="middle" fill="#5a7a9a">-0.3</text>
+<text x="170" y="99" class="val" text-anchor="middle" fill="#4285f4" filter="url(#glow-b)">0.8</text>
+
+<!-- Row s1 -->
+<text x="70" y="122" class="label" text-anchor="middle">s1</text>
+<rect x="83" y="108" width="24" height="18" rx="2" fill="#0d1b30" stroke="#34a853" stroke-width="1.5"/>
+<rect x="108" y="108" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="133" y="108" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="158" y="108" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<text x="95" y="121" class="val" text-anchor="middle" fill="#34a853" filter="url(#glow-g)">1.2</text>
+<text x="120" y="121" class="val" text-anchor="middle" fill="#5a7a9a">0.4</text>
+<text x="145" y="121" class="val" text-anchor="middle" fill="#5a7a9a">0.0</text>
+<text x="170" y="121" class="val" text-anchor="middle" fill="#5a7a9a">0.6</text>
+
+<!-- Row s2 -->
+<text x="70" y="144" class="label" text-anchor="middle">s2</text>
+<rect x="83" y="130" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="108" y="130" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="133" y="130" width="24" height="18" rx="2" fill="#0d1b30" stroke="#4285f4" stroke-width="1.5"/>
+<rect x="158" y="130" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<text x="95" y="143" class="val" text-anchor="middle" fill="#5a7a9a">-0.1</text>
+<text x="120" y="143" class="val" text-anchor="middle" fill="#5a7a9a">0.3</text>
+<text x="145" y="143" class="val" text-anchor="middle" fill="#4285f4" filter="url(#glow-b)">0.9</text>
+<text x="170" y="143" class="val" text-anchor="middle" fill="#5a7a9a">0.2</text>
+
+<!-- Row s3 -->
+<text x="70" y="166" class="label" text-anchor="middle">s3</text>
+<rect x="83" y="152" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="108" y="152" width="24" height="18" rx="2" fill="#0d2010" stroke="#34a853" stroke-width="1.5"/>
+<rect x="133" y="152" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<rect x="158" y="152" width="24" height="18" rx="2" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<text x="95" y="165" class="val" text-anchor="middle" fill="#5a7a9a">0.5</text>
+<text x="120" y="165" class="val" text-anchor="middle" fill="#34a853" filter="url(#glow-g)">1.5</text>
+<text x="145" y="165" class="val" text-anchor="middle" fill="#5a7a9a">-0.2</text>
+<text x="170" y="165" class="val" text-anchor="middle" fill="#5a7a9a">0.7</text>
+
+<!-- Legend -->
+<rect x="83" y="195" width="10" height="10" rx="2" fill="#0d1b30" stroke="#4285f4" stroke-width="1.5"/>
+<text x="97" y="204" class="label" fill="#4285f4">max Q per state</text>
+<rect x="83" y="210" width="10" height="10" rx="2" fill="#0d2010" stroke="#34a853" stroke-width="1.5"/>
+<text x="97" y="219" class="label" fill="#34a853">goal state</text>
+
+<!-- Epsilon-greedy annotation -->
+<text x="133" y="255" class="label" text-anchor="middle" fill="#5a7a9a">ε-greedy policy</text>
+<rect x="80" y="263" width="105" height="28" rx="4" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<text x="133" y="274" class="eq-small" text-anchor="middle">random    with prob ε</text>
+<text x="133" y="285" class="eq-small" text-anchor="middle">argmax Q  with prob 1-ε</text>
+
+<!-- Off-policy badge -->
+<rect x="83" y="308" width="100" height="22" rx="11" fill="rgba(66,133,244,0.12)" stroke="#4285f4" stroke-width="1"/>
+<text x="133" y="323" font-size="9" font-weight="700" fill="#4285f4" text-anchor="middle" font-family="JetBrains Mono, monospace" letter-spacing="0.1em">OFF-POLICY</text>
+
+<!-- ═══════════════════════════════ PANEL 2: BELLMAN ═══════════════════════════════ -->
+<text x="400" y="55" class="panel-title" text-anchor="middle">Bellman Update</text>
+<line x1="285" y1="62" x2="518" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- Main equation box -->
+<rect x="292" y="75" width="226" height="46" rx="6" fill="#0f1318" stroke="#2a3a50" stroke-width="1"/>
+<text x="315" y="96" font-size="11" font-weight="700" fill="#4285f4" font-family="JetBrains Mono, monospace">Q(s,a)</text>
+<text x="368" y="96" font-size="11" fill="#9ab8d4" font-family="JetBrains Mono, monospace"> ← </text>
+<text x="393" y="96" font-size="11" fill="#fbbc04" font-family="JetBrains Mono, monospace" filter="url(#glow-b)">r</text>
+<text x="403" y="96" font-size="11" fill="#9ab8d4" font-family="JetBrains Mono, monospace"> + γ·</text>
+<text x="434" y="96" font-size="11" fill="#34a853" font-family="JetBrains Mono, monospace">max</text>
+<text x="460" y="96" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">a'</text>
+<text x="468" y="96" font-size="11" fill="#34a853" font-family="JetBrains Mono, monospace">Q(s',a')</text>
+<text x="315" y="113" font-size="8" fill="#5a7a9a" font-family="JetBrains Mono, monospace">current estimate    target (TD)</text>
+
+<!-- Component breakdown -->
+<text x="400" y="150" class="label" text-anchor="middle" fill="#5a7a9a">components</text>
+
+<!-- r box -->
+<rect x="292" y="160" width="60" height="38" rx="4" fill="rgba(251,188,4,0.08)" stroke="#fbbc04" stroke-width="1"/>
+<text x="322" y="177" font-size="14" font-weight="700" fill="#fbbc04" text-anchor="middle" font-family="JetBrains Mono, monospace" filter="url(#glow-b)">r</text>
+<text x="322" y="191" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">reward</text>
+
+<!-- + -->
+<text x="362" y="183" font-size="14" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">+</text>
+
+<!-- γ box -->
+<rect x="374" y="160" width="44" height="38" rx="4" fill="rgba(161,66,244,0.08)" stroke="#a142f4" stroke-width="1"/>
+<text x="396" y="177" font-size="14" font-weight="700" fill="#a142f4" text-anchor="middle" font-family="JetBrains Mono, monospace">γ</text>
+<text x="396" y="191" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">discount</text>
+
+<!-- · -->
+<text x="428" y="183" font-size="14" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">·</text>
+
+<!-- maxQ box -->
+<rect x="436" y="160" width="78" height="38" rx="4" fill="rgba(52,168,83,0.08)" stroke="#34a853" stroke-width="1"/>
+<text x="475" y="177" font-size="10" font-weight="700" fill="#34a853" text-anchor="middle" font-family="JetBrains Mono, monospace" filter="url(#glow-g)">max Q(s')</text>
+<text x="475" y="191" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">next state val</text>
+
+<!-- TD error annotation -->
+<rect x="292" y="218" width="226" height="30" rx="4" fill="#0f1318" stroke="#1e2a3a" stroke-width="1"/>
+<text x="305" y="231" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">TD error δ = </text>
+<text x="383" y="231" font-size="8" fill="#fbbc04" font-family="JetBrains Mono, monospace">target</text>
+<text x="422" y="231" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace"> - </text>
+<text x="437" y="231" font-size="8" fill="#4285f4" font-family="JetBrains Mono, monospace">Q(s,a)</text>
+<text x="400" y="243" font-size="8" fill="#5a7a9a" font-family="JetBrains Mono, monospace" text-anchor="middle">Q ← Q + α · δ</text>
+
+<!-- Convergence note -->
+<rect x="292" y="265" width="226" height="22" rx="4" fill="rgba(52,168,83,0.06)" stroke="#34a853" stroke-width="1"/>
+<text x="405" y="280" font-size="8" fill="#34a853" text-anchor="middle" font-family="JetBrains Mono, monospace" letter-spacing="0.04em">converges to Q* for any policy</text>
+
+<!-- Key insight -->
+<text x="400" y="320" class="label" text-anchor="middle" fill="#5a7a9a">key: the max makes it</text>
+<text x="400" y="333" class="label" text-anchor="middle" fill="#5a7a9a">off-policy by nature</text>
+
+<!-- ═══════════════════════════════ PANEL 3: DQN ═══════════════════════════════ -->
+<text x="667" y="55" class="panel-title" text-anchor="middle">DQN</text>
+<line x1="550" y1="62" x2="784" y2="62" stroke="#1e2a3a" stroke-width="1"/>
+
+<!-- State input -->
+<rect x="558" y="80" width="52" height="60" rx="4" fill="#0f1318" stroke="#2a3a50" stroke-width="1"/>
+<text x="584" y="107" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">state</text>
+<text x="584" y="120" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">pixels</text>
+<text x="584" y="133" font-size="8" fill="#9ab8d4" text-anchor="middle" font-family="JetBrains Mono, monospace">or obs</text>
+
+<!-- Arrow -->
+<line x1="610" y1="110" x2="625" y2="110" stroke="#2a3a50" stroke-width="1.5"/>
+<polygon points="625,107 630,110 625,113" fill="#2a3a50"/>
+
+<!-- Hidden layer 1 -->
+<rect x="630" y="75" width="28" height="70" rx="4" fill="#0f1318" stroke="#4285f4" stroke-width="1"/>
+<!-- Neurons -->
+<circle cx="644" cy="88" r="4" fill="#4285f4" opacity="0.6"/>
+<circle cx="644" cy="100" r="4" fill="#4285f4" opacity="0.8"/>
+<circle cx="644" cy="112" r="4" fill="#4285f4" opacity="0.9" filter="url(#glow-b)"/>
+<circle cx="644" cy="124" r="4" fill="#4285f4" opacity="0.7"/>
+<circle cx="644" cy="136" r="4" fill="#4285f4" opacity="0.5"/>
+
+<!-- Arrow -->
+<line x1="658" y1="110" x2="673" y2="110" stroke="#2a3a50" stroke-width="1.5"/>
+<polygon points="673,107 678,110 673,113" fill="#2a3a50"/>
+
+<!-- Hidden layer 2 -->
+<rect x="678" y="80" width="28" height="60" rx="4" fill="#0f1318" stroke="#a142f4" stroke-width="1"/>
+<circle cx="692" cy="95" r="4" fill="#a142f4" opacity="0.7"/>
+<circle cx="692" cy="110" r="4" fill="#a142f4" opacity="0.9" filter="url(#glow-b)"/>
+<circle cx="692" cy="125" r="4" fill="#a142f4" opacity="0.6"/>
+
+<!-- Arrow -->
+<line x1="706" y1="110" x2="721" y2="110" stroke="#2a3a50" stroke-width="1.5"/>
+<polygon points="721,107 726,110 721,113" fill="#2a3a50"/>
+
+<!-- Output Q-values -->
+<text x="755" y="88" font-size="8" fill="#34a853" font-family="JetBrains Mono, monospace" text-anchor="middle">Q(s,↑)</text>
+<text x="755" y="103" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace" text-anchor="middle">Q(s,↓)</text>
+<text x="755" y="118" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace" text-anchor="middle">Q(s,←)</text>
+<text x="755" y="133" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace" text-anchor="middle">Q(s,→)</text>
+
+<!-- Lines from layer 2 to outputs -->
+<line x1="726" y1="95" x2="730" y2="84" stroke="#34a853" stroke-width="1" opacity="0.7"/>
+<line x1="726" y1="110" x2="730" y2="99" stroke="#5a7a9a" stroke-width="1" opacity="0.5"/>
+<line x1="726" y1="125" x2="730" y2="114" stroke="#5a7a9a" stroke-width="1" opacity="0.5"/>
+<line x1="726" y1="110" x2="730" y2="129" stroke="#5a7a9a" stroke-width="1" opacity="0.5"/>
+
+<!-- Labels -->
+<text x="644" y="157" font-size="7" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">CNN or MLP</text>
+<text x="692" y="152" font-size="7" fill="#5a7a9a" text-anchor="middle" font-family="JetBrains Mono, monospace">hidden</text>
+
+<!-- Two tricks box -->
+<text x="667" y="185" class="label" text-anchor="middle" fill="#5a7a9a">two tricks that made it work</text>
+
+<rect x="553" y="194" width="115" height="48" rx="4" fill="rgba(66,133,244,0.07)" stroke="#4285f4" stroke-width="1"/>
+<text x="563" y="210" font-size="9" font-weight="700" fill="#4285f4" font-family="JetBrains Mono, monospace">Experience Replay</text>
+<text x="563" y="223" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">store (s,a,r,s') in</text>
+<text x="563" y="234" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">buffer, sample randomly</text>
+
+<rect x="678" y="194" width="108" height="48" rx="4" fill="rgba(161,66,244,0.07)" stroke="#a142f4" stroke-width="1"/>
+<text x="688" y="210" font-size="9" font-weight="700" fill="#a142f4" font-family="JetBrains Mono, monospace">Target Network</text>
+<text x="688" y="223" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">freeze weights for</text>
+<text x="688" y="234" font-size="8" fill="#9ab8d4" font-family="JetBrains Mono, monospace">N steps, then copy</text>
+
+<!-- Deadly triad warning -->
+<rect x="553" y="258" width="233" height="28" rx="4" fill="rgba(234,67,53,0.06)" stroke="#ea4335" stroke-width="1"/>
+<text x="560" y="271" font-size="8" fill="#f28b82" font-family="JetBrains Mono, monospace">deadly triad: func approx +</text>
+<text x="560" y="282" font-size="8" fill="#f28b82" font-family="JetBrains Mono, monospace">bootstrapping + off-policy = unstable</text>
+
+<!-- Atari score box -->
+<rect x="553" y="300" width="233" height="22" rx="11" fill="rgba(52,168,83,0.1)" stroke="#34a853" stroke-width="1"/>
+<text x="669" y="315" font-size="9" font-weight="700" fill="#34a853" text-anchor="middle" font-family="JetBrains Mono, monospace" letter-spacing="0.08em">SUPERHUMAN ON 49 ATARI GAMES</text>
+
+<!-- Bottom label row -->
+<text x="133" y="385" class="panel-title" text-anchor="middle">value-based rl</text>
+<text x="400" y="385" class="panel-title" text-anchor="middle">bellman optimality</text>
+<text x="667" y="385" class="panel-title" text-anchor="middle">deep q-network</text>
+
+<!-- Bottom rule -->
+<line x1="40" y1="395" x2="760" y2="395" stroke="#1e2a3a" stroke-width="1"/>
+<text x="400" y="415" font-size="8" fill="#3a4a5a" text-anchor="middle" font-family="JetBrains Mono, monospace" letter-spacing="0.12em">AI NOTEBOOK · Q-LEARNING</text>
+
+<!-- Animated glow on max Q values -->
+<circle cx="170" cy="95" r="10" fill="none" stroke="#4285f4" stroke-width="1" opacity="0">
+  <animate attributeName="opacity" values="0;0.5;0" dur="2.4s" repeatCount="indefinite"/>
+  <animate attributeName="r" values="10;14;10" dur="2.4s" repeatCount="indefinite"/>
+</circle>
+<circle cx="95" cy="117" r="10" fill="none" stroke="#34a853" stroke-width="1" opacity="0">
+  <animate attributeName="opacity" values="0;0.5;0" dur="2.4s" begin="0.6s" repeatCount="indefinite"/>
+  <animate attributeName="r" values="10;14;10" dur="2.4s" begin="0.6s" repeatCount="indefinite"/>
+</circle>
+</svg>

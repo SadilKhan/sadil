@@ -1,0 +1,93 @@
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Post-training pipeline — SFT to reward model to RL">
+  <style>
+    .bg { fill: #0a0c10; }
+    .stage { fill: #181c23; stroke: rgba(138, 180, 248, 0.32); stroke-width: 1.4; }
+    .stage-active { stroke: #8ab4f8; filter: drop-shadow(0 0 12px rgba(138, 180, 248, 0.45)); }
+    .arrow { stroke: rgba(138, 180, 248, 0.45); stroke-width: 1.4; fill: none; stroke-linecap: round; }
+    .arrow-head { fill: rgba(138, 180, 248, 0.7); }
+    .pulse { fill: #fbbc04; }
+    .pulse-r { fill: #34a853; }
+    .lbl-stage { font: 800 13px 'Plus Jakarta Sans', sans-serif; fill: #e8eaed; text-anchor: middle; letter-spacing: 0.03em; }
+    .lbl-tag   { font: 600 9.5px 'JetBrains Mono', monospace; fill: rgba(138, 180, 248, 0.7); text-anchor: middle; letter-spacing: 0.10em; text-transform: uppercase; }
+    .title { font: 800 13px 'Plus Jakarta Sans', sans-serif; fill: #e8eaed; letter-spacing: 0.04em; }
+    .sub  { font: 600 10px 'JetBrains Mono', monospace; fill: rgba(138, 180, 248, 0.60); letter-spacing: 0.10em; text-transform: uppercase; }
+
+    @keyframes pt-flow {
+      0%   { offset-distance: 0%;   opacity: 0; }
+      8%   { opacity: 1; }
+      92%  { opacity: 1; }
+      100% { offset-distance: 100%; opacity: 0; }
+    }
+    @keyframes pt-stage-glow {
+      0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+      50%      { filter: drop-shadow(0 0 14px rgba(138, 180, 248, 0.65)); }
+    }
+    .flow-pulse {
+      offset-path: path('M 130 220 H 230 V 200 H 330 V 220 H 430 V 200 H 530');
+      offset-rotate: 0deg;
+      animation: pt-flow 4.5s linear infinite;
+    }
+    .flow-pulse--2 { animation-delay: 1.5s; }
+    .flow-pulse--3 { animation-delay: 3.0s; }
+
+    .feedback {
+      offset-path: path('M 480 218 Q 480 310, 360 310 Q 240 310, 130 220');
+      offset-rotate: 0deg;
+      animation: pt-flow 4.5s linear infinite;
+      animation-delay: 2.2s;
+    }
+
+    .stage-0 { animation: pt-stage-glow 4.5s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+    .stage-1 { animation: pt-stage-glow 4.5s ease-in-out infinite; animation-delay: 1.2s; transform-origin: center; transform-box: fill-box; }
+    .stage-2 { animation: pt-stage-glow 4.5s ease-in-out infinite; animation-delay: 2.4s; transform-origin: center; transform-box: fill-box; }
+    .stage-3 { animation: pt-stage-glow 4.5s ease-in-out infinite; animation-delay: 3.6s; transform-origin: center; transform-box: fill-box; }
+    @media (prefers-reduced-motion: reduce) {
+      .flow-pulse, .feedback, .stage-0, .stage-1, .stage-2, .stage-3 { animation: none; }
+    }
+  </style>
+
+  <rect class="bg" width="600" height="400"/>
+
+  <!-- header -->
+  <text class="sub"   x="40" y="38">post-training · the modern stack</text>
+  <text class="title" x="40" y="58">Base LM → SFT → Reward Model → RLHF</text>
+
+  <!-- pipeline track -->
+  <path class="arrow" d="M 130 220 H 230 V 200 H 330 V 220 H 430 V 200 H 530"/>
+  <polygon class="arrow-head" points="530,193 530,207 540,200"/>
+
+  <!-- feedback loop arrow back from RLHF to Base -->
+  <path class="arrow" d="M 480 218 Q 480 310, 360 310 Q 240 310, 130 220" stroke-dasharray="4 5" />
+  <polygon class="arrow-head" points="130,213 130,227 122,220"/>
+  <text class="lbl-tag" x="300" y="328">reward gradient</text>
+
+  <!-- 4 stages -->
+  <g class="stage-0">
+    <rect class="stage" x="60" y="170" width="100" height="80" rx="12"/>
+    <text class="lbl-stage" x="110" y="205">Base LM</text>
+    <text class="lbl-tag"   x="110" y="225">pre-trained</text>
+  </g>
+  <g class="stage-1">
+    <rect class="stage" x="190" y="150" width="100" height="80" rx="12"/>
+    <text class="lbl-stage" x="240" y="185">SFT</text>
+    <text class="lbl-tag"   x="240" y="205">demos</text>
+  </g>
+  <g class="stage-2">
+    <rect class="stage" x="320" y="170" width="100" height="80" rx="12"/>
+    <text class="lbl-stage" x="370" y="205">Reward</text>
+    <text class="lbl-tag"   x="370" y="225">preferences</text>
+  </g>
+  <g class="stage-3">
+    <rect class="stage stage-active" x="450" y="150" width="100" height="80" rx="12"/>
+    <text class="lbl-stage" x="500" y="185">RLHF</text>
+    <text class="lbl-tag"   x="500" y="205">PPO · DPO</text>
+  </g>
+
+  <!-- data pulses flowing along pipeline -->
+  <circle class="pulse flow-pulse" r="4"/>
+  <circle class="pulse flow-pulse flow-pulse--2" r="4"/>
+  <circle class="pulse flow-pulse flow-pulse--3" r="4"/>
+
+  <!-- reward signal flowing back -->
+  <circle class="pulse-r feedback" r="3.5"/>
+</svg>

@@ -1,187 +1,617 @@
 {{/*
   layouts/blog/list.html
   ──────────────────────────────────────────────────────────────
-  Level 1 — /blog/
-  Shows only series (sub-sections) as cards.
-  Falls back to Apero's standard page shell (head, nav, footer).
+  Hub page — shows sub-sections as cards.
+  Hero banner matches list-series.html style.
   ──────────────────────────────────────────────────────────────
 */}}
 {{ define "main" }}
-<div class="pa4 pt5-l mw8 center">
 
-  {{/* ── Page heading ── */}}
-  <div class="mb5">
-    <h1 class="f2 fw7 tracked-tight lh-title mt0 mb2">
-      {{ .Title }}
-    </h1>
-    {{ with .Description }}
-      <p class="f4 measure lh-copy silver mt0">{{ . }}</p>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,500;1,9..144,700&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  html, body, body.water-theme {
+    background: var(--bs-paper) !important;
+  }
+
+  body, .grid-container, .grid-container.single, .page-main {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+  }
+
+  .grid-container, .grid-container.single { display: block !important; }
+  .page-main { padding: 0 !important; }
+
+  .post-meta, .post-footer, .article-content > dl, .see-also { display: none !important; }
+
+  :root {
+    --bs-paper: #faf7f2;
+    --bs-cream: #f1ebe0;
+    --bs-ink: #1a1311;
+    --bs-ink-soft: #5b4f47;
+    --bs-ink-muted: #8d8076;
+    --bs-rule: rgba(26, 19, 17, 0.10);
+    --bs-rule-strong: rgba(26, 19, 17, 0.22);
+    --bs-accent: #b8421e;
+    --bs-accent-deep: #8c2d12;
+    --bs-card: #ffffff;
+    --bs-hero-ink: #f8f1e8;
+    --bs-overlay-from: rgba(15, 11, 9, 0.86);
+    --bs-overlay-mid: rgba(15, 11, 9, 0.50);
+    --bs-overlay-to: rgba(15, 11, 9, 0.08);
+    --bs-card-shadow: 0 1px 2px rgba(26, 19, 17, 0.05), 0 14px 36px rgba(26, 19, 17, 0.08);
+    --bs-card-shadow-hover: 0 2px 4px rgba(26, 19, 17, 0.07), 0 24px 56px rgba(26, 19, 17, 0.12);
+    --bs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --bs-serif: 'Fraunces', Georgia, serif;
+    --bs-sans: 'DM Sans', system-ui, sans-serif;
+    --bs-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  body.dark-mode {
+    --bs-paper: #100c0a;
+    --bs-cream: #1d1714;
+    --bs-ink: #f3eadf;
+    --bs-ink-soft: #b8ada1;
+    --bs-ink-muted: #7d7167;
+    --bs-rule: rgba(243, 234, 223, 0.12);
+    --bs-rule-strong: rgba(243, 234, 223, 0.24);
+    --bs-accent: #e8855a;
+    --bs-accent-deep: #f0a484;
+    --bs-card: #1a1411;
+    --bs-card-shadow: 0 1px 2px rgba(0,0,0,0.45), 0 14px 36px rgba(0,0,0,0.55);
+    --bs-card-shadow-hover: 0 2px 4px rgba(0,0,0,0.50), 0 24px 56px rgba(0,0,0,0.65);
+  }
+
+  .bs-stage {
+    background: var(--bs-paper);
+    color: var(--bs-ink);
+    font-family: var(--bs-sans);
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    overflow: hidden;
+  }
+
+  /* ───── HERO ───── */
+  .bs-hero {
+    position: relative;
+    min-height: clamp(440px, 78vh, 720px);
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    color: var(--bs-hero-ink);
+  }
+
+  .bs-hero__bg {
+    position: absolute;
+    inset: 0;
+    background: #100c0a;
+    overflow: hidden;
+  }
+
+  .bs-hero__bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.10);
+    filter: saturate(0.92) contrast(0.96);
+    animation: bsZoom 18s var(--bs-ease) forwards;
+  }
+
+  @keyframes bsZoom { to { transform: scale(1.0); } }
+
+  .bs-hero__veil {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 25% 90%, var(--bs-overlay-from) 0%, transparent 62%),
+      linear-gradient(to top, var(--bs-overlay-from) 0%, var(--bs-overlay-mid) 48%, var(--bs-overlay-to) 100%);
+  }
+
+  .bs-hero__grain {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.022) 1px, transparent 0);
+    background-size: 4px 4px;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    opacity: 0.55;
+  }
+
+  .bs-hero__inner {
+    position: relative;
+    z-index: 1;
+    width: min(1200px, 100% - 4rem);
+    margin: 0 auto;
+    padding: 7rem 0 4.4rem;
+  }
+
+  .bs-hero__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    color: rgba(248, 241, 232, 0.60);
+    font-family: var(--bs-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-bottom: 2.6rem;
+    transition: color 220ms var(--bs-ease), gap 220ms var(--bs-ease);
+  }
+
+  .bs-hero__back svg { width: 14px; height: 14px; opacity: 0.75; }
+  .bs-hero__back:hover { color: var(--bs-hero-ink); text-decoration: none; gap: 13px; }
+
+  .bs-hero__kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 1.6rem;
+  }
+
+  .bs-hero__kicker-line {
+    width: 36px;
+    height: 1px;
+    background: var(--bs-accent);
+  }
+
+  .bs-hero__kicker-text {
+    font-family: var(--bs-mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--bs-accent);
+  }
+
+  .bs-hero__title {
+    font-family: var(--bs-serif);
+    font-size: clamp(2.8rem, 7.2vw, 6.2rem);
+    font-weight: 800;
+    font-optical-sizing: auto;
+    line-height: 0.96;
+    letter-spacing: -0.035em;
+    color: #ffffff;
+    margin: 0 0 1.4rem;
+    text-shadow: 0 4px 32px rgba(0,0,0,0.30);
+  }
+
+  .bs-hero__lede {
+    font-family: var(--bs-serif);
+    font-size: clamp(1.05rem, 1.6vw, 1.32rem);
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.55;
+    color: rgba(248, 241, 232, 0.85);
+    max-width: 640px;
+    margin: 0 0 3.2rem;
+  }
+
+  .bs-hero__stats {
+    display: flex;
+    align-items: stretch;
+    border-top: 1px solid rgba(248, 241, 232, 0.18);
+    border-bottom: 1px solid rgba(248, 241, 232, 0.18);
+    padding: 1.1rem 0;
+    max-width: 760px;
+  }
+
+  .bs-stat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 0 1.6rem;
+    border-right: 1px solid rgba(248, 241, 232, 0.13);
+    min-width: 0;
+  }
+
+  .bs-stat:first-child { padding-left: 0; }
+  .bs-stat:last-child { border-right: 0; padding-right: 0; }
+
+  .bs-stat__num {
+    font-family: var(--bs-serif);
+    font-size: 2.1rem;
+    font-weight: 600;
+    line-height: 1;
+    color: #ffffff;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bs-stat__lbl {
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(248, 241, 232, 0.52);
+  }
+
+  .bs-hero__scroll {
+    position: absolute;
+    bottom: 1.4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    z-index: 2;
+    color: rgba(248, 241, 232, 0.45);
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.20em;
+    text-transform: uppercase;
+  }
+
+  .bs-hero__scroll svg {
+    width: 12px;
+    height: 14px;
+    animation: bsBounce 2.4s ease-in-out infinite;
+  }
+
+  @keyframes bsBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.45; }
+    50% { transform: translateY(4px); opacity: 0.80; }
+  }
+
+  /* ───── Card grid ───── */
+  .bs-grid-section {
+    width: min(1200px, 100% - 4rem);
+    margin: 0 auto;
+    padding: 5rem 0 6rem;
+  }
+
+  .bs-grid-section__head {
+    display: flex;
+    align-items: baseline;
+    gap: 1.4rem;
+    margin-bottom: 3rem;
+  }
+
+  .bs-grid-section__tag {
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--bs-accent);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .bs-grid-section__tag::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--bs-accent);
+  }
+
+  .bs-grid-section__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--bs-rule);
+  }
+
+  .series-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .series-card {
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--bs-card);
+    border: 1.5px solid var(--bs-rule);
+    box-shadow: var(--bs-card-shadow);
+    transition: transform 280ms var(--bs-ease), box-shadow 280ms var(--bs-ease), border-color 280ms var(--bs-ease);
+    color: inherit;
+    text-decoration: none;
+    display: block;
+  }
+
+  .series-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--bs-card-shadow-hover);
+    border-color: var(--bs-accent);
+    text-decoration: none;
+  }
+
+  .series-card__thumb {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--bs-cream);
+  }
+
+  .series-card__thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 500ms var(--bs-ease);
+  }
+
+  .series-card:hover .series-card__thumb img {
+    transform: scale(1.05);
+  }
+
+  .series-card__thumb-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    font-size: 3rem;
+    font-weight: 800;
+    color: rgba(255,255,255,0.6);
+    font-family: var(--bs-serif);
+  }
+
+  .series-card__body {
+    padding: 1.3rem 1.5rem 1.5rem;
+  }
+
+  .series-card__title {
+    font-family: var(--bs-serif);
+    font-size: 1.35rem;
+    font-weight: 700;
+    font-optical-sizing: auto;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin: 0 0 0.55rem;
+    color: var(--bs-ink);
+    transition: color 220ms var(--bs-ease);
+  }
+
+  .series-card:hover .series-card__title { color: var(--bs-accent); }
+
+  .series-card__desc {
+    font-family: var(--bs-sans);
+    font-size: 0.88rem;
+    color: var(--bs-ink-soft);
+    line-height: 1.65;
+    margin: 0 0 0.9rem;
+  }
+
+  .series-card__meta {
+    font-family: var(--bs-mono);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bs-ink-muted);
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .series-card__tag {
+    background: var(--bs-cream);
+    color: var(--bs-ink-soft);
+    border-radius: 20px;
+    padding: 2px 9px;
+    font-size: 9px;
+    font-weight: 600;
+  }
+
+  /* ───── Reveal ───── */
+  .bs-reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 720ms var(--bs-ease), transform 720ms var(--bs-ease);
+  }
+
+  .bs-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ───── Responsive ───── */
+  @media (max-width: 980px) {
+    .bs-hero__inner { padding: 5.5rem 0 3.6rem; }
+    .bs-hero__stats { max-width: 100%; flex-wrap: wrap; }
+    .bs-stat { padding: 0 1.1rem; }
+    .bs-stat__num { font-size: 1.65rem; }
+    .bs-grid-section { width: min(100% - 2.5rem, 920px); padding: 4rem 0 5rem; }
+    .series-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  }
+
+  @media (max-width: 620px) {
+    .bs-hero { min-height: 380px; }
+    .bs-hero__inner { padding: 4rem 0 2.6rem; }
+    .bs-hero__title { font-size: 2.6rem; }
+    .bs-hero__lede { font-size: 0.98rem; }
+    .bs-hero__stats { padding: 0.9rem 0; gap: 0; }
+    .bs-stat {
+      flex: 1 1 50%;
+      border-right: 0;
+      padding: 0.5rem 0;
+    }
+    .bs-stat:nth-child(odd) { border-right: 1px solid rgba(248, 241, 232, 0.13); padding-right: 0.9rem; }
+    .bs-stat:nth-child(even) { padding-left: 0.9rem; }
+    .bs-stat__num { font-size: 1.4rem; }
+    .bs-grid-section { width: calc(100% - 1.8rem); padding: 3rem 0 4rem; }
+    .series-grid { grid-template-columns: 1fr; gap: 1.25rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bs-hero__bg img { animation: none; transform: none; }
+    .bs-hero__scroll svg { animation: none; }
+    .bs-reveal { opacity: 1; transform: none; transition: none; }
+  }
+</style>
+
+<div class="bs-stage">
+
+  {{/* ────────── HERO ────────── */}}
+  {{ $bg := "" }}
+  {{ range .Resources.ByType "image" }}
+    {{ if findRE "^featured" .Name }}{{ $bg = .RelPermalink }}{{ end }}
+  {{ end }}
+  {{ if not $bg }}
+    {{ range .Resources.ByType "image" }}
+      {{ if findRE "featured" .Name }}{{ $bg = .RelPermalink }}{{ end }}
     {{ end }}
-  </div>
+  {{ end }}
+  {{ if not $bg }}
+    {{ range .Resources.ByType "image" }}
+      {{ if not $bg }}{{ $bg = .RelPermalink }}{{ end }}
+    {{ end }}
+  {{ end }}
 
-  {{/* ── Series grid ── */}}
-  {{ if .Sections }}
-  <div class="series-grid">
-    {{ range .Sections }}
-    <a href="{{ .RelPermalink }}" class="series-card no-underline db">
-      
-      {{/* Thumbnail — prefer files whose name starts with "featured" (skips sidebar-featured.*) */}}
-      {{ $img := "" }}
-      {{ range .Resources.ByType "image" }}
-        {{ if findRE "^featured" .Name }}{{ $img = . }}{{ end }}
+  <header class="bs-hero">
+    <div class="bs-hero__bg">
+      {{ if $bg }}
+        <img src="{{ $bg }}" alt="" aria-hidden="true" loading="eager"/>
       {{ end }}
-      {{ if not $img }}
-        {{ range .Resources.ByType "image" }}
-          {{ if findRE "featured" .Name }}{{ $img = . }}{{ end }}
-        {{ end }}
-      {{ end }}
-      {{ if not $img }}
-        {{ range .Resources.ByType "image" }}
-          {{ $img = . }}
-        {{ end }}
-      {{ end }}
+    </div>
+    <div class="bs-hero__veil"></div>
+    <div class="bs-hero__grain"></div>
 
-      <div class="series-card__thumb">
-        {{ if $img }}
-          <img src="{{ $img.RelPermalink }}" alt="{{ .Title }}" loading="lazy"/>
-        {{ else }}
-          <div class="series-card__thumb-placeholder">
-            <span>{{ substr .Title 0 1 }}</span>
-          </div>
-        {{ end }}
+    <div class="bs-hero__inner">
+      <a href="/blog/" class="bs-hero__back">
+        <svg viewBox="0 0 16 16" fill="none">
+          <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        All Series
+      </a>
+
+      <div class="bs-hero__kicker">
+        <span class="bs-hero__kicker-line"></span>
+        <span class="bs-hero__kicker-text">The Notebook</span>
       </div>
 
-      <div class="series-card__body">
-        <h2 class="series-card__title">{{ .Title }}</h2>
-        {{ with .Description }}
-          <p class="series-card__desc">{{ . | truncate 100 }}</p>
+      <h1 class="bs-hero__title">{{ .Title }}</h1>
+
+      {{ with .Description }}
+        <p class="bs-hero__lede">{{ . }}</p>
+      {{ end }}
+
+      <div class="bs-hero__stats">
+        {{ $totalPosts := 0 }}
+        {{ range .Sections }}{{ $totalPosts = add $totalPosts (len .RegularPages) }}{{ end }}
+        <div class="bs-stat">
+          <span class="bs-stat__num">{{ len .Sections }}</span>
+          <span class="bs-stat__lbl">{{ if eq (len .Sections) 1 }}Topic{{ else }}Topics{{ end }}</span>
+        </div>
+        <div class="bs-stat">
+          <span class="bs-stat__num">{{ $totalPosts }}</span>
+          <span class="bs-stat__lbl">{{ if eq $totalPosts 1 }}Post{{ else }}Posts{{ end }}</span>
+        </div>
+        {{ $totalRead := 0 }}
+        {{ range .Sections }}{{ range .RegularPages }}{{ $totalRead = add $totalRead (or .Params.read_time .ReadingTime) }}{{ end }}{{ end }}
+        {{ if $totalRead }}
+        <div class="bs-stat">
+          <span class="bs-stat__num">~{{ $totalRead }}m</span>
+          <span class="bs-stat__lbl">Total Read</span>
+        </div>
         {{ end }}
-        <div class="series-card__meta">
-          {{ len .RegularPages }} post{{ if ne (len .RegularPages) 1 }}s{{ end }}
-          {{ with index .Params "categories" }}
-            &nbsp;·&nbsp;
-            {{ range first 2 . }}
-              <span class="series-card__tag">{{ . }}</span>
-            {{ end }}
+      </div>
+    </div>
+
+    <div class="bs-hero__scroll" aria-hidden="true">
+      <span>Explore</span>
+      <svg viewBox="0 0 12 14" fill="none">
+        <path d="M6 1V13M1 8L6 13L11 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </header>
+
+  {{/* ────────── CARD GRID ────────── */}}
+  {{ if .Sections }}
+  <div class="bs-grid-section">
+    <div class="bs-grid-section__head bs-reveal">
+      <span class="bs-grid-section__tag">Topics</span>
+      <span class="bs-grid-section__rule"></span>
+    </div>
+    <div class="series-grid">
+      {{ range $i, $sec := .Sections }}
+      {{ $img := "" }}
+      {{ range $sec.Resources.ByType "image" }}
+        {{ if findRE "^featured" .Name }}{{ $img = .RelPermalink }}{{ end }}
+      {{ end }}
+      {{ if not $img }}
+        {{ range $sec.Resources.ByType "image" }}
+          {{ if findRE "featured" .Name }}{{ $img = .RelPermalink }}{{ end }}
+        {{ end }}
+      {{ end }}
+      {{ if not $img }}
+        {{ range $sec.Resources.ByType "image" }}
+          {{ if not $img }}{{ $img = .RelPermalink }}{{ end }}
+        {{ end }}
+      {{ end }}
+      <a href="{{ $sec.RelPermalink }}" class="series-card bs-reveal" style="transition-delay: {{ mul $i 100 }}ms">
+        <div class="series-card__thumb">
+          {{ if $img }}
+            <img src="{{ $img }}" alt="{{ $sec.Title }}" loading="lazy"/>
+          {{ else }}
+            <div class="series-card__thumb-placeholder">
+              <span>{{ substr $sec.Title 0 1 }}</span>
+            </div>
           {{ end }}
         </div>
-      </div>
-
-    </a>
-    {{ end }}
+        <div class="series-card__body">
+          <h2 class="series-card__title">{{ $sec.Title }}</h2>
+          {{ with $sec.Description }}
+            <p class="series-card__desc">{{ . | truncate 110 }}</p>
+          {{ end }}
+          <div class="series-card__meta">
+            {{ len $sec.RegularPages }} post{{ if ne (len $sec.RegularPages) 1 }}s{{ end }}
+            {{ with index $sec.Params "categories" }}
+              &nbsp;·&nbsp;
+              {{ range first 2 . }}
+                <span class="series-card__tag">{{ . }}</span>
+              {{ end }}
+            {{ end }}
+          </div>
+        </div>
+      </a>
+      {{ end }}
+    </div>
   </div>
-
   {{ else }}
-  {{/* Fallback: no sub-sections found */}}
-  <p class="silver">No series found.</p>
+  <div class="bs-grid-section">
+    <p style="font-family: var(--bs-serif); font-style: italic; color: var(--bs-ink-muted); text-align: center; padding: 4rem 0; font-size: 1.1rem;">No topics found.</p>
+  </div>
   {{ end }}
 
 </div>
 
-<style>
-.series-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.75rem;
-}
+<script>
+(function () {
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.bs-reveal').forEach(function (el) { el.classList.add('is-visible'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -5% 0px' });
+  document.querySelectorAll('.bs-reveal').forEach(function (el) { io.observe(el); });
+})();
+</script>
 
-.series-card {
-  border-radius: 14px;
-  overflow: hidden;
-  background: var(--surface, #fff);
-  border: 1.5px solid #e5e7eb;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  transition: transform 250ms ease, box-shadow 250ms ease, border-color 250ms ease;
-  color: inherit;
-}
-
-.series-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0,0,0,0.10);
-  border-color: #a5b4fc;
-}
-
-.series-card__thumb {
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: #f3f4f6;
-}
-
-.series-card__thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 400ms ease;
-}
-
-.series-card:hover .series-card__thumb img {
-  transform: scale(1.04);
-}
-
-.series-card__thumb-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  font-size: 3rem;
-  font-weight: 800;
-  color: rgba(255,255,255,0.6);
-  font-family: Georgia, serif;
-}
-
-.series-card__body {
-  padding: 1.1rem 1.3rem 1.3rem;
-}
-
-.series-card__title {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin: 0 0 0.4rem;
-  line-height: 1.3;
-  color: #111827;
-}
-
-.series-card__desc {
-  font-size: 0.875rem;
-  color: #6b7280;
-  line-height: 1.6;
-  margin: 0 0 0.75rem;
-}
-
-.series-card__meta {
-  font-size: 0.78rem;
-  color: #9ca3af;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.series-card__tag {
-  background: #f3f4f6;
-  color: #4b5563;
-  border-radius: 20px;
-  padding: 1px 8px;
-  font-size: 0.73rem;
-  font-weight: 500;
-}
-
-/* Dark mode */
-.dark-theme .series-card {
-  background: #1e2030;
-  border-color: #2d3148;
-}
-.dark-theme .series-card__title { color: #e5e7eb; }
-.dark-theme .series-card__thumb-placeholder { opacity: 0.8; }
-.dark-theme .series-card__tag { background: #2d3148; color: #9ca3af; }
-
-@media (max-width: 640px) {
-  .series-grid { grid-template-columns: 1fr; gap: 1.25rem; }
-  .pa4 { padding: 1rem; }
-}
-</style>
 {{ end }}

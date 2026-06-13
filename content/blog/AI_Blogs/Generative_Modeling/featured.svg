@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <linearGradient id="gm-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#081210"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="450" fill="url(#gm-bg)"/>
+
+  <!-- Grid -->
+  <g stroke="#0f1a16" stroke-width="0.5" opacity="0.5">
+    <line x1="0" y1="150" x2="800" y2="150"/>
+    <line x1="0" y1="300" x2="800" y2="300"/>
+    <line x1="200" y1="0" x2="200" y2="450"/>
+    <line x1="400" y1="0" x2="400" y2="450"/>
+    <line x1="600" y1="0" x2="600" y2="450"/>
+  </g>
+
+  <!-- Panel 1: Diffusion Forward / Reverse -->
+  <rect x="30" y="60" width="220" height="330" rx="10" fill="#071210" stroke="#065f46" stroke-width="1"/>
+  <text x="140" y="88" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="11" font-weight="600" letter-spacing="1">DIFFUSION</text>
+
+  <g transform="translate(50, 108)">
+    <!-- Forward process -->
+    <text x="90" y="15" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="9" font-weight="600">Forward Process q(x_t|x_0)</text>
+    <!-- Noise progression circles -->
+    <circle cx="18"  cy="55" r="13" fill="#059669" opacity="0.9"/>
+    <circle cx="52"  cy="55" r="13" fill="#047857" opacity="0.7"/>
+    <circle cx="86"  cy="55" r="13" fill="#065f46" opacity="0.55"/>
+    <circle cx="120" cy="55" r="13" fill="#064e3b" opacity="0.4"/>
+    <circle cx="154" cy="55" r="13" fill="#1f2937" opacity="0.35"/>
+    <!-- arrows -->
+    <line x1="32" y1="55" x2="37" y2="55" stroke="#374151" stroke-width="1"/>
+    <line x1="66" y1="55" x2="71" y2="55" stroke="#374151" stroke-width="1"/>
+    <line x1="100" y1="55" x2="105" y2="55" stroke="#374151" stroke-width="1"/>
+    <line x1="134" y1="55" x2="139" y2="55" stroke="#374151" stroke-width="1"/>
+    <text x="90" y="78" text-anchor="middle" fill="#374151" font-family="monospace" font-size="8">x_0 → x_1 → ... → x_T ~ N(0,I)</text>
+
+    <!-- Reverse process -->
+    <text x="90" y="105" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="9" font-weight="600">Reverse p_θ(x_{t-1}|x_t)</text>
+    <circle cx="154" cy="145" r="13" fill="#1f2937" opacity="0.35"/>
+    <circle cx="120" cy="145" r="13" fill="#065f46" opacity="0.45"/>
+    <circle cx="86"  cy="145" r="13" fill="#059669" opacity="0.6"/>
+    <circle cx="52"  cy="145" r="13" fill="#10b981" opacity="0.75"/>
+    <circle cx="18"  cy="145" r="13" fill="#34d399" opacity="0.9"/>
+    <!-- reverse arrows -->
+    <line x1="139" y1="145" x2="134" y2="145" stroke="#34d399" stroke-width="1"/>
+    <line x1="105" y1="145" x2="100" y2="145" stroke="#34d399" stroke-width="1"/>
+    <line x1="71"  y1="145" x2="66"  y2="145" stroke="#34d399" stroke-width="1"/>
+    <line x1="37"  y1="145" x2="32"  y2="145" stroke="#34d399" stroke-width="1"/>
+    <text x="90" y="168" text-anchor="middle" fill="#374151" font-family="monospace" font-size="8">x_T → ... → x_0  (learned)</text>
+
+    <!-- Score matching -->
+    <text x="90" y="200" text-anchor="middle" fill="#6ee7b7" font-family="monospace" font-size="9" font-weight="600">Score Matching</text>
+    <rect x="0" y="208" width="180" height="42" rx="5" fill="#022c22" stroke="#065f46" stroke-width="0.8"/>
+    <text x="90" y="225" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="8.5">ε_θ(x_t, t) ≈ ∇ log p(x_t)</text>
+    <text x="90" y="243" text-anchor="middle" fill="#064e3b" font-family="monospace" font-size="8">predict noise · denoise step</text>
+
+    <!-- DDIM badge -->
+    <rect x="20" y="265" width="60" height="20" rx="4" fill="#022c22" stroke="#065f46" stroke-width="0.8"/>
+    <text x="50" y="279" text-anchor="middle" fill="#059669" font-family="monospace" font-size="8">DDPM</text>
+    <rect x="100" y="265" width="60" height="20" rx="4" fill="#022c22" stroke="#34d399" stroke-width="1"/>
+    <text x="130" y="279" text-anchor="middle" fill="#34d399" font-family="monospace" font-size="8">DDIM</text>
+  </g>
+
+  <!-- Panel 2: Flow Matching -->
+  <rect x="290" y="60" width="220" height="330" rx="10" fill="#071210" stroke="#0e4429" stroke-width="1"/>
+  <text x="400" y="88" text-anchor="middle" fill="#4ade80" font-family="monospace" font-size="11" font-weight="600" letter-spacing="1">FLOW MATCHING</text>
+
+  <g transform="translate(310, 108)">
+    <!-- Curved vs straight -->
+    <text x="90" y="15" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="9" font-weight="600">Diffusion vs Flow Paths</text>
+    <rect x="0" y="22" width="180" height="90" rx="5" fill="#031a0e" stroke="#166534" stroke-width="0.8"/>
+
+    <!-- Diffusion curved path -->
+    <path d="M 20,95 C 40,60 80,50 100,65 S 140,95 160,75" fill="none" stroke="#374151" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <!-- Flow straight path -->
+    <line x1="20" y1="95" x2="160" y2="38" stroke="#4ade80" stroke-width="2"/>
+    <!-- Points -->
+    <circle cx="20" cy="95" r="4" fill="#6b7280"/>
+    <circle cx="160" cy="38" r="4" fill="#4ade80"/>
+    <text x="16"  y="108" fill="#4b5563" font-family="monospace" font-size="7">noise</text>
+    <text x="144" y="34"  fill="#4ade80" font-family="monospace" font-size="7">data</text>
+    <text x="60"  y="108" fill="#374151" font-family="monospace" font-size="7">-- diffusion</text>
+    <text x="100" y="42"  fill="#166534" font-family="monospace" font-size="7">-- flow</text>
+
+    <!-- CFM -->
+    <text x="90" y="132" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="9" font-weight="600">Conditional Flow Matching</text>
+    <rect x="0" y="140" width="180" height="55" rx="5" fill="#031a0e" stroke="#166534" stroke-width="0.8"/>
+    <text x="90" y="158" text-anchor="middle" fill="#4ade80" font-family="monospace" font-size="8.5">u_t(x) = x_1 - x_0</text>
+    <text x="90" y="173" text-anchor="middle" fill="#166534" font-family="monospace" font-size="8">train: v_θ(x_t,t) → u_t(x_t)</text>
+    <text x="90" y="188" text-anchor="middle" fill="#166534" font-family="monospace" font-size="8">sample: ODE solver (Euler)</text>
+
+    <!-- Ecosystem -->
+    <text x="90" y="218" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="9" font-weight="600">Built On Flow Matching</text>
+    <rect x="0" y="226" width="84" height="24" rx="4" fill="#031a0e" stroke="#166534" stroke-width="0.8"/>
+    <text x="42" y="242" text-anchor="middle" fill="#4ade80" font-family="monospace" font-size="8.5">SD3 · FLUX</text>
+    <rect x="96" y="226" width="84" height="24" rx="4" fill="#031a0e" stroke="#166534" stroke-width="0.8"/>
+    <text x="138" y="242" text-anchor="middle" fill="#4ade80" font-family="monospace" font-size="8.5">Sora · Genie</text>
+    <rect x="40" y="258" width="100" height="24" rx="4" fill="#031a0e" stroke="#22c55e" stroke-width="1"/>
+    <text x="90" y="274" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="8.5">Stable Audio · Movie Gen</text>
+  </g>
+
+  <!-- Panel 3: Unified view / math -->
+  <rect x="550" y="60" width="220" height="330" rx="10" fill="#071210" stroke="#14532d" stroke-width="1"/>
+  <text x="660" y="88" text-anchor="middle" fill="#22c55e" font-family="monospace" font-size="11" font-weight="600" letter-spacing="1">FOUNDATIONS</text>
+
+  <g transform="translate(568, 108)">
+    <!-- VAE link -->
+    <text x="92" y="15" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="9" font-weight="600">VAE → Diffusion</text>
+    <rect x="0" y="22" width="184" height="42" rx="5" fill="#031a0e" stroke="#166534" stroke-width="0.8"/>
+    <text x="92" y="40" text-anchor="middle" fill="#22c55e" font-family="monospace" font-size="8">ELBO: E[log p(x|z)] - KL(q||p)</text>
+    <text x="92" y="56" text-anchor="middle" fill="#166534" font-family="monospace" font-size="7.5">hierarchical latents → T-step process</text>
+
+    <!-- SDE formulation -->
+    <text x="92" y="85" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="9" font-weight="600">SDE Framework</text>
+    <rect x="0" y="92" width="184" height="55" rx="5" fill="#031a0e" stroke="#166534" stroke-width="0.8"/>
+    <text x="92" y="110" text-anchor="middle" fill="#22c55e" font-family="monospace" font-size="8">dx = f(x,t)dt + g(t)dW</text>
+    <text x="92" y="126" text-anchor="middle" fill="#166534" font-family="monospace" font-size="7.5">VP-SDE: σ(t) schedule</text>
+    <text x="92" y="140" text-anchor="middle" fill="#166534" font-family="monospace" font-size="7.5">VE-SDE: exploding variance</text>
+
+    <!-- Guidance -->
+    <text x="92" y="172" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="9" font-weight="600">Classifier-Free Guidance</text>
+    <rect x="0" y="180" width="184" height="42" rx="5" fill="#031a0e" stroke="#166534" stroke-width="0.8"/>
+    <text x="92" y="197" text-anchor="middle" fill="#22c55e" font-family="monospace" font-size="8">ε̃ = ε_uncond +</text>
+    <text x="92" y="213" text-anchor="middle" fill="#22c55e" font-family="monospace" font-size="8">w · (ε_cond - ε_uncond)</text>
+
+    <!-- Why flow wins -->
+    <text x="92" y="244" text-anchor="middle" fill="#86efac" font-family="monospace" font-size="9" font-weight="600">Why Flow Wins</text>
+    <rect x="0" y="252" width="184" height="55" rx="5" fill="#031a0e" stroke="#166534" stroke-width="0.8"/>
+    <text x="92" y="269" text-anchor="middle" fill="#22c55e" font-family="monospace" font-size="8">Straight paths → fewer NFE</text>
+    <text x="92" y="284" text-anchor="middle" fill="#166534" font-family="monospace" font-size="7.5">No noise schedule to tune</text>
+    <text x="92" y="299" text-anchor="middle" fill="#166534" font-family="monospace" font-size="7.5">Scales to video / audio / 3D</text>
+  </g>
+
+  <!-- Bottom bar -->
+  <rect x="0" y="410" width="800" height="40" fill="#040d09" opacity="0.8"/>
+  <text x="400" y="432" text-anchor="middle" fill="#374151" font-family="monospace" font-size="11" letter-spacing="2">AI NOTEBOOK · GENERATIVE MODELING</text>
+  <text x="30"  y="432" text-anchor="start"  fill="#14532d" font-family="monospace" font-size="10">2 posts</text>
+  <text x="770" y="432" text-anchor="end"    fill="#14532d" font-family="monospace" font-size="10">diffusion · flow matching</text>
+</svg>
