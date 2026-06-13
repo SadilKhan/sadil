@@ -122,11 +122,5 @@
     <loc>//localhost:1314/about/</loc>
   </url><url>
     <loc>//localhost:1314/license/</loc>
-  </url><url>
-    <loc>//localhost:1314/categories/llm/</loc>
-  </url><url>
-    <loc>//localhost:1314/categories/reinforcement-learning/</loc>
-  </url><url>
-    <loc>//localhost:1314/categories/training/</loc>
   </url>
 </urlset>

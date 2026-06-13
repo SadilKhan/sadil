@@ -92,7 +92,7 @@
     overflow: hidden;
   }
 
-  .bs-hero__bg img {
+  .hero-img {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -102,6 +102,11 @@
     filter: saturate(0.92) contrast(0.96);
     animation: bsZoom 18s var(--bs-ease) forwards;
   }
+
+  /* Show the right tree variant for each mode */
+  .hero-img--light { display: none; }
+  body:not(.dark-mode) .hero-img--dark  { display: none; }
+  body:not(.dark-mode) .hero-img--light { display: block; }
 
   @keyframes bsZoom { to { transform: scale(1.0); } }
 
@@ -454,7 +459,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .bs-hero__bg img { animation: none; transform: none; }
+    .hero-img { animation: none; transform: none; }
     .bs-hero__scroll svg { animation: none; }
     .bs-reveal { opacity: 1; transform: none; transition: none; }
   }
@@ -463,26 +468,18 @@
 <div class="bs-stage">
 
   {{/* ────────── HERO ────────── */}}
-  {{ $bg := "" }}
+  {{ $bgDark  := "" }}
+  {{ $bgLight := "" }}
   {{ range .Resources.ByType "image" }}
-    {{ if findRE "^featured" .Name }}{{ $bg = .RelPermalink }}{{ end }}
-  {{ end }}
-  {{ if not $bg }}
-    {{ range .Resources.ByType "image" }}
-      {{ if findRE "featured" .Name }}{{ $bg = .RelPermalink }}{{ end }}
-    {{ end }}
-  {{ end }}
-  {{ if not $bg }}
-    {{ range .Resources.ByType "image" }}
-      {{ if not $bg }}{{ $bg = .RelPermalink }}{{ end }}
+    {{ if eq .Name "featured-light.svg" }}{{ $bgLight = .RelPermalink }}
+    {{ else if findRE "^featured" .Name }}{{ $bgDark  = .RelPermalink }}
     {{ end }}
   {{ end }}
 
   <header class="bs-hero">
     <div class="bs-hero__bg">
-      {{ if $bg }}
-        <img src="{{ $bg }}" alt="" aria-hidden="true" loading="eager"/>
-      {{ end }}
+      {{ if $bgDark  }}<img class="hero-img hero-img--dark"  src="{{ $bgDark }}"  alt="" aria-hidden="true" loading="eager"/>{{ end }}
+      {{ if $bgLight }}<img class="hero-img hero-img--light" src="{{ $bgLight }}" alt="" aria-hidden="true" loading="eager"/>{{ end }}
     </div>
     <div class="bs-hero__veil"></div>
     <div class="bs-hero__grain"></div>

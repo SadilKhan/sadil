@@ -191,6 +191,32 @@ footer{border-top:1px solid var(--line); padding:40px 0; text-align:center; font
   .scrollcue{animation:none}
   html{scroll-behavior:auto}
 }
+
+/* ── Light-mode: remap optimizer-specific vars not covered by theme-toggle.js ── */
+html.light {
+  --ink:      #08111e;
+  --ink2:     #162a42;
+  --muted:    #3a5a7a;
+  --faint:    #557090;
+  --line:     #8aaac6;
+  --line2:    #9abbd6;
+  --panel:    #c8d8ec;
+  --gold:     #7a4800;
+  --gold-dim: #5e3600;
+  --teal-dim: #045a50;
+  --rose:     #a02828;
+  --violet:   #4a18a0;
+  --sky:      #0858a0;
+}
+html.light strong, html.light b { color: var(--ink) !important; }
+html.light em { color: var(--ink2) !important; }
+html.light .dim { color: var(--muted) !important; }
+html.light section.opt { border-top-color: var(--line) !important; }
+html.light .sec-num { border-color: var(--gold-dim) !important; }
+html.light .pill { border-color: var(--line2) !important; color: var(--muted) !important; }
+html.light .hero { border-bottom-color: var(--line) !important; }
+html.light footer { border-top-color: var(--line) !important; color: var(--faint) !important; }
+html.light .hero-thumb img { border-color: var(--line) !important; }
 </style>
 </head>
 <body>

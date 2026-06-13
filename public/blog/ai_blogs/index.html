@@ -47,8 +47,6 @@
   
   <meta itemprop="name" content="AI Notebook">
   <meta itemprop="description" content="I prepared these notes for myself to understand core AI concepts easily. I find it easier when maths is accompanied by visual examples. So I drafted these with Claude and then went through each one to fix the parts that were wrong or unclear.">
-  <meta itemprop="datePublished" content="2026-06-13T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2026-06-13T00:00:00+00:00">
   <meta itemprop="image" content="//localhost:1314/blog/ai_blogs/featured.svg">
   <meta itemprop="keywords" content="AI Notebook">
   
@@ -1316,7 +1314,7 @@ body.dark-mode .sk-drawer,
     overflow: hidden;
   }
 
-  .bs-hero__bg img {
+  .hero-img {
     position: absolute;
     inset: 0;
     width: 100%;
@@ -1326,6 +1324,11 @@ body.dark-mode .sk-drawer,
     filter: saturate(0.92) contrast(0.96);
     animation: bsZoom 18s var(--bs-ease) forwards;
   }
+
+   
+  .hero-img--light { display: none; }
+  body:not(.dark-mode) .hero-img--dark  { display: none; }
+  body:not(.dark-mode) .hero-img--light { display: block; }
 
   @keyframes bsZoom { to { transform: scale(1.0); } }
 
@@ -1678,7 +1681,7 @@ body.dark-mode .sk-drawer,
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .bs-hero__bg img { animation: none; transform: none; }
+    .hero-img { animation: none; transform: none; }
     .bs-hero__scroll svg { animation: none; }
     .bs-reveal { opacity: 1; transform: none; transition: none; }
   }
@@ -1689,15 +1692,14 @@ body.dark-mode .sk-drawer,
   
   
   
+  
     
-  
-  
+    
   
 
   <header class="bs-hero">
     <div class="bs-hero__bg">
-      
-        <img src="/blog/ai_blogs/featured.svg" alt="" aria-hidden="true" loading="eager"/>
+      <img class="hero-img hero-img--dark"  src="/blog/ai_blogs/featured.svg"  alt="" aria-hidden="true" loading="eager"/>
       
     </div>
     <div class="bs-hero__veil"></div>
@@ -1816,31 +1818,7 @@ body.dark-mode .sk-drawer,
       
       
       
-      <a href="/blog/ai_blogs/reinforcement_learning/" class="series-card bs-reveal" style="transition-delay: 200ms">
-        <div class="series-card__thumb">
-          
-            <img src="/blog/ai_blogs/reinforcement_learning/featured.svg" alt="Reinforcement Learning" loading="lazy"/>
-          
-        </div>
-        <div class="series-card__body">
-          <h2 class="series-card__title">Reinforcement Learning</h2>
-          
-            <p class="series-card__desc">Policy gradients, value-based methods, and the full post-training pipeline. PPO, DPO, GRPO, Q-learning, and …</p>
-          
-          <div class="series-card__meta">
-            6 posts
-            
-          </div>
-        </div>
-      </a>
-      
-      
-      
-        
-      
-      
-      
-      <a href="/blog/ai_blogs/llm/" class="series-card bs-reveal" style="transition-delay: 300ms">
+      <a href="/blog/ai_blogs/llm/" class="series-card bs-reveal" style="transition-delay: 200ms">
         <div class="series-card__thumb">
           
             <img src="/blog/ai_blogs/llm/featured.svg" alt="LLM" loading="lazy"/>
@@ -1853,6 +1831,30 @@ body.dark-mode .sk-drawer,
           
           <div class="series-card__meta">
             5 posts
+            
+          </div>
+        </div>
+      </a>
+      
+      
+      
+        
+      
+      
+      
+      <a href="/blog/ai_blogs/reinforcement_learning/" class="series-card bs-reveal" style="transition-delay: 300ms">
+        <div class="series-card__thumb">
+          
+            <img src="/blog/ai_blogs/reinforcement_learning/featured.svg" alt="Reinforcement Learning" loading="lazy"/>
+          
+        </div>
+        <div class="series-card__body">
+          <h2 class="series-card__title">Reinforcement Learning</h2>
+          
+            <p class="series-card__desc">Policy gradients, value-based methods, and the full post-training pipeline. PPO, DPO, GRPO, Q-learning, and …</p>
+          
+          <div class="series-card__meta">
+            6 posts
             
           </div>
         </div>

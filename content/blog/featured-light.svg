@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="800" height="450">
+  <defs>
+    <radialGradient id="rg" cx="50%" cy="100%" r="55%">
+      <stop offset="0%"   stop-color="#bdd4e8" stop-opacity="0.70"/>
+      <stop offset="100%" stop-color="#eef4f8" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="nf" x="-150%" y="-150%" width="400%" height="400%">
+      <feGaussianBlur stdDeviation="4"/>
+    </filter>
+  </defs>
+
+  <style>
+    .e0 { fill:none; stroke:#1a4262; stroke-width:1.4; stroke-opacity:0.32 }
+    .e1 { fill:none; stroke:#163458; stroke-width:1.1; stroke-opacity:0.25 }
+    .e2 { fill:none; stroke:#12274e; stroke-width:0.9; stroke-opacity:0.20 }
+    .e3 { fill:none; stroke:#0f1c3c; stroke-width:0.7; stroke-opacity:0.15 }
+    .ns { fill:#1a4262; opacity:0.28 }
+
+    .t0 { animation: tp 3.8s ease-in-out           infinite }
+    .t1 { animation: tp 4.5s ease-in-out -1.6s     infinite }
+    .t2 { animation: tp 3.2s ease-in-out -2.4s     infinite }
+    .t3 { animation: tp 5.1s ease-in-out -0.9s     infinite }
+    .t4 { animation: tp 4.0s ease-in-out -3.2s     infinite }
+    .t5 { animation: tp 3.6s ease-in-out -1.8s     infinite }
+
+    .g0 { animation: gp 3.8s ease-in-out           infinite }
+    .g1 { animation: gp 4.5s ease-in-out -1.6s     infinite }
+    .g2 { animation: gp 3.2s ease-in-out -2.4s     infinite }
+    .g3 { animation: gp 5.1s ease-in-out -0.9s     infinite }
+    .g4 { animation: gp 4.0s ease-in-out -3.2s     infinite }
+    .g5 { animation: gp 3.6s ease-in-out -1.8s     infinite }
+
+    @keyframes tp { 0%,100% { opacity:0.10 } 45% { opacity:0.72 } 80% { opacity:0.28 } }
+    @keyframes gp { 0%,100% { opacity:0.02 } 45% { opacity:0.16 } 80% { opacity:0.05 } }
+  </style>
+
+  <rect width="800" height="450" fill="#eef4f8"/>
+  <rect width="800" height="450" fill="url(#rg)"/>
+
+  <!-- Branch edges -->
+  <path class="e0" d="M 400,410 C 400,364 400,346 400,310"/>
+  <path class="e1" d="M 400,310 C 400,276 240,259 240,225"/>
+  <path class="e1" d="M 400,310 C 400,270 400,250 400,210"/>
+  <path class="e1" d="M 400,310 C 400,276 560,259 560,225"/>
+  <path class="e2" d="M 240,225 C 240,191 135,174 135,140"/>
+  <path class="e2" d="M 240,225 C 240,187 280,168 280,130"/>
+  <path class="e2" d="M 400,210 C 400,171 358,151 358,112"/>
+  <path class="e2" d="M 400,210 C 400,171 442,151 442,112"/>
+  <path class="e2" d="M 560,225 C 560,187 520,168 520,130"/>
+  <path class="e2" d="M 560,225 C 560,191 665,174 665,140"/>
+  <path class="e3" d="M 135,140 C 135,110  95, 95  95, 65"/>
+  <path class="e3" d="M 280,130 C 280,100 210, 85 210, 55"/>
+  <path class="e3" d="M 358,112 C 358, 86 300, 74 300, 48"/>
+  <path class="e3" d="M 442,112 C 442, 86 500, 74 500, 48"/>
+  <path class="e3" d="M 520,130 C 520,100 590, 85 590, 55"/>
+  <path class="e3" d="M 665,140 C 665,110 705, 95 705, 65"/>
+
+  <!-- Structural nodes -->
+  <circle class="ns" cx="400" cy="310" r="4.5"/>
+  <circle class="ns" cx="240" cy="225" r="3.5"/>
+  <circle class="ns" cx="400" cy="210" r="3.5"/>
+  <circle class="ns" cx="560" cy="225" r="3.5"/>
+  <circle class="ns" cx="135" cy="140" r="2.8"/>
+  <circle class="ns" cx="280" cy="130" r="2.8"/>
+  <circle class="ns" cx="358" cy="112" r="2.8"/>
+  <circle class="ns" cx="442" cy="112" r="2.8"/>
+  <circle class="ns" cx="520" cy="130" r="2.8"/>
+  <circle class="ns" cx="665" cy="140" r="2.8"/>
+
+  <!-- Glow halos (dark accent on light bg) -->
+  <circle class="g0" filter="url(#nf)" cx=" 95" cy="65" r="9" fill="#1a5a88"/>
+  <circle class="g1" filter="url(#nf)" cx="210" cy="55" r="9" fill="#1a5a88"/>
+  <circle class="g2" filter="url(#nf)" cx="300" cy="48" r="9" fill="#1a5a88"/>
+  <circle class="g3" filter="url(#nf)" cx="500" cy="48" r="9" fill="#1a5a88"/>
+  <circle class="g4" filter="url(#nf)" cx="590" cy="55" r="9" fill="#1a5a88"/>
+  <circle class="g5" filter="url(#nf)" cx="705" cy="65" r="9" fill="#1a5a88"/>
+
+  <!-- Tip nodes -->
+  <circle class="t0" cx=" 95" cy="65" r="2.5" fill="#0a3a60"/>
+  <circle class="t1" cx="210" cy="55" r="2.5" fill="#0a3a60"/>
+  <circle class="t2" cx="300" cy="48" r="2.5" fill="#0a3a60"/>
+  <circle class="t3" cx="500" cy="48" r="2.5" fill="#0a3a60"/>
+  <circle class="t4" cx="590" cy="55" r="2.5" fill="#0a3a60"/>
+  <circle class="t5" cx="705" cy="65" r="2.5" fill="#0a3a60"/>
+</svg>
