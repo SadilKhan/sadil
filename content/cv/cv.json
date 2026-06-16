@@ -11,7 +11,7 @@
     {
       "role": "Research Intern",
       "org": "Huawei Noah's Ark Lab",
-      "logo": "https://logos-world.net/wp-content/uploads/2020/04/Huawei-Logo.png",
+      "logo": "https://upload.wikimedia.org/wikipedia/en/0/04/Huawei_Standard_logo.svg",
       "location": "London, UK",
       "date": "May 2025 – Apr 2026",
       "desc": "3D Reconstruction and Parametric Surface Modeling."
@@ -51,10 +51,10 @@
     {
       "role": "Data Analyst Intern",
       "org": "Accenture Digital",
-      "logo": "https://logos-world.net/wp-content/uploads/2020/06/Accenture-Emblem.png",
+      "logo": "accenture.svg",
       "location": "India",
       "date": "May 2020 – Jul 2020",
-      "desc": "Intelligent Inventory Planning — automatic forecast hedging to cover demand gaps using AI."
+      "desc": "Intelligent Inventory Planning for automatic forecast hedging to cover demand gaps using AI."
     }
   ],
   "education": [

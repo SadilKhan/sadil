@@ -2436,7 +2436,6 @@ body:has(.about-page) .page-main {
 }
 
 .about-intro .about-title {
-  max-width: 680px;
   font-size: clamp(2.15rem, 5vw, 4.35rem);
   letter-spacing: -0.045em;
 }
@@ -2449,7 +2448,7 @@ body:has(.about-page) .page-main {
 }
 
 .about-intro .about-summary {
-  max-width: 680px;
+  max-width: none;
   margin-top: 18px;
   color: var(--c-muted);
   font-size: 1.02rem;
@@ -2762,6 +2761,7 @@ body:has(.about-page) .page-main {
 .about-page .about-intro {
   padding-bottom: 24px;
   margin-bottom: 24px;
+  border-bottom: none;
 }
 .about-page .about-page-label {
   margin: 0 0 10px;
@@ -2782,13 +2782,12 @@ body:has(.about-page) .page-main {
   font-size: clamp(1.85rem, 3.4vw, 2.7rem);
   letter-spacing: -0.03em;
   line-height: 1.04;
-  max-width: 720px;
 }
 .about-page .about-intro .about-summary {
   margin-top: 14px;
   font-size: 0.99rem;
   line-height: 1.7;
-  max-width: 680px;
+  max-width: none;
 }
 .about-page .about-affiliations { margin-top: 16px; gap: 6px; }
 .about-page .about-chip {
@@ -2832,7 +2831,7 @@ body:has(.about-page) .page-main {
 .about-page .about-section {
   margin-top: 24px;
   padding-top: 22px;
-  border-top: 1px solid var(--c-line);
+  border-top: none;
 }
 .about-page .about-section:first-of-type {
   margin-top: 18px;
@@ -3106,30 +3105,11 @@ body:has(.about-page) .page-main {
         </h1>
 
         
-        <p class="about-summary">I am a Research Scientist at Spectral Labs working on foundation model for spatial intelligence, and 3D designing. </p>
+        <p class="about-summary">I am a Research Scientist at Spectral Labs working on foundation model for spatial intelligence, and 3D designing. My research explores how AI can develop a deeper understanding of the physical world, reason about spatial relationships, and effectively interact with it. My current research centers on post-training methodologies and reward modeling for spatial reasoning.</p>
         
 
         
 
-        
-        <div class="about-actions" aria-label="Primary links">
-          
-          <a class="about-action about-action-primary" href="/publications/">
-            <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
-            Publications
-          </a>
-          
-          <a class="about-action" href="/projects/">
-            <i class="fa-solid fa-diagram-project" aria-hidden="true"></i>
-            Projects
-          </a>
-          
-          <a class="about-action" href="/cv/">
-            <i class="fa-solid fa-id-card" aria-hidden="true"></i>
-            CV
-          </a>
-          
-        </div>
         
 
         

@@ -1226,7 +1226,6 @@ body:has(.about-page) .page-main {
 }
 
 .about-intro .about-title {
-  max-width: 680px;
   font-size: clamp(2.15rem, 5vw, 4.35rem);
   letter-spacing: -0.045em;
 }
@@ -1239,7 +1238,7 @@ body:has(.about-page) .page-main {
 }
 
 .about-intro .about-summary {
-  max-width: 680px;
+  max-width: none;
   margin-top: 18px;
   color: var(--c-muted);
   font-size: 1.02rem;
@@ -1555,6 +1554,7 @@ body:has(.about-page) .page-main {
 .about-page .about-intro {
   padding-bottom: 24px;
   margin-bottom: 24px;
+  border-bottom: none;
 }
 .about-page .about-page-label {
   margin: 0 0 10px;
@@ -1575,13 +1575,12 @@ body:has(.about-page) .page-main {
   font-size: clamp(1.85rem, 3.4vw, 2.7rem);
   letter-spacing: -0.03em;
   line-height: 1.04;
-  max-width: 720px;
 }
 .about-page .about-intro .about-summary {
   margin-top: 14px;
   font-size: 0.99rem;
   line-height: 1.7;
-  max-width: 680px;
+  max-width: none;
 }
 .about-page .about-affiliations { margin-top: 16px; gap: 6px; }
 .about-page .about-chip {
@@ -1625,7 +1624,7 @@ body:has(.about-page) .page-main {
 .about-page .about-section {
   margin-top: 24px;
   padding-top: 22px;
-  border-top: 1px solid var(--c-line);
+  border-top: none;
 }
 .about-page .about-section:first-of-type {
   margin-top: 18px;

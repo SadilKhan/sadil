@@ -13,7 +13,7 @@
         "dataset": "",
         "paperLink": "",
         "categories": "CAD, Clip, Text, Point Cloud, Image, Text, Encoding",
-        "images": ["data/brepclip.png", "https://arxiv.org/html/2606.05515v1/x2.png", "https://arxiv.org/html/2606.05515v1/x4.png", "https://arxiv.org/html/2606.05515v1/x5.png"],
+        "images": ["https://arxiv.org/html/2606.05515v1/x3.png", "https://arxiv.org/html/2606.05515v1/x2.png", "https://arxiv.org/html/2606.05515v1/x4.png", "https://arxiv.org/html/2606.05515v1/x5.png"],
         "metadata": "(i) Multimodal representation learning for CAD models (text, image alignment). (ii) New CAD Scoring metric for text-to-CAD generation."
     },
   {
@@ -82,7 +82,7 @@
         "dataset": "https://sadilkhan.github.io/Marvel-Explorer/",
         "paperLink": "https://openaccess.thecvf.com/content/CVPR2025/papers/Sinha_MARVEL-40M_Multi-Level_Visual_Elaboration_for_High-Fidelity_Text-to-3D_Content_Creation_CVPR_2025_paper.pdf",
         "categories": "Text, Stable Diffusion, 3D, LLM, VLM, Lora",
-        "images": ["data/marvel.png", "https://arxiv.org/html/2411.17945v1/x2.png", "https://arxiv.org/html/2411.17945v1/x3.png"],
+        "images": ["https://arxiv.org/html/2411.17945v1/x1.png", "https://arxiv.org/html/2411.17945v1/x2.png", "https://arxiv.org/html/2411.17945v1/x3.png"],
         "metadata": "Largest 3D captioning dataset (40M+) with domain-specific and multi-level visual reasoning."
     },
     {

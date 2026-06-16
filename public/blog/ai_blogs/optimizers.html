@@ -15,6 +15,7 @@ window.MathJax = {
 };
 </script>
 <script id="MathJax-script" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 <style>
 :root{
   --bg:#0c1016; --bg2:#121925; --bg3:#18202e; --panel:#141c28;
@@ -126,6 +127,7 @@ pre .kw{color:#c792ea} pre .bi{color:#82aaff} pre .st{color:#c3e88d} pre .cm{col
 .fig-title b{color:var(--gold)}
 .fig-body{padding:16px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; justify-content:center}
 .fig canvas{display:block; border-radius:9px; background:#0a0e14; max-width:100%}
+.fig .optviz-plt{display:block; border-radius:9px; overflow:hidden; max-width:100%; background:#0a0e14}
 .fig-cap{padding:0 16px 15px; font-size:14.5px; color:var(--muted); line-height:1.55}
 .fig-controls{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
 .btn{font-family:var(--mono); font-size:12px; background:var(--bg3); color:var(--ink2); border:1px solid var(--line2); border-radius:7px; padding:6px 12px; cursor:pointer; transition:.15s}
@@ -331,7 +333,7 @@ for x, y in dataloader:                 # each batch = one noisy gradient estima
         <div class="fig-title"><b>SGD</b> on an ill-conditioned ravine</div>
         <div class="fig-controls"><button class="btn" data-replay>↻ replay</button></div>
       </div>
-      <div class="fig-body"><canvas class="optviz" width="640" height="300" data-func="ravine" data-runners="sgd"></canvas></div>
+      <div class="fig-body"><div class="optviz-plt" style="height:300px" data-func="ravine" data-runners="sgd"></div></div>
       <div class="fig-cap">Watch the classic failure mode: the step size is set by the steep (vertical) direction, so SGD <em>zig-zags</em> across the narrow valley while creeping slowly along its floor toward the minimum (the ✦). Every optimizer after this is, in part, an attempt to kill that zig-zag.</div>
     </div>
   </section>
@@ -354,7 +356,7 @@ theta = theta + v            # step with velocity</pre></div>
     <div class="fig">
       <div class="fig-head"><div class="fig-title"><b>Momentum</b> vs SGD — same ravine</div>
         <div class="fig-controls"><button class="btn" data-replay>↻ replay</button></div></div>
-      <div class="fig-body"><canvas class="optviz" width="640" height="300" data-func="ravine" data-runners="sgd|momentum"></canvas></div>
+      <div class="fig-body"><div class="optviz-plt" style="height:300px" data-func="ravine" data-runners="sgd|momentum"></div></div>
       <div class="fig-cap">SGD (faint grey) still rattles; <b style="color:var(--teal)">momentum</b> damps the vertical bounce and surges down the valley floor. The path is smoother and reaches the ✦ in far fewer steps.</div>
     </div>
   </section>
@@ -374,7 +376,7 @@ theta = theta + v            # step with velocity</pre></div>
     <div class="fig">
       <div class="fig-head"><div class="fig-title"><b>Nesterov</b> vs plain momentum</div>
         <div class="fig-controls"><button class="btn" data-replay>↻ replay</button></div></div>
-      <div class="fig-body"><canvas class="optviz" width="640" height="300" data-func="ravine" data-runners="momentum|nesterov"></canvas></div>
+      <div class="fig-body"><div class="optviz-plt" style="height:300px" data-func="ravine" data-runners="momentum|nesterov"></div></div>
       <div class="fig-cap">Subtle but visible: <b style="color:var(--violet)">Nesterov</b> overshoots the valley floor slightly less than <b style="color:var(--teal)">momentum</b> (faint) because its look-ahead gradient applies the brakes a step early.</div>
     </div>
   </section>
@@ -394,7 +396,7 @@ theta = theta + v            # step with velocity</pre></div>
     <div class="fig">
       <div class="fig-head"><div class="fig-title"><b>AdaGrad</b> — adaptive per-axis steps</div>
         <div class="fig-controls"><button class="btn" data-replay>↻ replay</button></div></div>
-      <div class="fig-body"><canvas class="optviz" width="640" height="300" data-func="ravine" data-runners="sgd|adagrad"></canvas></div>
+      <div class="fig-body"><div class="optviz-plt" style="height:300px" data-func="ravine" data-runners="sgd|adagrad"></div></div>
       <div class="fig-cap"><b style="color:var(--gold)">AdaGrad</b> immediately equalizes the two axes — the steep direction gets a small rate, the flat direction a large one — so it heads almost straight at the ✦ instead of zig-zagging. Watch it slow down near the end as \(G_t\) keeps growing.</div>
     </div>
   </section>
@@ -423,7 +425,7 @@ theta = theta + v            # step with velocity</pre></div>
     <div class="fig">
       <div class="fig-head"><div class="fig-title"><b>RMSProp</b> &amp; <b style="color:var(--sky)">AdaDelta</b> — adaptive, bounded</div>
         <div class="fig-controls"><button class="btn" data-replay>↻ replay</button></div></div>
-      <div class="fig-body"><canvas class="optviz" width="640" height="300" data-func="ravine" data-runners="adadelta|rmsprop"></canvas></div>
+      <div class="fig-body"><div class="optviz-plt" style="height:300px" data-func="ravine" data-runners="adadelta|rmsprop"></div></div>
       <div class="fig-cap"><b style="color:var(--gold)">RMSProp</b> drives confidently down the valley; <b style="color:var(--sky)">AdaDelta</b> (faint) is visibly more cautious early on — the price of its self-tuning step size is a slow start.</div>
     </div>
   </section>
@@ -464,7 +466,7 @@ def adam(grad_fn, theta, lr=1e-3, b1=0.9, b2=0.999, eps=1e-8, steps=1000):
     <div class="fig">
       <div class="fig-head"><div class="fig-title"><b>Adam</b> on the Beale function — a hard curved valley</div>
         <div class="fig-controls"><button class="btn" data-replay>↻ replay</button></div></div>
-      <div class="fig-body"><canvas class="optviz" width="640" height="320" data-func="beale" data-runners="sgd|adam"></canvas></div>
+      <div class="fig-body"><div class="optviz-plt" style="height:320px" data-func="beale" data-runners="sgd|adam"></div></div>
       <div class="fig-cap">The Beale function has a long curved ravine and a flat plateau — a torture test. Plain <b style="color:#9aa6b6">SGD</b> (faint) barely moves off the plateau; <b style="color:var(--gold)">Adam</b> adapts its per-axis step and threads the valley to the global minimum at \((3,\,0.5)\).</div>
     </div>
   </section>
@@ -522,7 +524,7 @@ opt = torch.optim.AdamW(
     <div class="fig">
       <div class="fig-head"><div class="fig-title">Escaping a <b>saddle point</b> — who gets stuck?</div>
         <div class="fig-controls"><button class="btn" data-replay>↻ replay</button></div></div>
-      <div class="fig-body"><canvas class="optviz" width="640" height="300" data-func="saddle" data-runners="sgd|adam"></canvas></div>
+      <div class="fig-body"><div class="optviz-plt" style="height:300px" data-func="saddle" data-runners="sgd|adam"></div></div>
       <div class="fig-cap">The surface is \(f=x^2-y^2\): a saddle at the origin where the gradient is nearly zero. <b style="color:#9aa6b6">SGD</b> (faint) lingers on the plateau; <b style="color:var(--gold)">Adam</b> escapes faster because dividing by the tiny \(\sqrt{\hat v}\) <em>amplifies</em> the minuscule gradient. In deep nets, saddle points — not local minima — are the dominant obstacle in high dimensions, which is a big reason adaptive methods caught on.</div>
     </div>
   </section>
@@ -955,161 +957,160 @@ function drawTerrain(ctx, fn, W, H, pad){
   ctx.putImageData(img,pad.l,pad.t);
 }
 
-/* ---------- a single animated viz on a canvas ---------- */
-class OptViz{
-  constructor(canvas, funcKey, runnerKeys){
-    this.canvas=canvas;
-    this.ctx=canvas.getContext("2d");
-    this.W=canvas.width; this.H=canvas.height;
-    this.funcKey=funcKey;
-    this.fn=F[funcKey];
-    this.pad={l:0,r:0,t:0,b:0};
-    this.runners=runnerKeys.map((k,idx,arr)=>({
-      key:k,
-      hero: idx===arr.length-1,
-      color: COLORMAP[k]||"#f2b65a",
-      path: precompute(funcKey,k)
-    }));
-    this.map=mapper(this.fn.box,this.W,this.H,this.pad);
-    this.frame=0;
+/* ---------- a single animated viz using Plotly ---------- */
+class PlotlyViz{
+  constructor(div,funcKey,runnerKeys){
+    this.div=div; this.funcKey=funcKey;
+    this.fn=F[funcKey]; this.runnerKeys=runnerKeys;
+    this.paths=runnerKeys.map(k=>precompute(funcKey,k));
     this.maxFrame=this.fn.steps;
-    this.raf=null;
-    this.playing=false;
-    this.terrain=document.createElement("canvas");
-    this.terrain.width=this.W; this.terrain.height=this.H;
-    drawTerrain(this.terrain.getContext("2d"), this.fn, this.W, this.H, this.pad);
-    // smooth fractional advance at 60fps (no frame-skipping -> no stutter).
-    // sub/9 is ~3x slower than the previous every-3rd-frame pacing.
-    this.sub=Math.max(1,Math.round(this.fn.steps/140));
-    this.perFrame=this.sub/9;
-    this.reduced=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    this.animating=false;
+    this.reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    this._frames=null;
+    this._build();
   }
-  drawBase(){
-    const ctx=this.ctx;
-    ctx.clearRect(0,0,this.W,this.H);
-    ctx.drawImage(this.terrain,0,0);
-    // minimum marker ✦
-    const m=this.map, mn=this.fn.min;
-    ctx.save();
-    ctx.translate(m.sx(mn[0]),m.sy(mn[1]));
-    ctx.fillStyle="#fff"; ctx.shadowColor="#fff"; ctx.shadowBlur=10;
-    ctx.font="16px serif"; ctx.textAlign="center"; ctx.textBaseline="middle";
-    ctx.fillText("\u2726",0,0);
-    ctx.restore();
+  _xyz(){
+    const fn=this.fn,[x0,x1,y0,y1]=fn.box,N=65;
+    const x=Array.from({length:N},(_,i)=>x0+(x1-x0)*i/(N-1));
+    const y=Array.from({length:N},(_,i)=>y0+(y1-y0)*i/(N-1));
+    let lo=Infinity,hi=-Infinity;
+    const zr=y.map(yv=>x.map(xv=>{
+      let v=fn.f(xv,yv);if(!isFinite(v))v=1e9;
+      if(v<lo)lo=v;if(v>hi)hi=v;return v;
+    }));
+    const sh=lo<=0?-lo+1e-3:0;
+    const z=zr.map(row=>row.map(v=>Math.log(v+sh+1e-6)));
+    return{x,y,z};
   }
-  drawPaths(upTo){
-    const ctx=this.ctx, m=this.map;
-    this.runners.forEach(r=>{
-      const last=r.path.length-1;
-      const nf=Math.min(upTo, last);
-      const n=Math.floor(nf);
-      const frac=nf-n;
-      const pts=[];
-      for(let i=0;i<=n;i++) pts.push([m.sx(r.path[i][0]), m.sy(r.path[i][1])]);
-      let hx, hy;
-      if(frac>0 && n<last){
-        const a=r.path[n], b=r.path[n+1];
-        hx=m.sx(a[0]+(b[0]-a[0])*frac); hy=m.sy(a[1]+(b[1]-a[1])*frac);
-        pts.push([hx,hy]);
-      }else{
-        hx=pts[pts.length-1][0]; hy=pts[pts.length-1][1];
-      }
-      ctx.lineJoin="round"; ctx.lineCap="round";
-      splinePath(ctx, pts);
-      if(r.hero){
-        ctx.strokeStyle=r.color; ctx.lineWidth=2.6;
-        ctx.shadowColor=r.color; ctx.shadowBlur=8; ctx.globalAlpha=1;
-      }else{
-        ctx.strokeStyle=r.color; ctx.lineWidth=1.4;
-        ctx.shadowBlur=0; ctx.globalAlpha=0.4;
-      }
-      ctx.stroke();
-      ctx.globalAlpha=1; ctx.shadowBlur=0;
-      // head dot
-      ctx.beginPath();
-      ctx.arc(hx,hy, r.hero?4.2:2.6, 0, Math.PI*2);
-      ctx.fillStyle=r.hero?"#fff":r.color;
-      if(r.hero){ctx.shadowColor=r.color; ctx.shadowBlur=10;}
-      ctx.fill(); ctx.shadowBlur=0;
-    });
-  }
-  renderStatic(){
-    this.drawBase();
-    this.drawPaths(this.maxFrame);
-    this.drawLegend();
-  }
-  drawLegend(){
-    const ctx=this.ctx;
-    ctx.save();
-    ctx.font="11px ui-sans-serif,system-ui";
-    ctx.textBaseline="middle";
-    let y=14;
-    this.runners.slice().reverse().forEach(r=>{
-      ctx.fillStyle=r.color;
-      ctx.fillRect(10,y-4,14,3);
-      ctx.fillStyle=r.hero?"#e9eef6":"#9aa6b6";
-      ctx.fillText(LABELMAP[r.key]||r.key, 30, y);
-      y+=16;
-    });
-    ctx.restore();
-  }
-  step(){
-    this.frame=Math.min(this.maxFrame, this.frame+this.perFrame);
-    this.drawBase();
-    this.drawPaths(this.frame);
-    this.drawLegend();
-    if(this.frame<this.maxFrame && this.playing){
-      this.raf=requestAnimationFrame(()=>this.step());
-    }else{
-      this.playing=false;
+  _buildFrames(){
+    const N=this.runnerKeys.length;
+    const SKIP=Math.max(2,Math.ceil(this.maxFrame/80));
+    const frames=[];
+    for(let t=0;t<=this.maxFrame;t+=SKIP){
+      const data=this.runnerKeys.map((k,i)=>{
+        const p=this.paths[i],n=Math.min(t,p.length-1);
+        return{x:p.slice(0,n+1).map(q=>q[0]),y:p.slice(0,n+1).map(q=>q[1])};
+      });
+      const heads=this.runnerKeys.map((k,i)=>{
+        const p=this.paths[i],n=Math.min(t,p.length-1);
+        return{x:[p[n][0]],y:[p[n][1]]};
+      });
+      // trace layout: 0=heatmap, 1=contour lines, 2=star, 3..=paths, 3+N..=heads
+      frames.push({
+        name:String(t),
+        data:[...data,...heads],
+        traces:[
+          ...this.runnerKeys.map((_,i)=>i+3),
+          ...this.runnerKeys.map((_,i)=>i+3+N)
+        ]
+      });
     }
+    return frames;
+  }
+  _build(){
+    const fn=this.fn,{x,y,z}=this._xyz(),N=this.runnerKeys.length;
+    const isM=N>1;
+    // deep navy → teal-blue → teal-green → olive → warm gold
+    const cs=[
+      [0,'#0a1a2e'],[0.18,'#0e3d6a'],[0.34,'#186a7a'],
+      [0.5,'#1a7856'],[0.64,'#507830'],[0.78,'#9a7018'],
+      [0.9,'#c87e18'],[1,'#e8a030']
+    ];
+    const traces=[
+      // 0: smooth heatmap fill
+      {type:'heatmap',x,y,z,colorscale:cs,showscale:false,
+       hoverinfo:'skip',zsmooth:'best'},
+      // 1: contour iso-lines only (transparent fill, white lines)
+      {type:'contour',x,y,z,
+       colorscale:[[0,'rgba(0,0,0,0)'],[1,'rgba(0,0,0,0)']],
+       showscale:false,
+       contours:{coloring:'lines',showlines:true,ncontours:10},
+       line:{color:'rgba(255,255,255,0.22)',width:0.8},
+       hoverinfo:'skip'},
+      // 2: minimum star
+      {type:'scatter',x:[fn.min[0]],y:[fn.min[1]],mode:'markers',
+       marker:{symbol:'star',size:14,color:'#fff',
+               line:{color:'rgba(255,220,100,0.45)',width:1.5}},
+       showlegend:false,hoverinfo:'skip'},
+      // 3..3+N-1: path traces
+      ...this.runnerKeys.map((k,i)=>({
+        type:'scatter',x:[],y:[],mode:'lines',name:LABELMAP[k],
+        line:{color:COLORMAP[k],width:i===N-1?2.4:1.4,shape:'spline',smoothing:1.2},
+        showlegend:isM,hoverinfo:'skip',opacity:i===N-1?1:0.45
+      })),
+      // 3+N..3+2N-1: head dot traces
+      ...this.runnerKeys.map((k,i)=>({
+        type:'scatter',x:[],y:[],mode:'markers',
+        marker:{size:i===N-1?9:6,color:i===N-1?'#fff':COLORMAP[k],
+                line:{color:COLORMAP[k],width:2}},
+        showlegend:false,hoverinfo:'skip'
+      }))
+    ];
+    const layout={
+      paper_bgcolor:'transparent',plot_bgcolor:'transparent',
+      margin:{l:2,r:2,t:2,b:2,pad:0},
+      xaxis:{range:[fn.box[0],fn.box[1]],fixedrange:true,
+             showgrid:false,zeroline:false,showticklabels:false,ticks:'',showline:false},
+      yaxis:{range:[fn.box[2],fn.box[3]],fixedrange:true,
+             showgrid:false,zeroline:false,showticklabels:false,ticks:'',showline:false,
+             scaleanchor:'x'},
+      showlegend:isM,
+      legend:{x:0.01,y:0.99,xanchor:'left',yanchor:'top',
+              bgcolor:'rgba(10,14,20,0.78)',bordercolor:'rgba(44,60,80,0.5)',borderwidth:1,
+              font:{color:'#9aa6b6',family:'"JetBrains Mono",ui-monospace,monospace',size:11},
+              itemsizing:'constant',tracegroupgap:2},
+      dragmode:false,hovermode:false
+    };
+    this._frames=this._buildFrames();
+    Plotly.newPlot(this.div,traces,layout,{displayModeBar:false,responsive:true,staticPlot:false});
+    Plotly.addFrames(this.div,this._frames);
   }
   play(){
-    if(this.reduced){ this.renderStatic(); return; }
-    if(this.playing) return;
-    if(this.frame>=this.maxFrame) this.frame=0;
-    this.playing=true;
-    this.raf=requestAnimationFrame(()=>this.step());
+    if(this.animating)return;
+    if(this.reduced){
+      const last=this._frames[this._frames.length-1];
+      Plotly.animate(this.div,[last.name],{frame:{duration:0,redraw:false},transition:{duration:0},mode:'immediate'});
+      return;
+    }
+    this.animating=true;
+    Plotly.animate(this.div,null,{frame:{duration:45,redraw:false},transition:{duration:0},mode:'immediate',fromcurrent:false})
+      .then(()=>{this.animating=false;});
   }
   reset(){
-    if(this.raf) cancelAnimationFrame(this.raf);
-    this.playing=false; this.frame=0;
-    this.drawBase(); this.drawPaths(0); this.drawLegend();
-    this.play();
+    this.animating=false;
+    Plotly.animate(this.div,[this._frames[0].name],{frame:{duration:0,redraw:false},transition:{duration:0},mode:'immediate'})
+      .then(()=>this.play());
   }
 }
 
 /* ---------- wire the per-section figures ---------- */
 function initFigures(){
   const vizmap=new WeakMap();
-  const canvases=document.querySelectorAll("canvas.optviz");
-  canvases.forEach(cv=>{
-    const fk=cv.getAttribute("data-func");
-    const rk=(cv.getAttribute("data-runners")||"sgd").split("|");
-    const viz=new OptViz(cv, fk, rk);
-    viz.drawBase(); viz.drawPaths(0); viz.drawLegend();
-    vizmap.set(cv, viz);
+  const divs=document.querySelectorAll('div.optviz-plt');
+  divs.forEach(div=>{
+    const fk=div.getAttribute('data-func');
+    const rk=(div.getAttribute('data-runners')||'sgd').split('|');
+    const viz=new PlotlyViz(div,fk,rk);
+    vizmap.set(div,viz);
   });
-  // auto-play when scrolled into view
-  if("IntersectionObserver" in window){
-    const io=new IntersectionObserver((entries)=>{
+  if('IntersectionObserver' in window){
+    const io=new IntersectionObserver(entries=>{
       entries.forEach(e=>{
         if(e.isIntersecting){
           const viz=vizmap.get(e.target);
-          if(viz && viz.frame===0) viz.play();
+          if(viz&&!viz.animating)viz.play();
         }
       });
     },{threshold:0.35});
-    canvases.forEach(cv=>io.observe(cv));
+    divs.forEach(div=>io.observe(div));
   }else{
-    canvases.forEach(cv=>vizmap.get(cv).play());
+    divs.forEach(div=>{const v=vizmap.get(div);if(v)v.play();});
   }
-  // replay buttons -> nearest figure's canvas
-  document.querySelectorAll("button[data-replay]").forEach(btn=>{
-    btn.addEventListener("click",()=>{
-      const fig=btn.closest(".fig");
-      const cv=fig && fig.querySelector("canvas.optviz");
-      if(cv && vizmap.get(cv)) vizmap.get(cv).reset();
+  document.querySelectorAll('button[data-replay]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const fig=btn.closest('.fig');
+      const div=fig&&fig.querySelector('div.optviz-plt');
+      if(div&&vizmap.get(div))vizmap.get(div).reset();
     });
   });
 }
@@ -1246,6 +1247,7 @@ const Grid=(function(){
   }
   return {init};
 })();
+
 
 /* ---------- hero ambient + faint topo backdrop ---------- */
 function initHero(){

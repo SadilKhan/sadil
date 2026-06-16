@@ -505,7 +505,10 @@
 
       <div class="bs-hero__stats">
         {{ $totalPosts := 0 }}
-        {{ range .Sections }}{{ $totalPosts = add $totalPosts (len .RegularPages) }}{{ end }}
+        {{ range .Sections }}
+          {{ $totalPosts = add $totalPosts (len .RegularPages) }}
+          {{ range .Sections }}{{ $totalPosts = add $totalPosts (len .RegularPages) }}{{ end }}
+        {{ end }}
         <div class="bs-stat">
           <span class="bs-stat__num">{{ len .Sections }}</span>
           <span class="bs-stat__lbl">{{ if eq (len .Sections) 1 }}Topic{{ else }}Topics{{ end }}</span>
@@ -515,7 +518,10 @@
           <span class="bs-stat__lbl">{{ if eq $totalPosts 1 }}Post{{ else }}Posts{{ end }}</span>
         </div>
         {{ $totalRead := 0 }}
-        {{ range .Sections }}{{ range .RegularPages }}{{ $totalRead = add $totalRead (or .Params.read_time .ReadingTime) }}{{ end }}{{ end }}
+        {{ range .Sections }}
+          {{ range .RegularPages }}{{ $totalRead = add $totalRead (or .Params.read_time .ReadingTime) }}{{ end }}
+          {{ range .Sections }}{{ range .RegularPages }}{{ $totalRead = add $totalRead (or .Params.read_time .ReadingTime) }}{{ end }}{{ end }}
+        {{ end }}
         {{ if $totalRead }}
         <div class="bs-stat">
           <span class="bs-stat__num">~{{ $totalRead }}m</span>
@@ -572,7 +578,7 @@
             <p class="series-card__desc">{{ . | truncate 110 }}</p>
           {{ end }}
           <div class="series-card__meta">
-            {{ len $sec.RegularPages }} post{{ if ne (len $sec.RegularPages) 1 }}s{{ end }}
+            {{ $secPosts := len $sec.RegularPages }}{{ range $sec.Sections }}{{ $secPosts = add $secPosts (len .RegularPages) }}{{ end }}{{ $secPosts }} post{{ if ne $secPosts 1 }}s{{ end }}
             {{ with index $sec.Params "categories" }}
               &nbsp;·&nbsp;
               {{ range first 2 . }}
