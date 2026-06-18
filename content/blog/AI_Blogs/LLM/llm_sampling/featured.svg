@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-label="LLM Sampling Strategies">
+  <defs>
+    <linearGradient id="smBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#07090d"/>
+      <stop offset="55%" stop-color="#0c1020"/>
+      <stop offset="100%" stop-color="#07090d"/>
+    </linearGradient>
+    <radialGradient id="smGlow" cx="30%" cy="60%" r="40%">
+      <stop offset="0%" stop-color="#a142f4" stop-opacity=".08"/>
+      <stop offset="100%" stop-color="#a142f4" stop-opacity="0"/>
+    </radialGradient>
+    <style><![CDATA[
+      .lbl { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .ttl { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+      .bar { animation: bpulse 3.2s ease-in-out infinite; }
+      .bar:nth-child(2)  { animation-delay: .18s; }
+      .bar:nth-child(3)  { animation-delay: .36s; }
+      .bar:nth-child(4)  { animation-delay: .54s; }
+      .bar:nth-child(5)  { animation-delay: .72s; }
+      .bar:nth-child(6)  { animation-delay: .90s; }
+      .bar:nth-child(7)  { animation-delay: 1.08s; }
+      .bar:nth-child(8)  { animation-delay: 1.26s; }
+      .bar:nth-child(9)  { animation-delay: 1.44s; }
+      .bar:nth-child(10) { animation-delay: 1.62s; }
+      @keyframes bpulse { 0%,100%{opacity:.72} 50%{opacity:1} }
+      .cut { animation: cutblink 2.8s ease-in-out infinite; }
+      @keyframes cutblink { 0%,100%{opacity:.6} 50%{opacity:1} }
+      .beam { animation: bflow 2.4s ease-in-out infinite; }
+      .beam2 { animation: bflow 2.4s ease-in-out .8s infinite; }
+      .beam3 { animation: bflow 2.4s ease-in-out 1.6s infinite; }
+      @keyframes bflow { 0%,100%{opacity:.5} 50%{opacity:.9} }
+    ]]></style>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#smBg)"/>
+  <rect width="800" height="450" fill="url(#smGlow)"/>
+
+  <!-- title -->
+  <text x="400" y="42" class="ttl" font-size="14" fill="#e0e8f4" text-anchor="middle" letter-spacing=".09em">LLM  SAMPLING  STRATEGIES</text>
+  <text x="400" y="60" class="lbl" font-size="9" fill="#7e9cbb" text-anchor="middle" letter-spacing=".15em">GREEDY · TEMPERATURE · TOP-K · TOP-P · BEAM · SPECULATIVE</text>
+  <line x1="80" y1="72" x2="720" y2="72" stroke="#1e2a3a" stroke-width="1"/>
+
+  <!-- ── Probability distribution (centre-left) ── -->
+  <!-- bars: 10 tokens, heights represent logit-softmax probs -->
+  <!-- tokens: "the"=.31 "a"=.24 "an"=.14 "this"=.10 "its"=.07 "one"=.05 "that"=.04 "any"=.03 "some"=.015 "each"=.005 -->
+  <text x="210" y="92" class="lbl" font-size="8.5" fill="#a9c6e0" text-anchor="middle" letter-spacing=".10em">LOGIT  DISTRIBUTION</text>
+
+  <!-- Bar chart: x=52..370, baseline y=220, bar width=28, gap=4 -->
+  <!-- bar 1: "the" p=.31 → height=118 -->
+  <rect x="52"  y="102" width="28" height="118" rx="3" fill="#4285f4" opacity=".85" class="bar"/>
+  <text x="66"  y="228" class="lbl" font-size="7" fill="#8ab4f8" text-anchor="middle">the</text>
+  <text x="66"  y="98"  class="lbl" font-size="7" fill="#8ab4f8" text-anchor="middle">.31</text>
+
+  <!-- bar 2: "a" p=.24 → height=92 -->
+  <rect x="84"  y="128" width="28" height="92" rx="3" fill="#4285f4" opacity=".75" class="bar"/>
+  <text x="98"  y="228" class="lbl" font-size="7" fill="#8ab4f8" text-anchor="middle">a</text>
+  <text x="98"  y="124" class="lbl" font-size="7" fill="#8ab4f8" text-anchor="middle">.24</text>
+
+  <!-- bar 3: "an" p=.14 → height=54 -->
+  <rect x="116" y="166" width="28" height="54" rx="3" fill="#4285f4" opacity=".65" class="bar"/>
+  <text x="130" y="228" class="lbl" font-size="7" fill="#8ab4f8" text-anchor="middle">an</text>
+  <text x="130" y="162" class="lbl" font-size="7" fill="#7e9cbb" text-anchor="middle">.14</text>
+
+  <!-- bar 4: "this" p=.10 → height=38 -->
+  <rect x="148" y="182" width="28" height="38" rx="3" fill="#4285f4" opacity=".55" class="bar"/>
+  <text x="162" y="228" class="lbl" font-size="7" fill="#8ab4f8" text-anchor="middle">this</text>
+  <text x="162" y="178" class="lbl" font-size="7" fill="#7e9cbb" text-anchor="middle">.10</text>
+
+  <!-- bar 5: "its" p=.07 → height=27 -->
+  <rect x="180" y="193" width="28" height="27" rx="3" fill="#a142f4" opacity=".70" class="bar"/>
+  <text x="194" y="228" class="lbl" font-size="7" fill="#c58af9" text-anchor="middle">its</text>
+  <text x="194" y="189" class="lbl" font-size="7" fill="#c58af9" text-anchor="middle">.07</text>
+
+  <!-- bar 6: "one" p=.05 → height=19 -->
+  <rect x="212" y="201" width="28" height="19" rx="3" fill="#a142f4" opacity=".60" class="bar"/>
+  <text x="226" y="228" class="lbl" font-size="7" fill="#c58af9" text-anchor="middle">one</text>
+
+  <!-- bar 7: "that" p=.04 → height=15 -->
+  <rect x="244" y="205" width="28" height="15" rx="3" fill="#ea4335" opacity=".55" class="bar"/>
+  <text x="258" y="228" class="lbl" font-size="7" fill="#f28b82" text-anchor="middle">that</text>
+
+  <!-- bar 8: "any" p=.03 → height=12 -->
+  <rect x="276" y="208" width="28" height="12" rx="3" fill="#ea4335" opacity=".45" class="bar"/>
+  <text x="290" y="228" class="lbl" font-size="7" fill="#f28b82" text-anchor="middle">any</text>
+
+  <!-- bar 9: "some" p=.015 → height=6 -->
+  <rect x="308" y="214" width="28" height="6" rx="3" fill="#ea4335" opacity=".35" class="bar"/>
+  <text x="322" y="228" class="lbl" font-size="7" fill="#5b6b80" text-anchor="middle">some</text>
+
+  <!-- bar 10: "each" p=.005 → height=2 -->
+  <rect x="340" y="218" width="28" height="2" rx="2" fill="#ea4335" opacity=".25" class="bar"/>
+  <text x="354" y="228" class="lbl" font-size="7" fill="#5b6b80" text-anchor="middle">each</text>
+
+  <!-- baseline -->
+  <line x1="48" y1="220" x2="376" y2="220" stroke="#2a3a50" stroke-width=".8"/>
+
+  <!-- top-k=4 cutoff line (vertical after bar 4) -->
+  <line x1="177" y1="88" x2="177" y2="225" stroke="#fbbc04" stroke-width="1.2" stroke-dasharray="4,3" class="cut"/>
+  <text x="178" y="86" class="lbl" font-size="7.5" fill="#fdd663" text-anchor="start">top-k=4</text>
+
+  <!-- top-p=0.80 cutoff line (vertical after bar 5, cumulative .31+.24+.14+.10+.07=.86→approx after bar 5) -->
+  <line x1="209" y1="88" x2="209" y2="225" stroke="#34a853" stroke-width="1.2" stroke-dasharray="4,3" class="cut"/>
+  <text x="210" y="98" class="lbl" font-size="7.5" fill="#81c995" text-anchor="start">top-p≈.86</text>
+
+  <!-- greedy arrow (pointing to tallest bar) -->
+  <path d="M66,96 L66,80 L38,80 L38,70" stroke="#8ab4f8" stroke-width="1.2" fill="none" marker-end="url(#arr)"/>
+  <text x="12" y="67" class="lbl" font-size="7" fill="#8ab4f8">greedy</text>
+
+  <!-- ── RIGHT column: strategies ── -->
+  <line x1="395" y1="82" x2="395" y2="420" stroke="#1e2a3a" stroke-width="1"/>
+
+  <!-- GREEDY box -->
+  <rect x="410" y="82" width="180" height="52" rx="7" fill="#0c1220" stroke="#4285f4" stroke-width="1"/>
+  <text x="420" y="96" class="lbl" font-size="8.5" fill="#8ab4f8" letter-spacing=".08em">GREEDY  DECODING</text>
+  <text x="420" y="110" class="ttl" font-size="9" fill="#a9c6e0">argmax logit every step</text>
+  <text x="420" y="124" class="ttl" font-size="9" fill="#a9c6e0">fast · repetitive at length</text>
+
+  <!-- TEMPERATURE box -->
+  <rect x="600" y="82" width="186" height="52" rx="7" fill="#0c1220" stroke="#a142f4" stroke-width="1"/>
+  <text x="610" y="96" class="lbl" font-size="8.5" fill="#c58af9" letter-spacing=".08em">TEMPERATURE  τ</text>
+  <text x="610" y="110" class="ttl" font-size="9" fill="#a9c6e0">logit / τ  before softmax</text>
+  <text x="610" y="124" class="ttl" font-size="9" fill="#a9c6e0">τ→0 greedy  ·  τ→∞ uniform</text>
+
+  <!-- TOP-K box -->
+  <rect x="410" y="146" width="180" height="52" rx="7" fill="#0c1220" stroke="#fbbc04" stroke-width="1"/>
+  <text x="420" y="160" class="lbl" font-size="8.5" fill="#fdd663" letter-spacing=".08em">TOP-K  SAMPLING</text>
+  <text x="420" y="174" class="ttl" font-size="9" fill="#a9c6e0">keep k highest-prob tokens</text>
+  <text x="420" y="188" class="ttl" font-size="9" fill="#a9c6e0">fixed vocabulary cutoff</text>
+
+  <!-- TOP-P box -->
+  <rect x="600" y="146" width="186" height="52" rx="7" fill="#0c1220" stroke="#34a853" stroke-width="1"/>
+  <text x="610" y="160" class="lbl" font-size="8.5" fill="#81c995" letter-spacing=".08em">TOP-P  (NUCLEUS)</text>
+  <text x="610" y="174" class="ttl" font-size="9" fill="#a9c6e0">tokens summing to p mass</text>
+  <text x="610" y="188" class="ttl" font-size="9" fill="#a9c6e0">adaptive width per context</text>
+
+  <!-- MIN-P box -->
+  <rect x="410" y="210" width="180" height="52" rx="7" fill="#0c1220" stroke="#24c1e0" stroke-width="1"/>
+  <text x="420" y="224" class="lbl" font-size="8.5" fill="#78d9ec" letter-spacing=".08em">MIN-P  SAMPLING</text>
+  <text x="420" y="238" class="ttl" font-size="9" fill="#a9c6e0">threshold = p_min × p_max</text>
+  <text x="420" y="252" class="ttl" font-size="9" fill="#a9c6e0">scales with distribution width</text>
+
+  <!-- BEAM SEARCH box -->
+  <rect x="600" y="210" width="186" height="52" rx="7" fill="#0c1220" stroke="#ff6d00" stroke-width="1"/>
+  <text x="610" y="224" class="lbl" font-size="8.5" fill="#ffab40" letter-spacing=".08em">BEAM  SEARCH</text>
+  <text x="610" y="238" class="ttl" font-size="9" fill="#a9c6e0">B sequences in parallel</text>
+  <text x="610" y="252" class="ttl" font-size="9" fill="#a9c6e0">argmax approximation</text>
+
+  <!-- SPECULATIVE box -->
+  <rect x="410" y="274" width="376" height="54" rx="7" fill="#0c1220" stroke="#ea4335" stroke-width="1"/>
+  <text x="420" y="290" class="lbl" font-size="8.5" fill="#f28b82" letter-spacing=".08em">SPECULATIVE  DECODING</text>
+  <text x="420" y="306" class="ttl" font-size="9" fill="#a9c6e0">draft model proposes γ tokens  ·  target verifies all in 1 forward pass</text>
+  <text x="420" y="320" class="ttl" font-size="9" fill="#a9c6e0">identical output distribution  ·  2–4× wall-clock speedup</text>
+
+  <!-- ── Bottom: beam search tree (visual) ── -->
+  <rect x="82" y="242" width="295" height="138" rx="8" fill="#0c1018" stroke="#1e2a3a" stroke-width="1"/>
+  <text x="230" y="258" class="lbl" font-size="8.5" fill="#7e9cbb" text-anchor="middle" letter-spacing=".10em">BEAM  SEARCH  (B=3)</text>
+
+  <!-- root node -->
+  <circle cx="130" cy="282" r="10" fill="#0c1a2a" stroke="#4285f4" stroke-width="1.5" class="beam"/>
+  <text x="130" y="286" class="lbl" font-size="7" fill="#8ab4f8" text-anchor="middle">s</text>
+
+  <!-- level 1 nodes -->
+  <line x1="140" y1="282" x2="175" y2="268" stroke="#4285f4" stroke-width=".8" opacity=".5"/>
+  <circle cx="185" cy="266" r="9" fill="#0a1710" stroke="#34a853" stroke-width="1.2" class="beam2"/>
+  <text x="185" y="270" class="lbl" font-size="7" fill="#81c995" text-anchor="middle">a</text>
+
+  <line x1="140" y1="282" x2="175" y2="283" stroke="#4285f4" stroke-width=".8" opacity=".5"/>
+  <circle cx="185" cy="283" r="9" fill="#0a1710" stroke="#34a853" stroke-width="1.2" class="beam"/>
+  <text x="185" y="287" class="lbl" font-size="7" fill="#81c995" text-anchor="middle">b</text>
+
+  <line x1="140" y1="282" x2="175" y2="298" stroke="#4285f4" stroke-width=".8" opacity=".4"/>
+  <circle cx="185" cy="300" r="9" fill="#0c1018" stroke="#2a3a50" stroke-width="1" class="beam3"/>
+  <text x="185" y="304" class="lbl" font-size="7" fill="#7e9cbb" text-anchor="middle">c</text>
+
+  <!-- level 2 nodes (top 2 beams expanded) -->
+  <line x1="194" y1="266" x2="220" y2="256" stroke="#34a853" stroke-width=".8" opacity=".5"/>
+  <circle cx="230" cy="254" r="8" fill="#0a1710" stroke="#34a853" stroke-width="1.2" class="beam2"/>
+  <text x="230" y="258" class="lbl" font-size="6.5" fill="#81c995" text-anchor="middle">a1</text>
+
+  <line x1="194" y1="266" x2="220" y2="270" stroke="#34a853" stroke-width=".8" opacity=".5"/>
+  <circle cx="230" cy="271" r="8" fill="#0a1710" stroke="#34a853" stroke-width="1.2" class="beam"/>
+  <text x="230" y="275" class="lbl" font-size="6.5" fill="#81c995" text-anchor="middle">a2</text>
+
+  <line x1="194" y1="283" x2="220" y2="284" stroke="#34a853" stroke-width=".8" opacity=".4"/>
+  <circle cx="230" cy="285" r="8" fill="#0c1018" stroke="#2a3a50" stroke-width="1" class="beam3"/>
+  <text x="230" y="289" class="lbl" font-size="6.5" fill="#7e9cbb" text-anchor="middle">b1</text>
+
+  <!-- level 3 (pruned to top 3) -->
+  <line x1="238" y1="254" x2="260" y2="246" stroke="#34a853" stroke-width=".8" opacity=".6"/>
+  <circle cx="270" cy="244" r="8" fill="#0a1710" stroke="#34a853" stroke-width="1.5" class="beam2"/>
+  <text x="270" y="248" class="lbl" font-size="6" fill="#81c995" text-anchor="middle">best</text>
+
+  <line x1="238" y1="271" x2="260" y2="262" stroke="#34a853" stroke-width=".8" opacity=".4"/>
+  <circle cx="270" cy="260" r="8" fill="#0c1018" stroke="#2a3a50" stroke-width="1" class="beam3"/>
+
+  <line x1="238" y1="285" x2="260" y2="277" stroke="#2a3a50" stroke-width=".8" opacity=".3"/>
+  <circle cx="270" cy="275" r="8" fill="#0c1018" stroke="#1e2a3a" stroke-width=".8" class="beam3"/>
+
+  <!-- score labels -->
+  <text x="270" y="233" class="lbl" font-size="7" fill="#fdd663">-3.2</text>
+  <text x="270" y="249" class="lbl" font-size="7" fill="#fdd663">-5.1</text>
+  <text x="270" y="265" class="lbl" font-size="7" fill="#5b6b80">-7.3</text>
+
+  <!-- beam score legend -->
+  <text x="300" y="258" class="lbl" font-size="7.5" fill="#7e9cbb">log-prob</text>
+  <text x="300" y="270" class="lbl" font-size="7.5" fill="#7e9cbb">scores</text>
+
+  <!-- bottom label -->
+  <text x="230" y="372" class="lbl" font-size="8" fill="#5b6b80" text-anchor="middle">prune to top-B at each level</text>
+  <!-- repetition penalty note -->
+  <rect x="88" y="345" width="280" height="20" rx="4" fill="#0f1420" stroke="#ff6d00" stroke-width=".8"/>
+  <text x="228" y="359" class="lbl" font-size="7.5" fill="#ffab40" text-anchor="middle">repetition penalty: add bias to already-seen tokens</text>
+
+  <!-- ── bottom strip ── -->
+  <rect x="80" y="342" width="636" height="70" rx="8" fill="none"/>
+  <!-- speculative note bottom -->
+  <rect x="410" y="340" width="376" height="70" rx="8" fill="#0c1018" stroke="#1e2a3a" stroke-width="1"/>
+  <text x="598" y="356" class="lbl" font-size="8.5" fill="#f28b82" text-anchor="middle" letter-spacing=".08em">SPECULATIVE  ACCEPTANCE  RULE</text>
+  <text x="598" y="372" class="ttl" font-size="8.5" fill="#a9c6e0" text-anchor="middle">if p_target(x) ≥ p_draft(x)  →  accept always</text>
+  <text x="598" y="387" class="ttl" font-size="8.5" fill="#a9c6e0" text-anchor="middle">else  →  accept with prob p_t / p_d  (rejection sample)</text>
+  <text x="598" y="402" class="ttl" font-size="8.5" fill="#7e9cbb" text-anchor="middle">guarantees same distribution as target-only decoding</text>
+
+  <!-- caption -->
+  <text x="400" y="432" class="lbl" font-size="8" fill="#2a3a50" text-anchor="middle" letter-spacing=".08em">all strategies manipulate the same logit vector  ·  speculative decoding does not change the distribution</text>
+</svg>

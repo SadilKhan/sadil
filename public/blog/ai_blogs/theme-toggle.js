@@ -188,6 +188,7 @@ html.light table thead th {
 }
 html.light table tbody td { border-color: var(--bdr) !important; }
 html.light table tbody tr:nth-child(even) { background: var(--bg3) !important; }
+html.light table tbody tr:nth-child(even) td { background: var(--bg3) !important; }
 
 /* ── Badges / status chips — override hardcoded rgba backgrounds ── */
 html.light .badge,   html.light .bdg   { filter: none; }

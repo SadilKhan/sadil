@@ -6,8 +6,15 @@
     <description>Recent content in LLM on Home</description>
     <generator>Hugo</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 11 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="//localhost:1314/blog/ai_blogs/llm/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>LLM Sampling</title>
+      <link></link>
+      <pubDate>Wed, 17 Jun 2026 00:00:00 +0000</pubDate>
+      <guid></guid>
+      <description></description>
+    </item>
     <item>
       <title>Positional Encoding</title>
       <link></link>

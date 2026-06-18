@@ -82,7 +82,7 @@ research:
         - title: "DreamCAD"
           url: "https://arxiv.org/abs/2411.17945"
           detail: "Bezier-Patch-based CAD generation"
-          venue: "Arxiv"
+          venue: "ECCV 2026"
 
 service:
   reviewers:
@@ -109,6 +109,10 @@ service:
       detail: "Master Thesis · MSc Computer Science · RPTU Kaiserslautern · 2025-2026"
 
 events:
+  - date: "June 2026"
+    text: "DreamCAD got accepted in ECCV 2026."
+    party: true
+    url: "https://sadilkhan.github.io/dreamcad2026/"
   - date: "May 2026"
     text: "Joined Spectral Labs as Full-time Research Scientist."
   - date: "Nov 2025"

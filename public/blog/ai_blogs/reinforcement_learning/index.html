@@ -47,8 +47,8 @@
   
   <meta itemprop="name" content="Reinforcement Learning">
   <meta itemprop="description" content="Policy gradients, value-based methods, and the full post-training pipeline. PPO, DPO, GRPO, Q-learning, and agentic RL — the algorithms that turn a pretrained base model into the assistant you actually use.">
-  <meta itemprop="datePublished" content="2026-06-13T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2026-06-13T00:00:00+00:00">
+  <meta itemprop="datePublished" content="2026-06-17T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-06-17T00:00:00+00:00">
   <meta itemprop="image" content="//localhost:1314/blog/ai_blogs/reinforcement_learning/featured.svg">
   <meta itemprop="keywords" content="AI Notebook">
   
@@ -2101,14 +2101,14 @@ body.dark-mode .sk-drawer,
 
       <div class="bs-hero__stats">
         <div class="bs-stat">
-          <span class="bs-stat__num">6</span>
+          <span class="bs-stat__num">7</span>
           <span class="bs-stat__lbl">Stories</span>
         </div>
         
           
           
           <div class="bs-stat">
-            <span class="bs-stat__num">~134m</span>
+            <span class="bs-stat__num">~159m</span>
             <span class="bs-stat__lbl">Total Read</span>
           </div>
           <div class="bs-stat">
@@ -2175,9 +2175,36 @@ body.dark-mode .sk-drawer,
           
           
           
-          <a class="bs-row bs-reveal" href="/blog/ai_blogs/markov_mc_td.html" data-searchable="markov, monte carlo, td the three foundations you keep forgetting, finally as one story with pictures. markov property, monte carlo, temporal difference — three definitions that evaporate every time you read them. here they are built as one continuous world: a markov chain becomes an mdp, monte carlo waits for the full episode, td updates after one step, and every rl algorithm you already know sits somewhere on that dial between them.
- reinforcement learning foundations" data-date="2026-06-13" data-title="markov, monte carlo, td" data-read="25" style="transition-delay: 0ms">
+          <a class="bs-row bs-reveal" href="/blog/ai_blogs/prm.html" data-searchable="process reward models grading the reasoning, not just the answer — how prms score every step and why that changes what rl can do. outcome reward models tell you whether the final answer is right. process reward models tell you which step went wrong. eleven sections covering the core distinction, where step labels come from, how to train the grader, how prms are used at inference for search and reranking, how they fit inside rl training loops, the failure modes practitioners run into, and a walkthrough of the models people actually deploy.
+ reinforcement learning post-training" data-date="2026-06-17" data-title="process reward models" data-read="25" style="transition-delay: 0ms">
             <span class="bs-row__num">01</span>
+            <div class="bs-row__meta">
+              <span class="bs-row__date">Jun 17, 2026</span>
+              <span>25 min read</span>
+            </div>
+            <div class="bs-row__main">
+              <h3 class="bs-row__title">Process Reward Models</h3>
+              
+                <p class="bs-row__excerpt">Outcome reward models tell you whether the final answer is right. Process reward models tell you which step went wrong. Eleven sections …</p>
+              
+            </div>
+            <div class="bs-row__thumb">
+              
+              
+                
+              
+              
+              <img src="/blog/ai_blogs/reinforcement_learning/prm/featured.svg" alt="Process Reward Models" loading="lazy"/>
+            </div>
+            <span class="bs-row__arrow" aria-hidden="true">→</span>
+          </a>
+        
+          
+          
+          
+          <a class="bs-row bs-reveal" href="/blog/ai_blogs/markov_mc_td.html" data-searchable="markov, monte carlo, td the three foundations you keep forgetting, finally as one story with pictures. markov property, monte carlo, temporal difference — three definitions that evaporate every time you read them. here they are built as one continuous world: a markov chain becomes an mdp, monte carlo waits for the full episode, td updates after one step, and every rl algorithm you already know sits somewhere on that dial between them.
+ reinforcement learning foundations" data-date="2026-06-13" data-title="markov, monte carlo, td" data-read="25" style="transition-delay: 80ms">
+            <span class="bs-row__num">02</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">Jun 13, 2026</span>
               <span>25 min read</span>
@@ -2203,8 +2230,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/q_learning.html" data-searchable="q-learning value-based rl from bellman equations to dqn — how an agent learns to act without ever seeing a policy. ten sections on the value side of reinforcement learning. starts with the q-function and why it is strictly more useful than the value function alone. builds the bellman optimality equation from scratch, then derives the tabular q-learning update as a one-step bootstrap. covers epsilon-greedy exploration, off-policy learning, and why the deadly triad makes naive q-learning with neural nets unstable. closes with dqn: experience replay and the target network that finally made deep value learning work at scale.
- reinforcement learning deep learning" data-date="2026-06-12" data-title="q-learning" data-read="30" style="transition-delay: 80ms">
-            <span class="bs-row__num">02</span>
+ reinforcement learning deep learning" data-date="2026-06-12" data-title="q-learning" data-read="30" style="transition-delay: 160ms">
+            <span class="bs-row__num">03</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">Jun 12, 2026</span>
               <span>30 min read</span>
@@ -2230,8 +2257,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/4_agentic_rl.html" data-searchable="agentic rl rl when the model&#39;s actions are tool calls instead of moves. what changes for rl when each action is a tool call (search, code execution, calculators, browsers) and the reward only arrives at the end of a long sequence. the post is about credit assignment across many steps, how people design these environments, and the places where current methods still struggle.
- reinforcement learning agents tool use" data-date="2026-05-29" data-title="agentic rl" data-read="18" style="transition-delay: 160ms">
-            <span class="bs-row__num">03</span>
+ reinforcement learning agents tool use" data-date="2026-05-29" data-title="agentic rl" data-read="18" style="transition-delay: 240ms">
+            <span class="bs-row__num">04</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">May 29, 2026</span>
               <span>18 min read</span>
@@ -2257,8 +2284,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/3_rl_post_training_guide.html" data-searchable="the post-training guide how a base model turns into the assistant you actually use. everything that happens between a pretrained base model and the chatbot people end up shipping. supervised fine tuning, reward modeling, rlhf, dpo, and the evaluation work that decides which checkpoint actually goes out. i wrote it as one connected process and tried to flag the places where each stage tends to break.
- llm post-training rlhf" data-date="2026-05-22" data-title="the post-training guide" data-read="18" style="transition-delay: 240ms">
-            <span class="bs-row__num">04</span>
+ llm post-training rlhf" data-date="2026-05-22" data-title="the post-training guide" data-read="18" style="transition-delay: 320ms">
+            <span class="bs-row__num">05</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">May 22, 2026</span>
               <span>18 min read</span>
@@ -2284,8 +2311,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/1_beyond_ppo.html" data-searchable="beyond ppo what came after ppo, and when each one is actually worth using. ppo is not the only option anymore. dpo, grpo, orpo, kto, and a few reinforce variants have all picked up traction for llm alignment, sometimes outperforming ppo on specific tasks. this post compares them side by side, focused on what each method gives up and what it gets back in return.
- reinforcement learning rlhf dpo" data-date="2026-05-15" data-title="beyond ppo" data-read="18" style="transition-delay: 320ms">
-            <span class="bs-row__num">05</span>
+ reinforcement learning rlhf dpo" data-date="2026-05-15" data-title="beyond ppo" data-read="18" style="transition-delay: 400ms">
+            <span class="bs-row__num">06</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">May 15, 2026</span>
               <span>18 min read</span>
@@ -2311,8 +2338,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/0_ppo_rl.html" data-searchable="ppo deep dive what ppo is actually doing under the clipped surrogate. a walkthrough of proximal policy optimization from the ground up. what the clipped ratio is doing, why importance sampling lets you reuse old rollouts, and how gae keeps the advantage estimate from blowing up. with diagrams that make the math less scary.
- reinforcement learning rlhf" data-date="2026-05-08" data-title="ppo deep dive" data-read="25" style="transition-delay: 400ms">
-            <span class="bs-row__num">06</span>
+ reinforcement learning rlhf" data-date="2026-05-08" data-title="ppo deep dive" data-read="25" style="transition-delay: 480ms">
+            <span class="bs-row__num">07</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">May 8, 2026</span>
               <span>25 min read</span>

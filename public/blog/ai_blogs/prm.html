@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Process Reward Models: Grading the Reasoning, Not Just the Answer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;--green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;--yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;--teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#a9c6e0;--text3:#7e9cbb;
+  --mono:'JetBrains Mono',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--orange));z-index:999;transition:width .05s}
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);z-index:900;padding:.55rem 1.5rem}
+.nav-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.2rem}
+.nav-brand{font-size:.85rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.7rem;white-space:nowrap;padding:.25rem .5rem;border-radius:6px;font-weight:500;transition:all .12s}
+.nav-links a:hover{color:var(--teal2);background:rgba(0,212,255,.08)}
+.hero{text-align:center;padding:4rem 1.5rem 2.5rem;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.08;background:linear-gradient(135deg,#8ab4f8,#c58af9,#ffab40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:680px;margin:0 auto}
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+section{padding:2.8rem 0 .5rem;border-top:1px solid var(--bdr);margin-top:2.2rem}
+section:first-of-type{border-top:none;margin-top:0}
+.sec-hdr{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.sec-num{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;letter-spacing:.05em}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.12rem;font-weight:700;margin:1.8rem 0 .6rem}
+p{color:var(--text);margin-bottom:.85rem;text-align:justify;-webkit-hyphens:auto;hyphens:auto}
+p.note{color:var(--text2);font-size:.92rem}
+.fig{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:1.3rem;margin:1.6rem 0}
+.fig-title{text-align:center;font-size:.74rem;font-weight:700;color:var(--text2);margin-bottom:1rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas.anim{display:block;width:100%;height:auto;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.8rem;font-style:italic;line-height:1.6}
+.mb{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto}
+.mb .katex-display{margin:.15rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.4rem;font-family:var(--mono)}
+.co{border-radius:10px;padding:.95rem 1.2rem;margin:1.3rem 0;border-left:3px solid;font-size:.9rem}
+.co-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+.co p{margin:0;font-size:.87rem;line-height:1.65}
+.co.t{background:rgba(36,193,224,.05);border-color:var(--teal)}.co.t .co-title{color:var(--teal2)}
+.co.y{background:rgba(251,188,4,.05);border-color:var(--yellow)}.co.y .co-title{color:var(--yellow2)}
+.co.o{background:rgba(255,109,0,.05);border-color:var(--orange)}.co.o .co-title{color:var(--orange2)}
+.co.g{background:rgba(52,168,83,.05);border-color:var(--green)}.co.g .co-title{color:var(--green2)}
+.co.r{background:rgba(234,67,53,.05);border-color:var(--red)}.co.r .co-title{color:var(--red2)}
+.co.p{background:rgba(161,66,244,.05);border-color:var(--purple)}.co.p .co-title{color:var(--purple2)}
+table.cmp{width:100%;border-collapse:collapse;font-size:.82rem;margin:1.3rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+table.cmp th{background:var(--s3);color:var(--text2);padding:.6rem .9rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+table.cmp td{padding:.55rem .9rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.ic{background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--blue2)}
+.code{background:#0b0e14;border:1px solid var(--bdr);border-radius:10px;margin:1.3rem 0;overflow:hidden}
+.code-hdr{background:var(--s3);padding:.45rem .9rem;font-size:.7rem;font-weight:700;color:var(--text2);font-family:var(--mono);letter-spacing:.04em;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:.5rem}
+.code-dot{width:8px;height:8px;border-radius:50%}
+.code pre{margin:0;padding:.95rem 1.1rem;overflow-x:auto}
+.code code{font-family:var(--mono);font-size:.78rem;line-height:1.6;color:#cdd9e8;white-space:pre}
+.code .c-kw{color:#c58af9}.code .c-st{color:#81c995}.code .c-co{color:#5b6b80;font-style:italic}.code .c-fn{color:#8ab4f8}.code .c-nu{color:#ffab40}
+.modelcard{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid;border-radius:0 10px 10px 0;padding:.9rem 1.1rem;margin:.8rem 0}
+.modelcard h4{font-size:.92rem;font-weight:700;margin:0 0 .25rem}
+.modelcard p{font-size:.85rem;margin:0;color:var(--text2)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+details.qa{background:var(--s2);border:1px solid rgba(252,198,40,.3);border-radius:12px;margin:1.6rem 0;overflow:hidden}
+details.qa summary{cursor:pointer;padding:.95rem 1.2rem;list-style:none;display:flex;align-items:center;gap:.8rem;user-select:none;transition:background .15s}
+details.qa summary:hover{background:rgba(252,198,40,.05)}
+details.qa summary::-webkit-details-marker{display:none}
+.qa-badge{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.07em;padding:.25rem .6rem;border-radius:6px;background:rgba(252,198,40,.15);color:var(--yellow2);white-space:nowrap}
+.qa-q{font-weight:600;font-size:.93rem;color:var(--text);flex:1}
+.qa-chev{color:var(--yellow2);font-size:.8rem;transition:transform .2s}
+details.qa[open] .qa-chev{transform:rotate(90deg)}
+.qa-body{padding:.4rem 1.3rem 1.2rem;border-top:1px solid var(--bdr)}
+.qa-body p{font-size:.91rem}
+@media(max-width:640px){.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-in">
+  <div class="nav-brand">Process Reward Models</div>
+  <div class="nav-links">
+    <a href="#s1">ORM vs PRM</a><a href="#s2">A Step</a><a href="#s3">Labels</a>
+    <a href="#s4">Auto-Label</a><a href="#s5">Training</a><a href="#s6">Search</a>
+    <a href="#s7">RL</a><a href="#s8">Pitfalls</a><a href="#s9">The Models</a><a href="#s10">Train One</a><a href="#s11">Cheat Sheet</a>
+  </div>
+</div></nav>
+
+<div class="hero">
+  <h1>Process Reward Models</h1>
+  <p>An outcome reward tells you the final answer was wrong. A process reward tells you it was line 3 that broke. This is the full story of PRMs: what a step is, where the labels come from without armies of humans, how you train the grader, and how it powers search and RL for reasoning models.</p>
+</div>
+
+<main>
+
+<!-- ════════ S1: ORM vs PRM ════════ -->
+<section id="s1">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">01</span><h2>The Core Distinction: Outcome vs Process</h2></div>
+  <p>A reward model scores model outputs. There are two places to put the score. An <strong>Outcome Reward Model (ORM)</strong> reads the whole solution and emits one number: right or wrong, good or bad. A <strong>Process Reward Model (PRM)</strong> reads the solution step by step and emits one number <em>per step</em>: was this line a correct, helpful move from here?</p>
+  <p>Why the difference matters, made concrete. A model solves a math problem in five steps, gets steps 1 to 4 perfectly right, makes an arithmetic slip in step 5, and lands on the wrong answer. The ORM sees a wrong answer and assigns reward 0 to the entire trajectory, punishing the four good steps along with the one bad one. The PRM assigns roughly +1, +1, +1, +1, then 0, isolating the blame to exactly where the reasoning broke.</p>
+  <div class="fig">
+    <div class="fig-title">Same Solution, Two Graders</div>
+    <canvas id="c-p1" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">A five step derivation with one bad step. The ORM collapses everything to a single terminal verdict, so the credit assignment problem is brutal: the learner cannot tell which step to fix. The PRM hands back a dense vector of per step verdicts, pinpointing the failure at step 5 and certifying steps 1 to 4 as good. Dense, local feedback is the entire value proposition.</div>
+  </div>
+  <div class="co t"><div class="co-title">Where you have seen this exact shape before</div>
+    <p>This is the sparse versus dense reward distinction from the diffusion and RL world, now in language. ORM is the single end of sequence reward that made the PPO critic hard to train; PRM is the dense per token signal that PRIME tried to manufacture from the KL term. A PRM is a learned, explicit version of that dense signal, trained to grade reasoning.</p>
+  </div>
+</section>
+
+<!-- ════════ S2: A STEP ════════ -->
+<section id="s2">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">02</span><h2>What Counts as a Step?</h2></div>
+  <p>Before you can grade steps you must define one. A step is a contiguous chunk of reasoning that can be judged as a single move. The boundary is a design choice, and the right granularity depends on the domain.</p>
+  <p><strong>In math</strong>, a step is usually one line of the derivation, split on newlines or on sentence boundaries. Consider this solution to "a train travels 60 miles in 1.5 hours, then 40 miles in 0.5 hours, what is its average speed?":</p>
+  <div class="mb">
+    <div class="math-d">\begin{aligned}&\text{step 1: total distance} = 60 + 40 = 100 \text{ miles}\\&\text{step 2: total time} = 1.5 + 0.5 = 2.0 \text{ hours}\\&\text{step 3: average speed} = 100 / 2.0 = 50 \text{ mph}\end{aligned}</div>
+    <div class="mb-label">Three steps, each a self contained, checkable claim. A PRM scores each line given the question and the lines above it.</div>
+  </div>
+  <p><strong>In code</strong>, a step might be a logical block: a function, a loop body, a single transformation. Here a model builds a function to find the maximum of a list, and one step contains a classic bug:</p>
+  <div class="mb">
+    <div class="math-d">\texttt{step 1: def find\_max(xs): m = xs[0]}\;\;\checkmark\\ \texttt{step 2: for x in xs[1:]: if x > m: m = x}\;\;\checkmark\\ \texttt{step 3: return m if xs else None}\;\;\;\text{(dead check: xs[0] already crashed on empty)}</div>
+    <div class="mb-label">Steps 1 and 2 are correct. Step 3's guard is logically dead because step 1 already indexes xs[0]. A PRM trained on code can flag step 3 as a non-improving or buggy move.</div>
+  </div>
+  <p>The interview nuance: <strong>too fine and steps are unjudgeable</strong> (a single token carries no verdict), <strong>too coarse and you are back to outcome grading</strong> (one step equals the whole solution). The sweet spot is the unit at which a reasonable grader can say "yes, this move was sound" or "no, here is where it went wrong". Most math PRMs use line level steps; the OpenAI PRM800K dataset uses solution lines as steps.</p>
+  <div class="fig">
+    <div class="fig-title">Granularity: the Same Solution Cut Three Ways</div>
+    <canvas id="c-p2" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">Token level (top): too fine, each piece is meaningless on its own. Step level (middle): the useful unit, each chunk is a checkable claim. Whole solution (bottom): too coarse, this is just an ORM. The middle cut is what makes process supervision possible: chunks big enough to carry a verdict, small enough to localize blame.</div>
+  </div>
+</section>
+
+<!-- ════════ S3: LABELS ════════ -->
+<section id="s3">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(251,188,4,.12);color:var(--yellow2)">03</span><h2>What Does a Step Label Even Mean?</h2></div>
+  <p>Say a step is "correct". Correct how? There are two definitions, and conflating them is the most common conceptual error in the field.</p>
+  <p><strong>Definition A, correctness.</strong> Is this step true and free of error in isolation? Step 2 above, total time = 2.0 hours, is simply correct arithmetic.</p>
+  <p><strong>Definition B, value or potential.</strong> Does this step move us toward a correct final answer? This is the reinforcement learning definition: a step is good if a strong solver, continuing from here, is likely to reach the right answer. A step can be locally correct yet low value (a true but useless tangent) or locally surprising yet high value (a clever non obvious lemma).</p>
+  <p>The PRM800K human labels use a three way correctness scheme, positive, neutral, negative. Most automatically labeled PRMs use the value definition, because it is what you can measure without a human: roll out many completions from a step and see how often they succeed. That measured success rate <em>is</em> the step's value, and it connects PRMs straight back to the value functions of your RL blogs.</p>
+  <div class="mb">
+    <div class="math-d">\text{label}(s_t) \;\approx\; V(s_t) \;=\; \mathbb{P}\big(\text{reach correct answer} \mid \text{prefix up to step } t\big)</div>
+    <div class="mb-label">The value definition of a step label is exactly a state value from the RL blogs: the probability of eventual success from this partial solution.</div>
+  </div>
+  <div class="co y"><div class="co-title">The subtlety that trips people up</div>
+    <p>A PRM that learns value is not checking truth, it is forecasting success. Under this definition a step that is mathematically valid but leads down a dead end gets a low label, and a step that takes a known productive shortcut gets a high one even before the shortcut is justified. This is why PRMs trained on rollouts behave like critics, and why they can reward reasoning that looks unusual but reliably works.</p>
+  </div>
+</section>
+
+<!-- ════════ S4: AUTO-LABEL ════════ -->
+<section id="s4">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">04</span><h2>Where Labels Come From Without an Army of Humans</h2></div>
+  <p>The original PRM (OpenAI, 2023) was trained on 800,000 human step labels, expensive and unscalable. The breakthrough that made PRMs practical is automatic labeling by <strong>rollout</strong>, the Math-Shepherd method. The idea is pure Monte Carlo, straight from the foundations blog: to estimate a step's value, complete it many times and count successes.</p>
+  <p>Walk the procedure on a concrete step. The model is partway through a problem and has written steps 1 and 2; we want a label for the partial solution after step 2. Sample, say, 8 independent completions from that prefix and check each final answer against the known ground truth:</p>
+  <div class="mb">
+    <div class="math-d">\text{8 rollouts from prefix} \to \{\checkmark,\checkmark,\times,\checkmark,\checkmark,\times,\checkmark,\checkmark\} \;\Rightarrow\; \text{label} = \tfrac{6}{8} = 0.75</div>
+    <div class="mb-label">Hard estimation (HE): the step's value is the fraction of completions that reach the correct answer. No human needed, only a verifier for the final answer.</div>
+  </div>
+  <p>Two labeling conventions you will be asked to distinguish. <strong>Soft labels</strong> keep the fraction 0.75 as a regression target. <strong>Hard labels</strong> threshold it: any step from which at least one rollout succeeds is labeled good, which marks a step as good if the correct answer is still reachable from it. Math-Shepherd compared both; soft labels generally carry more information.</p>
+  <p>The crucial efficiency point: you only need a <strong>verifier for the final answer</strong>, not for the steps. In math the verifier checks the boxed answer against ground truth. In code it runs the unit tests. The expensive thing, judging intermediate reasoning, is bootstrapped entirely from the cheap thing, checking the final outcome. This is how PRM training data is now generated at scale.</p>
+  <div class="fig">
+    <div class="fig-title">Auto-Labeling by Rollout: Monte Carlo on a Prefix</div>
+    <canvas id="c-p3" class="anim" width="880" height="370"></canvas>
+    <div class="fig-cap">From the prefix after step 2, eight completions branch out, each run to a final answer and checked by the verifier. Six reach the correct answer, two fail. The step's value label is 6/8 = 0.75. Repeat this at every step of many solutions and you have a fully labeled PRM training set, built from nothing but a final answer checker. The deeper the rollouts disagree, the more decisive that step was.</div>
+  </div>
+  <div class="co p"><div class="co-title">The honest cost and its fixes</div>
+    <p>Rollout labeling is compute heavy: k completions per step, many steps, many problems. Refinements attack this. Some methods use a binary search over steps to find the first error in O(log n) rollouts instead of labeling every step. Others (the entropy and tree based successors) reuse a shared rollout tree so completions are amortized across steps. The principle stays: trade cheap final answer checks plus compute for expensive human judgment.</p>
+  </div>
+</section>
+
+<!-- ════════ S5: TRAINING ════════ -->
+<section id="s5">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">05</span><h2>Training the Grader</h2></div>
+  <p>With labeled steps in hand, the PRM is usually the base language model with its prediction head replaced by a tiny scalar head. At a designated marker token after each step (a special token, or a fixed delimiter), the model outputs one number, the predicted step value. Training is per step regression or classification:</p>
+  <div class="mb">
+    <div class="math-d">\mathcal{L}_{PRM} = \sum_t \text{BCE}\big(r_\theta(q, s_{1:t}),\; y_t\big),\qquad r_\theta \in [0,1]</div>
+    <div class="mb-label">q is the question, s_{1:t} the steps so far, y_t the label from §4. Binary cross entropy for hard labels, MSE for soft. The model reads the prefix and grades the latest step.</div>
+  </div>
+  <p>One design decision interviewers probe: the PRM must score a step using <strong>only the prefix up to and including that step</strong>, never the future. It is a forward looking judge, like a value function, not a retrospective one. If it could peek at later steps it would be grading outcomes again. The marker token placement enforces this causally: the score at step t sees tokens up to t and no further, exactly the causal masking from the attention blog doing useful work.</p>
+  <p>At inference the PRM reads a solution and emits a vector of step scores. These must be aggregated into one solution score for ranking. Three standard reductions, each with a different temperament:</p>
+  <div class="mb">
+    <div class="math-d">\text{score}(\text{sol}) \in \Big\{\;\underbrace{\min_t r_t}_{\text{any bad step ruins it}},\;\; \underbrace{\prod_t r_t}_{\text{compounding doubt}},\;\; \underbrace{r_T \text{ or } \tfrac{1}{T}\textstyle\sum_t r_t}_{\text{last / mean}}\;\Big\}</div>
+    <div class="mb-label">min is the popular default: a solution is only as trustworthy as its weakest step, which matches the intuition that one fatal error sinks a proof.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">From Step Scores to One Number</div>
+    <canvas id="c-p4" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">Two candidate solutions to the same problem, each a row of per step PRM scores. Solution A is uniformly strong; solution B is excellent until a single weak step. Under the min reduction, B's one weak step drags its solution score below A, correctly preferring the consistently sound derivation. The choice of reduction is a knob: min is strict, mean is forgiving, product sits between.</div>
+  </div>
+</section>
+
+<!-- ════════ S6: SEARCH ════════ -->
+<section id="s6">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">06</span><h2>Using a PRM at Inference: Search and Reranking</h2></div>
+  <p>The simplest and most popular use needs no RL at all. Generate many candidate solutions, score each with the PRM, keep the best. This is <strong>best-of-N with PRM reranking</strong>, and it reliably beats both greedy decoding and majority vote on hard reasoning, because the PRM can reward a correct but rare solution that majority vote would drown out.</p>
+  <p>But the real power is guiding generation <em>as it unfolds</em>, turning the PRM into the value function of a search. In <strong>step level beam search</strong>, at each step you expand several candidate next steps, score them all with the PRM, and keep only the top few partial solutions to extend, pruning doomed branches before wasting tokens on them:</p>
+  <div class="mb">
+    <div class="math-d">\text{at each step: expand } k \text{ candidates} \to \text{PRM scores} \to \text{keep top } b \to \text{extend}</div>
+    <div class="mb-label">The PRM is the heuristic that ranks partial solutions, exactly the role a value estimate plays in any guided tree search.</div>
+  </div>
+  <p>Push this further and you get <strong>PRM guided Monte Carlo Tree Search</strong>, where the PRM provides the value estimate that MCTS uses to decide which branches to explore, the same MCTS from the agentic RL blog, now with a learned reasoning critic instead of a game simulator. This is the family of methods behind the strong test time compute scaling results: spend more inference compute exploring the tree, let the PRM steer, and accuracy climbs.</p>
+  <div class="fig">
+    <div class="fig-title">PRM as the Compass of a Search Tree</div>
+    <canvas id="c-p5" class="anim" width="880" height="360"></canvas>
+    <div class="fig-cap">A reasoning tree growing step by step. At each frontier the PRM scores candidate next steps; high scoring branches (green) are expanded, low scoring ones (red) are pruned before they waste compute. The bold path is the surviving best line of reasoning. Without the PRM the tree explodes uniformly; with it, compute flows toward the branches most likely to succeed. More search plus a good PRM equals higher accuracy, the test time scaling story.</div>
+  </div>
+</section>
+
+<!-- ════════ S7: RL ════════ -->
+<section id="s7">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">07</span><h2>PRMs Inside RL Training</h2></div>
+  <p>Reranking and search use a frozen PRM at inference. The other use puts the PRM <em>inside</em> the training loop as the reward signal, and this is where it connects to everything from your PPO and GRPO blogs. Recall the central pain there: the reward arrives only at the final token, so 499 of 500 tokens get no task signal and credit assignment is slow. A PRM fixes this directly by paying a reward at every step.</p>
+  <div class="mb">
+    <div class="math-d">\tilde r_t = \underbrace{r_\theta^{PRM}(q, s_{1:t})}_{\text{dense, per step}} \quad\text{instead of}\quad \tilde r_t = \underbrace{R(\text{answer})\cdot \mathbf{1}[t = T]}_{\text{sparse, terminal only}}</div>
+    <div class="mb-label">The PRM turns a sparse terminal reward into a dense per step reward, which is exactly what PRIME approximated and what the value function bootstrap struggled to spread backward.</div>
+  </div>
+  <p>Plug this dense reward into PPO or GRPO and intermediate good steps are reinforced immediately, without waiting for the value function to slowly propagate credit from the end. The advantage estimate at step t now reflects whether <em>this step</em> helped, not just whether the whole trajectory eventually succeeded. Math-Shepherd and PRIME both demonstrated PRM rewards lifting reasoning performance inside GRPO style training.</p>
+  <p>But the danger scales with the density. A dense learned reward is a dense attack surface for <strong>reward hacking</strong>: the policy will find steps that the PRM scores highly but that are not actually good reasoning, the same gaming that the KL penalty guards against for the outcome reward model. The standard defenses transfer directly: keep a KL anchor to a reference policy, refresh or retrain the PRM as the policy shifts (an online PRM, the PRIME approach), and blend the dense PRM signal with a sparse but trustworthy outcome verifier so the final ground truth always has a vote.</p>
+  <div class="fig">
+    <div class="fig-title">Sparse Outcome Reward vs Dense PRM Reward in Training</div>
+    <canvas id="c-p6" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Top: the ORM world, one reward at the end, every intermediate step learning only through slow value bootstrapping. Bottom: the PRM world, a reward attached to every step, so the gradient at each step reflects that step's own contribution. Faster, sharper credit assignment, at the cost of a richer reward to hack, which is why the KL anchor and an outcome verifier stay in the loop.</div>
+  </div>
+</section>
+
+<!-- ════════ S8: PITFALLS ════════ -->
+<section id="s8">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(234,67,53,.12);color:var(--red2)">08</span><h2>The Pitfalls That Get Asked About</h2></div>
+  <p>PRMs are powerful and brittle in specific, predictable ways. Knowing the failure modes is what separates a surface answer from a deep one.</p>
+  <p><strong>Reward hacking under the value definition.</strong> Because auto labels measure success probability, a PRM can over reward steps that <em>correlate</em> with success rather than <em>cause</em> it: confident phrasing, common formatting, steps that resemble those in easy problems. The policy then learns the surface features, not the reasoning.</p>
+  <p><strong>Label noise from the verifier.</strong> Rollout labeling trusts the final answer checker. If the checker is loose, a wrong path that stumbles into the right numeric answer gets labeled good (false positive), and a correct path that the checker cannot parse gets labeled bad (false negative). Garbage final verification poisons every step label built on it.</p>
+  <p><strong>Distribution shift during RL.</strong> A PRM trained on one policy's rollouts becomes miscalibrated as RL pushes the policy into new regions of reasoning space the PRM never saw, the same staleness that forces target networks and online reward models elsewhere. A frozen PRM slowly stops measuring what it was trained to measure.</p>
+  <p><strong>The fundamental tension, process versus outcome correctness.</strong> The deepest issue. A step can be a valid logical move that happens to lead to a dead end, or an invalid move that luckily reaches the right answer. Process labels and outcome labels genuinely disagree on these cases, and no labeling scheme resolves it perfectly. PRMs that optimize for value can mark sound but unlucky reasoning as bad, subtly teaching the model to avoid legitimate exploration.</p>
+  <div class="fig">
+    <div class="fig-title">When Process and Outcome Disagree</div>
+    <canvas id="c-p7" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">Four solutions sorted into a two by two grid: process correct or not, outcome correct or not. The easy diagonal (both right, both wrong) is uncontroversial. The off diagonal is where PRMs struggle: a logically sound path that dead ends, and a flawed path that gets lucky. Value based labels reward the lucky failure of logic and punish the unlucky success of logic, the exact tension no automatic labeler escapes.</div>
+  </div>
+</section>
+
+<!-- ════════ S9: THE MODELS ════════ -->
+<section id="s9">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">09</span><h2>The PRMs People Actually Use</h2></div>
+  <p>The landscape is no longer research demos. A handful of open PRMs are downloadable today and serve as both rerankers and reward sources. They cluster into three families, each a direct descendant of a method from the earlier sections.</p>
+
+  <h3>Family 1: Monte Carlo labeled, discriminative (the workhorses)</h3>
+  <p>These follow the §4 rollout recipe to make labels, then train a scalar head as in §5. They are the default choice for best-of-N and search.</p>
+  <div class="modelcard" style="border-color:var(--blue)">
+    <h4>Qwen2.5-Math-PRM-7B and -72B</h4>
+    <p>Currently the strongest open math PRMs. Built on Qwen2.5-Math-Instruct, trained on a blend of human (PRM800K) and Monte Carlo rollout labels, with careful filtering to remove steps whose label is inconsistent between the two sources. The 7B is the practical sweet spot; the 72B tops the ProcessBench leaderboard for error localization.</p>
+  </div>
+  <div class="modelcard" style="border-color:var(--teal)">
+    <h4>Skywork-o1-Open-PRM (1.5B and 7B)</h4>
+    <p>Also Qwen2.5-Math based, tuned for both math and code, and notable for strong performance at the tiny 1.5B size, which makes it cheap enough to run as an inline search guide. Ships with vLLM server support out of the box for high throughput best-of-N@64 scoring.</p>
+  </div>
+  <div class="modelcard" style="border-color:var(--green)">
+    <h4>Math-Shepherd-PRM-7B and RLHFlow-PRM (Mistral / Deepseek 8B)</h4>
+    <p>The original automatic-label PRMs. Math-Shepherd defined the rollout labeling recipe; RLHFlow reimplemented it on Llama-3.1 bases with different solution generators. Still common baselines and perfectly usable.</p>
+  </div>
+
+  <h3>Family 2: Implicit PRMs (no step labels at all)</h3>
+  <div class="modelcard" style="border-color:var(--orange)">
+    <h4>EurusPRM (Implicit PRM / PRIME lineage)</h4>
+    <p>The cleverest family. Recall from §7 of the diffusion-era PRIME idea that the per-step log-ratio log[π(a|s)/π_ref(a|s)] is itself a reward. Implicit PRM trains <em>only</em> on final outcome labels with a tweaked objective, and the per-step reward falls out for free as that log-ratio, no step annotation and no rollout labeling needed. EurusPRM-Stage1/2 are the released checkpoints. This is the cheapest PRM to train because it needs the same data an ORM does.</p>
+  </div>
+
+  <h3>Family 3: Generative / reasoning PRMs (the frontier)</h3>
+  <div class="modelcard" style="border-color:var(--purple)">
+    <h4>Generative PRMs (R-PRM, PRM-CoT and successors)</h4>
+    <p>Instead of emitting a bare scalar, these <em>write a short critique</em> of each step and then judge it, so the verdict comes with a rationale. They turn step grading into a reasoning task the model is already good at, tend to generalize better off-distribution, and can be sampled multiple times and majority-voted. The cost is inference latency: you generate text to score text.</p>
+  </div>
+
+  <div class="co t"><div class="co-title">How they are judged</div>
+    <p>Two benchmarks dominate. <strong>ProcessBench</strong> measures whether a PRM can locate the first wrong step in a solution. <strong>PRMBench</strong> stress-tests finer abilities like catching redundant-but-correct steps and resisting confident-sounding errors. A recurring finding worth remembering: a high best-of-N score does not guarantee good error localization, and vice versa, so pick the model by the axis your application needs.</p>
+  </div>
+</section>
+
+<!-- ════════ S10: TRAIN ONE ════════ -->
+<section id="s10">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">10</span><h2>Training and Running One in Practice</h2></div>
+  <p>This section is the hands-on part: the exact data shape, a Monte Carlo labeling sketch, a training run with Hugging Face TRL, and inference with the Qwen step-token convention plus a vLLM note. Everything here runs on real, current tooling.</p>
+
+  <h3>Step 1: the data format</h3>
+  <p>A PRM training example is a problem, a list of step strings, and a parallel list of step labels. TRL's <span class="ic">PRMTrainer</span> expects exactly three columns: <span class="ic">prompt</span>, <span class="ic">completions</span> (the list of steps), and <span class="ic">labels</span> (a bool or float per step). A single real-shaped row:</p>
+  <div class="code">
+    <div class="code-hdr"><span class="code-dot" style="background:var(--green)"></span>one PRM training row (Math-Shepherd style, JSON)</div>
+    <pre><code>{
+  <span class="c-st">"prompt"</span>: <span class="c-st">"Weng earns $12/hr babysitting. Yesterday she did 50 min. How much did she earn?"</span>,
+  <span class="c-st">"completions"</span>: [
+    <span class="c-st">"Step 1: 50 minutes is 50/60 = 5/6 of an hour."</span>,
+    <span class="c-st">"Step 2: She earns 12 * (5/6) = 10 dollars."</span>,
+    <span class="c-st">"Step 3: So Weng earned $10. The answer is 10."</span>
+  ],
+  <span class="c-st">"labels"</span>: [<span class="c-kw">true</span>, <span class="c-kw">true</span>, <span class="c-kw">true</span>]   <span class="c-co"># one label per step; soft floats like 0.75 also allowed</span>
+}</code></pre>
+  </div>
+  <p>A negative example has the error step flagged and, by the common convention from §3, labels stop at the first error (later steps are too ill-defined to label):</p>
+  <div class="code">
+    <div class="code-hdr"><span class="code-dot" style="background:var(--red)"></span>a row with a mistake at step 2</div>
+    <pre><code>{
+  <span class="c-st">"prompt"</span>: <span class="c-st">"A train goes 60 mi in 1.5 h then 40 mi in 0.5 h. Average speed?"</span>,
+  <span class="c-st">"completions"</span>: [
+    <span class="c-st">"Step 1: total distance = 60 + 40 = 100 miles."</span>,
+    <span class="c-st">"Step 2: total time = 1.5 - 0.5 = 1.0 hours."</span>,      <span class="c-co"># wrong: should be +</span>
+    <span class="c-st">"Step 3: average = 100 / 1.0 = 100 mph."</span>
+  ],
+  <span class="c-st">"labels"</span>: [<span class="c-kw">true</span>, <span class="c-kw">false</span>, <span class="c-kw">false</span>]
+}</code></pre>
+  </div>
+
+  <h3>Step 2: generate labels by Monte Carlo rollout</h3>
+  <p>If you do not have human labels, manufacture them with the §4 recipe: from each step prefix, sample completions and score the value as the fraction that reach the verified answer. The core loop, vLLM for fast sampling:</p>
+  <div class="code">
+    <div class="code-hdr"><span class="code-dot" style="background:var(--orange)"></span>auto_label.py : Monte Carlo step labeling</div>
+    <pre><code><span class="c-kw">from</span> vllm <span class="c-kw">import</span> LLM, SamplingParams
+
+llm = LLM(model=<span class="c-st">"Qwen/Qwen2.5-Math-7B-Instruct"</span>)   <span class="c-co"># the completer / solver</span>
+params = SamplingParams(n=<span class="c-nu">8</span>, temperature=<span class="c-nu">0.8</span>, max_tokens=<span class="c-nu">512</span>)
+
+<span class="c-kw">def</span> <span class="c-fn">label_steps</span>(problem, steps, ground_truth):
+    labels = []
+    <span class="c-kw">for</span> i <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-fn">len</span>(steps)):
+        prefix = problem + <span class="c-st">"\n"</span> + <span class="c-st">"\n"</span>.join(steps[:i+<span class="c-nu">1</span>])
+        outs = llm.generate([prefix], params)[<span class="c-nu">0</span>].outputs   <span class="c-co"># 8 rollouts from this prefix</span>
+        wins = <span class="c-fn">sum</span>(verify(o.text, ground_truth) <span class="c-kw">for</span> o <span class="c-kw">in</span> outs)
+        labels.append(wins / <span class="c-fn">len</span>(outs))             <span class="c-co"># soft label = success fraction, e.g. 6/8 = 0.75</span>
+    <span class="c-kw">return</span> labels                                  <span class="c-co"># or threshold to hard bools</span></code></pre>
+  </div>
+  <p class="note">Only <span class="ic">verify()</span>, a final-answer checker (boxed-answer match for math, unit tests for code), is needed. The expensive step judgment is bootstrapped from the cheap outcome check, exactly the §4 efficiency point in code.</p>
+
+  <h3>Step 3: train the PRM with TRL</h3>
+  <p>With a labeled dataset in the three-column format, training is a few lines. TRL inserts a separator token after each step and applies the per-step BCE loss from §5 automatically:</p>
+  <div class="code">
+    <div class="code-hdr"><span class="code-dot" style="background:var(--blue)"></span>train_prm.py : Hugging Face TRL PRMTrainer</div>
+    <pre><code><span class="c-kw">from</span> datasets <span class="c-kw">import</span> load_dataset
+<span class="c-kw">from</span> transformers <span class="c-kw">import</span> AutoModelForTokenClassification, AutoTokenizer
+<span class="c-kw">from</span> trl <span class="c-kw">import</span> PRMTrainer, PRMConfig
+
+model_id = <span class="c-st">"Qwen/Qwen2.5-Math-7B-Instruct"</span>
+tok = AutoTokenizer.from_pretrained(model_id)
+<span class="c-co"># 2 labels = {bad step, good step}; the head is a per-token classifier</span>
+model = AutoModelForTokenClassification.from_pretrained(model_id, num_labels=<span class="c-nu">2</span>)
+
+dataset = load_dataset(<span class="c-st">"trl-lib/math_shepherd"</span>)   <span class="c-co"># prompt / completions / labels</span>
+
+cfg = PRMConfig(
+    output_dir=<span class="c-st">"my-math-prm"</span>,
+    per_device_train_batch_size=<span class="c-nu">4</span>,
+    learning_rate=<span class="c-nu">1e-5</span>,
+    num_train_epochs=<span class="c-nu">1</span>,
+    step_separator=<span class="c-st">"\n"</span>,        <span class="c-co"># where a step ends; a reward token is placed here</span>
+    max_completion_length=<span class="c-nu">1024</span>,
+)
+
+trainer = PRMTrainer(model=model, args=cfg, train_dataset=dataset[<span class="c-st">"train"</span>], processing_class=tok)
+trainer.train()</code></pre>
+  </div>
+  <p>Under the hood TRL tokenizes each step, appends a reward token, masks the loss so only those reward-token positions contribute, and minimizes BCE against your labels. The same recipe runs from the command line on the bundled script:</p>
+  <div class="code">
+    <div class="code-hdr"><span class="code-dot" style="background:var(--purple)"></span>one-liner with the TRL example script</div>
+    <pre><code>accelerate launch examples/scripts/prm.py \
+  --model_name_or_path Qwen/Qwen2-0.5B \
+  --dataset_name trl-lib/math_shepherd \
+  --num_train_epochs <span class="c-nu">1</span> \
+  --output_dir Qwen2-0.5B-Reward-Math-Shepherd</code></pre>
+  </div>
+
+  <h3>Step 4: run it for scoring</h3>
+  <p>Inference convention differs by model, and the one to know is Qwen's, because it is the strongest and the most copied. Steps are joined by a special <span class="ic">&lt;extra_0&gt;</span> token, and the reward for each step is the probability that its <span class="ic">&lt;extra_0&gt;</span> position is classified positive:</p>
+  <div class="code">
+    <div class="code-hdr"><span class="code-dot" style="background:var(--green)"></span>score_with_qwen_prm.py : the official inference shape</div>
+    <pre><code><span class="c-kw">import</span> torch, torch.nn.functional <span class="c-kw">as</span> F
+<span class="c-kw">from</span> transformers <span class="c-kw">import</span> AutoModel, AutoTokenizer
+
+name = <span class="c-st">"Qwen/Qwen2.5-Math-PRM-7B"</span>
+tok = AutoTokenizer.from_pretrained(name, trust_remote_code=<span class="c-kw">True</span>)
+model = AutoModel.from_pretrained(name, torch_dtype=torch.bfloat16,
+                                  trust_remote_code=<span class="c-kw">True</span>).eval()
+
+steps = [
+    <span class="c-st">"Step 1: 50 minutes is 5/6 of an hour."</span>,
+    <span class="c-st">"Step 2: 12 * 5/6 = 10 dollars."</span>,
+    <span class="c-st">"Step 3: The answer is \\boxed{10}."</span>,
+]
+messages = [
+    {<span class="c-st">"role"</span>: <span class="c-st">"system"</span>, <span class="c-st">"content"</span>: <span class="c-st">"Please reason step by step..."</span>},
+    {<span class="c-st">"role"</span>: <span class="c-st">"user"</span>, <span class="c-st">"content"</span>: <span class="c-st">"Weng earns $12/hr..."</span>},
+    {<span class="c-st">"role"</span>: <span class="c-st">"assistant"</span>, <span class="c-st">"content"</span>: <span class="c-st">"&lt;extra_0&gt;"</span>.join(steps) + <span class="c-st">"&lt;extra_0&gt;"</span>},
+]
+text = tok.apply_chat_template(messages, tokenize=<span class="c-kw">False</span>)
+ids = tok.encode(text, return_tensors=<span class="c-st">"pt"</span>)
+
+logits = model(input_ids=ids)[<span class="c-nu">0</span>]
+sep_id = tok.encode(<span class="c-st">"&lt;extra_0&gt;"</span>)[<span class="c-nu">0</span>]
+mask = (ids == sep_id)
+probs = F.softmax(logits, dim=-<span class="c-nu">1</span>) * mask.unsqueeze(-<span class="c-nu">1</span>)
+rewards = probs[mask.expand_as(probs[..., <span class="c-nu">0</span>])].view(-<span class="c-nu">1</span>, <span class="c-nu">2</span>)[:, <span class="c-nu">1</span>]
+<span class="c-fn">print</span>(rewards.tolist())   <span class="c-co"># e.g. [1.0, 0.19, 0.98] one reward per step</span></code></pre>
+  </div>
+  <p>That output vector, one number per step, is the dense signal everything else consumes: aggregate it by <span class="ic">min</span> for best-of-N reranking (§6), feed it branch by branch into a beam or MCTS search (§6), or pipe it as the per-step reward into a GRPO loop (§7). For production scoring at scale, serve the PRM behind a <strong>vLLM</strong> server and batch hundreds of candidate solutions per call; Skywork and Qwen PRMs both run this way, which is how best-of-64 stays affordable.</p>
+  <div class="co o"><div class="co-title">Practical gotchas worth stating in an interview</div>
+    <p>Match the step separator to how the solutions were generated (Qwen-Math uses double newlines between steps). Keep the PRM's base model close to the policy's distribution or scores drift. And if you are doing implicit-PRM style training, you do not run any of Step 2 at all: you train on outcome labels only and read the per-step reward off the log-ratio, the cheapest path when step annotation is infeasible.</p>
+  </div>
+</section>
+
+<!-- ════════ S11: CHEAT SHEET ════════ -->
+<section id="s11">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">11</span><h2>The Interview Cheat Sheet</h2></div>
+  <table class="cmp">
+    <thead><tr><th>Question</th><th>The crisp answer</th></tr></thead>
+    <tbody>
+      <tr><td><strong>ORM vs PRM in one line</strong></td><td>ORM scores the final answer; PRM scores every step, giving dense local credit assignment</td></tr>
+      <tr><td><strong>What is a step</strong></td><td>a checkable chunk of reasoning, usually a line in math or a block in code; fine enough to localize blame, coarse enough to carry a verdict</td></tr>
+      <tr><td><strong>What does a label mean</strong></td><td>either correctness (true in isolation) or value (probability of eventually reaching the right answer); auto labeling uses value</td></tr>
+      <tr><td><strong>Where labels come from</strong></td><td>rollout (Math-Shepherd): complete each prefix k times, label by fraction that reach the verified correct answer; only a final answer checker needed</td></tr>
+      <tr><td><strong>Soft vs hard labels</strong></td><td>soft keeps the success fraction as a regression target; hard thresholds it (good if any rollout succeeds)</td></tr>
+      <tr><td><strong>How it is trained</strong></td><td>base LLM with a scalar head, per step BCE or MSE against labels, scored causally at a marker token using only the prefix</td></tr>
+      <tr><td><strong>Aggregation</strong></td><td>min (strict, the usual default), product, mean, or last step</td></tr>
+      <tr><td><strong>Inference uses</strong></td><td>best-of-N reranking, step level beam search, PRM guided MCTS; the basis of test time compute scaling</td></tr>
+      <tr><td><strong>Training use</strong></td><td>dense per step reward inside PPO or GRPO, fixing the sparse terminal reward problem</td></tr>
+      <tr><td><strong>Main risks</strong></td><td>reward hacking, verifier label noise, distribution shift during RL, process versus outcome disagreement</td></tr>
+    </tbody>
+  </table>
+  <h3>The three threads that connect it all</h3>
+  <p><strong>A PRM is a value function.</strong> Its auto labels are literally the probability of eventual success from a partial solution, the V(s) of the RL blogs. That is why it can serve as a search heuristic and a dense reward interchangeably.</p>
+  <p><strong>Its labels come from Monte Carlo.</strong> Rollout labeling is exactly the wait-for-the-ending averaging of the foundations blog, applied to a prefix instead of a full episode.</p>
+  <p><strong>It fixes the sparse reward problem.</strong> Everything painful about the single end of sequence reward in PPO and GRPO, slow credit assignment, untrainable critic, is what the dense PRM signal directly addresses, at the price of a richer reward to hack.</p>
+  <div class="co g"><div class="co-title">The one paragraph summary</div>
+    <p>A process reward model grades reasoning step by step instead of judging only the final answer, turning a sparse terminal reward into dense local feedback. A step is a checkable chunk; a step label is best understood as its value, the probability that continuing from here reaches the correct answer, which is why labels can be generated automatically by rolling out each prefix many times and counting verified successes, no human step annotation required. The PRM is then a base model with a scalar head trained to predict those labels causally, and at inference it reranks candidates, guides beam search and MCTS, or feeds a dense reward into PPO and GRPO. It is, underneath, a learned value function for reasoning, with all the power and all the reward hacking risk that implies.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+function gctx(id){const cv=document.getElementById('c-'+id);return cv?cv.getContext('2d'):null;}
+function lbl(ctx,s,x,y,col,sz,w,al){ctx.font=`${w||500} ${sz||10}px "Plus Jakarta Sans",sans-serif`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function mlbl(ctx,s,x,y,col,sz,al){ctx.font=`500 ${sz||9}px "JetBrains Mono",monospace`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function pill(ctx,x,y,w,h,r,fill,stroke,lw){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+function scoreCol(v){ // 0..1 red->green
+  if(v>=0.5){const t=(v-0.5)*2;return `rgb(${255-t*183|0},${139+t*47|0},${130-t*24|0})`;}
+  const t=v*2;return `rgb(234,${67+t*72|0},${53+t*77|0})`;
+}
+const STATIC={};
+(function(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){const id=e.target.id.replace('c-','');if(STATIC[id]){STATIC[id]();obs.unobserve(e.target);}}
+  }),{threshold:0.05});
+  window.addEventListener('DOMContentLoaded',()=>{
+    Object.keys(STATIC).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+  });
+})();
+function stepBox(ctx,x,y,w,h,txt,score,showScore){
+  const col=score===undefined?'#9fbcd8':scoreCol(score);
+  pill(ctx,x,y,w,h,7,(score===undefined?'rgba(52,70,100,.4)':scoreCol(score)+'1e'),col,1.3);
+  mlbl(ctx,txt,x+12,y+h/2,'#dbe7f4',8.5,'left');
+  if(showScore&&score!==undefined){
+    pill(ctx,x+w-52,y+h/2-9,44,18,4,scoreCol(score)+'30',col,1);
+    mlbl(ctx,score.toFixed(2),x+w-30,y+h/2,col,8.5);
+  }
+}
+
+/* ── P1: ORM vs PRM ── */
+STATIC.p1=function(){
+  const ctx=gctx('p1');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const steps=['step 1: set up equation','step 2: expand terms','step 3: collect like terms','step 4: isolate x','step 5: x = 7/0 ✗ arithmetic slip'];
+  const sc=[0.95,0.93,0.9,0.92,0.05];
+  // PRM column
+  lbl(ctx,'PRM: one verdict per step',250,36,'#81c995',10.5,700);
+  steps.forEach((s,i)=>{stepBox(ctx,70,60+i*42,360,32,s,sc[i],true);});
+  // ORM column
+  lbl(ctx,'ORM: one verdict, total',670,36,'#f28b82',10.5,700);
+  steps.forEach((s,i)=>{stepBox(ctx,470,60+i*42,300,32,s,undefined,false);});
+  // brace + single verdict
+  ctx.strokeStyle='#f28b82';ctx.lineWidth=1.6;
+  ctx.beginPath();ctx.moveTo(778,66);ctx.lineTo(792,66);ctx.lineTo(792,256);ctx.lineTo(778,256);ctx.stroke();
+  pill(ctx,802,150,64,28,7,'rgba(234,67,53,.14)','#f28b82',1.4);
+  mlbl(ctx,'0',834,164,'#f28b82',12);
+  mlbl(ctx,'all steps punished for step 5',250,290,'#81c995',8.5);
+  mlbl(ctx,'cannot tell which step broke',650,290,'#f28b82',8.5);
+};
+
+/* ── P2: granularity ── */
+STATIC.p2=function(){
+  const ctx=gctx('p2');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  // token level
+  lbl(ctx,'token level — too fine, unjudgeable',440,36,'#f28b82',10,700);
+  const toks=['avg','speed','=','100','/','2.0','=','50','mph'];
+  toks.forEach((t,i)=>{pill(ctx,120+i*72,52,64,26,4,'rgba(234,67,53,.08)','#f28b82',1);mlbl(ctx,t,152+i*72,65,'#f0b3ac',8);});
+  // step level
+  lbl(ctx,'step level — the useful unit',440,118,'#81c995',10,700);
+  const stp=['total dist = 100 mi','total time = 2.0 h','avg = 100/2 = 50 mph'];
+  stp.forEach((t,i)=>{pill(ctx,120+i*250,134,234,30,6,'rgba(72,186,106,.1)','#81c995',1.3);mlbl(ctx,t,237+i*250,149,'#a8e6c0',8.5);
+    pill(ctx,330+i*250,138,22,22,5,'rgba(72,186,106,.2)','#81c995',1);mlbl(ctx,'✓',341+i*250,149,'#a8e6c0',9);});
+  // whole
+  lbl(ctx,'whole solution — too coarse, just an ORM',440,202,'#ffbe6e',10,700);
+  pill(ctx,120,218,640,30,6,'rgba(255,190,110,.08)','#ffbe6e',1.3);
+  mlbl(ctx,'total dist = 100 mi; total time = 2.0 h; avg = 50 mph',440,233,'#ffbe6e',8.5);
+  pill(ctx,628,222,120,22,5,'rgba(255,190,110,.2)','#ffbe6e',1);mlbl(ctx,'one verdict',688,233,'#ffbe6e',8);
+  mlbl(ctx,'big enough to carry a verdict, small enough to localize blame: the middle wins',440,290,'#aac6e2',9);
+};
+
+/* ── P3: rollout labeling ── */
+STATIC.p3=function(){
+  const ctx=gctx('p3');if(!ctx)return;const W=880,H=370;ctx.clearRect(0,0,W,H);
+  // prefix
+  pill(ctx,60,150,150,70,9,'rgba(66,133,244,.1)','#8ab4f8',1.5);
+  mlbl(ctx,'prefix:',135,168,'#8ab4f8',8.5);
+  mlbl(ctx,'steps 1, 2 done',135,186,'#a8caff',8);
+  mlbl(ctx,'label this point',135,204,'#a8caff',8);
+  // 8 rollouts
+  const results=[1,1,0,1,1,0,1,1];
+  results.forEach((r,i)=>{
+    const y=46+i*38;
+    arrow(ctx,212,185,300,y+13,'rgba(150,180,220,.4)',1);
+    ctx.strokeStyle=(r?'#81c995':'#f28b82')+'77';ctx.lineWidth=1.4;
+    ctx.beginPath();ctx.moveTo(304,y+13);
+    ctx.bezierCurveTo(420,y+13,520,y+13,600,y+13);ctx.stroke();
+    pill(ctx,600,y,150,26,6,(r?'rgba(72,186,106,.12)':'rgba(234,67,53,.1)'),(r?'#81c995':'#f28b82'),1.2);
+    mlbl(ctx,'rollout '+(i+1)+(r?'  ✓ correct':'  ✗ wrong'),675,y+13,(r?'#a8e6c0':'#f28b82'),8);
+  });
+  mlbl(ctx,'8 completions, run to a final answer, checked by the verifier',430,28,'#c8e0f2',9.5);
+  // tally
+  pill(ctx,770,150,100,70,9,'rgba(252,198,40,.1)','#ffe282',1.6);
+  mlbl(ctx,'6 of 8 ✓',820,172,'#ffe282',9);
+  lbl(ctx,'label',820,190,'#eedda0',8,400);
+  lbl(ctx,'0.75',820,206,'#ffe282',13,800);
+  mlbl(ctx,'only a FINAL ANSWER checker is needed; step judgment is bootstrapped from it',440,352,'#aac6e2',9);
+};
+
+/* ── P4: aggregation ── */
+STATIC.p4=function(){
+  const ctx=gctx('p4');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  function row(y,nm,scores,col){
+    lbl(ctx,nm,80,y+16,col,10,700,'left');
+    scores.forEach((s,i)=>{
+      const x=210+i*100;
+      pill(ctx,x,y,84,32,6,scoreCol(s)+'1e',scoreCol(s),1.3);
+      mlbl(ctx,'step '+(i+1),x+42,y+11,'#dbe7f4',7.5);
+      mlbl(ctx,s.toFixed(2),x+42,y+24,scoreCol(s),9);
+    });
+    const mn=Math.min(...scores);
+    pill(ctx,710,y,150,32,7,'rgba(252,198,40,.1)','#ffe282',1.4);
+    mlbl(ctx,'min = '+mn.toFixed(2),785,y+16,'#ffe282',9);
+    return mn;
+  }
+  lbl(ctx,'two candidate solutions, scored per step, reduced by min',440,34,'#c8e0f2',10,700);
+  const a=row(80,'Solution A',[0.88,0.91,0.86,0.9,0.89],'#81c995');
+  const b=row(150,'Solution B',[0.95,0.97,0.34,0.93,0.96],'#ffbe6e');
+  // verdict
+  pill(ctx,250,232,380,48,10,'rgba(72,186,106,.1)','#a8e6c0',1.5);
+  mlbl(ctx,'A wins: min 0.86 > 0.34',440,250,'#a8e6c0',10);
+  mlbl(ctx,'one weak step (B step 3) sinks the whole solution',440,268,'#9fd4b3',8.5);
+  mlbl(ctx,'min = a solution is only as trustworthy as its weakest step',440,308,'#aac6e2',9);
+};
+
+/* ── P5: search tree ── */
+STATIC.p5=function(){
+  const ctx=gctx('p5');if(!ctx)return;const W=880,H=360;ctx.clearRect(0,0,W,H);
+  // root
+  function nd(x,y,r,s,keep){
+    const col=s===undefined?'#8ab4f8':scoreCol(s);
+    ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=col+(keep?'33':'12');ctx.fill();
+    ctx.strokeStyle=col;ctx.lineWidth=keep?2.2:1;ctx.stroke();
+    if(s!==undefined)mlbl(ctx,s.toFixed(2),x,y,col,8);
+  }
+  nd(80,180,22,undefined,true);
+  mlbl(ctx,'question',80,150,'#8ab4f8',8);
+  // level 1
+  const l1=[[230,90,0.82,true],[230,180,0.55,false],[230,270,0.3,false]];
+  l1.forEach(n=>{arrow(ctx,102,180,n[0]-22,n[1],(n[3]?'#81c995':'#f28b82')+'88',n[3]?1.8:1);nd(n[0],n[1],20,n[2],n[3]);});
+  mlbl(ctx,'PRM scores each candidate step',230,40,'#c8e0f2',8.5);
+  // level 2 from the kept node
+  const l2=[[400,55,0.9,true],[400,120,0.6,false]];
+  l2.forEach(n=>{arrow(ctx,250,90,n[0]-20,n[1],(n[3]?'#81c995':'#f28b82')+'88',n[3]?1.8:1);nd(n[0],n[1],19,n[2],n[3]);});
+  // pruned branches faded
+  mlbl(ctx,'low scorers pruned',230,310,'#f28b82',8);
+  // level 3
+  const l3=[[560,40,0.94,true],[560,90,0.5,false]];
+  l3.forEach(n=>{arrow(ctx,419,55,n[0]-19,n[1],(n[3]?'#81c995':'#f28b82')+'88',n[3]?1.8:1);nd(n[0],n[1],18,n[2],n[3]);});
+  // final
+  arrow(ctx,578,40,700,40,'#a8e6c0',2);
+  pill(ctx,706,24,150,32,7,'rgba(72,186,106,.12)','#a8e6c0',1.5);
+  mlbl(ctx,'✓ best line',781,40,'#a8e6c0',9);
+  // pruned X marks
+  [[230,180],[230,270],[400,120],[560,90]].forEach(p=>{mlbl(ctx,'✕',p[0]+26,p[1],'#f28b82',10);});
+  mlbl(ctx,'compute flows toward branches the PRM says are most likely to succeed: test time scaling',440,344,'#aac6e2',8.8);
+};
+
+/* ── P6: sparse vs dense reward ── */
+STATIC.p6=function(){
+  const ctx=gctx('p6');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  const n=6;
+  // ORM top
+  lbl(ctx,'ORM: sparse, terminal only',440,38,'#f28b82',10.5,700);
+  for(let i=0;i<n;i++){
+    const x=90+i*125;
+    pill(ctx,x,60,108,34,6,'rgba(52,70,100,.4)','rgba(150,180,220,.5)',1);
+    mlbl(ctx,'step '+(i+1),x+54,77,'#c8e0f2',8);
+    if(i<n-1)arrow(ctx,x+110,77,x+123,77,'rgba(150,180,220,.5)',1);
+    // reward marker
+    if(i===n-1){pill(ctx,x+30,100,48,20,4,'rgba(234,67,53,.16)','#f28b82',1.2);mlbl(ctx,'r=1',x+54,110,'#f28b82',8);}
+    else mlbl(ctx,'r=0',x+54,110,'#445570',8);
+  }
+  mlbl(ctx,'every middle step learns only by slow value bootstrapping',440,138,'#f0b3ac',8.5);
+  // PRM bottom
+  lbl(ctx,'PRM: dense, every step',440,196,'#81c995',10.5,700);
+  const ds=[0.7,0.85,0.4,0.9,0.88,1.0];
+  for(let i=0;i<n;i++){
+    const x=90+i*125;
+    pill(ctx,x,218,108,34,6,scoreCol(ds[i])+'1e',scoreCol(ds[i]),1.2);
+    mlbl(ctx,'step '+(i+1),x+54,235,'#c8e0f2',8);
+    if(i<n-1)arrow(ctx,x+110,235,x+123,235,'rgba(150,180,220,.5)',1);
+    pill(ctx,x+30,258,48,20,4,scoreCol(ds[i])+'26',scoreCol(ds[i]),1.2);
+    mlbl(ctx,'r='+ds[i].toFixed(1),x+54,268,scoreCol(ds[i]),7.6);
+  }
+  mlbl(ctx,'each step\u2019s gradient reflects that step\u2019s own contribution: sharp credit, but a richer reward to hack',440,304,'#9fd4b3',8.8);
+};
+
+/* ── P7: process vs outcome ── */
+STATIC.p7=function(){
+  const ctx=gctx('p7');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  const cx=440,cy=170,s=110;
+  // axes grid
+  ctx.strokeStyle='rgba(150,180,220,.4)';ctx.lineWidth=1;
+  ctx.strokeRect(cx-s,cy-s,2*s,2*s);
+  ctx.beginPath();ctx.moveTo(cx,cy-s);ctx.lineTo(cx,cy+s);ctx.moveTo(cx-s,cy);ctx.lineTo(cx+s,cy);ctx.stroke();
+  lbl(ctx,'process correct →',cx,cy+s+22,'#aac6e2',9);
+  ctx.save();ctx.translate(cx-s-22,cy);ctx.rotate(-Math.PI/2);lbl(ctx,'outcome correct →',0,0,'#aac6e2',9);ctx.restore();
+  // quadrants
+  const quad=[
+    [cx-s/2,cy-s/2,'sound + right','#81c995','easy: agree ✓'],
+    [cx+s/2,cy-s/2,'lucky flaw','#f28b82','flawed but right'],
+    [cx-s/2,cy+s/2,'unlucky logic','#ffbe6e','sound but dead end'],
+    [cx+s/2,cy+s/2,'wrong + wrong','#9fbcd8','easy: agree ✓']
+  ];
+  quad.forEach(q=>{
+    lbl(ctx,q[2],q[0],q[1]-6,q[3],9,700);
+    mlbl(ctx,q[4],q[0],q[1]+12,q[3]+'cc',7.4);
+  });
+  // labels for axes ends
+  mlbl(ctx,'no',cx-s+14,cy+s-10,'#7e9cbb',7.5);mlbl(ctx,'yes',cx+s-14,cy+s-10,'#7e9cbb',7.5);
+  mlbl(ctx,'the off-diagonal is where value-based PRM labels disagree with logic, and no auto-labeler escapes it',440,310,'#aac6e2',8.8);
+};
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>

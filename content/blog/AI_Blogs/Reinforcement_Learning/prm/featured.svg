@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Process Reward Models">
+  <defs>
+    <linearGradient id="prmBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#07090d"/>
+      <stop offset="50%" stop-color="#0e1220"/>
+      <stop offset="100%" stop-color="#07090d"/>
+    </linearGradient>
+    <radialGradient id="prmGlow" cx="50%" cy="50%" r="48%">
+      <stop offset="0%" stop-color="#4285f4" stop-opacity=".07"/>
+      <stop offset="100%" stop-color="#4285f4" stop-opacity="0"/>
+    </radialGradient>
+    <style><![CDATA[
+      .lbl { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+      .ttl { font-family: 'Plus Jakarta Sans', system-ui, sans-serif; font-weight: 800; }
+      .ok  { animation: pok  3.4s ease-in-out infinite; }
+      .ok2 { animation: pok  3.4s ease-in-out .55s infinite; }
+      .ok3 { animation: pok  3.4s ease-in-out 1.1s infinite; }
+      .ok4 { animation: pok  3.4s ease-in-out 1.65s infinite; }
+      .bad { animation: pbad 3.4s ease-in-out 2.2s infinite; }
+      @keyframes pok  { 0%,100%{opacity:.72} 50%{opacity:1} }
+      @keyframes pbad { 0%,100%{opacity:.65} 50%{opacity:1} }
+      .orm { animation: orm  2.6s ease-in-out infinite; }
+      @keyframes orm  { 0%,100%{opacity:.55} 50%{opacity:.95} }
+    ]]></style>
+  </defs>
+
+  <rect width="800" height="450" fill="url(#prmBg)"/>
+  <rect width="800" height="450" fill="url(#prmGlow)"/>
+
+  <!-- title -->
+  <text x="400" y="42" class="ttl" font-size="14" fill="#e0e8f4" text-anchor="middle" letter-spacing=".09em">PROCESS REWARD MODELS</text>
+  <text x="400" y="60" class="lbl" font-size="9" fill="#7e9cbb" text-anchor="middle" letter-spacing=".15em">DENSE STEP-LEVEL FEEDBACK VS SPARSE OUTCOME SIGNAL</text>
+  <line x1="80" y1="72" x2="720" y2="72" stroke="#1e2a3a" stroke-width="1"/>
+
+  <!-- ── LEFT: Outcome RM ── -->
+  <text x="195" y="94" class="lbl" font-size="9" fill="#5b6b80" text-anchor="middle" letter-spacing=".12em">OUTCOME  RM</text>
+
+  <!-- steps (muted) -->
+  <g transform="translate(52,108)">
+    <rect x="0"   y="0" width="58" height="36" rx="6" fill="#12161f" stroke="#2a3a50" stroke-width="1"/>
+    <text x="29"  y="12" class="lbl" font-size="7.5" fill="#5b6b80" text-anchor="middle">step 1</text>
+    <text x="29"  y="28" class="lbl" font-size="10"  fill="#7e9cbb" text-anchor="middle">✓</text>
+
+    <rect x="66"  y="0" width="58" height="36" rx="6" fill="#12161f" stroke="#2a3a50" stroke-width="1"/>
+    <text x="95"  y="12" class="lbl" font-size="7.5" fill="#5b6b80" text-anchor="middle">step 2</text>
+    <text x="95"  y="28" class="lbl" font-size="10"  fill="#7e9cbb" text-anchor="middle">✓</text>
+
+    <rect x="132" y="0" width="58" height="36" rx="6" fill="#12161f" stroke="#2a3a50" stroke-width="1"/>
+    <text x="161" y="12" class="lbl" font-size="7.5" fill="#5b6b80" text-anchor="middle">step 3</text>
+    <text x="161" y="28" class="lbl" font-size="10"  fill="#7e9cbb" text-anchor="middle">✓</text>
+
+    <rect x="198" y="0" width="58" height="36" rx="6" fill="#12161f" stroke="#2a3a50" stroke-width="1"/>
+    <text x="227" y="12" class="lbl" font-size="7.5" fill="#5b6b80" text-anchor="middle">step 4</text>
+    <text x="227" y="28" class="lbl" font-size="10"  fill="#7e9cbb" text-anchor="middle">✓</text>
+
+    <rect x="264" y="0" width="58" height="36" rx="6" fill="#150c0c" stroke="#3a2020" stroke-width="1"/>
+    <text x="293" y="12" class="lbl" font-size="7.5" fill="#f28b82" text-anchor="middle">step 5</text>
+    <text x="293" y="28" class="lbl" font-size="10"  fill="#ea4335" text-anchor="middle">✗</text>
+
+    <!-- bracket + single verdict -->
+    <line x1="29"  y1="36" x2="29"  y2="52" stroke="#2a3a50" stroke-width=".8" stroke-dasharray="3,2"/>
+    <line x1="161" y1="36" x2="161" y2="52" stroke="#2a3a50" stroke-width=".8" stroke-dasharray="3,2"/>
+    <line x1="293" y1="36" x2="293" y2="52" stroke="#2a3a50" stroke-width=".8" stroke-dasharray="3,2"/>
+    <path d="M0,48 L0,56 L322,56 L322,48" stroke="#2a3a50" stroke-width=".8" fill="none"/>
+    <rect x="111" y="64" width="100" height="26" rx="6" fill="#150c0c" stroke="#ea4335" stroke-width="1.2" class="orm"/>
+    <text x="161" y="81" class="lbl" font-size="9" fill="#f28b82" text-anchor="middle" letter-spacing=".06em">reward = 0</text>
+  </g>
+  <text x="213" y="220" class="lbl" font-size="8" fill="#3a4a5e" text-anchor="middle">4 correct steps get reward 0 — no blame signal</text>
+
+  <!-- ── divider ── -->
+  <line x1="398" y1="82" x2="398" y2="290" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="4,3"/>
+
+  <!-- ── RIGHT: Process RM ── -->
+  <text x="597" y="94" class="lbl" font-size="9" fill="#81c995" text-anchor="middle" letter-spacing=".12em">PROCESS  RM</text>
+
+  <g transform="translate(430,108)">
+    <!-- step boxes with green/red borders -->
+    <rect x="0"   y="0" width="58" height="36" rx="6" fill="#0a1710" stroke="#34a853" stroke-width="1.3" class="ok"/>
+    <text x="29"  y="12" class="lbl" font-size="7.5" fill="#81c995" text-anchor="middle">step 1</text>
+    <text x="29"  y="28" class="lbl" font-size="10"  fill="#34a853" text-anchor="middle">✓</text>
+
+    <rect x="66"  y="0" width="58" height="36" rx="6" fill="#0a1710" stroke="#34a853" stroke-width="1.3" class="ok2"/>
+    <text x="95"  y="12" class="lbl" font-size="7.5" fill="#81c995" text-anchor="middle">step 2</text>
+    <text x="95"  y="28" class="lbl" font-size="10"  fill="#34a853" text-anchor="middle">✓</text>
+
+    <rect x="132" y="0" width="58" height="36" rx="6" fill="#0a1710" stroke="#34a853" stroke-width="1.3" class="ok3"/>
+    <text x="161" y="12" class="lbl" font-size="7.5" fill="#81c995" text-anchor="middle">step 3</text>
+    <text x="161" y="28" class="lbl" font-size="10"  fill="#34a853" text-anchor="middle">✓</text>
+
+    <rect x="198" y="0" width="58" height="36" rx="6" fill="#0a1710" stroke="#34a853" stroke-width="1.3" class="ok4"/>
+    <text x="227" y="12" class="lbl" font-size="7.5" fill="#81c995" text-anchor="middle">step 4</text>
+    <text x="227" y="28" class="lbl" font-size="10"  fill="#34a853" text-anchor="middle">✓</text>
+
+    <rect x="264" y="0" width="58" height="36" rx="6" fill="#150c0c" stroke="#ea4335" stroke-width="1.5" class="bad"/>
+    <text x="293" y="12" class="lbl" font-size="7.5" fill="#f28b82" text-anchor="middle">step 5</text>
+    <text x="293" y="28" class="lbl" font-size="10"  fill="#ea4335" text-anchor="middle">✗</text>
+
+    <!-- per-step score chips -->
+    <line x1="29"  y1="36" x2="29"  y2="52" stroke="#34a853" stroke-width=".8" opacity=".6"/>
+    <rect x="4"   y="52" width="50" height="18" rx="4" fill="#0a1710" stroke="#34a853" stroke-width=".8" class="ok"/>
+    <text x="29"  y="65" class="lbl" font-size="8" fill="#81c995" text-anchor="middle">+0.97</text>
+
+    <line x1="95"  y1="36" x2="95"  y2="52" stroke="#34a853" stroke-width=".8" opacity=".6"/>
+    <rect x="70"  y="52" width="50" height="18" rx="4" fill="#0a1710" stroke="#34a853" stroke-width=".8" class="ok2"/>
+    <text x="95"  y="65" class="lbl" font-size="8" fill="#81c995" text-anchor="middle">+0.93</text>
+
+    <line x1="161" y1="36" x2="161" y2="52" stroke="#34a853" stroke-width=".8" opacity=".6"/>
+    <rect x="136" y="52" width="50" height="18" rx="4" fill="#0a1710" stroke="#34a853" stroke-width=".8" class="ok3"/>
+    <text x="161" y="65" class="lbl" font-size="8" fill="#81c995" text-anchor="middle">+0.90</text>
+
+    <line x1="227" y1="36" x2="227" y2="52" stroke="#34a853" stroke-width=".8" opacity=".6"/>
+    <rect x="202" y="52" width="50" height="18" rx="4" fill="#0a1710" stroke="#34a853" stroke-width=".8" class="ok4"/>
+    <text x="227" y="65" class="lbl" font-size="8" fill="#81c995" text-anchor="middle">+0.86</text>
+
+    <line x1="293" y1="36" x2="293" y2="52" stroke="#ea4335" stroke-width=".8" opacity=".6"/>
+    <rect x="268" y="52" width="50" height="18" rx="4" fill="#150c0c" stroke="#ea4335" stroke-width="1.2" class="bad"/>
+    <text x="293" y="65" class="lbl" font-size="8" fill="#f28b82" text-anchor="middle">−0.84</text>
+  </g>
+  <text x="587" y="220" class="lbl" font-size="8" fill="#4a7a55" text-anchor="middle">step 5 flagged · steps 1-4 certified correct</text>
+
+  <!-- ── Applications row ── -->
+  <rect x="80" y="238" width="636" height="52" rx="8" fill="#0c1018" stroke="#1e2a3a" stroke-width="1"/>
+  <text x="398" y="254" class="lbl" font-size="8" fill="#3a4a5e" text-anchor="middle" letter-spacing=".14em">USES  OF  PRM  SCORES</text>
+
+  <rect x="98"  y="260" width="106" height="20" rx="4" fill="#0c1a2a" stroke="#4285f4" stroke-width=".8"/>
+  <text x="151" y="274" class="lbl" font-size="7.5" fill="#8ab4f8" text-anchor="middle">Best-of-N reranking</text>
+
+  <rect x="214" y="260" width="100" height="20" rx="4" fill="#0a1710" stroke="#34a853" stroke-width=".8"/>
+  <text x="264" y="274" class="lbl" font-size="7.5" fill="#81c995" text-anchor="middle">MCTS tree search</text>
+
+  <rect x="324" y="260" width="100" height="20" rx="4" fill="#160c20" stroke="#a142f4" stroke-width=".8"/>
+  <text x="374" y="274" class="lbl" font-size="7.5" fill="#c58af9" text-anchor="middle">RL process shaping</text>
+
+  <rect x="434" y="260" width="100" height="20" rx="4" fill="#150f05" stroke="#fbbc04" stroke-width=".8"/>
+  <text x="484" y="274" class="lbl" font-size="7.5" fill="#fdd663" text-anchor="middle">Curriculum filtering</text>
+
+  <rect x="544" y="260" width="158" height="20" rx="4" fill="#051210" stroke="#24c1e0" stroke-width=".8"/>
+  <text x="623" y="274" class="lbl" font-size="7.5" fill="#78d9ec" text-anchor="middle">Math-Shepherd auto-label</text>
+
+  <!-- ── Label types ── -->
+  <rect x="80" y="304" width="300" height="116" rx="8" fill="#0c1018" stroke="#1e2a3a" stroke-width="1"/>
+  <text x="230" y="320" class="lbl" font-size="8.5" fill="#7e9cbb" text-anchor="middle" letter-spacing=".10em">LABEL  SOURCES</text>
+  <rect x="96"  y="328" width="120" height="18" rx="4" fill="#0c1a2a" stroke="#4285f4" stroke-width=".8"/>
+  <text x="156" y="341" class="lbl" font-size="7.5" fill="#8ab4f8" text-anchor="middle">Human annotation</text>
+  <rect x="226" y="328" width="140" height="18" rx="4" fill="#0a1710" stroke="#34a853" stroke-width=".8"/>
+  <text x="296" y="341" class="lbl" font-size="7.5" fill="#81c995" text-anchor="middle">Monte Carlo rollouts</text>
+  <rect x="96"  y="354" width="120" height="18" rx="4" fill="#160c20" stroke="#a142f4" stroke-width=".8"/>
+  <text x="156" y="367" class="lbl" font-size="7.5" fill="#c58af9" text-anchor="middle">LLM self-critique</text>
+  <rect x="226" y="354" width="140" height="18" rx="4" fill="#150f05" stroke="#fbbc04" stroke-width=".8"/>
+  <text x="296" y="367" class="lbl" font-size="7.5" fill="#fdd663" text-anchor="middle">ORM majority vote</text>
+  <rect x="96"  y="380" width="268" height="18" rx="4" fill="#051012" stroke="#24c1e0" stroke-width=".8"/>
+  <text x="230" y="393" class="lbl" font-size="7.5" fill="#78d9ec" text-anchor="middle">Process Reward Bench evaluation</text>
+
+  <!-- ── Training note ── -->
+  <rect x="400" y="304" width="316" height="116" rx="8" fill="#0c1018" stroke="#1e2a3a" stroke-width="1"/>
+  <text x="558" y="320" class="lbl" font-size="8.5" fill="#7e9cbb" text-anchor="middle" letter-spacing=".10em">DEPLOYED  MODELS</text>
+
+  <rect x="416" y="328" width="130" height="18" rx="4" fill="#0c1a2a" stroke="#4285f4" stroke-width=".8"/>
+  <text x="481" y="341" class="lbl" font-size="7.5" fill="#8ab4f8" text-anchor="middle">OpenAI PRM800K</text>
+  <rect x="556" y="328" width="146" height="18" rx="4" fill="#0a1710" stroke="#34a853" stroke-width=".8"/>
+  <text x="629" y="341" class="lbl" font-size="7.5" fill="#81c995" text-anchor="middle">Math-Shepherd (Liao)</text>
+  <rect x="416" y="354" width="130" height="18" rx="4" fill="#160c20" stroke="#a142f4" stroke-width=".8"/>
+  <text x="481" y="367" class="lbl" font-size="7.5" fill="#c58af9" text-anchor="middle">Qwen2.5-Math-PRM</text>
+  <rect x="556" y="354" width="146" height="18" rx="4" fill="#150f05" stroke="#fbbc04" stroke-width=".8"/>
+  <text x="629" y="367" class="lbl" font-size="7.5" fill="#fdd663" text-anchor="middle">SkyworkPRM (7B)</text>
+  <rect x="416" y="380" width="280" height="18" rx="4" fill="#051012" stroke="#24c1e0" stroke-width=".8"/>
+  <text x="556" y="393" class="lbl" font-size="7.5" fill="#78d9ec" text-anchor="middle">DeepSeek-GRM  ·  InternLM-PRM</text>
+
+  <!-- bottom caption -->
+  <text x="400" y="434" class="lbl" font-size="8" fill="#2a3a50" text-anchor="middle" letter-spacing=".08em">ORM: 1 verdict per solution  ·  PRM: 1 verdict per step  ·  dense credit assignment</text>
+</svg>

@@ -47,8 +47,8 @@
   
   <meta itemprop="name" content="LLM">
   <meta itemprop="description" content="Transformer internals and the ideas that make large language models work. Attention, positional encoding, normalization, distributed training, and mixture of experts — each post picks one mechanism and goes all the way down.">
-  <meta itemprop="datePublished" content="2026-06-11T00:00:00+00:00">
-  <meta itemprop="dateModified" content="2026-06-11T00:00:00+00:00">
+  <meta itemprop="datePublished" content="2026-06-17T00:00:00+00:00">
+  <meta itemprop="dateModified" content="2026-06-17T00:00:00+00:00">
   <meta itemprop="image" content="//localhost:1314/blog/ai_blogs/llm/featured.svg">
   <meta itemprop="keywords" content="AI Notebook">
   
@@ -2101,14 +2101,14 @@ body.dark-mode .sk-drawer,
 
       <div class="bs-hero__stats">
         <div class="bs-stat">
-          <span class="bs-stat__num">5</span>
+          <span class="bs-stat__num">6</span>
           <span class="bs-stat__lbl">Stories</span>
         </div>
         
           
           
           <div class="bs-stat">
-            <span class="bs-stat__num">~98m</span>
+            <span class="bs-stat__num">~116m</span>
             <span class="bs-stat__lbl">Total Read</span>
           </div>
           <div class="bs-stat">
@@ -2175,9 +2175,36 @@ body.dark-mode .sk-drawer,
           
           
           
-          <a class="bs-row bs-reveal" href="/blog/ai_blogs/positional_encoding.html" data-searchable="positional encoding sinusoidal pe to rope to yarn — why transformers are blind to order, and the nine-year arc of fixes that now power 128k-context models. nine sections covering the full arc of positional encoding. starts with why attention is a set operation and order simply doesn&#39;t exist without injection. walks through sinusoidal, learned absolute, and relative approaches, then builds rope from scratch: pair splitting, rotation matrices, and why absolute position cancels in the dot product. closes with the long-context toolkit — position interpolation, ntk-aware scaling, and yarn&#39;s per-frequency surgery that ships in qwen2 and deepseek.
- deep learning transformers" data-date="2026-06-11" data-title="positional encoding" data-read="25" style="transition-delay: 0ms">
+          <a class="bs-row bs-reveal" href="/blog/ai_blogs/llm_sampling.html" data-searchable="llm sampling every decoding strategy, with numbers — greedy to speculative decoding in one place. nine sections covering every major decoding strategy: why greedy decoding fails on longer sequences, what temperature actually does to the logit distribution, the cutoff family of top-k, top-p, and min-p, beam search as the true argmax approximation, repetition penalties, and speculative decoding — same output, several times faster. each strategy is shown with worked numbers so the mechanics are concrete.
+ llm decoding" data-date="2026-06-17" data-title="llm sampling" data-read="18" style="transition-delay: 0ms">
             <span class="bs-row__num">01</span>
+            <div class="bs-row__meta">
+              <span class="bs-row__date">Jun 17, 2026</span>
+              <span>18 min read</span>
+            </div>
+            <div class="bs-row__main">
+              <h3 class="bs-row__title">LLM Sampling</h3>
+              
+                <p class="bs-row__excerpt">Nine sections covering every major decoding strategy: why greedy decoding fails on longer sequences, what temperature actually does to the …</p>
+              
+            </div>
+            <div class="bs-row__thumb">
+              
+              
+                
+              
+              
+              <img src="/blog/ai_blogs/llm/llm_sampling/featured.svg" alt="LLM Sampling" loading="lazy"/>
+            </div>
+            <span class="bs-row__arrow" aria-hidden="true">→</span>
+          </a>
+        
+          
+          
+          
+          <a class="bs-row bs-reveal" href="/blog/ai_blogs/positional_encoding.html" data-searchable="positional encoding sinusoidal pe to rope to yarn — why transformers are blind to order, and the nine-year arc of fixes that now power 128k-context models. nine sections covering the full arc of positional encoding. starts with why attention is a set operation and order simply doesn&#39;t exist without injection. walks through sinusoidal, learned absolute, and relative approaches, then builds rope from scratch: pair splitting, rotation matrices, and why absolute position cancels in the dot product. closes with the long-context toolkit — position interpolation, ntk-aware scaling, and yarn&#39;s per-frequency surgery that ships in qwen2 and deepseek.
+ deep learning transformers" data-date="2026-06-11" data-title="positional encoding" data-read="25" style="transition-delay: 80ms">
+            <span class="bs-row__num">02</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">Jun 11, 2026</span>
               <span>25 min read</span>
@@ -2203,8 +2230,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/normalization.html" data-searchable="normalization methods what batchnorm, layernorm, rmsnorm, groupnorm, and instancenorm are actually doing to the tensor. five normalization methods. one tensor shape. the difference is just which dimensions you average over and that choice has large consequences for stability, batch size sensitivity, and whether you can even run the model at inference. this post visualizes each method on the same [b, s, d] tensor so the differences are immediate.
- deep learning training" data-date="2026-06-10" data-title="normalization methods" data-read="12" style="transition-delay: 80ms">
-            <span class="bs-row__num">02</span>
+ deep learning training" data-date="2026-06-10" data-title="normalization methods" data-read="12" style="transition-delay: 160ms">
+            <span class="bs-row__num">03</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">Jun 10, 2026</span>
               <span>12 min read</span>
@@ -2230,8 +2257,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/attention.html" data-searchable="attention &amp; flashattention self-attention to flashattention-3 — the mechanism, its variants, and why standard attention is slow on real gpus. eleven sections from self-attention through flashattention-3. the first half covers the mechanism: qkv projections, cross-attention, multi-head, attention patterns, and linear attention. the second half goes deep on the gpu: why the n×n score matrix is the bottleneck, how online softmax makes tiling possible, and how fa-1, fa-2, and fa-3 progressively eliminate the memory wall.
- deep learning transformers" data-date="2026-06-06" data-title="attention &amp; flashattention" data-read="28" style="transition-delay: 160ms">
-            <span class="bs-row__num">03</span>
+ deep learning transformers" data-date="2026-06-06" data-title="attention &amp; flashattention" data-read="28" style="transition-delay: 240ms">
+            <span class="bs-row__num">04</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">Jun 6, 2026</span>
               <span>28 min read</span>
@@ -2257,8 +2284,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/llm_parallelism.html" data-searchable="llm parallelism how a 70b model actually gets split across a gpu cluster. a walk through data parallel, tensor parallel, pipeline parallel, zero, fsdp, and expert parallel, and how those axes compose into the 3d and 4d meshes used on real clusters. diagrams for what gets sharded where, what has to cross the network between nodes, and what each axis actually costs in throughput.
- llm distributed training systems" data-date="2026-05-01" data-title="llm parallelism" data-read="15" style="transition-delay: 240ms">
-            <span class="bs-row__num">04</span>
+ llm distributed training systems" data-date="2026-05-01" data-title="llm parallelism" data-read="15" style="transition-delay: 320ms">
+            <span class="bs-row__num">05</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">May 1, 2026</span>
               <span>15 min read</span>
@@ -2284,8 +2311,8 @@ body.dark-mode .sk-drawer,
           
           
           <a class="bs-row bs-reveal" href="/blog/ai_blogs/mixture_of_experts.html" data-searchable="mixture of experts sparse routing, and the tricks that keep it from collapsing. most modern frontier models route each token through a small subset of experts instead of one dense mlp. this piece is about why that scales better, and about the surprisingly fiddly routing layer (top k selection, load balancing, auxiliary losses) that keeps the experts from drifting into copies of each other.
- llm architecture moe" data-date="2026-04-24" data-title="mixture of experts" data-read="18" style="transition-delay: 320ms">
-            <span class="bs-row__num">05</span>
+ llm architecture moe" data-date="2026-04-24" data-title="mixture of experts" data-read="18" style="transition-delay: 400ms">
+            <span class="bs-row__num">06</span>
             <div class="bs-row__meta">
               <span class="bs-row__date">Apr 24, 2026</span>
               <span>18 min read</span>

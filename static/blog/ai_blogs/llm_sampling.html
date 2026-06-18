@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Sampling: Every Decoding Strategy, With Numbers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<style>
+:root{
+  --bg:#07090d;--s1:#0f1318;--s2:#151a22;--s3:#1b2230;
+  --bdr:#1e2a3a;--bdr2:#2a3a50;
+  --blue:#4285f4;--blue2:#8ab4f8;--green:#34a853;--green2:#81c995;
+  --red:#ea4335;--red2:#f28b82;--yellow:#fbbc04;--yellow2:#fdd663;
+  --purple:#a142f4;--purple2:#c58af9;--teal:#24c1e0;--teal2:#78d9ec;
+  --orange:#ff6d00;--orange2:#ffab40;
+  --text:#e0e8f4;--text2:#a9c6e0;--text3:#7e9cbb;
+  --mono:'JetBrains Mono',monospace;--sans:'Plus Jakarta Sans',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{color:var(--text);font-family:var(--sans);line-height:1.75;overflow-x:hidden;font-size:16px}
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--blue),var(--purple),var(--orange));z-index:999;transition:width .05s}
+nav{position:sticky;top:0;background:rgba(7,9,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bdr);z-index:900;padding:.55rem 1.5rem}
+.nav-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:1.2rem}
+.nav-brand{font-size:.85rem;font-weight:700;background:linear-gradient(90deg,var(--blue2),var(--orange2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.nav-links{display:flex;gap:.1rem;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{color:var(--text3);text-decoration:none;font-size:.7rem;white-space:nowrap;padding:.25rem .5rem;border-radius:6px;font-weight:500;transition:all .12s}
+.nav-links a:hover{color:var(--teal2);background:rgba(0,212,255,.08)}
+.hero{text-align:center;padding:4rem 1.5rem 2.5rem;max-width:860px;margin:0 auto}
+.hero h1{font-size:clamp(2rem,4.5vw,3.4rem);font-weight:800;letter-spacing:-.03em;line-height:1.08;background:linear-gradient(135deg,#8ab4f8,#c58af9,#ffab40);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.9rem}
+.hero p{color:var(--text2);font-size:1rem;max-width:680px;margin:0 auto}
+main{max-width:980px;margin:0 auto;padding:0 1.5rem 6rem}
+section{padding:2.8rem 0 .5rem;border-top:1px solid var(--bdr);margin-top:2.2rem}
+section:first-of-type{border-top:none;margin-top:0}
+.sec-hdr{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}
+.sec-num{font-family:var(--mono);font-size:.72rem;font-weight:700;padding:.3rem .65rem;border-radius:7px;letter-spacing:.05em}
+h2{font-size:1.7rem;font-weight:800;letter-spacing:-.02em}
+h3{font-size:1.12rem;font-weight:700;margin:1.8rem 0 .6rem}
+p{color:var(--text);margin-bottom:.85rem}
+p.note{color:var(--text2);font-size:.92rem}
+.fig{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:1.3rem;margin:1.6rem 0}
+.fig-title{text-align:center;font-size:.74rem;font-weight:700;color:var(--text2);margin-bottom:1rem;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:.6rem}
+.fig-title::before,.fig-title::after{content:'';flex:1;height:1px;background:var(--bdr)}
+canvas.anim{display:block;width:100%;height:auto;border-radius:8px}
+.fig-cap{text-align:center;font-size:.78rem;color:var(--text3);margin-top:.8rem;font-style:italic;line-height:1.6}
+.mb{background:var(--s2);border:1px solid var(--bdr);border-left:3px solid var(--blue);border-radius:0 10px 10px 0;padding:1rem 1.3rem;margin:1.3rem 0;overflow-x:auto}
+.mb .katex-display{margin:.15rem 0!important}
+.mb-label{font-size:.7rem;color:var(--text3);text-align:right;margin-top:.4rem;font-family:var(--mono)}
+.co{border-radius:10px;padding:.95rem 1.2rem;margin:1.3rem 0;border-left:3px solid;font-size:.9rem}
+.co-title{font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
+.co p{margin:0;font-size:.87rem;line-height:1.65}
+.co.t{background:rgba(36,193,224,.05);border-color:var(--teal)}.co.t .co-title{color:var(--teal2)}
+.co.y{background:rgba(251,188,4,.05);border-color:var(--yellow)}.co.y .co-title{color:var(--yellow2)}
+.co.o{background:rgba(255,109,0,.05);border-color:var(--orange)}.co.o .co-title{color:var(--orange2)}
+.co.g{background:rgba(52,168,83,.05);border-color:var(--green)}.co.g .co-title{color:var(--green2)}
+.co.r{background:rgba(234,67,53,.05);border-color:var(--red)}.co.r .co-title{color:var(--red2)}
+.co.p{background:rgba(161,66,244,.05);border-color:var(--purple)}.co.p .co-title{color:var(--purple2)}
+table.cmp{width:100%;border-collapse:collapse;font-size:.82rem;margin:1.3rem 0;border-radius:10px;overflow:hidden;border:1px solid var(--bdr)}
+table.cmp th{background:var(--s3);color:var(--text2);padding:.6rem .9rem;text-align:left;font-weight:600;border-bottom:1px solid var(--bdr2)}
+table.cmp td{padding:.55rem .9rem;border-bottom:1px solid var(--bdr);vertical-align:middle}
+table.cmp tr:last-child td{border-bottom:none}
+table.cmp tr:nth-child(even) td{background:rgba(15,19,24,.5)}
+.ic{background:rgba(66,133,244,.1);border:1px solid rgba(66,133,244,.15);border-radius:4px;padding:.02rem .35rem;font-family:var(--mono);font-size:.84em;color:var(--blue2)}
+.tag{display:inline-block;padding:.1rem .45rem;border-radius:4px;font-size:.7rem;font-family:var(--mono);font-weight:600}
+details.qa{background:var(--s2);border:1px solid rgba(252,198,40,.3);border-radius:12px;margin:1.6rem 0;overflow:hidden}
+details.qa summary{cursor:pointer;padding:.95rem 1.2rem;list-style:none;display:flex;align-items:center;gap:.8rem;user-select:none;transition:background .15s}
+details.qa summary:hover{background:rgba(252,198,40,.05)}
+details.qa summary::-webkit-details-marker{display:none}
+.qa-badge{font-family:var(--mono);font-size:.66rem;font-weight:700;letter-spacing:.07em;padding:.25rem .6rem;border-radius:6px;background:rgba(252,198,40,.15);color:var(--yellow2);white-space:nowrap}
+.qa-q{font-weight:600;font-size:.93rem;color:var(--text);flex:1}
+.qa-chev{color:var(--yellow2);font-size:.8rem;transition:transform .2s}
+details.qa[open] .qa-chev{transform:rotate(90deg)}
+.qa-body{padding:.4rem 1.3rem 1.2rem;border-top:1px solid var(--bdr)}
+.qa-body p{font-size:.91rem}
+@media(max-width:640px){.nav-links{display:none}}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<nav><div class="nav-in">
+  <div class="nav-brand">LLM Sampling</div>
+  <div class="nav-links">
+    <a href="#s1">The Loop</a><a href="#s2">Greedy</a><a href="#s3">Temperature</a>
+    <a href="#s4">Cutoffs</a><a href="#s5">Beam</a><a href="#s6">Penalties</a>
+    <a href="#s7">Speculative</a><a href="#s8">Meets RL</a><a href="#s9">Cheat Sheet</a>
+  </div>
+</div></nav>
+
+<div class="hero">
+  <h1>LLM Sampling: the Last Inch of Generation</h1>
+  <p>The model does a forward pass and hands you a probability for every token in the vocabulary. Everything after that handoff is decoding, and it changes the output as much as the model does. Every strategy an interview can ask, each one run on the same worked example with real numbers.</p>
+</div>
+
+<main>
+
+<!-- ════════ S1: THE LOOP ════════ -->
+<section id="s1">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">01</span><h2>The Loop, and Our Running Example</h2></div>
+  <p>Generation is a loop: feed the context in, get one vector of <strong>logits</strong> out (one raw score per vocabulary token), turn it into a distribution with softmax, choose one token by some rule, append it, repeat. Every method in this blog is a different "choose one token by some rule".</p>
+  <div class="mb">
+    <div class="math-d">p_i = \frac{e^{z_i}}{\sum_j e^{z_j}}\qquad\quad x_{t+1} \sim \text{rule}\big(p\big),\quad \text{append, repeat}</div>
+    <div class="mb-label">z = logits, p = the next token distribution. The model's job ends at p. The rule is ours.</div>
+  </div>
+  <p>Our fixed worked example for the whole blog. The context is <span class="ic">The cat sat on the ___</span> and we pretend the vocabulary has six tokens. The model returns these logits, and softmax turns them into these probabilities:</p>
+  <div class="fig">
+    <div class="fig-title">One Forward Pass: Logits In, a Distribution Out</div>
+    <canvas id="c-g1" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Logits are arbitrary real scores; softmax exponentiates and normalizes. mat dominates but does not monopolize: 59 percent. sofa and floor are sensible. moon is unlikely and banana is noise, but neither is exactly zero, and that tail is where degenerate outputs come from. Every method below is a different way of handling this one distribution.</div>
+  </div>
+  <p class="note">Memorize the row, it returns in every section: <span class="ic">mat .590, sofa .217, floor .132, bed .048, moon .011, banana .002</span> from logits <span class="ic">6.0, 5.0, 4.5, 3.5, 2.0, 0.0</span>.</p>
+</section>
+
+<!-- ════════ S2: GREEDY ════════ -->
+<section id="s2">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(234,67,53,.12);color:var(--red2)">02</span><h2>Greedy Decoding, and Why the Obvious Thing Fails</h2></div>
+  <p>The obvious rule: take the argmax. Here that means <span class="ic">mat</span>, every single time, deterministically. Greedy is fast, reproducible, and for short factual answers often fine. For open ended text it has a famous disease: <strong>repetition loops</strong>. Once a phrase appears, its own presence in the context raises the probability of appearing again, argmax takes it again, which raises it further, and the model spirals into "I'm sorry. I'm sorry. I'm sorry." This is a positive feedback loop between the context and a deterministic rule, and the model itself assigns the looped text high probability while any human rates it garbage.</p>
+  <div class="fig">
+    <div class="fig-title">The Greedy Spiral</div>
+    <canvas id="c-g2" class="anim" width="880" height="300"></canvas>
+    <div class="fig-cap">Each repetition of the phrase raises its own probability in the next step, and argmax has no mechanism to ever step off the track. The distribution under the curve is healthy; the deterministic rule is what locks the trajectory. A single sampled token would have broken the loop.</div>
+  </div>
+
+  <details class="qa">
+    <summary>
+      <span class="qa-badge">BUT WAIT</span>
+      <span class="qa-q">Isn't the most likely text by definition the best text? Why would we ever want anything except the highest probability sequence?</span>
+      <span class="qa-chev">▶</span>
+    </summary>
+    <div class="qa-body">
+      <p>This is the deepest question in decoding, and the answer is no, for two separate reasons.</p>
+      <p><strong>Likelihood and quality are different objectives.</strong> The model was trained to predict human text, and human text is not maximally predictable. Natural language carries a steady rate of surprise: specific word choices, new information, turns of phrase. If you select for minimum surprise at every step, you get text that is more predictable than any text a human would write: safe, repetitive, hollow. The nucleus sampling paper measured exactly this: human written continuations live in a band of moderate per token probability, while maximization style decoding lives far above that band, in a probability zone humans simply do not occupy.</p>
+      <p><strong>Greedy does not even find the most likely sequence.</strong> Argmax is locally optimal per step, but sequence probability is a product over steps, and a slightly worse token now can unlock a much better continuation later. Finding the true argmax sequence is intractable (the search tree is vocabulary to the power length), and beam search, the practical approximation in §5, shows that even when you search harder for high likelihood, open ended quality gets worse, not better. The objective itself is wrong for creativity, not just the optimizer.</p>
+      <p>The honest synthesis: maximization is right when there is one correct answer whose form matters (translation, transcription, structured extraction). Sampling is right when the task has many valid continuations and blandness is a failure mode. Most of this blog is about controlling sampling's randomness rather than eliminating it.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ════════ S3: TEMPERATURE ════════ -->
+<section id="s3">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(251,188,4,.12);color:var(--yellow2)">03</span><h2>Temperature: One Knob for the Shape of Randomness</h2></div>
+  <p>The gentlest intervention: divide the logits by T before softmax.</p>
+  <div class="mb">
+    <div class="math-d">p_i(T) = \frac{e^{z_i / T}}{\sum_j e^{z_j / T}}</div>
+    <div class="mb-label">T below 1 sharpens (amplifies logit gaps), T above 1 flattens (shrinks them). T to 0 becomes argmax, T to infinity becomes uniform.</div>
+  </div>
+  <p>Run the worked example through three temperatures, exact numbers:</p>
+  <p><span class="ic">T = 0.5</span>: logits double to 12, 10, 9, 7, 4, 0. Result: mat <strong>.839</strong>, sofa .114, floor .042, bed .006. The distribution sharpens hard, the tail dies.<br>
+  <span class="ic">T = 1</span>: the original row: mat .590, sofa .217, floor .132.<br>
+  <span class="ic">T = 2</span>: logits halve to 3, 2.5, 2.25, 1.75, 1, 0. Result: mat <strong>.392</strong>, sofa .238, floor .185, bed .112, moon .053, banana <strong>.020</strong>. The tail wakes up: banana is now a 1 in 50 event per step, and a 200 token generation will roll those dice 200 times.</p>
+  <div class="fig">
+    <div class="fig-title">The Same Logits at Three Temperatures</div>
+    <canvas id="c-g3" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">Low temperature concentrates mass on the favorite, high temperature redistributes it toward the tail. The danger of high T is not the visible tokens, it is the long tail of thousands of banana grade tokens in a real vocabulary, each individually negligible, collectively a per step risk of derailment. This is exactly why temperature is almost always paired with a cutoff from the next section.</div>
+  </div>
+</section>
+
+<!-- ════════ S4: CUTOFFS ════════ -->
+<section id="s4">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">04</span><h2>The Cutoff Family: Top-k, Top-p, Min-p</h2></div>
+  <p>Temperature reshapes the distribution but never removes the tail. The cutoff family deletes it: zero out the junk, renormalize what survives, sample from that. Three rules for where to draw the line.</p>
+  <h3>Top-k: keep the k best</h3>
+  <p>Sort, keep the k highest, renormalize. With <span class="ic">k = 3</span> on the worked example, the survivors are mat, sofa, floor with mass .939, and renormalizing gives <span class="ic">mat .628, sofa .231, floor .141</span>. bed, moon, banana are now impossible, at any temperature.</p>
+  <h3>Top-p (nucleus): keep the smallest set covering probability p</h3>
+  <p>Sort, walk down accumulating probability, stop once the running sum reaches p, renormalize the kept set. With <span class="ic">p = 0.9</span>: cumulative .590, .807, .939, stop. Same three survivors here. The difference from top-k is invisible on one example and decisive across contexts, because <strong>the kept set size adapts to the model's confidence</strong>:</p>
+  <div class="mb">
+    <div class="math-d">\text{keep the smallest } S:\ \sum_{i \in S} p_i \geq p \qquad\text{(tokens sorted descending)}</div>
+    <div class="mb-label">A confident step keeps 1 token, an open step keeps 50. k cannot do both with one value.</div>
+  </div>
+  <h3>Min-p: keep everything within a fraction of the best</h3>
+  <p>The newest member: keep token i if <span class="ic">p_i ≥ p_min × p_max</span>. With <span class="ic">p_min = 0.1</span>: the bar is 0.1 × .590 = .059. mat, sofa, floor pass; bed at .048 just misses. The threshold scales with confidence automatically, like top-p, but it is anchored to the peak rather than the cumulative mass, which behaves better at high temperatures: heating flattens the peak, the bar drops with it, and diversity rises gracefully instead of suddenly admitting the deep tail.</p>
+  <div class="fig">
+    <div class="fig-title">Three Rulers on the Same Bars</div>
+    <canvas id="c-g4" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">The worked distribution, sorted, with each rule's cut drawn. Top-k counts bars, top-p accumulates area, min-p sets a height bar relative to the tallest. On this distribution all three happen to keep the same three tokens. The next figure shows why they part ways.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">Why Adaptive Beats Fixed: Two Extreme Contexts</div>
+    <canvas id="c-g5" class="anim" width="880" height="340"></canvas>
+    <div class="fig-cap">Left, a peaked context: Paris is the capital of ___. The model puts 97 percent on one token. Top-p keeps exactly that one; a fixed k = 3 forcibly admits two junk tokens that should be impossible. Right, a flat creative context: She opened the door and saw ___, dozens of equally plausible continuations. Top-p keeps around 40 of them; k = 3 amputates the diversity that was the entire point. One fixed number cannot serve both shapes, an adaptive rule serves both automatically.</div>
+  </div>
+  <p class="note">Production default you will see everywhere: temperature 0.7 to 1.0 combined with top-p 0.9 to 0.95, or increasingly min-p 0.05 to 0.1 for high temperature creative work. Order of operations matters and the convention is: temperature first, then the cutoff, then renormalize, then sample.</p>
+</section>
+
+<!-- ════════ S5: BEAM ════════ -->
+<section id="s5">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(161,66,244,.15);color:var(--purple2)">05</span><h2>Beam Search: When You Actually Want the Argmax Sequence</h2></div>
+  <p>Greedy is locally optimal and globally wrong: sequence probability is a product, and a slightly worse word now can buy a much better continuation. Beam search keeps the <strong>B best partial sequences</strong> alive at every step, extends them all, and keeps the best B of the extensions.</p>
+  <p>A two step worked example. Step one offers <span class="ic">A .40</span> and <span class="ic">B .35</span>. Greedy grabs A. But A's best continuation is worth .50 while B's is worth .90:</p>
+  <div class="mb">
+    <div class="math-d">P(A,\,\text{best}) = .40 \times .50 = .20 \qquad\quad P(B,\,\text{best}) = .35 \times .90 = .315</div>
+    <div class="mb-label">The greedy path loses to a path it never explored. Beam width 2 keeps both alive at step one and finds the .315 sequence.</div>
+  </div>
+  <div class="fig">
+    <div class="fig-title">The Tree Greedy Never Sees</div>
+    <canvas id="c-g6" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">Greedy commits to the locally best branch and inherits its mediocre subtree. Beam search carries two candidates one step further and lets the products decide. In practice scores are summed log probabilities, and a length penalty divides by length to the power α, because raw products systematically favor short sequences.</div>
+  </div>
+  <p>The interview nuance: beam search is the right tool exactly where the §2 collapsible said maximization is right, <strong>closed tasks with a correct answer</strong>: translation, speech recognition, summarization with tight fidelity needs. On open ended generation, larger beams make output <em>worse</em>: blander, more repetitive, the high probability boredom zone, searched more thoroughly. Knowing that beam quality degrades with beam size on creative tasks is a classic interview checkpoint.</p>
+</section>
+
+<!-- ════════ S6: PENALTIES ════════ -->
+<section id="s6">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(255,109,0,.12);color:var(--orange2)">06</span><h2>Repetition Penalties: Editing the Logits by History</h2></div>
+  <p>The cutoff family looks only at the current distribution. Penalties look at the <strong>history</strong> and push down tokens that already appeared. Two formulations dominate, and interviews love asking the difference.</p>
+  <p><strong>Multiplicative repetition penalty</strong> (Hugging Face, CTRL): for every token already in the context, divide its logit by θ if positive, multiply if negative, with θ around 1.1 to 1.3:</p>
+  <div class="mb">
+    <div class="math-d">z_i' = \begin{cases} z_i / \theta & z_i > 0\\ z_i \cdot \theta & z_i \le 0\end{cases}\qquad\text{for every } i \text{ already generated}</div>
+    <div class="mb-label">Asymmetric on purpose: it pushes logits toward and past zero from both sides.</div>
+  </div>
+  <p><strong>Additive frequency and presence penalties</strong> (OpenAI API): subtract from the logit a term per occurrence count, plus a flat term for having occurred at all:</p>
+  <div class="mb">
+    <div class="math-d">z_i' = z_i \;-\; c_i \cdot \lambda_{freq} \;-\; \mathbf{1}[c_i > 0] \cdot \lambda_{pres}</div>
+    <div class="mb-label">c_i = how many times token i has been generated. Frequency scales with repetition, presence is one flat tax for ever appearing: the first nudges away from overuse, the second nudges toward new vocabulary.</div>
+  </div>
+  <p>Worked example: suppose <span class="ic">mat</span> was already generated once and θ = 1.25. Its logit drops from 6.0 to 4.8, and recomputing softmax over the row gives a new leader:</p>
+  <div class="fig">
+    <div class="fig-title">One Penalty Application, Recomputed Exactly</div>
+    <canvas id="c-g7" class="anim" width="880" height="320"></canvas>
+    <div class="fig-cap">Before: mat .590 dominates. After dividing its logit by 1.25: mat falls to .303 and sofa, untouched at .370, takes the lead. A single multiplicative penalty flipped the argmax and broke the would be loop of §2. The risk of overdoing it: penalize too hard and the model starts avoiding necessary words, pronouns, code keywords, the character's own name.</div>
+  </div>
+</section>
+
+<!-- ════════ S7: SPECULATIVE ════════ -->
+<section id="s7">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(36,193,224,.12);color:var(--teal2)">07</span><h2>Speculative Decoding: Same Output, Several Times Faster</h2></div>
+  <p>Everything so far changed <em>what</em> token gets picked. Speculative decoding changes <em>how fast</em> tokens arrive while provably leaving the distribution untouched. The pain it solves: a big model generates one token per forward pass, and each pass is slow and memory bound. The trick: let a tiny fast <strong>draft model</strong> guess several tokens ahead, then have the big <strong>target model</strong> verify all of them in a single parallel pass.</p>
+  <p>Why verification is one pass and not many: a transmitted prefix can be scored for every position at once, the same property that makes training parallel. So the big model checks a 5 token guess as cheaply as it would have produced 1.</p>
+  <p>The acceptance rule is the elegant part, and it is exact. For each drafted token, compare the target probability q to the draft probability p:</p>
+  <div class="mb">
+    <div class="math-d">\text{accept with probability } \min\!\Big(1,\ \frac{q(x)}{p(x)}\Big);\quad\text{on reject, resample from } \max(0,\ q - p)\text{ normalized}</div>
+    <div class="mb-label">This is rejection sampling tuned so the accepted stream is distributed exactly as the target model alone. Speed with zero quality cost, mathematically guaranteed.</div>
+  </div>
+  <p>Worked example. The draft proposes <span class="ic">the cat sat on the mat</span>, 5 tokens, in 5 cheap passes. The target verifies in 1 pass and agrees with the first 4; on the 5th it wanted <span class="ic">sofa</span>, so it rejects there and substitutes. Net: <strong>5 tokens produced in the time of roughly 1 big pass plus the cheap draft</strong>, instead of 5 big passes. Typical real speedups are 2 to 3 times, larger when the draft is accurate.</p>
+  <div class="fig">
+    <div class="fig-title">Draft Many Cheaply, Verify All at Once</div>
+    <canvas id="c-g8" class="anim" width="880" height="350"></canvas>
+    <div class="fig-cap">Top lane: the small draft model races ahead proposing five tokens. Middle: the big target model scores all five positions in a single parallel pass. Bottom: the accept and reject ledger, four greens accepted, the fifth rejected and corrected by a draw from the target's residual. The output is bit for bit a sample from the target model, only produced in far fewer big passes. Variants: Medusa adds extra prediction heads instead of a separate draft model; EAGLE drafts in feature space; lookahead decoding drops the draft model entirely.</div>
+  </div>
+</section>
+
+<!-- ════════ S8: MEETS RL ════════ -->
+<section id="s8">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(66,133,244,.15);color:var(--blue2)">08</span><h2>Where Sampling Meets Everything Else You Know</h2></div>
+  <p>Decoding is not a sealed box at the end. It touches alignment, structured output, and RL directly, and interviewers probe these seams.</p>
+  <p><strong>Sampling is the data source for RLHF and GRPO.</strong> When GRPO samples G responses per prompt, it samples them with temperature and top-p. Those knobs set the diversity of the group, which sets the spread of rewards, which sets the variance of the advantage estimate. Temperature too low and all G responses are near identical, the group has nothing to learn from; too high and they are noise. The decoding settings are a hyperparameter of training, not just inference.</p>
+  <p><strong>Constrained and structured decoding.</strong> To force valid JSON or a regex or a grammar, mask the logits: at each step set the logits of every token that would violate the grammar to negative infinity, then sample normally from what remains. The model proposes, the grammar disposes, and the output is guaranteed parseable. This is how function calling and tool schemas are enforced.</p>
+  <p><strong>Guidance steers the distribution before you sample.</strong> Classifier free guidance, the same idea from the diffusion and flow matching blogs, has a text analog: combine a conditional and unconditional logit vector to sharpen toward the prompt. Contrastive decoding subtracts a weak model's logits from a strong model's to amplify exactly what expertise adds. Both edit p before the rule of §1 ever runs.</p>
+  <div class="fig">
+    <div class="fig-title">One Distribution, Many Hands Reaching for It</div>
+    <canvas id="c-g9" class="anim" width="880" height="330"></canvas>
+    <div class="fig-cap">The next token distribution sits in the center. Around it, every actor that touches it: temperature reshapes, cutoffs prune, penalties edit by history, grammar masks for validity, guidance sharpens toward intent, and RL training consumes whole sampled sequences as its data. Decoding is the junction where the model, the user's intent, and the training loop all meet on the same vector of numbers.</div>
+  </div>
+</section>
+
+<!-- ════════ S9: CHEAT SHEET ════════ -->
+<section id="s9">
+  <div class="sec-hdr"><span class="sec-num" style="background:rgba(52,168,83,.12);color:var(--green2)">09</span><h2>The Interview Cheat Sheet</h2></div>
+  <table class="cmp">
+    <thead><tr><th>Method</th><th>What it does</th><th>One line intuition</th><th>Use when</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--red2)">Greedy</strong></td><td>argmax every step</td><td>most likely next token, deterministic</td><td>one right answer, short, reproducible</td></tr>
+      <tr><td><strong style="color:var(--purple2)">Beam search</strong></td><td>keep B best partial sequences</td><td>search for the likely sequence, not token</td><td>translation, ASR, closed tasks</td></tr>
+      <tr><td><strong style="color:var(--yellow2)">Temperature</strong></td><td>scale logits by 1/T</td><td>one knob for sharpness of randomness</td><td>always, as the base randomness control</td></tr>
+      <tr><td><strong style="color:var(--green2)">Top-k</strong></td><td>keep k highest, renormalize</td><td>fixed size shortlist</td><td>simple, predictable cap</td></tr>
+      <tr><td><strong style="color:var(--green2)">Top-p (nucleus)</strong></td><td>keep smallest set covering p</td><td>shortlist that adapts to confidence</td><td>the modern default for open text</td></tr>
+      <tr><td><strong style="color:var(--green2)">Min-p</strong></td><td>keep tokens above p_min × peak</td><td>height bar relative to the favorite</td><td>high temperature creative work</td></tr>
+      <tr><td><strong style="color:var(--orange2)">Repetition / freq / presence</strong></td><td>push down seen tokens</td><td>edit logits by history</td><td>kill loops, broaden vocabulary</td></tr>
+      <tr><td><strong style="color:var(--teal2)">Speculative</strong></td><td>draft then parallel verify</td><td>same distribution, fewer big passes</td><td>latency, always, free quality wise</td></tr>
+      <tr><td><strong style="color:var(--blue2)">Constrained</strong></td><td>mask invalid logits</td><td>grammar disposes, model proposes</td><td>JSON, tool calls, regex output</td></tr>
+    </tbody>
+  </table>
+  <h3>The four questions an interviewer is really testing</h3>
+  <p><strong>Do you know likelihood is not quality?</strong> The §2 collapsible: human text lives in a moderate probability band, maximization overshoots it into bland repetition, which is why we sample at all.</p>
+  <p><strong>Do you understand adaptivity?</strong> Top-p and min-p adjust their kept set to the model's per step confidence; top-k cannot. The peaked capital of France versus the flat open door contrast is the canonical proof.</p>
+  <p><strong>Do you know the order of operations?</strong> Temperature, then cutoff, then renormalize, then sample, with penalties applied to logits before softmax. Getting this wrong silently changes behavior.</p>
+  <p><strong>Do you see the seams?</strong> Decoding is the data generator for RL, the enforcement point for structured output, and the target of guidance. The settings you pick at inference are also training hyperparameters.</p>
+  <div class="co g"><div class="co-title">The one paragraph summary</div>
+    <p>The model outputs a distribution; decoding is the rule that turns it into a token. Greedy and beam chase likelihood and suit closed tasks but go bland on open ones, because likelihood is not quality. Temperature sets the randomness, and a cutoff, top-k fixed, top-p and min-p adaptive, removes the dangerous tail so the randomness stays sane. Penalties edit logits by history to break loops. Speculative decoding makes it faster with zero quality cost by drafting and verifying. And the whole apparatus is the seam where the model, the user's intent through guidance and grammars, and the RL training loop all meet on one vector of numbers.</p>
+  </div>
+</section>
+
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+  document.querySelectorAll('.math-d').forEach(el=>{
+    try{katex.render(el.textContent.trim(),el,{displayMode:true,throwOnError:false});}catch(e){}
+  });
+});
+window.addEventListener('scroll',()=>{
+  const p=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=Math.min(p,100)+'%';
+});
+function gctx(id){const cv=document.getElementById('c-'+id);return cv?cv.getContext('2d'):null;}
+function lbl(ctx,s,x,y,col,sz,w,al){ctx.font=`${w||500} ${sz||10}px "Plus Jakarta Sans",sans-serif`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function mlbl(ctx,s,x,y,col,sz,al){ctx.font=`500 ${sz||9}px "JetBrains Mono",monospace`;ctx.fillStyle=col;ctx.textAlign=al||'center';ctx.textBaseline='middle';ctx.fillText(s,x,y);}
+function pill(ctx,x,y,w,h,r,fill,stroke,lw){ctx.beginPath();ctx.roundRect(x,y,w,h,r);if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}}
+function arrow(ctx,x1,y1,x2,y2,col,lw){
+  ctx.strokeStyle=col;ctx.lineWidth=lw||1.4;
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);ctx.fillStyle=col;
+  ctx.beginPath();ctx.moveTo(x2,y2);ctx.lineTo(x2-7*Math.cos(a-.45),y2-7*Math.sin(a-.45));ctx.lineTo(x2-7*Math.cos(a+.45),y2-7*Math.sin(a+.45));ctx.closePath();ctx.fill();
+}
+const STATIC={};
+(function(){
+  const obs=new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){const id=e.target.id.replace('c-','');if(STATIC[id]){STATIC[id]();obs.unobserve(e.target);}}
+  }),{threshold:0.05});
+  window.addEventListener('DOMContentLoaded',()=>{
+    Object.keys(STATIC).forEach(id=>{const cv=document.getElementById('c-'+id);if(cv)obs.observe(cv);});
+  });
+})();
+
+const TOK=['mat','sofa','floor','bed','moon','banana'];
+const LOGITS=[6.0,5.0,4.5,3.5,2.0,0.0];
+const COLS=['#a8e6c0','#9fdcef','#a8caff','#d6a8ff','#ffbe6e','#f28b82'];
+function softmax(z,T){T=T||1;const m=Math.max(...z);const e=z.map(v=>Math.exp((v-m)/T));const s=e.reduce((a,b)=>a+b,0);return e.map(v=>v/s);}
+
+// horizontal probability bars
+function probBars(ctx,x0,y0,bw,probs,toks,cols,maxP,hi){
+  maxP=maxP||Math.max(...probs);
+  const rowH=30;
+  probs.forEach((p,i)=>{
+    const y=y0+i*rowH;
+    mlbl(ctx,toks[i],x0-8,y+11,cols[i],9,'right');
+    pill(ctx,x0,y,bw,22,4,'rgba(48,66,96,.45)','rgba(125,155,195,.3)',.7);
+    const w=bw*(p/maxP);
+    pill(ctx,x0,y,Math.max(w,2),22,4,cols[i],null);
+    if(hi&&hi.includes(i)){pill(ctx,x0-2,y-2,bw+4,26,5,null,'#ffe282',1.6);}
+    mlbl(ctx,p.toFixed(3),x0+bw+8,y+11,cols[i],8.5,'left');
+  });
+}
+
+/* ── G1: logits to dist ── */
+STATIC.g1=function(){
+  const ctx=gctx('g1');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  lbl(ctx,'The cat sat on the ___',440,34,'#c8e0f2',12,700);
+  // logits column
+  mlbl(ctx,'logits z',150,64,'#aac6e2',9);
+  LOGITS.forEach((z,i)=>{
+    const y=86+i*30;
+    mlbl(ctx,TOK[i],70,y+11,COLS[i],9,'right');
+    pill(ctx,84,y,z*22+2,22,4,COLS[i]+'55',COLS[i],1);
+    mlbl(ctx,z.toFixed(1),84+z*22+10,y+11,COLS[i],8.5,'left');
+  });
+  // softmax arrow
+  arrow(ctx,290,200,360,200,'#aac6e2',1.6);
+  mlbl(ctx,'softmax',325,184,'#ffe282',9);
+  // probs
+  const P=softmax(LOGITS);
+  mlbl(ctx,'probability p',560,64,'#aac6e2',9);
+  probBars(ctx,440,86,250,P,TOK,COLS,Math.max(...P),[0]);
+  mlbl(ctx,'mat dominates but the tail is never exactly zero',440,H-14,'#aac6e2',9);
+};
+
+/* ── G2: greedy spiral ── */
+STATIC.g2=function(){
+  const ctx=gctx('g2');if(!ctx)return;const W=880,H=300;ctx.clearRect(0,0,W,H);
+  const phrase='I\u2019m sorry.';
+  for(let i=0;i<5;i++){
+    const x=70+i*150, y=80;
+    pill(ctx,x,y,128,40,8,'rgba(234,67,53,.12)','#f28b82',1.4);
+    mlbl(ctx,phrase,x+64,y+21,'#f0b3ac',9.5);
+    if(i<4)arrow(ctx,x+130,y+20,x+148,y+20,'#f28b82',1.4);
+    // rising probability bar under each
+    const pr=0.55+i*0.1;
+    pill(ctx,x,y+54,128,16,3,'rgba(48,66,96,.5)',null);
+    pill(ctx,x,y+54,128*pr,16,3,'#ea5a4e',null);
+    mlbl(ctx,'P = '+pr.toFixed(2),x+64,y+62,'#ffd2cd',7.6);
+  }
+  arrow(ctx,90,160,800,160,'#f28b82',1.4);
+  mlbl(ctx,'each repeat raises its own next step probability; argmax can never step off',440,182,'#f0b3ac',9);
+  pill(ctx,250,210,380,40,8,'rgba(72,186,106,.08)','#a8e6c0',1.3);
+  mlbl(ctx,'a single sampled token would have broken the loop',440,230,'#a8e6c0',9);
+};
+
+/* ── G3: three temperatures ── */
+STATIC.g3=function(){
+  const ctx=gctx('g3');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  const Ts=[[0.5,'T = 0.5  sharpen'],[1.0,'T = 1.0  original'],[2.0,'T = 2.0  flatten']];
+  Ts.forEach((tt,k)=>{
+    const x0=70+k*290;
+    lbl(ctx,tt[1],x0+120,40,k===0?'#a8e6c0':k===1?'#9fdcef':'#ffbe6e',10,700);
+    const P=softmax(LOGITS,tt[0]);
+    P.forEach((p,i)=>{
+      const y=64+i*38;
+      mlbl(ctx,TOK[i],x0-6,y+9,COLS[i],8,'right');
+      pill(ctx,x0+6,y,160,16,3,'rgba(48,66,96,.45)',null);
+      pill(ctx,x0+6,y,Math.max(160*p,1.5),16,3,COLS[i],null);
+      mlbl(ctx,p.toFixed(3),x0+6+165,y+8,COLS[i],7.6,'left');
+    });
+  });
+  mlbl(ctx,'watch banana: .000 → .002 → .020. high T wakes the deep tail across a real vocabulary',440,H-12,'#aac6e2',9);
+};
+
+/* ── G4: three rulers ── */
+STATIC.g4=function(){
+  const ctx=gctx('g4');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  const P=softmax(LOGITS);
+  const x0=300,y0=60,bw=300,rowH=42;
+  let cum=0;
+  P.forEach((p,i)=>{
+    const y=y0+i*rowH;
+    cum+=p;
+    mlbl(ctx,TOK[i],x0-8,y+12,COLS[i],9,'right');
+    pill(ctx,x0,y,bw,24,4,'rgba(48,66,96,.45)','rgba(125,155,195,.3)',.7);
+    pill(ctx,x0,y,Math.max(bw*p,2),24,4,COLS[i],null);
+    mlbl(ctx,p.toFixed(3),x0+bw*p+8,y+12,COLS[i],8,'left');
+    mlbl(ctx,'cum '+cum.toFixed(3),x0+bw+58,y+12,'#aac6e2',7.6,'left');
+  });
+  // top-k=3 bracket
+  ctx.strokeStyle='#a8e6c0';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(x0-58,y0);ctx.lineTo(x0-58,y0+3*rowH-18);ctx.stroke();
+  mlbl(ctx,'top-k=3',x0-64,y0+rowH,'#a8e6c0',8,'right');
+  // top-p=0.9 line after 3rd (cum .939)
+  ctx.strokeStyle='#9fdcef';ctx.lineWidth=2;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(x0,y0+3*rowH-9);ctx.lineTo(x0+bw+120,y0+3*rowH-9);ctx.stroke();ctx.setLineDash([]);
+  mlbl(ctx,'top-p=0.9 cut (cum .939)',x0+bw+58,y0+3*rowH+4,'#9fdcef',7.8,'left');
+  // min-p bar at .059
+  const bar=0.1*P[0];
+  ctx.strokeStyle='#ffbe6e';ctx.lineWidth=2;
+  const bx=x0+bw*bar;
+  ctx.beginPath();ctx.moveTo(bx,y0-6);ctx.lineTo(bx,y0+6*rowH-18);ctx.stroke();
+  mlbl(ctx,'min-p bar .059',bx,y0-14,'#ffbe6e',8);
+  mlbl(ctx,'count bars (k) · accumulate area (p) · height vs peak (min-p): same 3 survivors here',440,H-12,'#aac6e2',8.6);
+};
+
+/* ── G5: peaked vs flat ── */
+STATIC.g5=function(){
+  const ctx=gctx('g5');if(!ctx)return;const W=880,H=340;ctx.clearRect(0,0,W,H);
+  // left peaked
+  lbl(ctx,'peaked: Paris is the capital of ___',230,38,'#a8caff',10,700);
+  const peaked=[0.97,0.012,0.008,0.005,0.003,0.002];
+  const ptok=['France','Texas','Spain','Italy','Ohio','noise'];
+  peaked.forEach((p,i)=>{
+    const y=64+i*38;
+    mlbl(ctx,ptok[i],70,y+9,i===0?'#a8e6c0':'#9fbcd8',8,'right');
+    pill(ctx,84,y,300,16,3,'rgba(48,66,96,.45)',null);
+    pill(ctx,84,y,Math.max(300*p,2),16,3,i===0?'#a8e6c0':'#7e9cbb',null);
+  });
+  // top-p keeps 1
+  ctx.strokeStyle='#9fdcef';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(78,64+22);ctx.lineTo(390,64+22);ctx.stroke();
+  mlbl(ctx,'top-p keeps just France ✓',230,300,'#9fdcef',8.5);
+  // k=3 forces junk
+  ctx.strokeStyle='#f28b82';ctx.lineWidth=2;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(78,64+3*38-16);ctx.lineTo(390,64+3*38-16);ctx.stroke();ctx.setLineDash([]);
+  mlbl(ctx,'k=3 forces in 2 junk tokens ✗',230,318,'#f28b82',8.5);
+  // divider
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(440,28);ctx.lineTo(440,H-14);ctx.stroke();ctx.setLineDash([]);
+  // right flat
+  lbl(ctx,'flat: She opened the door and saw ___',650,38,'#ffbe6e',10,700);
+  const flat=[0.10,0.09,0.085,0.08,0.078,0.07];
+  const ftok=['a man','her sister','nothing','a fire','the sea','snow'];
+  flat.forEach((p,i)=>{
+    const y=64+i*38;
+    mlbl(ctx,ftok[i],494,y+9,'#ffbe6e',8,'right');
+    pill(ctx,506,y,300,16,3,'rgba(48,66,96,.45)',null);
+    pill(ctx,506,y,Math.max(300*p*3.2,2),16,3,'#ffbe6e',null);
+  });
+  mlbl(ctx,'top-p keeps ~40 options ✓   k=3 amputates the diversity ✗',650,300,'#9fd4b3',8.5);
+  mlbl(ctx,'one fixed k cannot serve both shapes; an adaptive cutoff serves both',440,H-12,'#aac6e2',8.6);
+};
+
+/* ── G6: beam tree ── */
+STATIC.g6=function(){
+  const ctx=gctx('g6');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  // root
+  pill(ctx,60,150,70,34,8,'rgba(150,180,220,.2)','rgba(150,180,220,.6)',1.2);
+  mlbl(ctx,'start',95,167,'#c8e0f2',9);
+  // step 1: A and B
+  function node(x,y,nm,col,sub){pill(ctx,x,y,70,34,8,col+'18',col,1.4);mlbl(ctx,nm,x+35,y+13,col,9.5);if(sub)mlbl(ctx,sub,x+35,y+27,col+'cc',7.5);}
+  arrow(ctx,132,160,228,90,'#a8caff',1.4); mlbl(ctx,'.40',175,112,'#a8caff',8.5);
+  arrow(ctx,132,176,228,250,'#a8e6c0',1.4); mlbl(ctx,'.35',175,228,'#a8e6c0',8.5);
+  node(230,73,'A','#a8caff'); node(230,233,'B','#a8e6c0');
+  // step 2 children
+  arrow(ctx,302,90,400,60,'#a8caff',1.2);mlbl(ctx,'.50',350,58,'#a8caff',8);
+  arrow(ctx,302,90,400,120,'#a8caff',1.2);mlbl(ctx,'.30',350,122,'#7e9cbb',8);
+  arrow(ctx,302,250,400,220,'#a8e6c0',1.2);mlbl(ctx,'.90',350,212,'#a8e6c0',8);
+  arrow(ctx,302,250,400,280,'#a8e6c0',1.2);mlbl(ctx,'.10',350,284,'#7e9cbb',8);
+  node(402,43,'A→x','#a8caff','.20'); node(402,103,'A→y','#7e9cbb');
+  node(402,203,'B→p','#a8e6c0','.315'); node(402,263,'B→q','#7e9cbb');
+  // verdicts
+  pill(ctx,520,150,150,34,8,'rgba(234,67,53,.1)','#f28b82',1.3);
+  mlbl(ctx,'greedy picks A → .20',595,167,'#f0b3ac',8.5);
+  pill(ctx,520,200,150,34,8,'rgba(72,186,106,.12)','#a8e6c0',1.4);
+  mlbl(ctx,'beam finds B→p → .315',595,217,'#a8e6c0',8.5);
+  arrow(ctx,478,60,516,158,'#f28b82',1.1);
+  arrow(ctx,478,220,516,212,'#a8e6c0',1.1);
+  mlbl(ctx,'a worse first token (B) unlocks a better sequence; greedy never explores it',440,H-12,'#aac6e2',8.8);
+};
+
+/* ── G7: penalty recompute ── */
+STATIC.g7=function(){
+  const ctx=gctx('g7');if(!ctx)return;const W=880,H=320;ctx.clearRect(0,0,W,H);
+  const before=softmax(LOGITS);
+  const lz=LOGITS.slice();lz[0]=6.0/1.25; // 4.8
+  const after=softmax(lz);
+  lbl(ctx,'before: mat already used once',230,40,'#9fbcd8',10,700);
+  probBars(ctx,200,64,200,before,TOK,COLS,Math.max(...before),[0]);
+  // divider
+  ctx.setLineDash([5,5]);ctx.strokeStyle='rgba(150,180,220,.3)';ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(440,28);ctx.lineTo(440,H-14);ctx.stroke();ctx.setLineDash([]);
+  lbl(ctx,'after: mat logit 6.0 → 4.8 (÷1.25)',650,40,'#ffbe6e',10,700);
+  probBars(ctx,620,64,200,after,TOK,COLS,Math.max(...after),[1]);
+  mlbl(ctx,'mat .590 → .303, and sofa .217 → .370 takes the lead: the loop is broken',440,H-12,'#aac6e2',8.8);
+};
+
+/* ── G8: speculative ── */
+STATIC.g8=function(){
+  const ctx=gctx('g8');if(!ctx)return;const W=880,H=350;ctx.clearRect(0,0,W,H);
+  const toks=['the','cat','sat','on','mat'];
+  const accept=[true,true,true,true,false];
+  // draft lane
+  lbl(ctx,'draft model: 5 cheap passes, races ahead',230,38,'#9fdcef',10,700);
+  toks.forEach((t,i)=>{
+    pill(ctx,80+i*130,58,116,38,7,'rgba(159,220,239,.16)','#9fdcef',1.3);
+    mlbl(ctx,t,138+i*130,77,'#9fdcef',10);
+    if(i<4)arrow(ctx,196+i*130,77,210+i*130,77,'#9fdcef',1.1);
+  });
+  // verify lane
+  lbl(ctx,'target model: ONE parallel pass verifies all five',230,140,'#d6a8ff',10,700);
+  pill(ctx,80,158,646,40,8,'rgba(176,94,250,.1)','#d6a8ff',1.4);
+  toks.forEach((t,i)=>{
+    mlbl(ctx,'pos '+(i+1),138+i*130,178,'#cbb2ee',8);
+    arrow(ctx,138+i*130,100,138+i*130,156,'rgba(150,180,220,.5)',1);
+  });
+  // ledger
+  lbl(ctx,'accept / reject ledger',230,232,'#c8e0f2',10,700);
+  toks.forEach((t,i)=>{
+    const ok=accept[i];
+    pill(ctx,80+i*130,250,116,40,7,ok?'rgba(72,186,106,.16)':'rgba(234,67,53,.14)',ok?'#a8e6c0':'#f28b82',1.4);
+    mlbl(ctx,ok?'✓ '+t:'✗ → sofa',138+i*130,266,ok?'#a8e6c0':'#f28b82',9);
+    mlbl(ctx,ok?'accepted':'resample q−p',138+i*130,281,ok?'#9fd4b3':'#f0b3ac',7.2);
+  });
+  mlbl(ctx,'5 tokens in ~1 big pass + 1 cheap draft instead of 5 big passes · output is exactly a target sample',440,H-12,'#aac6e2',8.6);
+};
+
+/* ── G9: the junction ── */
+STATIC.g9=function(){
+  const ctx=gctx('g9');if(!ctx)return;const W=880,H=330;ctx.clearRect(0,0,W,H);
+  const cx=440,cy=165;
+  // center distribution
+  pill(ctx,cx-80,cy-50,160,100,12,'rgba(88,148,250,.1)','#a8caff',1.8);
+  lbl(ctx,'next token',cx,cy-22,'#a8caff',10,700);
+  lbl(ctx,'distribution p',cx,cy-6,'#a8caff',10,700);
+  // mini bars inside
+  const P=softmax(LOGITS);
+  P.slice(0,4).forEach((p,i)=>{pill(ctx,cx-60+i*32,cy+38-p*44,24,Math.max(p*44,2),2,COLS[i],null);});
+  // actors around
+  const actors=[
+    ['temperature','reshapes','#ffbe6e',cx,cy-118],
+    ['cutoffs','prune the tail','#a8e6c0',cx+220,cy-66],
+    ['penalties','edit by history','#f28b82',cx+220,cy+66],
+    ['grammar mask','force validity','#9fdcef',cx,cy+118],
+    ['guidance','sharpen to intent','#d6a8ff',cx-220,cy+66],
+    ['RL training','eats whole samples','#a8caff',cx-220,cy-66]
+  ];
+  actors.forEach(a=>{
+    pill(ctx,a[3]-78,a[4]-20,156,40,8,a[2]+'14',a[2],1.3);
+    mlbl(ctx,a[0],a[3],a[4]-4,a[2],9);
+    mlbl(ctx,a[1],a[3],a[4]+11,a[2]+'cc',7.4);
+    // arrow toward center
+    const dx=cx-a[3],dy=cy-a[4],m=Math.hypot(dx,dy);
+    arrow(ctx,a[3]+dx/m*84,a[4]+dy/m*30,cx-dx/m*88,cy-dy/m*56,a[2]+'88',1.2);
+  });
+  mlbl(ctx,'decoding is the junction where model, user intent, and the training loop meet on one vector',440,H-12,'#aac6e2',8.8);
+};
+</script>
+<script src="./theme-toggle.js"></script>
+</body>
+</html>
